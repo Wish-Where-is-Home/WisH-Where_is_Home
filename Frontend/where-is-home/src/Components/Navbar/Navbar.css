@@ -1,0 +1,32 @@
+
+
+.navbar {
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 80%;
+    height: 100px;
+    border: 2px solid #0dddda;
+    background-color: var(--background-color);
+    border-top: 0;
+    border-right: 0;
+    border-left: 0;
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 999;
+
+}
+
+
+.navbar-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 90%;
+    background-color: var(--background-color);
+}
+
+

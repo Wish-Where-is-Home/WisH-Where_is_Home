@@ -1,3 +1,9 @@
+:root{
+  --background-color-dark:#373434;
+  --background-color-light:whitesmoke;
+
+}
+
 .App {
   text-align: center;
 }

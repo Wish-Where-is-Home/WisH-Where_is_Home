@@ -10,7 +10,7 @@
 
 .LanguageSelector .vertical-bar {
     margin: 0 10px; 
-    color: #000; 
+    color: var(--blacktowhite);
 }
 
 .active-language {

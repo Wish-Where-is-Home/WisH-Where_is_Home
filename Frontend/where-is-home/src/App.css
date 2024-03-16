@@ -2,6 +2,27 @@
   --background-color-dark:#373434;
   --background-color-light:whitesmoke;
 
+  --blacktowhite-light:black;
+  --blacktowhite-dark:white;
+
+  --text-shadow-light:0 0 5px rgba(0, 0, 0, 0.666);
+  --text-shadow-dark:0 0 5px rgba(255, 255, 255, 0.905);
+
+}
+
+
+
+.light-mode{
+  --background-color: var(--background-color-light);
+  --blacktowhite:var(--blacktowhite-light) ;
+  --text-shadow: var(--text-shadow-light);
+}
+
+
+.dark-mode{
+  --background-color: var(--background-color-dark);
+  --blacktowhite:var(--blacktowhite-dark) ;
+  --text-shadow: var(--text-shadow-dark);
 }
 
 .App {

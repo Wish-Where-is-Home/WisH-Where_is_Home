@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import './Navbar.css';
 import logo from '../../Assets/Logos/logo1.png';
-import {useTranslation} from "react-i18next";
+import { useTranslation } from "react-i18next";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSun, faMoon } from '@fortawesome/free-solid-svg-icons';
 import { LanguageSelector } from '../LanguageSelector/LanguageSelector';
 
 function Navbar({ darkMode, toggleDarkMode }) {
 
-    const {t} = useTranslation("common");
-
+    const { t } = useTranslation("common");
 
     const [menuOpen, setMenuOpen] = useState(false);
     const [isMobile, setIsMobile] = useState(window.innerWidth < 1700);
@@ -18,7 +19,7 @@ function Navbar({ darkMode, toggleDarkMode }) {
 
     useEffect(() => {
         const handleResize = () => {
-            setIsMobile(window.innerWidth < 1000);
+            setIsMobile(window.innerWidth < 1500);
         };
 
         window.addEventListener('resize', handleResize);
@@ -34,24 +35,30 @@ function Navbar({ darkMode, toggleDarkMode }) {
                 <div className="logo">
                     <img src={logo} alt="logo" />
                 </div>
-                {isMobile ? (
-                    <div className="hamburger" onClick={toggleMenu}>
-                        <div className={`hamburger-lines ${menuOpen ? 'open' : ''}`}>
-                            <span className="line line1"></span>
-                            <span className="line line2"></span>
-                            <span className="line line3"></span>
+                <div className='navbar-options'>
+                    {isMobile ? (
+                        <div className="hamburger" onClick={toggleMenu}>
+                            <div className={`hamburger-lines ${menuOpen ? 'open' : ''}`}>
+                                <span className="line line1"></span>
+                                <span className="line line2"></span>
+                                <span className="line line3"></span>
+                            </div>
                         </div>
+                    ) : (
+                        <div className="menu-items2">
+                            <ul>
+                                <li><a href="#">{t('aboutus')}</a></li>
+                                <li><a href="#">Login</a></li>
+                                <li><LanguageSelector style={{"marginleft":"3rem"}}/></li>
+                            </ul>
+                        </div>
+                    )}
+                    <div className="theme-toggle-container">
+                        <FontAwesomeIcon icon={faSun} className="sun-icon" />
+                        <FontAwesomeIcon icon={faMoon} className="moon-icon" />
+                        <input type="checkbox" className="theme-toggle" checked={darkMode} onChange={toggleDarkMode} />
                     </div>
-                ) : (
-                    <div className="menu-items2">
-                        <ul>
-                            <li><a href="#">{t('aboutus')}</a></li>
-                            <li><a href="#">Login</a></li>
-                            <li><LanguageSelector style={{"marginleft":"3rem"}}/></li>
-                        </ul>
-                    </div>
-                )}
-                <input type="checkbox" className="theme-toggle" checked={darkMode} onChange={toggleDarkMode} />
+                </div>
             </div>
             {menuOpen && isMobile && (
                 <div className="menu-items">
@@ -67,3 +74,4 @@ function Navbar({ darkMode, toggleDarkMode }) {
 }
 
 export default Navbar;
+

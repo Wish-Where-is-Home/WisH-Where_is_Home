@@ -33,7 +33,9 @@ function Navbar({ darkMode, toggleDarkMode }) {
         <nav className={`navbar ${darkMode ? 'dark-mode' : 'light-mode'}`}>
             <div className='navbar-container'>
                 <div className="logo">
+                    <a href='/'>
                     <img src={logo} alt="logo" />
+                    </a>
                 </div>
                 <div className='navbar-options'>
                     {isMobile ? (
@@ -47,8 +49,8 @@ function Navbar({ darkMode, toggleDarkMode }) {
                     ) : (
                         <div className="menu-items2">
                             <ul>
-                                <li><a href="#">{t('aboutus')}</a></li>
-                                <li><a href="#">Login</a></li>
+                                <li><a href="/aboutus">{t('aboutus')}</a></li>
+                                <li><a href="/login">Login</a></li>
                                 <li><LanguageSelector style={{"marginleft":"3rem"}}/></li>
                             </ul>
                         </div>
@@ -63,8 +65,8 @@ function Navbar({ darkMode, toggleDarkMode }) {
             {menuOpen && isMobile && (
                 <div className="menu-items">
                     <ul>
-                        <li><a href="#">{t('aboutus')}</a></li>
-                        <li><a href="#">Login</a></li>
+                        <li><a href="/aboutus">{t('aboutus')}</a></li>
+                        <li><a href="/login">Login</a></li>
                         <li><LanguageSelector style={{margin:0}}/></li>
                     </ul>
                 </div>

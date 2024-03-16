@@ -1,0 +1,25 @@
+.LanguageSelector ul {
+    margin: 0;
+    padding: 0;
+}
+
+.LanguageSelector ul li {
+    margin: 0;
+}
+
+
+.LanguageSelector .vertical-bar {
+    margin: 0 10px; 
+    color: var(--blacktowhite);
+}
+
+.active-language {
+    text-shadow: var(--text-shadow);
+}
+
+@media (max-width: 1000px) {
+    .LanguageSelector{
+        white-space: nowrap;
+    }
+    
+}

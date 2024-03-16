@@ -1,0 +1,9 @@
+@font-face {
+    font-family: 'Quatro';
+    src: local('Quatro Book'), local('Quatro-Book'),
+        url('Quatro-Book.woff2') format('woff2'),
+        url('Quatro-Book.woff') format('woff'),
+        url('Quatro-Book.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }

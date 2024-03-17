@@ -38,6 +38,7 @@
     transform: translate(-50%,0);
     margin: 0; 
     font-weight: 600;
+    width: 100%;
     font-size: 1rem;
     letter-spacing: 0.3rem;
     color: var(--hometitle);
@@ -186,7 +187,7 @@
       background-position: 400px;
     }
     100% {
-      background-position: 800px;
+      background-position: 1200px;
     }
   }
   
@@ -203,7 +204,20 @@
       .svg-icon {
         display: none;
     }
-  }
+
+    .right{
+      display: none !important;
+    }
+
+    .left{
+      width: 100%;
+      height: 100%;
+    }
+
+    .select-district{
+      height: 50%;
+    }
+  } 
 
 
 

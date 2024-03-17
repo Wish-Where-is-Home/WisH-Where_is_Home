@@ -2,11 +2,32 @@ import React, { useState, useEffect } from 'react';
 import './Homepage.css';
 import {useTranslation} from "react-i18next";
 import videobackground from './../../Assets/Video/videobackground.mp4';
+import { FaInfoCircle } from 'react-icons/fa';
 
 
 function Homepage( {darkMode}) {
     const [selectedDistrict, setSelectedDistrict] = useState('Portugal');
+    const [modalVisible, setModalVisible] = useState(false);
+    const [modalContent, setModalContent] = useState('');
     const {t} = useTranslation("common");
+
+    const handleInfoMouseEnter = () => {
+       
+        const content = (
+            <div>
+                <p>{t('infotext')}.</p>
+            </div>
+        );
+        
+        
+        setModalContent(content);
+        setModalVisible(true);
+    };
+
+    const handleInfoMouseLeave = () => {
+        setModalVisible(false);
+    };
+    
 
     const handleDistrictChange = (event) => {
         setSelectedDistrict(event.target.value);
@@ -54,7 +75,8 @@ return (
     <div className={`home-section ${darkMode ? 'dark-mode' : 'light-mode'}`}>
         <div className="video-container">
                         <video autoPlay muted loop className="video" disablePictureInPicture controlsList="nodownload">
-                            <source src={videobackground} type="video/mp4" />
+                            <source src={
+                                videobackground} type="video/mp4" />
                         </video>
         </div>
         <h2 className='hometitle btn-shine'>
@@ -63,6 +85,49 @@ return (
 
         <div className='home-container'>
             <div className='left'>
+            <p className='selecttitle'>{t('selectedistrict')}:</p>
+            <div className='select-district'>
+                            <select
+                                id="districtSelect"
+                                className='select'
+                                p
+                                size={1}
+                                onChange={(event) => handleDistrictClick(event, event.target.value)}
+                                value={selectedDistrict}
+                            >
+                                <option value="Portugal" >Portugal</option>
+                                <option value="Aveiro">Aveiro</option>
+                                <option value="Beja">Beja</option>
+                                <option value="Braga">Braga</option>
+                                <option value="Braganca">Bragança</option>
+                                <option value="Castelo_Branco">Castelo Branco</option>
+                                <option value="Coimbra">Coimbra</option>
+                                <option value="Évora">Évora</option>
+                                <option value="Faro">Faro</option>
+                                <option value="Guarda">Guarda</option>
+                                <option value="Leiria">Leiria</option>
+                                <option value="Lisboa">Lisboa</option>
+                                <option value="Portalegre">Portalegre</option>
+                                <option value="Porto">Porto</option>
+                                <option value="Santarem">Santarém</option>
+                                <option value="Setúbal">Setúbal</option>
+                                <option value="Viana_do_Castelo">Viana do Castelo</option>
+                                <option value="Vila_Real">Vila Real</option>
+                                <option value="Viseu">Viseu</option>
+                            </select>
+            </div>
+                <div style={{ position: 'relative',width:'100%' }}>
+                                <FaInfoCircle 
+                                    onMouseEnter={handleInfoMouseEnter} 
+                                    onMouseLeave={handleInfoMouseLeave} 
+                                    style={{ cursor: 'pointer',color:"white",alignSelf:'center'}} 
+                                />
+                    <div className={modalVisible ? "modal visible" : "modal"}>
+                                                <div className="modal-content">
+                                                    {modalContent}
+                                                </div>
+                                            </div>
+                                        </div>
 
             </div>
             <div className='right'>
@@ -86,7 +151,6 @@ return (
                         <path id="Beja"  onClick={(event) => handleDistrictClick(event, 'Beja')} data-z="47" className="district z z47" d="M2913 24421v-130l33-98v-131l33-98v-130l-33-131-33-98-65-130 33-98 32-98 33-98v-425l-33-130v-164l109-68 97 62c14 61 124 159 172 274l36-7 42-98c54 16 119 80 190 115 65 31 142 18 131-47-23-138 3-146 44-278l107-38c-13-72-15-124 35-176 268-127 603-165 860-6l121-262c-87-228 158-301-83-656-172-7-273-69-346-247 60-42 61-130 59-197 93-3 44 31 114 40l41-210 83-59c78 39 84 103 154 74l36-231c98-15 108 43 185 29 168-267 296-127 435-266 27-119-19-273-64-379l-60-88c10-9 355-48 385-41l59-47 99 123 116 5 83-72c228 103 441 232 671 344 270-87 349 136 600 196 115-90 496 23 689 15 17-44 301-358 389-491-66-179 115 38 210-144l157-67c58-36 62-41 130-36 8 135 376 585 460 787 123 67 113-61 278-73l65 98 98 131 65-98h164l65-98 131-33 98-32 98 32-98 131-33 98v130l-33 131-65 294-33 131-98 32-98 65-98-97-97-33-98 33-33 130-131 98-98-33h-130l-131 33v131l-32 98v130l-33 98-65 131-33 98-33 98-98 130-98 66-65 97-98 66-98 65-32 98-33 98-33 98-65 131 33 97-66 98-65 98-33 98-65 98-33 98v131l-368 5-31-21-35 70-36-4-129 138h-36l-9-37-74 10-28-35c-77 6-150 1-223 32-22 33-93 43-163 95l-35-15c-124 70-274 140-390 216l9 37-82 11-69 39 20 75-38-1-52 53c-53-24-172 5-227 27l-75-17 3 39-74 25-3 79 63 51 1 37-186 60 1 37c-78 33-27 92-165 117-53-48-207-39-267-21-89-27-130-32-208-84-3-7-188-154-233-199h-82c-8-29-28-182-30-217l-184-18-11 44c-88-53-312 36-397 82l21 104-58 58-31-20c-49 20-45 38-87 72-183-61-136-15-251-32-47-47-99-87-141-135-52-4-211 35-273 49l-48 106-43-8-67-99c-73 21-219 48-285 8l-73-145-34-16-76 33z"  fill={selectedDistrict ? '#373434' : 'none'}stroke="#373434"/>
                         <path id="Faro" onClick={(event) => handleDistrictClick(event, 'Faro')} data-z="48" className="district z z48" d="M2913 24421l76-33 34 16 73 145c66 40 212 13 285-8l67 99 43 8 48-106c62-14 221-53 273-49 42 48 94 88 141 135 115 17 68-29 251 32 42-34 38-52 87-72l31 20 58-58-21-104c85-46 309-135 397-82l11-44 184 18c2 35 22 188 30 217h82c45 45 230 192 233 199 78 52 119 57 208 84 60-18 214-27 267 21 138-25 87-84 165-117l-1-37 186-60-1-37-63-51 3-79 74-25-3-39 75 17c55-22 174-51 227-27l52-53 38 1-20-75 69-39 82-11-9-37c116-76 266-146 390-216l35 15c70-52 141-62 163-95 73-31 146-26 223-32l28 35 74-10 9 37h36l129-138 36 4 35-70 31 21 368-5 33 98 98 98 65 98 33 163 65 163 33 131v326l33 196 32 98-32 131 65 98 33 228 14 84-178-51-228 65-392 196-196 196-261 130-327 262-98 98-195 130h-327v-65l-555-359-131-66-293-97h-131l-98 32-98 33-163 32-163-130-98-33-98 33-196 65-98-32-98-33-98-33-98-32-131-66h-130l-229 33-98 65-31 70-34-70-98 98-163 65-131 33-228 33-98 98h-131l-72 103-58 24-60 8-71-37-98-33v-163l131-98v-131l98-163 32-98 33-98-33-131 98-32 98-196 33-131-33-130-33-98 98-163 66-131 130-229z"  fill={selectedDistrict ? '#373434' : 'transparent'}stroke="#373434"/>
                     </svg>
-
                     </div>
 
         </div>

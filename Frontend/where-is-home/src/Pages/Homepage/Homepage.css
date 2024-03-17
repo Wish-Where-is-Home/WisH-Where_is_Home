@@ -24,7 +24,7 @@
 .hometitle {
     position: absolute;
     left: 50%;
-    bottom: 2rem;
+    bottom: 4%;
     transform: translate(-50%,0);
     margin: 0; 
     font-weight: 600;
@@ -35,6 +35,93 @@
 
 }
 
+
+.home-container .left{
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.home-container .right{
+    width: 50%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.svg-icon {
+    width: auto; 
+    height: 140vh; 
+    margin-top: 5rem;
+}
+
+.svg-icon path {
+    stroke: black;
+    fill: white;
+    stroke-width: 70;
+}
+
+.svg-icon path:hover {
+    fill: #0dddda !important;
+    stroke: black !important;
+    stroke-width: 70;
+    transition: fill 1s;
+    cursor: pointer;
+  }
+
+
+.btn-shine {
+    background: linear-gradient(to right,var(--hometitle) 0, white 10%, var(--hometitle) 20%);
+    background-position: 0;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shine 3s infinite linear;
+    animation-fill-mode: forwards;
+    -webkit-text-size-adjust: none;
+  }
+
+  .home-container{
+    height: 70vh;
+    width: 75%;
+     align-self: center;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row;
+    z-index: 1;
+}
+
+  
+  @keyframes shine {
+    0% {
+      background-position: 0;
+    }
+    50% {
+      background-position: 400px;
+    }
+    100% {
+      background-position: 800px;
+    }
+  }
+  
+
+
+  @media (max-width:1000px) {
+    .home-container {
+        flex-direction: column;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: none;
+      }
+      .svg-icon {
+        display: none;
+    }
+  }
 
 
 
@@ -48,4 +135,16 @@
             width: 80%;
     
         }
+
+        @keyframes shine {
+            0% {
+              background-position: 0;
+            }
+            50% {
+              background-position: 120px;
+            }
+            100% {
+              background-position: 240px;
+            }
+          }
     }

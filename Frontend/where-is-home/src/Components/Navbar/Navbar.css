@@ -1,9 +1,10 @@
 @import url('https://fonts.googleapis.com/css?family=Muli&display=swap');
 
 @font-face {
-    font-family: 'Manrope';
-    src: url('../../Fonts/manrope/manrope-light.otf') format('opentype');
+    font-family: 'Noir';
+    src: url('../../Fonts/NOIR_Font/Noir_regular.otf') format('opentype');
   }
+  
 
 .navbar {
     margin: 0 auto;
@@ -21,7 +22,7 @@
     left: 50%;
     transform: translateX(-50%);
     z-index: 999;
-    font-family:'Manrope, sans-serif' ;
+    font-family:'Noir', sans-serif ;
 
 }
 
@@ -311,12 +312,12 @@
 
 
 .menu-items .moon-icon {
-    right: 60px;
+    right: 50px;
 }
 
 
 .menu-items .sun-icon {
-    left: 60px;
+    left: 50px;
 }
 
 

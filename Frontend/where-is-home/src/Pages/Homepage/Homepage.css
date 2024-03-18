@@ -1,6 +1,6 @@
 @font-face {
-  font-family: 'Manrope';
-  src: url('../../Fonts/manrope/manrope-light.otf') format('opentype');
+  font-family: 'Noir';
+  src: url('../../Fonts/NOIR_Font/Noir_regular.otf') format('opentype');
 }
 
 
@@ -9,8 +9,7 @@
     width: 100%;
     display: flex;
     background-color: var(--background-color);
-    font-family:'Manrope, sans-serif' ;
-
+    font-family:'Noir', sans-serif ;
 }
 
 
@@ -198,7 +197,7 @@
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
-  font-family:'Manrope, sans-serif' ;
+  font-family:'Noir', sans-serif ;
 }
 
 .button-homepage:before {

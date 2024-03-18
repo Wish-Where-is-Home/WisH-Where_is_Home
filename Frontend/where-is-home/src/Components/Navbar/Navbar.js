@@ -37,7 +37,7 @@ function Navbar({ darkMode, toggleDarkMode }) {
                     <img src={logo} alt="logo" />
                     </a>
                     <div className='logo-title'>
-                    <h3>Wish</h3>
+                    <h3>WisH</h3>
                     <p>Where is Home</p>
                     </div>
                 </div>

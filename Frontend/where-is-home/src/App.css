@@ -14,6 +14,10 @@
   --logincontainer-light:white;
   --logincontainer-dark:#373434;
 
+
+  --navbar-border-light:hsl(179, 54%, 31%);
+  --navbar-border-dark:#0dddda;
+
 }
 
 
@@ -24,6 +28,7 @@
   --text-shadow: var(--text-shadow-light);
   --hometitle:var(--hometitle-light);
   --logincontainer:var(--logincontainer-light);
+  --navbar-border:var(--navbar-border-light);
 }
 
 
@@ -33,6 +38,7 @@
   --text-shadow: var(--text-shadow-dark);
   --hometitle:var(--hometitle-dark);
   --logincontainer:var(--logincontainer-dark);
+  --navbar-border:var(--navbar-border-dark);
 }
 
 .App {

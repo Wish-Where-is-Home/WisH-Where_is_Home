@@ -36,6 +36,10 @@ function Navbar({ darkMode, toggleDarkMode }) {
                     <a href='/'>
                     <img src={logo} alt="logo" />
                     </a>
+                    <div className='logo-title'>
+                    <h3>Wish</h3>
+                    <p>Where is Home</p>
+                    </div>
                 </div>
                 <div className='navbar-options'>
                     {isMobile ? (

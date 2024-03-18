@@ -19,7 +19,7 @@
     z-index: 9999;
     animation: fadeOut 0.5s ease-in-out forwards;
     animation-delay: 1.7s;
-    font-family:'Noir', sans-serif ;
+    font-family:'Space Mono Bold 700', sans-serif ;
 }
 
 .loader-circle {

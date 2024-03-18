@@ -8,6 +8,9 @@
   --text-shadow-light:0 0 5px rgba(0, 0, 0, 0.666);
   --text-shadow-dark:0 0 5px rgba(255, 255, 255, 0.905);
 
+  --hometitle-light:black;
+  --hometitle-dark:#0dddda;
+
 }
 
 
@@ -16,6 +19,7 @@
   --background-color: var(--background-color-light);
   --blacktowhite:var(--blacktowhite-light) ;
   --text-shadow: var(--text-shadow-light);
+  --hometitle:var(--hometitle-light);
 }
 
 
@@ -23,6 +27,7 @@
   --background-color: var(--background-color-dark);
   --blacktowhite:var(--blacktowhite-dark) ;
   --text-shadow: var(--text-shadow-dark);
+  --hometitle:var(--hometitle-dark);
 }
 
 .App {

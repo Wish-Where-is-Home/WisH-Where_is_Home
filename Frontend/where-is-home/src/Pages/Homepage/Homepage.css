@@ -1,0 +1,316 @@
+@import url('https://fonts.cdnfonts.com/css/space-mono');
+@font-face {
+    font-family: 'Quatro Book';
+    src: url('../../Fonts/Quatro-Book/Quatro-Book.ttf') format('truetype'),
+         url('../../Fonts/Quatro-Book/Quatro-Book.woff') format('woff'),
+         url('../../Fonts/Quatro-Book/Quatro-Book.woff2') format('woff2');
+}
+
+
+.home-section{
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    background-color: var(--background-color);
+    font-family: 'Space Mono', sans-serif;
+}
+
+
+.video-container {
+    position: absolute;
+    z-index: 0;
+    height: 70vh;
+    top: 20%;
+    width: 100%;
+}
+.home-container{
+  height: 70vh;
+  width: 75%;
+   align-self: center;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+  z-index: 1;
+}
+
+.video {
+    width:100% !important;
+    height: 100%;
+    filter: brightness(0.2);
+    object-fit: cover;
+}
+
+.hometitle {
+    position: absolute;
+    left: 50%;
+    bottom: 4%;
+    transform: translate(-50%,0);
+    margin: 0; 
+    font-weight: 600;
+    width: 100%;
+    font-size: 1rem;
+    letter-spacing: 0.3rem;
+    color: var(--hometitle);
+    font-style: italic;
+
+}
+
+
+.home-container .left{
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.home-container .left .selecttitle{
+  font-size: 1.5rem;
+  color: white;
+  font-weight: 800;
+  letter-spacing: 0.3rem;
+  padding-bottom: 1rem;
+}
+
+
+.select-district{
+  width: 100%;
+  height: 20%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+}
+
+
+.select-district .select{
+  width: 50%;
+  height: 4rem;
+  padding: 20px;
+  border-radius: 30px;
+  display: block;
+  background-color: var(--background-color);
+  border: 3px solid #0dddda;
+  color: var(--blacktowhite);
+  line-height: 1.42857143;
+  text-align: center;
+  
+}
+
+.modal {
+  display: none;
+  position: absolute;
+  z-index: 1;
+  width: 50%;
+  background-color: var(--background-color);
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 5px;
+  color:var(--blacktowhite);
+  font-size: 12px;
+  letter-spacing: 0.1rem;
+  left: 50%;
+  opacity: 0;
+  transform: translateX(-50%);
+}
+
+.modal.visible {
+  display: block;
+  opacity: 1;
+}
+
+
+
+.select-district .select option{
+  height: 3rem;
+  text-align: center;
+  justify-content: center;
+  font-size: 1rem;
+  padding-top: .5rem;
+  
+
+}
+
+.select-district .select option:checked{
+  background-color: #2e6f6e;
+  color: white;
+}
+
+.home-container .right{
+    width: 50%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.svg-icon {
+    width: auto; 
+    height: 140vh; 
+    margin-top: 5rem;
+}
+
+.svg-icon path {
+    stroke: black;
+    fill: white;
+    stroke-width: 70;
+}
+
+.svg-icon path:hover {
+    fill: #0dddda !important;
+    stroke: black !important;
+    stroke-width: 70;
+    transition: fill 1s;
+    cursor: pointer;
+  }
+
+
+.btn-shine {
+    background: linear-gradient(to right,var(--hometitle) 0, white 10%, var(--hometitle) 20%);
+    background-position: 0;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shine 3s infinite linear;
+    animation-fill-mode: forwards;
+    -webkit-text-size-adjust: none;
+  }
+
+
+
+.button-homepage{
+  background-color: #0dddda;
+  border: 0;
+  border-radius: 56px;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  font-family: system-ui,-apple-system,system-ui,"Segoe UI",Roboto,Ubuntu,"Helvetica Neue",sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  margin-top: 2rem;
+  outline: 0;
+  padding: 16px 40px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  transition: all .3s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.button-homepage:before {
+  background-color: initial;
+  background-image: linear-gradient(#fff 0, rgba(255, 255, 255, 0) 100%);
+  border-radius: 125px;
+  content: "";
+  height: 50%;
+  left: 4%;
+  opacity: .5;
+  position: absolute;
+  top: 0;
+  transition: all .3s;
+  width: 92%;
+}
+
+.button-homepage:hover {
+  box-shadow: rgba(255, 255, 255, .2) 0 3px 15px inset, rgba(0, 0, 0, .1) 0 3px 5px, rgba(0, 0, 0, .1) 0 10px 13px;
+  transform: scale(1.05);
+}
+
+  
+  @keyframes shine {
+    0% {
+      background-position: 0;
+    }
+    50% {
+      background-position: 400px;
+    }
+    100% {
+      background-position: 1200px;
+    }
+  }
+  
+
+
+  @media (max-width:1000px) {
+    .home-container {
+        flex-direction: column;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: none;
+      }
+      .svg-icon {
+        display: none;
+    }
+
+    .right{
+      display: none !important;
+    }
+
+    .left{
+      width: 100%;
+      height: 100%;
+    }
+
+    .select-district{
+      height: 40%;
+    }
+
+    .select-district .select{
+      width: 60%
+    }
+    
+  } 
+
+
+
+@media (max-width: 767px) {
+
+        .video-container {
+            height: 60vh;
+        }
+        .hometitle{
+            font-size: 0.7rem;
+            width: 80%;
+    
+        }
+
+        .select-district{
+          height: 20%;
+        }
+
+        .button-homepage{
+          font-size: 14px;
+          margin-top: 3rem;
+        }
+
+        .home-container .left .selecttitle{
+          font-size: 1rem;
+          white-space: nowrap;
+        }
+
+        .modal {
+          width: 100%;
+        }
+
+        .select-district .select{
+          width: 100%
+        }
+
+        @keyframes shine {
+            0% {
+              background-position: 0;
+            }
+            50% {
+              background-position: 120px;
+            }
+            100% {
+              background-position: 240px;
+            }
+          }
+    }

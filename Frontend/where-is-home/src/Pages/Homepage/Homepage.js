@@ -3,12 +3,15 @@ import './Homepage.css';
 import {useTranslation} from "react-i18next";
 import videobackground from './../../Assets/Video/videobackground.mp4';
 import { FaInfoCircle } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 
 function Homepage( {darkMode}) {
     const [selectedDistrict, setSelectedDistrict] = useState('Portugal');
     const [modalVisible, setModalVisible] = useState(false);
     const [modalContent, setModalContent] = useState('');
+
+    const navigate = useNavigate();
     const {t} = useTranslation("common");
 
     const handleInfoMouseEnter = () => {
@@ -28,10 +31,6 @@ function Homepage( {darkMode}) {
         setModalVisible(false);
     };
     
-
-    const handleDistrictChange = (event) => {
-        setSelectedDistrict(event.target.value);
-      };
 
       const handleDistrictClick = (event, districtId) => {
         const isOptionClick = event.target.tagName === 'OPTION';
@@ -69,6 +68,14 @@ function Homepage( {darkMode}) {
             });
         };
     }, []);
+
+    const handleButtonClick = (selectedDistrict) => {
+        console.log('handleButtonClick', selectedDistrict);
+       
+        setTimeout(() => {
+            navigate('/secondpage', { state: { selectedDistrict } });
+        }, 2000);
+    };
     
 
 return (
@@ -90,7 +97,6 @@ return (
                             <select
                                 id="districtSelect"
                                 className='select'
-                                p
                                 size={1}
                                 onChange={(event) => handleDistrictClick(event, event.target.value)}
                                 value={selectedDistrict}
@@ -116,7 +122,7 @@ return (
                                 <option value="Viseu">Viseu</option>
                             </select>
             </div>
-                <div style={{ position: 'relative',width:'100%' }}>
+                <div className='home-info' style={{ position: 'relative',width:'100%',paddingBottom:"3.5rem" }}>
                                 <FaInfoCircle 
                                     onMouseEnter={handleInfoMouseEnter} 
                                     onMouseLeave={handleInfoMouseLeave} 
@@ -128,7 +134,11 @@ return (
                                                 </div>
                                             </div>
                                         </div>
-
+                                        <div>
+                        <button className='button-homepage' onClick={() => handleButtonClick(selectedDistrict)}>
+                            {t('button-homepage-text')}
+                        </button>
+                        </div>
             </div>
             <div className='right'>
                     <svg className="svg-icon" width="500" height="700" viewBox="0 0 12969 26674">

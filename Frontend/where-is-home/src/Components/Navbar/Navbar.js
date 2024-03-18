@@ -11,7 +11,7 @@ function Navbar({ darkMode, toggleDarkMode }) {
     const { t } = useTranslation("common");
 
     const [menuOpen, setMenuOpen] = useState(false);
-    const [isMobile, setIsMobile] = useState(window.innerWidth < 1700);
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 1300);
 
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
@@ -19,7 +19,7 @@ function Navbar({ darkMode, toggleDarkMode }) {
 
     useEffect(() => {
         const handleResize = () => {
-            setIsMobile(window.innerWidth < 1500);
+            setIsMobile(window.innerWidth < 1300);
         };
 
         window.addEventListener('resize', handleResize);
@@ -52,14 +52,14 @@ function Navbar({ darkMode, toggleDarkMode }) {
                                 <li><a href="/aboutus">{t('aboutus')}</a></li>
                                 <li><a href="/login">Login</a></li>
                                 <li><LanguageSelector style={{"marginleft":"3rem"}}/></li>
+                                <li className="theme-toggle-container">
+                                    <FontAwesomeIcon icon={faSun} className="sun-icon" />
+                                    <FontAwesomeIcon icon={faMoon} className="moon-icon" />
+                                    <input type="checkbox" className="theme-toggle" checked={darkMode} onChange={toggleDarkMode} />
+                                </li>
                             </ul>
                         </div>
                     )}
-                    <div className="theme-toggle-container">
-                        <FontAwesomeIcon icon={faSun} className="sun-icon" />
-                        <FontAwesomeIcon icon={faMoon} className="moon-icon" />
-                        <input type="checkbox" className="theme-toggle" checked={darkMode} onChange={toggleDarkMode} />
-                    </div>
                 </div>
             </div>
             {menuOpen && isMobile && (
@@ -68,6 +68,11 @@ function Navbar({ darkMode, toggleDarkMode }) {
                         <li><a href="/aboutus">{t('aboutus')}</a></li>
                         <li><a href="/login">Login</a></li>
                         <li><LanguageSelector style={{margin:0}}/></li>
+                        <li className="theme-toggle-container">
+                                    <FontAwesomeIcon icon={faSun} className="sun-icon" />
+                                    <FontAwesomeIcon icon={faMoon} className="moon-icon" />
+                                    <input type="checkbox" className="theme-toggle" checked={darkMode} onChange={toggleDarkMode} />
+                                </li>
                     </ul>
                 </div>
             )}

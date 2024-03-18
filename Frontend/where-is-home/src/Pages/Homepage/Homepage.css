@@ -1,9 +1,6 @@
-@import url('https://fonts.cdnfonts.com/css/space-mono');
 @font-face {
-    font-family: 'Quatro Book';
-    src: url('../../Fonts/Quatro-Book/Quatro-Book.ttf') format('truetype'),
-         url('../../Fonts/Quatro-Book/Quatro-Book.woff') format('woff'),
-         url('../../Fonts/Quatro-Book/Quatro-Book.woff2') format('woff2');
+  font-family: 'Manrope';
+  src: url('../../Fonts/manrope/manrope-light.otf') format('opentype');
 }
 
 
@@ -12,7 +9,8 @@
     width: 100%;
     display: flex;
     background-color: var(--background-color);
-    font-family: 'Space Mono', sans-serif;
+    font-family:'Manrope, sans-serif' ;
+
 }
 
 
@@ -200,6 +198,7 @@
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
+  font-family:'Manrope, sans-serif' ;
 }
 
 .button-homepage:before {

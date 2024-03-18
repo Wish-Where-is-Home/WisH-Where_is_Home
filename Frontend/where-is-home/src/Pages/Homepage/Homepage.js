@@ -14,6 +14,7 @@ function Homepage( {darkMode}) {
     const [modalVisible, setModalVisible] = useState(false);
     const [modalContent, setModalContent] = useState('');
 
+
     const navigate = useNavigate();
     const {t} = useTranslation("common");
 
@@ -73,18 +74,9 @@ function Homepage( {darkMode}) {
     }, []);
 
     const handleButtonClick = (selectedDistrict) => {
-        
 
-        const loadingModal = document.createElement('div');
-        loadingModal.id = 'loadingModal'; 
-        document.body.appendChild(loadingModal);
-        ReactDOM.render(<LoadingModal darkMode={darkMode} />, loadingModal);
-       
-        setTimeout(() => {
-            const modal = document.getElementById('loadingModal');
-            modal.remove();
             navigate('/secondpage', { state: { selectedDistrict } });
-        }, 1000);
+        
     };
     
 

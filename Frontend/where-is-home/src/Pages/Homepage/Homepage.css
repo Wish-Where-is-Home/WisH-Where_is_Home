@@ -211,7 +211,7 @@
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
-  font-family:'Noir', sans-serif ;
+  font-family:'Space Mono Bold 700', sans-serif ;
 }
 
 .button-homepage:before {

@@ -11,6 +11,9 @@
   --hometitle-light:black;
   --hometitle-dark:#0dddda;
 
+  --logincontainer-light:white;
+  --logincontainer-dark:#373434;
+
 }
 
 
@@ -20,6 +23,7 @@
   --blacktowhite:var(--blacktowhite-light) ;
   --text-shadow: var(--text-shadow-light);
   --hometitle:var(--hometitle-light);
+  --logincontainer:var(--logincontainer-light);
 }
 
 
@@ -28,6 +32,7 @@
   --blacktowhite:var(--blacktowhite-dark) ;
   --text-shadow: var(--text-shadow-dark);
   --hometitle:var(--hometitle-dark);
+  --logincontainer:var(--logincontainer-dark);
 }
 
 .App {

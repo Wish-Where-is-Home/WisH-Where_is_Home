@@ -4,6 +4,7 @@ import Homepage from './Pages/Homepage/Homepage';
 import Loader from './Components/Loader/Loader';
 import { BrowserRouter as Router, Route, Routes, BrowserRouter } from 'react-router-dom'; 
 import './App.css';
+import Login_register from './Pages/Login-register/Login_register';
 
 function App() {
 
@@ -39,6 +40,7 @@ useEffect(() => {
         <BrowserRouter>
                           <Routes>
                           <Route exact path="/" element={<Homepage darkMode={darkMode} />} />
+                          <Route exact path="/login" element={<Login_register  darkMode={darkMode} />}/>
                           </Routes>
           </BrowserRouter>
         </>

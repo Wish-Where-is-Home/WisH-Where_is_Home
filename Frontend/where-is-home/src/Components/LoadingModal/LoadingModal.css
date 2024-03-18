@@ -6,8 +6,8 @@
     width: 100%;
     height: 100%;
     background-color: black;
-    opacity: 0.4; /* Opacity set to 0.1 */
-    z-index: 9998; /* Lower z-index than loading modal to ensure it's behind */
+    opacity: 0.4; 
+    z-index: 9998;
 }
 
 .loadingModal {
@@ -25,7 +25,7 @@
     box-shadow: rgba(13, 221, 218, 1) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
     background-color: var(--background-color);
     z-index: 9999;
-    font-family:'Noir', sans-serif ;
+    font-family:'Space Mono Bold 700', sans-serif ;
 }
 
 .loader-circle2 {

@@ -84,7 +84,7 @@ function Homepage( {darkMode}) {
             const modal = document.getElementById('loadingModal');
             modal.remove();
             navigate('/secondpage', { state: { selectedDistrict } });
-        }, 2000);
+        }, 1000);
     };
     
 

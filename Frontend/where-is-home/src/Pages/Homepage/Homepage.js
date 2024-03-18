@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import ReactDOM from 'react-dom';
+
 import './Homepage.css';
 import {useTranslation} from "react-i18next";
 import videobackground from './../../Assets/Video/videobackground.mp4';
 import { FaInfoCircle } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import LoadingModal from '../../Components/LoadingModal/LoadingModal';
 
 
 function Homepage( {darkMode}) {
@@ -70,9 +73,16 @@ function Homepage( {darkMode}) {
     }, []);
 
     const handleButtonClick = (selectedDistrict) => {
-        console.log('handleButtonClick', selectedDistrict);
+        
+
+        const loadingModal = document.createElement('div');
+        loadingModal.id = 'loadingModal'; 
+        document.body.appendChild(loadingModal);
+        ReactDOM.render(<LoadingModal darkMode={darkMode} />, loadingModal);
        
         setTimeout(() => {
+            const modal = document.getElementById('loadingModal');
+            modal.remove();
             navigate('/secondpage', { state: { selectedDistrict } });
         }, 2000);
     };

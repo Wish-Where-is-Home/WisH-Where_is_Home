@@ -310,10 +310,11 @@
     opacity: 0;
 }
 
-/* Change moon icon opacity on hover */
 .theme-toggle:checked:hover + .moon-icon {
     opacity: 0.5;
 }
+
+
 
 
 

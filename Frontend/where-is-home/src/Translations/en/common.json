@@ -1,7 +1,17 @@
 {
     "aboutus":"About Us",
     "QuoteHome":"Discover a place you would love to live",
-    "QuoteHome2":"Where the lifestyle meets the perfect location",
+    "QuoteHome2":"Where the lifestyle meets the perfect location",  
+    "password":"Password",
+    "forgotpass":"Forgot password?",
+    "confirmpass":"Confirm Password",
+    "donthave":"Don't have an account?",
+    "jatemconta":"Already have an account?",
+    "register":"Register",
+    "emailquestion":"What is your email?",
+    "submit":"Submit",
+    "resetpass":"Reset Password",
+    "backlogin":"Go back to login?",
     "selectedistrict":"Select a District",
     "infotext":"If you still don't know a district, select Portugal",
     "button-homepage-text":"Search"

@@ -3,6 +3,7 @@ import './Login_register.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebook, faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import {useTranslation} from "react-i18next";
 
 const Login_register = ({ darkMode }) => {
     
@@ -10,6 +11,7 @@ const Login_register = ({ darkMode }) => {
     const [passwordVisible2, setPasswordVisible2] = useState(false);
     const [isLoginForm, setIsLoginForm] = useState(true);
     const [showForgotPassword, setShowForgotPassword] = useState(false);
+    const {t} = useTranslation("common");
 
     const togglePasswordVisibility = () => {
         setPasswordVisible(!passwordVisible);
@@ -50,7 +52,7 @@ const Login_register = ({ darkMode }) => {
                                  <div class="field input-field">
                                         <input
                                             type={passwordVisible ? 'text' : 'password'}
-                                            placeholder="Password"
+                                            placeholder= {t('password')}
                                             className="password"
                                         />
                                     </div>
@@ -62,7 +64,7 @@ const Login_register = ({ darkMode }) => {
                                 </div>
                             </div>
                             <div class="form-link">
-                                <a href="#" class="forgot-pass" onClick={toggleForgotPassword}>Forgot password?</a>
+                                <a href="#" class="forgot-pass" onClick={toggleForgotPassword}>{t('forgotpass')}</a>
                             </div>
 
                         <div class="field button-field">
@@ -70,7 +72,7 @@ const Login_register = ({ darkMode }) => {
                         </div>
                         </form>
                         <div class="form-link">
-                        <span>Don't have an account? <a href="#" className="link login-link" onClick={toggleForm}>Sign Up</a></span>
+                        <span>{t('donthave')} <a href="#" className="link login-link" onClick={toggleForm}>Sign Up</a></span>
                         </div>
                         <div className='icons-login'>
                             <svg style={{ display: 'none' }}>
@@ -101,7 +103,7 @@ const Login_register = ({ darkMode }) => {
                     </div>
                 ): !isLoginForm && !showForgotPassword ?(
                     <div className='register-forms'>
-                        <h2>Register</h2>
+                        <h2>{t('register')}</h2>
                         <div className='space'>
                         </div>
                         <form>
@@ -113,7 +115,7 @@ const Login_register = ({ darkMode }) => {
                                  <div class="field input-field">
                                         <input
                                             type={passwordVisible ? 'text' : 'password'}
-                                            placeholder="Password"
+                                            placeholder={t('password')}
                                             className="password"
                                         />
                                     </div>
@@ -127,7 +129,7 @@ const Login_register = ({ darkMode }) => {
                                  <div class="field input-field">
                                         <input
                                             type={passwordVisible2 ? 'text' : 'password'}
-                                            placeholder="Confirm Password"
+                                            placeholder={t('confirmpass')}
                                             className="password"
                                         />
                                     </div>
@@ -141,11 +143,11 @@ const Login_register = ({ darkMode }) => {
                             </div>
 
                         <div class="field button-field">
-                            <button>Register</button>
+                            <button>{t('register')}</button>
                         </div>
                         </form>
                         <div class="form-link">
-                        <span>Already have an account? <a href="#" className="link login-link" onClick={toggleForm}>Login</a></span>
+                        <span>{t('jatemconta')} <a href="#" className="link login-link" onClick={toggleForm}>Login</a></span>
                         </div>
                         <div className='icons-login'>
                             <svg style={{ display: 'none' }}>
@@ -162,7 +164,7 @@ const Login_register = ({ darkMode }) => {
                             <a href="" rel="author" className="share google">
                                 <svg role="presentation" className="svg--icon">
                                     <use xlinkHref="#svg--google" />
-                                    <span className="clip">GOOGLE +</span>
+                                    <span className="clip">GOOGLE</span>
                                 </svg>
                             </a>
 
@@ -177,10 +179,10 @@ const Login_register = ({ darkMode }) => {
                     </div>
                 ): showForgotPassword ?(
                     <div className="forget-forms">
-                        <h2>Reset Password</h2>
+                        <h2>{t('resetpass')}</h2>
                         <div className='space'>
                         </div>
-                        <p>What is your email?</p>
+                        <p>{t('jatemconta')}</p>
                         <form>
                         <div className='inputs-login'>
                                 <div class="field input-field">
@@ -188,11 +190,11 @@ const Login_register = ({ darkMode }) => {
                                 </div>
                         </div>
                         <div class="field button-field">
-                            <button>Submit</button>
+                            <button>{t('register')}</button>
                         </div>
                         </form>
                         <div class="form-link">
-                        <span>Go back to login? <a href="#" className="link login-link" onClick={toggleForgotPassword}>Login</a></span>
+                        <span>{t('backlogin')} <a href="#" className="link login-link" onClick={toggleForgotPassword}>Login</a></span>
                         </div>
                                    
                     </div>

@@ -48,6 +48,19 @@
     letter-spacing: 0.2rem;
 }
 
+
+.forget-forms{
+    width: 95%;
+    height: 95%;
+}
+
+.forget-forms h2{
+    color: var(--blacktowhite);
+    font-size: 2rem;
+    white-space:  nowrap;
+    letter-spacing: 0.2rem;
+}
+
 /* ---------------------------------------------------------------- */
 
 
@@ -219,4 +232,25 @@ form .field{
     box-shadow: 0 0 8px 0 rgba(50, 50, 50, 0.15);
     border-radius: 50%;
     transition: 250ms;
+}
+
+.forget-forms p{
+    margin-top: 10%;
+    color: var(--blacktowhite);
+    padding-bottom: 2rem;
+}
+
+.forget-forms .field{
+    margin: 0 auto;
+}
+
+.forget-forms .field button{
+    margin: 0 auto;
+    margin-top: 2rem;
+}
+
+
+.forget-forms .form-link{
+    padding-top: 0;
+    margin-bottom: 2rem;
 }

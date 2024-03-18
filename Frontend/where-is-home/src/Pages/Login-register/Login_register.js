@@ -9,6 +9,7 @@ const Login_register = ({ darkMode }) => {
     const [passwordVisible, setPasswordVisible] = useState(false);
     const [passwordVisible2, setPasswordVisible2] = useState(false);
     const [isLoginForm, setIsLoginForm] = useState(true);
+    const [showForgotPassword, setShowForgotPassword] = useState(false);
 
     const togglePasswordVisibility = () => {
         setPasswordVisible(!passwordVisible);
@@ -22,11 +23,20 @@ const Login_register = ({ darkMode }) => {
         setIsLoginForm(!isLoginForm);
     };
 
+    const toggleForgotPassword = () => {
+        setShowForgotPassword(!showForgotPassword);
+    };
+
+    const handleForgotPassword = (e) => {
+        e.preventDefault();
+        console.log("Password reset requested!");
+    };
+
 
     return (
         <div className={`login ${darkMode ? 'dark-mode' : 'light-mode'}`}>
             <div className='container'>
-                {isLoginForm ? (
+                {isLoginForm && !showForgotPassword ? (
                     <div className='login-forms'>
                         <h2>Login</h2>
                         <div className='space'>
@@ -52,7 +62,7 @@ const Login_register = ({ darkMode }) => {
                                 </div>
                             </div>
                             <div class="form-link">
-                                <a href="#" class="forgot-pass">Forgot password?</a>
+                                <a href="#" class="forgot-pass" onClick={toggleForgotPassword}>Forgot password?</a>
                             </div>
 
                         <div class="field button-field">
@@ -89,7 +99,7 @@ const Login_register = ({ darkMode }) => {
                             </a>
                         </div>
                     </div>
-                ):(
+                ): !isLoginForm && !showForgotPassword ?(
                     <div className='register-forms'>
                         <h2>Register</h2>
                         <div className='space'>
@@ -165,8 +175,29 @@ const Login_register = ({ darkMode }) => {
                         </div>
                                    
                     </div>
-                    
-                )}
+                ): showForgotPassword ?(
+                    <div className="forget-forms">
+                        <h2>Reset Password</h2>
+                        <div className='space'>
+                        </div>
+                        <p>What is your email?</p>
+                        <form>
+                        <div className='inputs-login'>
+                                <div class="field input-field">
+                                    <input type="email" placeholder="Email" className="input"/>
+                                </div>
+                        </div>
+                        <div class="field button-field">
+                            <button>Submit</button>
+                        </div>
+                        </form>
+                        <div class="form-link">
+                        <span>Go back to login? <a href="#" className="link login-link" onClick={toggleForgotPassword}>Login</a></span>
+                        </div>
+                                   
+                    </div>
+
+                ):null}
             </div>
         </div>
     );

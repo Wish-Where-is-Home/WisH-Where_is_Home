@@ -96,9 +96,16 @@ return (
                                 videobackground} type="video/mp4" />
                         </video>
         </div>
-        <h2 className='hometitle btn-shine'>
+
+        <h2 className='hometitle2 btn-shine'>
                {t('QuoteHome')}!
         </h2>
+
+        <h2 className='hometitle btn-shine'>
+               {t('QuoteHome2')}!
+        </h2>
+
+        
 
         <div className='home-container'>
             <div className='left'>

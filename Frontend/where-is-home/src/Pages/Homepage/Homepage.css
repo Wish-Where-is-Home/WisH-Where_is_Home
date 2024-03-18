@@ -52,6 +52,20 @@
 
 }
 
+.hometitle2 {
+  position: absolute;
+  left: 50%;
+  top: 13%;
+  transform: translate(-50%,0);
+  margin: 0; 
+  font-weight: 600;
+  width: 100%;
+  font-size: 1rem;
+  letter-spacing: 0.3rem;
+  color: var(--hometitle);
+  font-style: italic;
+}
+
 
 .home-container .left{
     width: 50%;
@@ -277,6 +291,13 @@
             width: 80%;
     
         }
+
+        .hometitle2{
+          font-size: 0.7rem;
+          width: 80%;
+  
+      }
+
 
         .select-district{
           height: 20%;

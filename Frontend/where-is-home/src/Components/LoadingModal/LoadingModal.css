@@ -22,7 +22,7 @@
     border-radius: 56px;
     justify-content: center;
     align-items: center;
-    box-shadow: rgba(255, 253, 253, 0.36) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+    box-shadow: rgba(13, 221, 218, 1) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
     background-color: var(--background-color);
     z-index: 9999;
     font-family:'Noir', sans-serif ;

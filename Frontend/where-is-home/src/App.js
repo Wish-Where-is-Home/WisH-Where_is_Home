@@ -5,6 +5,7 @@ import Loader from './Components/Loader/Loader';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; 
 import './App.css';
 import Login_register from './Pages/Login-register/Login_register';
+import AboutUs from './Pages/AboutUs/AboutUs';
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
@@ -35,6 +36,7 @@ function App() {
       <Router>
         <Routes>
           <Route exact path="/" element={<Homepage darkMode={darkMode} />} />
+          <Route exact path="/aboutus" element={<AboutUs darkMode={darkMode}/>}/>
           <Route exact path="/login" element={<Login_register  darkMode={darkMode} />} />
         </Routes>
       </Router>

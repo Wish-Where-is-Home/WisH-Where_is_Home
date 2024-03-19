@@ -1,0 +1,177 @@
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 480px;
+    height: 100%;
+    background-color: rgb(12, 12, 12);
+    z-index: 10000;
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    transition: transform 0.7s ease; 
+  }
+
+  .navbar.open {
+    transform: translateX(0); 
+}
+
+.navbar {
+    transform: translateX(-100%); 
+}
+
+
+.navbar-div{
+    height: 90%;
+    width: 85%;
+    display: flex;
+    margin: auto;
+    flex-direction: column;
+}
+
+.navbar-title{
+    display: flex;
+    height: 5%;
+    width: 100%;
+    margin-top: 1rem;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 4rem;
+
+}
+
+.navbar-title h3{
+    font-family: "metropolis-semibold", sans-serif;
+    font-size: 13px;
+    line-height: 1.363;
+    text-transform: uppercase;
+    letter-spacing: 0.25rem;
+    color: #4cdbfb;
+}
+
+.navbar-title a {
+    height: 100%;
+    color: white;
+    font-size: 18px;
+    align-self: end;
+    margin-left: 27px;
+    align-items: center;
+    justify-content: center;
+    width: 15%;
+    display: flex;
+}
+
+.navbar-title .close{
+    margin: auto;
+}
+
+
+.navbar-content{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+
+
+.navbar-list{
+    font-family: "metropolis-regular", sans-serif;
+    font-size: 1.1rem;
+    margin: 1rem 0 2rem 0;
+    padding: 0 0 1.8rem 0;
+    list-style: none;
+    text-align: start;
+}
+
+.navbar-list li{
+    border-top: 1px solid rgba(255, 255, 255, 0.146);
+    line-height: 4rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.navbar-list li:last-child {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.146);
+}
+
+
+.navbar-list li label {
+    font-family: "metropolis-semibold", sans-serif;
+    font-size: 1rem;
+    color: #ffffff;
+    margin-bottom: 0.5rem;
+}
+
+.navbar-list li .rc-slider {
+    width: 70%; 
+    margin: 0 auto; 
+}
+
+.navbar-list li .slider-container {
+    display: flex;
+    flex-direction: row; 
+    width: 100%;
+}
+
+
+.navbar-list li .rc-slider {
+    width: 70%; 
+}
+
+.navbar-list li span {
+    font-family: "metropolis-semibold", sans-serif;
+    font-size: 0.8rem;
+    color: #ffffff;
+    text-align: center; 
+}
+
+
+  @media (max-width: 800px) {
+    .navbar{
+        width: 220px;
+
+    }
+
+    .navbar-title h3{
+        font-family: "metropolis-semibold", sans-serif;
+        font-size: 8px;
+        line-height: 1.363;
+        text-transform: uppercase;
+        letter-spacing: 0.25rem;
+        color: #4cdbfb;
+    }
+
+
+    .navbar-list{
+        font-family: "metropolis-regular", sans-serif;
+        font-size: 0.8rem;
+        margin: 3rem 0 1rem 0;
+        padding: 0 0 0 0;
+        list-style: none;
+        text-align: start;
+    }
+
+    .navbar-title{
+        margin-bottom: 2rem;
+    }
+
+    .navbar-list li{
+        line-height: 3rem;
+    }
+
+    .navbar-list li label {
+        font-size: 0.8rem; 
+    }
+
+    .navbar-list li .rc-slider {
+        width: 60%;
+    }
+  }
+  
+
+
+
+
+

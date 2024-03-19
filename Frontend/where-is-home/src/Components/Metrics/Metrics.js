@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css'; 
+import AccordionItem from './AccordionItem';
 
 const Metrics = ({ isOpen, toggleNavbar }) => {
     const [metricValues, setMetricValues] = useState({
@@ -21,6 +22,46 @@ const Metrics = ({ isOpen, toggleNavbar }) => {
         });
     };
 
+    const [acceptedMetrics, setAcceptedMetrics] = useState(false); // State to track if metrics have been accepted
+
+    const handleAcceptMetrics = () => {
+        setAcceptedMetrics(true);
+    };
+
+    const handleGoBack = () => {
+        setAcceptedMetrics(false);
+    };
+
+    const secondSetOfMetrics = [
+        {
+            genre: 'Health',
+            sliders: [
+                { label: 'Metric 1' },
+                { label: 'Metric 2' },
+            ]
+        },
+        {
+            genre: 'Nature',
+            sliders: [
+                { label: 'Metric 3' },
+                { label: 'Metric 4' },
+            ]
+        },
+        {
+            genre: 'Entertainment',
+            sliders: [
+                { label: 'Metric 5' },
+                { label: 'Metric 6' },
+            ]
+        },
+        {
+            genre: 'Education',
+            sliders: [
+                { label: 'Metric 7' },
+                { label: 'Metric 8' },
+            ]
+        },
+    ];
 
     return (
         <nav className={`navbar ${isOpen ? 'open' : ''}`}>
@@ -32,6 +73,8 @@ const Metrics = ({ isOpen, toggleNavbar }) => {
                     </a>
                 </div>
                 <div className='navbar-content'>
+
+                {!acceptedMetrics ? (
                     <ul className='navbar-list'>
                     <li>
                         <label >Health:</label>
@@ -87,6 +130,20 @@ const Metrics = ({ isOpen, toggleNavbar }) => {
                         <span>{metricValues.education}</span>
                     </li>
                     </ul>
+                    ) : (
+                        secondSetOfMetrics.map((item, index) => (
+                            <AccordionItem key={index} genre={item.genre} sliders={item.sliders} />
+                        ))
+                    )}
+                    {!acceptedMetrics && (
+                        // Display accept button if metrics haven't been accepted yet
+                        <button onClick={handleAcceptMetrics}>Accept Metrics</button>
+                    )}
+                    {acceptedMetrics && (
+                        // Display button to go back to the initial set of sliders
+                        <button onClick={handleGoBack}>Go Back</button>
+                    )}
+                    
                 </div>
             </div>
         </nav>

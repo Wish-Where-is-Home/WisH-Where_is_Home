@@ -58,7 +58,7 @@
     padding-left: 20px;
     display: flex;
     flex-direction:column;
-    align-items: center;
+    align-items: flex-start;
     justify-content: flex-start;
 }
 
@@ -67,6 +67,7 @@
     font-size: 1rem;
     color: var(--navbar-border);
     white-space: nowrap;
+    justify-content: flex-start;
 }
 
 .logo-title p{
@@ -75,6 +76,7 @@
     white-space: nowrap;
     margin: 0;
     margin-bottom: 10px;
+    justify-content: flex-start;
 }
 
 

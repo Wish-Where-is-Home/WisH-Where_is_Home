@@ -1,0 +1,36 @@
+[
+    {
+      "id": 1,
+      "beds": 4,
+      "baths": 5,
+      "carSpaces": 2,
+      "area": "241.00m²",
+      "type": "Apartamento T4",
+      "location": "Praia Grande, Torres",
+      "price": "170.000$",
+      "image": "/images/imovel1.png"
+    },
+    {
+      "id": 2,
+      "beds": 3,
+      "baths": 3,
+      "carSpaces": 1,
+      "area": "150.00m²",
+      "type": "Casa T3",
+      "location": "Centro da Cidade, Lisboa",
+      "price": "250.000$",
+      "image": "/images/imovel2.jpg"
+    },
+    {
+      "id": 3,
+      "beds": 2,
+      "baths": 2,
+      "carSpaces": 1,
+      "area": "100.00m²",
+      "type": "Vivenda T2",
+      "location": "Avenida Principal, Porto",
+      "price": "120.000$",
+      "image": "/images/imovel3.jpg"
+    }
+  ]
+  

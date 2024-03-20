@@ -31,6 +31,28 @@
       "location": "Avenida Principal, Porto",
       "price": "120.000$",
       "image": "/images/imovel3.jpg"
+    },
+    {
+      "id": 4,
+      "beds": 2,
+      "baths": 2,
+      "carSpaces": 1,
+      "area": "100.00m²",
+      "type": "Vivenda T2",
+      "location": "Avenida Principal, Porto",
+      "price": "120.000$",
+      "image": "/images/imovel3.jpg"
+    },
+    {
+      "id": 5,
+      "beds": 2,
+      "baths": 2,
+      "carSpaces": 1,
+      "area": "100.00m²",
+      "type": "Vivenda T2",
+      "location": "Avenida Principal, Porto",
+      "price": "120.000$",
+      "image": "/images/imovel3.jpg"
     }
   ]
   

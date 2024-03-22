@@ -4,14 +4,94 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebook, faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import {useTranslation} from "react-i18next";
+import { useAuth } from '../../AuthContext/AuthContext';
+import { getAuth, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider } from "firebase/auth";
 
-const Login_register = ({ darkMode }) => {
+const Login_register = ({ darkMode,firebaseConfig }) => {
     
     const [passwordVisible, setPasswordVisible] = useState(false);
     const [passwordVisible2, setPasswordVisible2] = useState(false);
     const [isLoginForm, setIsLoginForm] = useState(true);
     const [showForgotPassword, setShowForgotPassword] = useState(false);
     const {t} = useTranslation("common");
+
+    const [nameRegister,setNameRegister] = useState('');
+    const [emailRegister, setEmailRegister] = useState('');
+    const [passwordRegister, setPasswordRegister] = useState('');
+    const [passwordConfirmRegister, setPasswordConfirmRegister] = useState('');
+
+    const auth = getAuth();
+
+    
+
+
+    const handleLogin = () => {
+        signInWithEmailAndPassword(auth, emailRegister, passwordRegister)
+            .then((userCredential) => {
+                const user = userCredential.user;
+                console.log("User logged in:", user);
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                console.error("Login error:", errorMessage);
+            });
+    };
+
+
+    const handleRegister = () => {
+        if (passwordRegister !== passwordConfirmRegister) {
+          console.error("Passwords do not match");
+          return;
+        }
+    
+        const auth = getAuth();
+        createUserWithEmailAndPassword(auth, emailRegister, passwordRegister)
+          .then((userCredential) => {
+            const user = userCredential.user;
+            updateProfile(user, {
+              displayName: nameRegister
+            }).then(() => {
+              console.log("User registered with name:", nameRegister);
+            }).catch((error) => {
+              console.error("Error updating profile:", error.message);
+            });
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.error("Registration error:", errorMessage);
+          });
+      };
+
+
+      const handleGoogleLogin = () => {
+        const auth = getAuth();
+        const provider = new GoogleAuthProvider();
+        signInWithPopup(auth, provider)
+          .then((result) => {
+            const user = result.user;
+            console.log("User signed in with Google:", user);
+          })
+          .catch((error) => {
+            console.error("Google login error:", error.message);
+          });
+      };
+    
+      const handleFacebookLogin = () => {
+        const auth = getAuth();
+        const provider = new FacebookAuthProvider();
+        signInWithPopup(auth, provider)
+          .then((result) => {
+            
+            const user = result.user;
+            console.log("User signed in with Facebook:", user);
+          })
+          .catch((error) => {
+            console.error("Facebook login error:", error.message);
+          });
+      };
+
 
     const togglePasswordVisibility = () => {
         setPasswordVisible(!passwordVisible);
@@ -86,19 +166,19 @@ const Login_register = ({ darkMode }) => {
                                 </symbol>
                             </svg>
 
-                            <a href="" rel="author" className="share google">
+                            <button onClick={handleGoogleLogin} className="share google">
                                 <svg role="presentation" className="svg--icon">
                                     <use xlinkHref="#svg--google" />
-                                    <span className="clip">GOOGLE +</span>
+                                    <span className="clip">GOOGLE</span>
                                 </svg>
-                            </a>
+                            </button>
 
-                            <a href="" rel="author" className="share facebook">
+                            <button onClick={handleFacebookLogin} className="share facebook">
                                 <svg role="presentation" className="svg--icon">
                                     <use xlinkHref="#svg--facebook" />
                                     <span className="clip">FACEBOOK</span>
                                 </svg>
-                            </a>
+                            </button>
                         </div>
                     </div>
                 ): !isLoginForm && !showForgotPassword ?(
@@ -109,7 +189,10 @@ const Login_register = ({ darkMode }) => {
                         <form>
                         <div className='inputs-login'>
                                 <div class="field input-field">
-                                    <input type="email" placeholder="Email" className="input"/>
+                                    <input type="text" placeholder="Name" className="input" onChange={(e) => setNameRegister(e.target.value)}/>
+                                </div>
+                                <div class="field input-field">
+                                    <input type="email" placeholder="Email" className="input" onChange={(e) => setEmailRegister(e.target.value)} />
                                 </div>
                                 <div className='pass-vis'>
                                  <div class="field input-field">
@@ -117,6 +200,7 @@ const Login_register = ({ darkMode }) => {
                                             type={passwordVisible ? 'text' : 'password'}
                                             placeholder={t('password')}
                                             className="password"
+                                            onChange={(e) => setPasswordRegister(e.target.value)}
                                         />
                                     </div>
                                     <FontAwesomeIcon
@@ -131,6 +215,7 @@ const Login_register = ({ darkMode }) => {
                                             type={passwordVisible2 ? 'text' : 'password'}
                                             placeholder={t('confirmpass')}
                                             className="password"
+                                            onChange={(e) => setPasswordConfirmRegister(e.target.value)}
                                         />
                                     </div>
                                     <FontAwesomeIcon
@@ -143,7 +228,7 @@ const Login_register = ({ darkMode }) => {
                             </div>
 
                         <div class="field button-field">
-                            <button>{t('register')}</button>
+                            <button onClick={handleRegister}>{t('register')}</button>
                         </div>
                         </form>
                         <div class="form-link">
@@ -161,19 +246,19 @@ const Login_register = ({ darkMode }) => {
                                 </symbol>
                             </svg>
 
-                            <a href="" rel="author" className="share google">
+                            <button onClick={handleGoogleLogin} className="share google">
                                 <svg role="presentation" className="svg--icon">
                                     <use xlinkHref="#svg--google" />
                                     <span className="clip">GOOGLE</span>
                                 </svg>
-                            </a>
+                            </button>
 
-                            <a href="" rel="author" className="share facebook">
+                            <button onClick={handleFacebookLogin} className="share facebook">
                                 <svg role="presentation" className="svg--icon">
                                     <use xlinkHref="#svg--facebook" />
                                     <span className="clip">FACEBOOK</span>
                                 </svg>
-                            </a>
+                            </button>
                         </div>
                                    
                     </div>

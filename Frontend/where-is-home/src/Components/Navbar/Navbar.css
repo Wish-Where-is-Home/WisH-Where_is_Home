@@ -157,6 +157,10 @@
 
 
 
+.logout-menu:hover{
+    cursor: pointer;
+}
+
 
 .menu-items {
     position: absolute;

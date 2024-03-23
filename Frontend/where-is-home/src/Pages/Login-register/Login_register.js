@@ -52,6 +52,7 @@ const Login_register = ({ darkMode,firebaseConfig }) => {
               displayName: nameRegister
             }).then(() => {
               console.log("User registered with name:", nameRegister);
+              setIsLoginForm(true);
             }).catch((error) => {
               console.error("Error updating profile:", error.message);
             });
@@ -64,18 +65,33 @@ const Login_register = ({ darkMode,firebaseConfig }) => {
       };
 
 
-      const handleGoogleLogin = () => {
+      const handleGoogleLogin = async () => {
         const auth = getAuth();
         const provider = new GoogleAuthProvider();
-        signInWithPopup(auth, provider)
-          .then((result) => {
+        try {
+            const result = await signInWithPopup(auth, provider);
             const user = result.user;
             console.log("User signed in with Google:", user);
-          })
-          .catch((error) => {
+    
+            // Create token
+            const tokenResponse = await fetch('http://localhost:8000/loginusers/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email: user.email, name: user.displayName, id: user.uid }),
+                credentials: 'include'
+            });
+    
+            const tokenData = await tokenResponse.json();
+    
+            localStorage.setItem('token', tokenData.token);
+            localStorage.setItem('tokenExpiration', tokenData.exp);
+            window.location.href ="/"
+        } catch (error) {
             console.error("Google login error:", error.message);
-          });
-      };
+        }
+    };
     
       const handleFacebookLogin = () => {
         const auth = getAuth();

@@ -8,6 +8,7 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [authToken, setAuthToken] = useState(localStorage.getItem('token'));
   const [userInfo, setUserInfo] = useState(null);
+  
 
 
   const isAuthenticated = !!authToken;
@@ -49,40 +50,41 @@ export const AuthProvider = ({ children }) => {
     return () => clearInterval(interval);
 }, []);
 
-  const loginUser = async (credentials) => {
-    try {
-       
-        const auth = getAuth();
+    const loginUser = async (credentials) => {
+      try {
         
-        
-        const response = await signInWithEmailAndPassword(auth, credentials.email, credentials.password);
+          const auth = getAuth();
+          
+          
+          const response = await signInWithEmailAndPassword(auth, credentials.email, credentials.password);
 
-        const userName = response.user.displayName;
-        const userId = response.user.uid;
+          const userName = response.user.displayName;
+          const userId = response.user.uid;
+          
         
-       
-        const tokenResponse = await fetch('http://localhost:8000/loginusers/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ email: credentials.email, name: userName, id:userId}),
-            credentials: 'include' 
-        });
+          const tokenResponse = await fetch('http://localhost:8000/loginusers/', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ email: credentials.email, name: userName, id:userId}),
+              credentials: 'include' 
+          });
 
-        const tokenData = await tokenResponse.json();
-        
-        
-        localStorage.setItem('token', tokenData.token);
-        localStorage.setItem('tokenExpiration', tokenData.exp); 
-        
-        
-    } catch (error) {
-        
-        console.error('Login error:', error.message);
-        
-    }
-};
+          const tokenData = await tokenResponse.json();
+          
+          
+          localStorage.setItem('token', tokenData.token);
+          localStorage.setItem('tokenExpiration', tokenData.exp); 
+          window.location.href ="/"
+          
+          
+      } catch (error) {
+          
+          console.error('Login error:', error.message);
+          
+      }
+  };
 
 
 const logoutUser = () => {

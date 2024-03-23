@@ -27,8 +27,6 @@ const Login_register = ({ darkMode,firebaseConfig }) => {
     
     const { loginUser } = useAuth();
 
-    
-
 
     const handleLogin = (e) => {
         e.preventDefault(); 
@@ -126,11 +124,11 @@ const Login_register = ({ darkMode,firebaseConfig }) => {
                         </div>
                         <form className="login-f">
                             <div className='inputs-login'>
-                                <div class="field input-field">
+                                <div className="field input-field">
                                     <input type="email" placeholder="Email" className="input"  onChange={(e) => setEmailLogin(e.target.value)}/>
                                 </div>
                                 <div className='pass-vis'>
-                                 <div class="field input-field">
+                                 <div className="field input-field">
                                         <input
                                             type={passwordVisible ? 'text' : 'password'}
                                             placeholder= {t('password')}
@@ -145,15 +143,15 @@ const Login_register = ({ darkMode,firebaseConfig }) => {
                                         />
                                 </div>
                             </div>
-                            <div class="form-link">
-                                <a href="#" class="forgot-pass" onClick={toggleForgotPassword}>{t('forgotpass')}</a>
+                            <div className="form-link">
+                                <a href="#" className="forgot-pass" onClick={toggleForgotPassword}>{t('forgotpass')}</a>
                             </div>
 
-                        <div class="field button-field">
+                        <div className="field button-field">
                             <button onClick={handleLogin}>Login</button>
                         </div>
                         </form>
-                        <div class="form-link">
+                        <div className="form-link">
                         <span>{t('donthave')} <a href="#" className="link login-link" onClick={toggleForm}>Sign Up</a></span>
                         </div>
                         <div className='icons-login'>
@@ -190,14 +188,14 @@ const Login_register = ({ darkMode,firebaseConfig }) => {
                         </div>
                         <form>
                         <div className='inputs-login'>
-                                <div class="field input-field">
+                                <div className="field input-field">
                                     <input type="text" placeholder="Name" className="input" onChange={(e) => setNameRegister(e.target.value)}/>
                                 </div>
-                                <div class="field input-field">
+                                <div className="field input-field">
                                     <input type="email" placeholder="Email" className="input" onChange={(e) => setEmailRegister(e.target.value)} />
                                 </div>
                                 <div className='pass-vis'>
-                                 <div class="field input-field">
+                                 <div className="field input-field">
                                         <input
                                             type={passwordVisible ? 'text' : 'password'}
                                             placeholder={t('password')}
@@ -212,7 +210,7 @@ const Login_register = ({ darkMode,firebaseConfig }) => {
                                         />
                                 </div>
                                 <div className='pass-vis'>
-                                 <div class="field input-field">
+                                 <div className="field input-field">
                                         <input
                                             type={passwordVisible2 ? 'text' : 'password'}
                                             placeholder={t('confirmpass')}
@@ -229,11 +227,11 @@ const Login_register = ({ darkMode,firebaseConfig }) => {
                                 
                             </div>
 
-                        <div class="field button-field">
+                        <div className="field button-field">
                             <button onClick={handleRegister}>{t('register')}</button>
                         </div>
                         </form>
-                        <div class="form-link">
+                        <div className="form-link">
                         <span>{t('jatemconta')} <a href="#" className="link login-link" onClick={toggleForm}>Login</a></span>
                         </div>
                         <div className='icons-login'>
@@ -272,15 +270,15 @@ const Login_register = ({ darkMode,firebaseConfig }) => {
                         <p>{t('jatemconta')}</p>
                         <form>
                         <div className='inputs-login'>
-                                <div class="field input-field">
+                                <div className="field input-field">
                                     <input type="email" placeholder="Email" className="input"/>
                                 </div>
                         </div>
-                        <div class="field button-field">
+                        <div className="field button-field">
                             <button>{t('register')}</button>
                         </div>
                         </form>
-                        <div class="form-link">
+                        <div className="form-link">
                         <span>{t('backlogin')} <a href="#" className="link login-link" onClick={toggleForgotPassword}>Login</a></span>
                         </div>
                                    

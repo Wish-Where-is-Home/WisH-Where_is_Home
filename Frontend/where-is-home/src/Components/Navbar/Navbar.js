@@ -5,10 +5,15 @@ import { useTranslation } from "react-i18next";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSun, faMoon } from '@fortawesome/free-solid-svg-icons';
 import { LanguageSelector } from '../LanguageSelector/LanguageSelector';
+import { useAuth } from '../../AuthContext/AuthContext';
+
 
 function Navbar({ darkMode, toggleDarkMode }) {
 
     const { t } = useTranslation("common");
+
+    const { isAuthenticated, userInfo,logoutUser} = useAuth();
+
 
     const [menuOpen, setMenuOpen] = useState(false);
     const [isMobile, setIsMobile] = useState(window.innerWidth < 1300);

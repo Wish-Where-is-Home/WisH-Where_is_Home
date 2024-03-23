@@ -15,31 +15,32 @@ const Login_register = ({ darkMode,firebaseConfig }) => {
     const [showForgotPassword, setShowForgotPassword] = useState(false);
     const {t} = useTranslation("common");
 
+    const[emailLogin,setEmailLogin] = useState('');
+    const[passwordLogin,setPasswordLogin] = useState('');
+
+
     const [nameRegister,setNameRegister] = useState('');
     const [emailRegister, setEmailRegister] = useState('');
     const [passwordRegister, setPasswordRegister] = useState('');
     const [passwordConfirmRegister, setPasswordConfirmRegister] = useState('');
 
-    const auth = getAuth();
+    
+    const { loginUser } = useAuth();
 
     
 
 
-    const handleLogin = () => {
-        signInWithEmailAndPassword(auth, emailRegister, passwordRegister)
-            .then((userCredential) => {
-                const user = userCredential.user;
-                console.log("User logged in:", user);
-            })
-            .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                console.error("Login error:", errorMessage);
-            });
-    };
+    const handleLogin = (e) => {
+        e.preventDefault(); 
+        loginUser({
+          email: emailLogin,
+          password: passwordLogin
+        });
+      };
 
 
-    const handleRegister = () => {
+    const handleRegister = (e) => {
+        e.preventDefault(); 
         if (passwordRegister !== passwordConfirmRegister) {
           console.error("Passwords do not match");
           return;
@@ -126,7 +127,7 @@ const Login_register = ({ darkMode,firebaseConfig }) => {
                         <form className="login-f">
                             <div className='inputs-login'>
                                 <div class="field input-field">
-                                    <input type="email" placeholder="Email" className="input"/>
+                                    <input type="email" placeholder="Email" className="input"  onChange={(e) => setEmailLogin(e.target.value)}/>
                                 </div>
                                 <div className='pass-vis'>
                                  <div class="field input-field">
@@ -134,6 +135,7 @@ const Login_register = ({ darkMode,firebaseConfig }) => {
                                             type={passwordVisible ? 'text' : 'password'}
                                             placeholder= {t('password')}
                                             className="password"
+                                            onChange={(e) => setPasswordLogin(e.target.value)}
                                         />
                                     </div>
                                     <FontAwesomeIcon
@@ -148,7 +150,7 @@ const Login_register = ({ darkMode,firebaseConfig }) => {
                             </div>
 
                         <div class="field button-field">
-                            <button>Login</button>
+                            <button onClick={handleLogin}>Login</button>
                         </div>
                         </form>
                         <div class="form-link">

@@ -14,6 +14,8 @@ function Navbar({ darkMode, toggleDarkMode }) {
 
     const { isAuthenticated, userInfo,logoutUser} = useAuth();
 
+    console.log(userInfo);
+
 
     const [menuOpen, setMenuOpen] = useState(false);
     const [isMobile, setIsMobile] = useState(window.innerWidth < 1300);

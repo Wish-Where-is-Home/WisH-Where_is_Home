@@ -16,9 +16,9 @@ export const AuthProvider = ({ children }) => {
     try {
         const decodedToken = jwt_decode(token);
         
-        const { email, name } = decodedToken;
+        const { email, name, id } = decodedToken;
 
-        setUserInfo({ email, name });
+        setUserInfo({ email, name, id });
     } catch (error) {
         console.error('Error decoding token:', error);
     }
@@ -58,6 +58,7 @@ export const AuthProvider = ({ children }) => {
         const response = await signInWithEmailAndPassword(auth, credentials.email, credentials.password);
 
         const userName = response.user.displayName;
+        const userId = response.user.uid;
         
        
         const tokenResponse = await fetch('http://localhost:8000/loginusers/', {
@@ -65,7 +66,7 @@ export const AuthProvider = ({ children }) => {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ email: credentials.email, name: userName }),
+            body: JSON.stringify({ email: credentials.email, name: userName, id:userId}),
             credentials: 'include' 
         });
 

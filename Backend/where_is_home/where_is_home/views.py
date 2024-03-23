@@ -11,13 +11,15 @@ class GenerateTokenView(APIView):
     def post(self, request):
         email = request.data.get('email')
         name = request.data.get('name')
+        user_id = request.data.get('id')
         
-        # Set token expiration time to 1 hour from now
+        
         expiration_time = datetime.utcnow() + timedelta(hours=1)
         
         token_payload = {
             'email': email,
             'name': name,
+            'id': user_id, 
             'exp': expiration_time.timestamp() 
         }
         

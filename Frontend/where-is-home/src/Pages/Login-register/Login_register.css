@@ -247,11 +247,13 @@ form .field{
 
 .forget-forms .field{
     margin: 0 auto;
+    margin-left: 2rem;
 }
 
 .forget-forms .field button{
     margin: 0 auto;
-    margin-top: 2rem;
+    margin-top: 4rem;
+    margin-left: 2rem;
 }
 
 

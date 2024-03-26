@@ -5,7 +5,7 @@ import { faFacebook, faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import {useTranslation} from "react-i18next";
 import { useAuth } from '../../AuthContext/AuthContext';
-import { getAuth, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, updateProfile, sendPasswordResetEmail, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider } from "firebase/auth";
 
 const Login_register = ({ darkMode,firebaseConfig }) => {
     
@@ -23,6 +23,7 @@ const Login_register = ({ darkMode,firebaseConfig }) => {
     const [emailRegister, setEmailRegister] = useState('');
     const [passwordRegister, setPasswordRegister] = useState('');
     const [passwordConfirmRegister, setPasswordConfirmRegister] = useState('');
+    const [resetEmail, setResetEmail] = useState('');
 
     
     const { loginUser } = useAuth();
@@ -124,10 +125,16 @@ const Login_register = ({ darkMode,firebaseConfig }) => {
         setShowForgotPassword(!showForgotPassword);
     };
 
-    const handleForgotPassword = (e) => {
+    const handleResetPassword = async (e) => {
         e.preventDefault();
-        console.log("Password reset requested!");
-    };
+        try {
+          const auth = getAuth();
+          await sendPasswordResetEmail(auth, resetEmail);
+        } catch (error) {
+          console.error("Reset password error:", error.message);
+        }
+      };
+      
 
 
     return (
@@ -284,14 +291,14 @@ const Login_register = ({ darkMode,firebaseConfig }) => {
                         <div className='space'>
                         </div>
                         <p>{t('jatemconta')}</p>
-                        <form>
+                        <form  onSubmit={handleResetPassword}>
                         <div className='inputs-login'>
                                 <div className="field input-field">
-                                    <input type="email" placeholder="Email" className="input"/>
+                                    <input type="email" placeholder="Email" className="input" value={resetEmail} onChange={(e) => setResetEmail(e.target.value)}/>
                                 </div>
                         </div>
                         <div className="field button-field">
-                            <button>{t('register')}</button>
+                            <button type='submit'>{t('resetpass')}</button>
                         </div>
                         </form>
                         <div className="form-link">

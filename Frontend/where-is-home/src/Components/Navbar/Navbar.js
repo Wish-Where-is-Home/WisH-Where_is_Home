@@ -5,10 +5,16 @@ import { useTranslation } from "react-i18next";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSun, faMoon } from '@fortawesome/free-solid-svg-icons';
 import { LanguageSelector } from '../LanguageSelector/LanguageSelector';
+import { useAuth } from '../../AuthContext/AuthContext';
+
 
 function Navbar({ darkMode, toggleDarkMode }) {
 
     const { t } = useTranslation("common");
+
+    const { isAuthenticated,logoutUser} = useAuth();
+
+
 
     const [menuOpen, setMenuOpen] = useState(false);
     const [isMobile, setIsMobile] = useState(window.innerWidth < 1300);
@@ -28,6 +34,12 @@ function Navbar({ darkMode, toggleDarkMode }) {
             window.removeEventListener('resize', handleResize);
         };
     }, []);
+
+    const handleLogout = () => {
+        logoutUser(); 
+        window.location.reload();
+    };
+
 
     return (
         <nav className={`navbar ${darkMode ? 'dark-mode' : 'light-mode'}`}>
@@ -54,13 +66,19 @@ function Navbar({ darkMode, toggleDarkMode }) {
                         <div className="menu-items2">
                             <ul>
                                 <li><a href="/aboutus">{t('aboutus')}</a></li>
-                                <li><a href="/login">Login</a></li>
+                                
                                 <li><LanguageSelector style={{"marginleft":"3rem"}}/></li>
                                 <li className="theme-toggle-container">
                                     <FontAwesomeIcon icon={faSun} className="sun-icon" />
                                     <FontAwesomeIcon icon={faMoon} className="moon-icon" />
                                     <input type="checkbox" className="theme-toggle" checked={darkMode} onChange={toggleDarkMode} />
                                 </li>
+                                {!isAuthenticated ? (
+                                    <li><a href="/login">Login</a></li>
+                                 ):(
+                                    <li className='logout-menu'><a onClick={handleLogout}>Logout</a></li>
+                                )}
+                                
                             </ul>
                         </div>
                     )}
@@ -68,6 +86,7 @@ function Navbar({ darkMode, toggleDarkMode }) {
             </div>
             {menuOpen && isMobile && (
                 <div className="menu-items">
+                    {!isAuthenticated?(
                     <ul>
                         <li><a href="/aboutus">{t('aboutus')}</a></li>
                         <li><a href="/login">Login</a></li>
@@ -76,8 +95,20 @@ function Navbar({ darkMode, toggleDarkMode }) {
                                     <FontAwesomeIcon icon={faSun} className="sun-icon" />
                                     <FontAwesomeIcon icon={faMoon} className="moon-icon" />
                                     <input type="checkbox" className="theme-toggle" checked={darkMode} onChange={toggleDarkMode} />
-                                </li>
+                        </li>
                     </ul>
+                     ):(
+                        <ul>
+                            <li><a href="/aboutus">{t('aboutus')}</a></li>
+                            <li><LanguageSelector style={{margin:0}}/></li>
+                            <li className="theme-toggle-container">
+                                        <FontAwesomeIcon icon={faSun} className="sun-icon" />
+                                        <FontAwesomeIcon icon={faMoon} className="moon-icon" />
+                                        <input type="checkbox" className="theme-toggle" checked={darkMode} onChange={toggleDarkMode} />
+                            </li>
+                            <li className='logout-menu'><a onClick={handleLogout}>Logout</a></li>
+                    </ul>
+                    )}
                 </div>
             )}
         </nav>

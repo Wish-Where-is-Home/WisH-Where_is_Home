@@ -4,14 +4,110 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebook, faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import {useTranslation} from "react-i18next";
+import { useAuth } from '../../AuthContext/AuthContext';
+import { getAuth, createUserWithEmailAndPassword, updateProfile, sendPasswordResetEmail, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider } from "firebase/auth";
 
-const Login_register = ({ darkMode }) => {
+const Login_register = ({ darkMode,firebaseConfig }) => {
     
     const [passwordVisible, setPasswordVisible] = useState(false);
     const [passwordVisible2, setPasswordVisible2] = useState(false);
     const [isLoginForm, setIsLoginForm] = useState(true);
     const [showForgotPassword, setShowForgotPassword] = useState(false);
     const {t} = useTranslation("common");
+
+    const[emailLogin,setEmailLogin] = useState('');
+    const[passwordLogin,setPasswordLogin] = useState('');
+
+
+    const [nameRegister,setNameRegister] = useState('');
+    const [emailRegister, setEmailRegister] = useState('');
+    const [passwordRegister, setPasswordRegister] = useState('');
+    const [passwordConfirmRegister, setPasswordConfirmRegister] = useState('');
+    const [resetEmail, setResetEmail] = useState('');
+
+    
+    const { loginUser } = useAuth();
+
+
+    const handleLogin = (e) => {
+        e.preventDefault(); 
+        loginUser({
+          email: emailLogin,
+          password: passwordLogin
+        });
+      };
+
+
+    const handleRegister = (e) => {
+        e.preventDefault(); 
+        if (passwordRegister !== passwordConfirmRegister) {
+          console.error("Passwords do not match");
+          return;
+        }
+    
+        const auth = getAuth();
+        createUserWithEmailAndPassword(auth, emailRegister, passwordRegister)
+          .then((userCredential) => {
+            const user = userCredential.user;
+            updateProfile(user, {
+              displayName: nameRegister
+            }).then(() => {
+              console.log("User registered with name:", nameRegister);
+              setIsLoginForm(true);
+            }).catch((error) => {
+              console.error("Error updating profile:", error.message);
+            });
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.error("Registration error:", errorMessage);
+          });
+      };
+
+
+      const handleGoogleLogin = async () => {
+        const auth = getAuth();
+        const provider = new GoogleAuthProvider();
+        try {
+            const result = await signInWithPopup(auth, provider);
+            const user = result.user;
+            console.log("User signed in with Google:", user);
+    
+            // Create token
+            const tokenResponse = await fetch('http://localhost:8000/loginusers/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email: user.email, name: user.displayName, id: user.uid }),
+                credentials: 'include'
+            });
+    
+            const tokenData = await tokenResponse.json();
+    
+            localStorage.setItem('token', tokenData.token);
+            localStorage.setItem('tokenExpiration', tokenData.exp);
+            window.location.href ="/"
+        } catch (error) {
+            console.error("Google login error:", error.message);
+        }
+    };
+    
+      const handleFacebookLogin = () => {
+        const auth = getAuth();
+        const provider = new FacebookAuthProvider();
+        signInWithPopup(auth, provider)
+          .then((result) => {
+            
+            const user = result.user;
+            console.log("User signed in with Facebook:", user);
+          })
+          .catch((error) => {
+            console.error("Facebook login error:", error.message);
+          });
+      };
+
 
     const togglePasswordVisibility = () => {
         setPasswordVisible(!passwordVisible);
@@ -29,10 +125,16 @@ const Login_register = ({ darkMode }) => {
         setShowForgotPassword(!showForgotPassword);
     };
 
-    const handleForgotPassword = (e) => {
+    const handleResetPassword = async (e) => {
         e.preventDefault();
-        console.log("Password reset requested!");
-    };
+        try {
+          const auth = getAuth();
+          await sendPasswordResetEmail(auth, resetEmail);
+        } catch (error) {
+          console.error("Reset password error:", error.message);
+        }
+      };
+      
 
 
     return (
@@ -45,15 +147,16 @@ const Login_register = ({ darkMode }) => {
                         </div>
                         <form className="login-f">
                             <div className='inputs-login'>
-                                <div class="field input-field">
-                                    <input type="email" placeholder="Email" className="input"/>
+                                <div className="field input-field">
+                                    <input type="email" placeholder="Email" className="input"  onChange={(e) => setEmailLogin(e.target.value)}/>
                                 </div>
                                 <div className='pass-vis'>
-                                 <div class="field input-field">
+                                 <div className="field input-field">
                                         <input
                                             type={passwordVisible ? 'text' : 'password'}
                                             placeholder= {t('password')}
                                             className="password"
+                                            onChange={(e) => setPasswordLogin(e.target.value)}
                                         />
                                     </div>
                                     <FontAwesomeIcon
@@ -63,15 +166,15 @@ const Login_register = ({ darkMode }) => {
                                         />
                                 </div>
                             </div>
-                            <div class="form-link">
-                                <a href="#" class="forgot-pass" onClick={toggleForgotPassword}>{t('forgotpass')}</a>
+                            <div className="form-link">
+                                <a href="#" className="forgot-pass" onClick={toggleForgotPassword}>{t('forgotpass')}</a>
                             </div>
 
-                        <div class="field button-field">
-                            <button>Login</button>
+                        <div className="field button-field">
+                            <button onClick={handleLogin}>Login</button>
                         </div>
                         </form>
-                        <div class="form-link">
+                        <div className="form-link">
                         <span>{t('donthave')} <a href="#" className="link login-link" onClick={toggleForm}>Sign Up</a></span>
                         </div>
                         <div className='icons-login'>
@@ -86,19 +189,19 @@ const Login_register = ({ darkMode }) => {
                                 </symbol>
                             </svg>
 
-                            <a href="" rel="author" className="share google">
+                            <button onClick={handleGoogleLogin} className="share google">
                                 <svg role="presentation" className="svg--icon">
                                     <use xlinkHref="#svg--google" />
-                                    <span className="clip">GOOGLE +</span>
+                                    <span className="clip">GOOGLE</span>
                                 </svg>
-                            </a>
+                            </button>
 
-                            <a href="" rel="author" className="share facebook">
+                            <button onClick={handleFacebookLogin} className="share facebook">
                                 <svg role="presentation" className="svg--icon">
                                     <use xlinkHref="#svg--facebook" />
                                     <span className="clip">FACEBOOK</span>
                                 </svg>
-                            </a>
+                            </button>
                         </div>
                     </div>
                 ): !isLoginForm && !showForgotPassword ?(
@@ -108,15 +211,19 @@ const Login_register = ({ darkMode }) => {
                         </div>
                         <form>
                         <div className='inputs-login'>
-                                <div class="field input-field">
-                                    <input type="email" placeholder="Email" className="input"/>
+                                <div className="field input-field">
+                                    <input type="text" placeholder="Name" className="input" onChange={(e) => setNameRegister(e.target.value)}/>
+                                </div>
+                                <div className="field input-field">
+                                    <input type="email" placeholder="Email" className="input" onChange={(e) => setEmailRegister(e.target.value)} />
                                 </div>
                                 <div className='pass-vis'>
-                                 <div class="field input-field">
+                                 <div className="field input-field">
                                         <input
                                             type={passwordVisible ? 'text' : 'password'}
                                             placeholder={t('password')}
                                             className="password"
+                                            onChange={(e) => setPasswordRegister(e.target.value)}
                                         />
                                     </div>
                                     <FontAwesomeIcon
@@ -126,11 +233,12 @@ const Login_register = ({ darkMode }) => {
                                         />
                                 </div>
                                 <div className='pass-vis'>
-                                 <div class="field input-field">
+                                 <div className="field input-field">
                                         <input
                                             type={passwordVisible2 ? 'text' : 'password'}
                                             placeholder={t('confirmpass')}
                                             className="password"
+                                            onChange={(e) => setPasswordConfirmRegister(e.target.value)}
                                         />
                                     </div>
                                     <FontAwesomeIcon
@@ -142,11 +250,11 @@ const Login_register = ({ darkMode }) => {
                                 
                             </div>
 
-                        <div class="field button-field">
-                            <button>{t('register')}</button>
+                        <div className="field button-field">
+                            <button onClick={handleRegister}>{t('register')}</button>
                         </div>
                         </form>
-                        <div class="form-link">
+                        <div className="form-link">
                         <span>{t('jatemconta')} <a href="#" className="link login-link" onClick={toggleForm}>Login</a></span>
                         </div>
                         <div className='icons-login'>
@@ -161,19 +269,19 @@ const Login_register = ({ darkMode }) => {
                                 </symbol>
                             </svg>
 
-                            <a href="" rel="author" className="share google">
+                            <button onClick={handleGoogleLogin} className="share google">
                                 <svg role="presentation" className="svg--icon">
                                     <use xlinkHref="#svg--google" />
                                     <span className="clip">GOOGLE</span>
                                 </svg>
-                            </a>
+                            </button>
 
-                            <a href="" rel="author" className="share facebook">
+                            <button onClick={handleFacebookLogin} className="share facebook">
                                 <svg role="presentation" className="svg--icon">
                                     <use xlinkHref="#svg--facebook" />
                                     <span className="clip">FACEBOOK</span>
                                 </svg>
-                            </a>
+                            </button>
                         </div>
                                    
                     </div>
@@ -183,17 +291,17 @@ const Login_register = ({ darkMode }) => {
                         <div className='space'>
                         </div>
                         <p>{t('jatemconta')}</p>
-                        <form>
+                        <form  onSubmit={handleResetPassword}>
                         <div className='inputs-login'>
-                                <div class="field input-field">
-                                    <input type="email" placeholder="Email" className="input"/>
+                                <div className="field input-field">
+                                    <input type="email" placeholder="Email" className="input" value={resetEmail} onChange={(e) => setResetEmail(e.target.value)}/>
                                 </div>
                         </div>
-                        <div class="field button-field">
-                            <button>{t('register')}</button>
+                        <div className="field button-field">
+                            <button type='submit'>{t('resetpass')}</button>
                         </div>
                         </form>
-                        <div class="form-link">
+                        <div className="form-link">
                         <span>{t('backlogin')} <a href="#" className="link login-link" onClick={toggleForgotPassword}>Login</a></span>
                         </div>
                                    

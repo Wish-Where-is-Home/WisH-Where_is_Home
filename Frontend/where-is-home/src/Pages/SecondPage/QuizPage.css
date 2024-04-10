@@ -7,7 +7,7 @@
   font-family: 'Space Mono Bold 700', sans-serif;
   overflow-y: hidden;
   overflow-x: hidden;
-  padding-top: 10%;
+  padding-top: 8%;
   display: grid;
   grid-template-columns: 50% 50%;
   grid-gap: 10px;
@@ -23,10 +23,6 @@
 
 }
 
-.right-store {
-  overflow-y: auto;
-  margin-top:10rem;
-}
   
   .search-filters {
     flex: 1;
@@ -101,6 +97,13 @@
   /* Icon Styling */
   .button-icon {
     font-size: 1.5rem; /* size of the icon */
+  }
+
+
+  .right-container{
+    width: 100%;
+    height: 83%; 
+    background-color: yellow;
   }
   
   

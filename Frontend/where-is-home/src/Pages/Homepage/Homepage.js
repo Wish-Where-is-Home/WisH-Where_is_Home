@@ -79,7 +79,7 @@ function Homepage( {darkMode}) {
 
     const handleButtonClick = (selectedDistrict) => {
 
-            navigate('/secondpage', { state: { selectedDistrict } });
+            navigate('/properties', { state: { selectedDistrict } });
         
     };
     

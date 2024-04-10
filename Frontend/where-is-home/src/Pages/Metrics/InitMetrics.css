@@ -1,0 +1,132 @@
+.SearchPage {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--background-color);
+    font-family: 'Space Mono Bold 700', sans-serif;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    padding-top: 10%;
+  }
+  
+  .search-filters {
+    flex: 1;
+    width: 90%;
+    margin: auto;
+    padding-top: 2%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    z-index: 2;
+  }
+  
+  .search-filters label {
+    margin-top: 20px;
+    font-size: 1.2rem;
+    color: var(--navbar-border);
+    letter-spacing: 0.1rem;
+  }
+  
+  .search-filters toolcool-range-slider {
+    --slider-height: 0.5rem;
+    --pointer-width: 1.5rem;
+    --pointer-height: 1.5rem;
+    --slider-bg: var(--navbar-border);
+    --pointer-bg: var(--background-color);
+    --pointer-border: 1px solid var(--navbar-border);
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+  
+  /* Button Styling */
+
+  .button-container {
+    display: flex;
+    justify-content: space-between; 
+    padding: 0 50%; 
+    margin-left: -40%;
+  }
+
+  
+.button-small-round {
+    border: none;
+    outline: none;
+    border-radius: 50px;
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px; /* space around button */
+    background-color: var(--button-color); /* button color */
+    color: var(--button-text-color); /* button text color */
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* subtle shadow */
+    transition: background-color 0.3s; /* smooth color transition */
+  }
+  
+  .button-small-round:hover {
+    background-color: var(--button-hover-color); /* color on hover */
+  }
+  
+  /* Icon Styling */
+  .button-icon {
+    font-size: 1.5rem; /* size of the icon */
+  }
+  
+  
+  
+  .map-container {
+    flex: 2;
+    position: relative;
+    width: 100%;
+    z-index: 1;
+  }
+  
+  .map-container .map {
+    width: 100%;
+    height: 100%;
+  }
+  
+  /* Dark Mode Styling */
+  .dark-mode {
+    --background-color: #2D2D2D;
+    --navbar-border: #FFFFFF;
+    --blacktowhite: #FFFFFF;
+    --button-color: #5f79b7;
+    --button-text-color: #FFFFFF;
+    --button-hover-color: #2D4373;
+  }
+  
+  /*
+  Light Mode Styling */
+.light-mode {
+    --background-color: #F0F0F0;
+    --navbar-border: #000000;
+    --blacktowhite: #000000;
+    --button-color: #2D4373;
+    --button-text-color: #FFFFFF;
+    --button-hover-color: #5f79b7;
+    }
+    
+    /* Adjustments for slider thumb and track */
+    .toolcool-range-slider {
+    --slider-bg-fill: var(--navbar-border);
+    --pointer-shadow: none;
+    }
+    
+    /* Changes for dark and light mode of the sliders */
+    .dark-mode .toolcool-range-slider {
+    --slider-bg: #5f79b7;
+    --pointer-bg: #dcdcdc;
+    --pointer-border: 1px solid hsla(0, 0%, 88%, 0.5);
+
+    }
+    
+    .light-mode .toolcool-range-slider {
+    --slider-bg: #2D4373;
+    --pointer-bg: #fff;
+    --pointer-border: 1px solid hsl(201, 72%, 59%);
+    
+    }

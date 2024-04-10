@@ -1,0 +1,130 @@
+.sidebar {
+    position: fixed;
+    top: 70px; 
+    left: -30%; /* Adjusted from right: -27% to left: -30% */
+    width: 30%;
+    height: calc(100% - 70px); 
+    background-color: black;
+    transition: left 0.3s ease; /* Adjusted from right to left */
+    z-index: 1000; 
+  }
+  
+  .sidebar-open {
+    left: 0; 
+  }
+  
+  .sidebar-toggle {
+    position: absolute;
+    top: 50%; 
+    right: -30px; /* Adjusted from left: -30px to right: -30px */
+    padding: 10px;
+    background-color: #292828;
+    color: rgba(13, 221, 218, 1);
+    border: none;
+    cursor: pointer;
+    z-index: 1001; 
+  }
+  
+  
+  
+  .PropText{
+    margin-top: 50px;
+    color: rgba(13, 221, 218, 1);
+  }
+  
+  .first-text {
+    font-size: 24px;
+    font-weight: 800;
+    margin-left: 20px;
+    color: white
+  }
+  
+  .box {
+    width: 290px;
+    position: relative;
+    margin-left: 10px; 
+  }
+  
+  .navbar-list {
+    margin-top: 50px;
+    font-family: "metropolis-regular", sans-serif;
+    font-size: 24px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+.navbar-item {
+    margin-bottom: 5px;
+}
+
+.navbar-item:last-child {
+    margin-right: 0;
+}
+
+.navbar-item button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    color: #fff;
+    padding: 10px;
+    text-align: left;
+    transition: background-color 0.3s ease;
+}
+
+.navbar-item button:hover,
+.navbar-item.active button {
+    background-color: #555;
+}
+
+.metrics-container {
+    height: 100%;
+    width: 70%;
+    margin:  10% 15%;
+}
+
+.slider-item {
+    margin-bottom: 2.5rem;
+}
+
+.slider-item label {
+    font-family: "metropolis-semibold", sans-serif;
+    font-size: 1rem;
+    color: #ffffff;
+    margin-bottom: 2rem;
+}
+
+.slider-item span {
+    font-family: "metropolis-semibold", sans-serif;
+    font-size: 0.8rem;
+    color: #ffffff;
+    text-align: center; 
+}
+
+.slider-container {
+    margin: 0;
+    
+}
+
+.slider-container .rc-slider {
+    width: 100%;
+    margin: 0 auto; 
+}
+
+.slider-container .rc-slider-handle {
+    background-color: rgba(13, 221, 218, 1);;
+    border-color: rgba(13, 221, 218, 1);
+}
+
+.slider-container .rc-slider-track {
+    background-color: rgba(13, 221, 218, 1);;
+}
+
+.slider-container .rc-slider-rail {
+    background-color: white;
+}
+
+.slider-container .rc-slider-step {
+    background-color: rgba(13, 221, 218, 1);
+}

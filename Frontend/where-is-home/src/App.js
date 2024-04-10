@@ -7,7 +7,7 @@ import './App.css';
 import Login_register from './Pages/Login-register/Login_register';
 import AboutUs from './Pages/AboutUs/AboutUs';
 import PropertiesPage from './Pages/PropertiesPage/PropertiesPage';
-
+import InitMetrics from './Pages/Metrics/InitMetrics';
 import Metrics from './Components/Metrics/Metrics';
 
 
@@ -44,6 +44,7 @@ function App() {
           <Route exact path="/login" element={<Login_register  darkMode={darkMode} />} />
           <Route exact path="/properties" element={<PropertiesPage darkMode={darkMode} />} />
           <Route exact path="/metrics" element={<Metrics  darkMode={darkMode} />} />
+          <Route exact path="/initMetrics" element={<InitMetrics darkMode={darkMode} />} />
         </Routes>
       </Router>
     </div>

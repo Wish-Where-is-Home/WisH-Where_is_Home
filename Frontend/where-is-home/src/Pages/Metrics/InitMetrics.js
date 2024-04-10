@@ -92,10 +92,10 @@ function InitMetrics({ darkMode }) {
 
         <div className="button-container">
           <button className="button-small-round" onClick={handlePreviousClick}>
-            <span className="button-icon"></span> {/* Replace with actual icon */}
+            <span className="button-icon">Previous</span> {/* Replace with actual icon */}
           </button>
           <button className="button-small-round" onClick={handleSearchClick}>
-            <span className="button-icon">🔍</span> {/* Replace with actual icon */}
+            <span className="button-icon">Search🔍</span> {/* Replace with actual icon */}
           </button>
         </div>
       </div>

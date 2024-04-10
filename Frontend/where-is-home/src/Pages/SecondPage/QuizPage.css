@@ -42,9 +42,10 @@
   .label-slider-container {
     display: flex;
     align-items: center;
+    height: 60px;
 }
 .label_metric{
-  width: 85px;
+  width: 50%;
 }
   
   .search-filters label {

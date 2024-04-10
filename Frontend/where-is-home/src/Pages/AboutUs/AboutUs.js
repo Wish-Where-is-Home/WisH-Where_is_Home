@@ -14,7 +14,7 @@ function AboutUs ({darkMode}) {
                     <h2>About Us</h2>
 
                     <div className='text'>
-                        <p>Texto</p>
+                        <p>{t('textaboutus')}</p>
                     </div>
 
                     </div>

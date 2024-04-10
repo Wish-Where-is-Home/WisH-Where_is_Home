@@ -8,6 +8,9 @@ import Login_register from './Pages/Login-register/Login_register';
 import AboutUs from './Pages/AboutUs/AboutUs';
 import PropertiesPage from './Pages/PropertiesPage/PropertiesPage';
 
+import Metrics from './Components/Metrics/Metrics';
+
+
 function App() {
   const [darkMode, setDarkMode] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -40,6 +43,7 @@ function App() {
           <Route exact path="/aboutus" element={<AboutUs darkMode={darkMode}/>}/>
           <Route exact path="/login" element={<Login_register  darkMode={darkMode} />} />
           <Route exact path="/properties" element={<PropertiesPage darkMode={darkMode} />} />
+          <Route exact path="/metrics" element={<Metrics  darkMode={darkMode} />} />
         </Routes>
       </Router>
     </div>

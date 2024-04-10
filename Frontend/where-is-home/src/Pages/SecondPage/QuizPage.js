@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import 'toolcool-range-slider';
 import { useTranslation } from "react-i18next";
-import './InitMetrics.css';
+import './QuizPage.css';
 
 function QuizPage({ darkMode }) {
   const { t } = useTranslation("common");
@@ -42,60 +42,65 @@ function QuizPage({ darkMode }) {
     <div className={`SearchPage ${darkMode ? 'dark-mode' : 'light-mode'}`}>
         <div className="left-store">
             <div className='search-filters'>
-                <label htmlFor="security-slider">{t('security')}</label>
-                <toolcool-range-slider
-                id="security-slider"
-                name="security"
-                min="0"
-                max="100"
-                value="50"
-                theme="rect"></toolcool-range-slider>
-
-                <label htmlFor="health-slider">{t('health')}</label>
-                <toolcool-range-slider
-                id="health-slider"
-                name="health"
-                min="0"
-                max="100"
-                value="50"
-                theme="rect"></toolcool-range-slider>
-
-                <label htmlFor="nature-slider">{t('nature')}</label>
-                <toolcool-range-slider
-                id="nature-slider"
-                name="nature"
-                min="0"
-                max="100"
-                value="50"
-                theme="rect"></toolcool-range-slider>
-
-                <label htmlFor="sports-slider">{t('sports')}</label>
-                <toolcool-range-slider
-                id="sports-slider"
-                name="sports"
-                min="0"
-                max="100"
-                value="50"
-                theme="rect"></toolcool-range-slider>
-
-                <label htmlFor="life-slider">{t('life')}</label>
-                <toolcool-range-slider
-                id="life-slider"
-                name="life"
-                min="0"
-                max="100"
-                value="50"
-                theme="rect"></toolcool-range-slider>
-
-
-                <div className="button-container">
-                <button className="button-small-round" onClick={handlePreviousClick}>
-                    <span className="button-icon"></span> {/* Replace with actual icon */}
-                </button>
-                <button className="button-small-round" onClick={handleSearchClick}>
-                    <span className="button-icon">🔍</span> {/* Replace with actual icon */}
-                </button>
+                <div className="label-slider-container">
+                    <label className="label_metric" htmlFor="security-slider">{t('security')}</label>
+                    <toolcool-range-slider
+                    id="security-slider"
+                    name="security"
+                    min="0"
+                    max="100"
+                    value="50"
+                    theme="rect"></toolcool-range-slider>
                 </div>
+                <div className="label-slider-container">
+                    <label className="label_metric" htmlFor="health-slider">{t('health')}</label>
+                    <toolcool-range-slider
+                    id="health-slider"
+                    name="health"
+                    min="0"
+                    max="100"
+                    value="50"
+                    theme="rect"></toolcool-range-slider>
+                </div>
+                <div className="label-slider-container">
+                    <label className="label_metric" htmlFor="nature-slider">{t('nature')}</label>
+                    <toolcool-range-slider
+                    id="nature-slider"
+                    name="nature"
+                    min="0"
+                    max="100"
+                    value="50"
+                    theme="rect"></toolcool-range-slider>
+                </div>
+                <div className="label-slider-container">
+                    <label className="label_metric" htmlFor="sports-slider">{t('sports')}</label>
+                    <toolcool-range-slider
+                    id="sports-slider"
+                    name="sports"
+                    min="0"
+                    max="100"
+                    value="50"
+                    theme="rect"></toolcool-range-slider>
+                </div>
+                <div className="label-slider-container">
+                    <label className="label_metric" htmlFor="life-slider">{t('life')}</label>
+                    <toolcool-range-slider
+                    id="life-slider"
+                    name="life"
+                    min="0"
+                    max="100"
+                    value="50"
+                    theme="rect"></toolcool-range-slider>
+                </div>
+
+            <div className="button-container">
+            <button className="button-small-round" onClick={handlePreviousClick}>
+                <span className="button-icon">Previous</span> {/* Replace with actual icon */}
+            </button>
+            <button className="button-small-round" onClick={handleSearchClick}>
+                <span className="button-icon">Search🔍</span> {/* Replace with actual icon */}
+            </button>
+            </div>
             </div>
 
         </div>

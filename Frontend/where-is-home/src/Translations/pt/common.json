@@ -14,6 +14,12 @@
     "backlogin":"Voltar ao login?",
     "selectedistrict":"Seleciona um Distrito",
     "infotext":"Se ainda não conhece um distrito, selecione Portugal",
-    "button-homepage-text":"Procurar"
-    
+    "button-homepage-text":"Procurar",
+    "security": "Segurança",
+    "health": "Saúde",
+    "nature": "Natureza",
+    "sports": "Desporto",
+    "life": "Vida",
+    "sliderDescription": "Quão importante é isto para si?"
+      
 }

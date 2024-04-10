@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
 import Login_register from './Pages/Login-register/Login_register';
 import AboutUs from './Pages/AboutUs/AboutUs';
+import InitMetrics from './Pages/Metrics/InitMetrics';
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
@@ -38,6 +39,7 @@ function App() {
           <Route exact path="/" element={<Homepage darkMode={darkMode} />} />
           <Route exact path="/aboutus" element={<AboutUs darkMode={darkMode}/>}/>
           <Route exact path="/login" element={<Login_register  darkMode={darkMode} />} />
+          <Route exact path="/initMetrics" element={<InitMetrics darkMode={darkMode} />} />
         </Routes>
       </Router>
     </div>

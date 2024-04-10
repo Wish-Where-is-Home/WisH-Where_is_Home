@@ -9,6 +9,21 @@
     overflow-x: hidden;
     padding-top: 10%;
   }
+
+  .left-store {
+    position: sticky;
+    top: 0;
+    border-right: 2px solid white;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+  
+  }
+  
+  .right-store {
+    overflow-y: auto;
+    margin-top:10rem;
+  }
   
   .search-filters {
     flex: 1;
@@ -68,17 +83,7 @@
   
   
   
-  .map-container {
-    flex: 2;
-    position: relative;
-    width: 100%;
-    z-index: 1;
-  }
-  
-  .map-container .map {
-    width: 100%;
-    height: 100%;
-  }
+ 
   
   /* Dark Mode Styling */
   .dark-mode {

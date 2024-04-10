@@ -75,7 +75,7 @@ function Homepage( {darkMode}) {
 
     const handleButtonClick = (selectedDistrict) => {
 
-            navigate('/properties', { state: { selectedDistrict } });
+            navigate('/quiz', { state: { selectedDistrict } });
         
     };
     

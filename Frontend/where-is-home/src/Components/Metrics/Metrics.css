@@ -1,4 +1,4 @@
-.sidebar {
+.sidebar-metrics {
     position: fixed;
     top: 70px; 
     left: -30%; /* Adjusted from right: -27% to left: -30% */
@@ -9,43 +9,42 @@
     z-index: 1000; 
   }
   
-  .sidebar-open {
+  .sidebar-metrics-open {
     left: 0; 
   }
   
-  .sidebar-toggle {
+  .sidebar-metrics-toggle {
     position: absolute;
     top: 50%; 
-    right: -30px; /* Adjusted from left: -30px to right: -30px */
+    right: -30px; 
     padding: 10px;
     background-color: #292828;
     color: rgba(13, 221, 218, 1);
     border: none;
     cursor: pointer;
-    z-index: 1001; 
   }
   
   
   
-  .PropText{
+  .PropText-metrics{
     margin-top: 50px;
     color: rgba(13, 221, 218, 1);
   }
   
-  .first-text {
+  .first-text-metrics {
     font-size: 24px;
     font-weight: 800;
     margin-left: 20px;
     color: white
   }
   
-  .box {
+  .box-metrics {
     width: 290px;
     position: relative;
     margin-left: 10px; 
   }
   
-  .navbar-list {
+  .navbar-list-metrics {
     margin-top: 50px;
     font-family: "metropolis-regular", sans-serif;
     font-size: 24px;
@@ -54,15 +53,15 @@
     align-items: center;
     justify-content: center;
 }
-.navbar-item {
+.navbar-item-metrics {
     margin-bottom: 5px;
 }
 
-.navbar-item:last-child {
+.navbar-item-metrics:last-child {
     margin-right: 0;
 }
 
-.navbar-item button {
+.navbar-item-metrics button {
     background-color: transparent;
     border: none;
     cursor: pointer;
@@ -73,8 +72,8 @@
     transition: background-color 0.3s ease;
 }
 
-.navbar-item button:hover,
-.navbar-item.active button {
+.navbar-item-metrics button:hover,
+.navbar-item-metrics.active button {
     background-color: #555;
 }
 

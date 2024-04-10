@@ -12,6 +12,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBed, faBathtub, faWarehouse,faSquareShareNodes, faSquareArrowUpRight, faSquareCaretDown, faMapLocation, faMapLocationDot } from '@fortawesome/free-solid-svg-icons';
 import { faSquareBehance } from '@fortawesome/free-brands-svg-icons';
 import { faSquareFull } from '@fortawesome/free-regular-svg-icons';
+import {useTranslation} from "react-i18next";
 
 
 function Sidebar() {
@@ -25,52 +26,56 @@ function Sidebar() {
     const toggleSidebar = () => {
         setIsOpen(!isOpen);
     };
+    const {t} = useTranslation("common");
 
     return (
         <div className={`sidebar ${isOpen ? 'sidebar-open' : ''}`}>
             <div className="sidebar-toggle" onClick={toggleSidebar}>
                 {isOpen ? <ChevronRight size={24} /> : <ChevronLeft size={24} />} 
             </div>
-            <h1 className='PropText'>Properties</h1>
-            {boxes.map((box) => (
-                <div className="box-container" key={box.id}> 
-                    <div className="first-text">{box.id}º</div>
-                    <div className="box" style={{ display: isOpen ? 'block' : 'none' }}>
-                        <div className="imovel">
-                            <div className="overlap-group">
-                                <div className="rectangle" />
-                                <div className="quantidades">
-                                    <div className="qty-elem">
-                                        <FontAwesomeIcon className="bed-icon" icon={faBed} />
-                                        <div className="text-wrapper">{box.beds}</div>
+            <h1 className='PropText'>{t('Properties')}</h1>
+            <div className='sidebar-content'>
+                {boxes.map((box) => (
+                    <div className="box-container" key={box.id}> 
+                        <div className="first-text">{box.id}º</div>
+                        <div className="box" style={{ display: isOpen ? 'block' : 'none' }}>
+                            <div className="imovel">
+                                <div className="overlap-group">
+                                    <div className="rectangle" />
+                                    <div className="quantidades">
+                                        <div className="qty-elem">
+                                            <FontAwesomeIcon className="bed-icon" icon={faBed} />
+                                            <div className="text-wrapper">{box.beds}</div>
+                                        </div>
+                                        <div className="div">
+                                            <div className="text-wrapper-2">{box.baths}</div>
+                                            <FontAwesomeIcon className="bath-icon" icon={faBathtub} />
+                                        </div>
+                                        <div className="qty-elem-2">
+                                            <div className="text-wrapper-3">{box.carSpaces}</div>
+                                            <FontAwesomeIcon className="garage-icon" icon={faWarehouse} />
+                                        </div>
+                                        <div className="qty-elem-3">
+                                            <div className="text-wrapper-4">{box.area}</div>
+                                            <FontAwesomeIcon className="area-icon" icon={faSquareFull} />
+                                        </div>
                                     </div>
-                                    <div className="div">
-                                        <div className="text-wrapper-2">{box.baths}</div>
-                                        <FontAwesomeIcon className="bath-icon" icon={faBathtub} />
+                                    <div className="text-wrapper-5">{box.type}</div>
+                                    <div className="localizacao">
+                                        <FontAwesomeIcon className="map-icon" icon={faMapLocationDot} />
+                                        <div className="text-wrapper-6">{box.location}</div>
                                     </div>
-                                    <div className="qty-elem-2">
-                                        <div className="text-wrapper-3">{box.carSpaces}</div>
-                                        <FontAwesomeIcon className="garage-icon" icon={faWarehouse} />
-                                    </div>
-                                    <div className="qty-elem-3">
-                                        <div className="text-wrapper-4">{box.area}</div>
-                                        <FontAwesomeIcon className="area-icon" icon={faSquareFull} />
-                                    </div>
+                                    <div className="text-wrapper-7">{box.price}</div>
                                 </div>
-                                <div className="text-wrapper-5">{box.type}</div>
-                                <div className="localizacao">
-                                    <FontAwesomeIcon className="map-icon" icon={faMapLocationDot} />
-                                    <div className="text-wrapper-6">{box.location}</div>
-                                </div>
-                                <div className="text-wrapper-7">{box.price}</div>
                             </div>
+                            <img className="imovel-img" src={box.image} alt={`Imovel ${box.id}`} />
                         </div>
-                        <img className="imovel-img" src={box.image} alt={`Imovel ${box.id}`} />
                     </div>
+                    
+                        
+                        
+                    ))}
                 </div>
-                    
-                    
-                ))}
             </div>
 
     );

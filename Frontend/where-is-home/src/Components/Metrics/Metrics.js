@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import './Metrics.css';
-
 import { ChevronLeft, ChevronRight } from 'react-feather';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
+import {useTranslation} from "react-i18next";
+
 
 function Metrics(){
     const [isOpen, setIsOpen] = useState(false);
@@ -47,26 +46,28 @@ function Metrics(){
     const toggleSidebar = () => {
         setIsOpen(!isOpen);
     };
+    const {t} = useTranslation("common");
+
 
     return (
-        <div className={`sidebar ${isOpen ? 'sidebar-open' : ''}`}>
-            <div className="sidebar-toggle" onClick={toggleSidebar}>
+        <div className={`sidebar-metrics ${isOpen ? 'sidebar-metrics-open' : ''}`}>
+            <div className="sidebar-metrics-toggle" onClick={toggleSidebar}>
                 {isOpen ? <ChevronLeft size={24} /> : <ChevronRight size={24} />} 
             </div>
-            <h1 className='PropText'>Adjust your preferences:</h1>
+            <h1 className='PropText-metrics'>{t('AdjustPref')}</h1>
             
-                <div className="box-container" > 
-                    <div className="first-text"></div>
-                    <div className="box" style={{ display: isOpen ? 'block' : 'none' }}>
+                <div className="box-container-metrics" > 
+                    <div className="first-text-metrics"></div>
+                    <div className="box-metrics" style={{ display: isOpen ? 'block' : 'none' }}>
                         
                     </div>
                 </div>
                     
             
-                <div className='navbar-list'>
+                <div className='navbar-list-metrics'>
                     {secondSetOfMetrics.map((item, index) => (
-                        <div key={index} className={`navbar-item ${selectedGenre === item.genre ? 'active' : ''}`}>
-                            <button onClick={() => handleGenreSelect(item.genre)}>{item.genre}</button>
+                        <div key={index} className={`navbar-item-metrics ${selectedGenre === item.genre ? 'active' : ''}`}>
+                            <button onClick={() => handleGenreSelect(item.genre)}>{t(item.genre)}</button> 
                         </div>
                     ))}
                 </div>
@@ -74,7 +75,7 @@ function Metrics(){
                     {selectedGenre && (
                         Array.from({ length: secondSetOfMetrics.find((item) => item.genre === selectedGenre).metricsCount }).map((_, metricIndex) => (
                             <div key={metricIndex} className="slider-item">
-                                <label>{selectedGenre} Metric {metricIndex + 1}:</label>
+                                <label>{t(selectedGenre)} Metric {metricIndex + 1}:</label>
                                 <div className="slider-container">
                                     <Slider
                                         min={0}

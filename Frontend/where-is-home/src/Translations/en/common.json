@@ -1,26 +1,26 @@
 {
-    "aboutus": "About Us",
-    "QuoteHome": "Discover a place you would love to live",
-    "QuoteHome2": "Where the lifestyle meets the perfect location",
-    "password": "Password",
-    "forgotpass": "Forgot password?",
-    "confirmpass": "Confirm Password",
-    "donthave": "Don't have an account?",
-    "jatemconta": "Already have an account?",
-    "register": "Register",
-    "emailquestion": "What is your email?",
-    "submit": "Submit",
-    "resetpass": "Reset Password",
-    "backlogin": "Go back to login?",
-    "selectedistrict": "Select a District",
-    "infotext": "If you still don't know a district, select Portugal",
-    "button-homepage-text": "Search",
+    "aboutus":"About Us",
+    "QuoteHome":"Discover a place you would love to live",
+    "QuoteHome2":"Where the lifestyle meets the perfect location",  
+    "password":"Password",
+    "forgotpass":"Forgot password?",
+    "confirmpass":"Confirm Password",
+    "donthave":"Don't have an account?",
+    "jatemconta":"Already have an account?",
+    "register":"Register",
+    "emailquestion":"What is your email?",
+    "submit":"Submit",
+    "resetpass":"Reset Password",
+    "backlogin":"Go back to login?",
+    "selectedistrict":"Select a District",
+    "infotext":"If you still don't know a district, select Portugal",
+    "button-homepage-text":"Search",
     "security": "Security",
     "health": "Health",
     "nature": "Nature",
     "sports": "Sports",
     "life": "Life",
-    "sliderDescription": "How important is this to you?"
-    
-  }
-  
+    "sliderDescription": "How important is this to you?",
+    "textaboutus":"Welcome to our project dedicated to helping you find the ideal place to live. Our goal is to make this challenging process easier by providing reliable tools and information for informed choices. We believe that where we choose to live directly impacts our happiness and well-being. Whether you're a digital nomad, a family, or someone looking for new opportunities, we're here to guide you on your journey. Join us as we explore different locations and discover where you can find your own piece of paradise. Your search for the perfect place starts here."
+
+}

@@ -1,11 +1,17 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect,useState} from 'react';
 import 'toolcool-range-slider';
 import { useTranslation } from "react-i18next";
 import './QuizPage.css';
+import "leaflet/dist/leaflet.css";
+import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
+import L from 'leaflet';
 
 function QuizPage({ darkMode }) {
   const { t } = useTranslation("common");
-  
+  const [geojsonData, setGeojsonData] = useState(null);
+
+ 
+
   const onSliderChange = (event) => {
     const value = Math.round(event.detail.value);
     console.log(`${event.target.name} value: ${value}`);
@@ -21,8 +27,27 @@ function QuizPage({ darkMode }) {
   const handleSearchClick = () => {
     // Logic to handle the search button click
     console.log('Search button clicked');
-    // Trigger the search functionality
+   
   };
+
+  useEffect(() => {
+    
+    const fetchWfsData = async () => {
+      try {
+        const response = await fetch('http://mednat.ieeta.pt:9009/geoserver/wish/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=wish%3Adistritos&maxFeatures=50&outputFormat=application%2Fjson');
+        const data = await response.json();
+        console.log(data);
+
+        setGeojsonData(data);
+      } catch (error) {
+        console.error('Error fetching WFS data:', error);
+      }
+    };
+
+    fetchWfsData();
+  }, []);
+
+ 
 
   useEffect(() => {
     const sliders = document.querySelectorAll('toolcool-range-slider');
@@ -158,8 +183,17 @@ function QuizPage({ darkMode }) {
             </div>
 
         </div>
-        <div className='right-store'>
-
+        <div className='right-container'>
+          <MapContainer style={{ height: "100%", width: "100%" }} center={[42.505, -8.09]} zoom={5} scrollWheelZoom={false}>
+                  <TileLayer
+                      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                      
+                  />
+                  {geojsonData && 
+                 <GeoJSON data={geojsonData} />
+                    }
+              </MapContainer>
         </div>    
     </div>
   );

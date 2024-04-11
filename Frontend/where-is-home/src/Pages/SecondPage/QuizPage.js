@@ -1,17 +1,36 @@
 import React, { useRef, useEffect,useState} from 'react';
+import { useLocation } from 'react-router-dom';
 import 'toolcool-range-slider';
 import { useTranslation } from "react-i18next";
 import './QuizPage.css';
 import "leaflet/dist/leaflet.css";
 import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
 import L from 'leaflet';
+
 import Slider from '@mui/material/Slider';
 import Box from '@mui/material/Box';
+
+import 'proj4leaflet';
+
+
 
 
 function QuizPage({ darkMode }) {
   const { t } = useTranslation("common");
+  const location = useLocation();
   const [geojsonData, setGeojsonData] = useState(null);
+  const [selectedDistrict, setSelectedDistrict] = useState('');
+  const [districtId, setDistrictId] = useState('');
+
+
+  useEffect(() => {
+    // Access location state to get the selected district and its ID
+    if (location.state) {
+      setSelectedDistrict(location.state.selectedDistrict);
+      setDistrictId(location.state.districtId);
+      console.log(location.state.districtId);
+    }
+  }, [location.state]);
 
   const sliderOptions = ['Not Important', 'Slightly Important', 'Moderate', 'Important', 'Very Important'];
   const [sliderValues, setSliderValues] = useState([
@@ -52,25 +71,36 @@ function QuizPage({ darkMode }) {
    
   };
 
+
   
+  const geoJSONStyle = {
+    color: 'blue', // cor do contorno
+    weight: 2, // largura do contorno
+    fillColor: 'lightblue', // cor de preenchimento
+    fillOpacity: 0.5, // opacidade do preenchimento
+  };
+
+
+
+
+
+
 
   useEffect(() => {
-    
-    const fetchWfsData = async () => {
+    const fetchGeojsonData = async () => {
       try {
-        const response = await fetch('http://mednat.ieeta.pt:9009/geoserver/wish/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=wish%3Adistritos&maxFeatures=50&outputFormat=application%2Fjson');
+        const url = 'http://mednat.ieeta.pt:9009/geoserver/wish/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=wish%3Afreguesias&outputFormat=application%2Fjson&srsname=EPSG:4326';
+        const response = await fetch(url);
         const data = await response.json();
         console.log(data);
-
         setGeojsonData(data);
       } catch (error) {
-        console.error('Error fetching WFS data:', error);
+        console.error('Error fetching GeoJSON data:', error);
       }
     };
-
-    fetchWfsData();
+  
+    fetchGeojsonData();
   }, []);
-
  
 
   useEffect(() => {
@@ -86,6 +116,15 @@ function QuizPage({ darkMode }) {
       });
     };
   }, []);
+
+
+  const onEachFeature = (feature, layer) => {
+
+
+    if (feature.properties && feature.properties.dsg) {
+      layer.bindPopup(feature.properties.dsg);
+    }
+  };
 
   return (
     <div className={`SearchPage ${darkMode ? 'dark-mode' : 'light-mode'}`}>
@@ -365,15 +404,14 @@ function QuizPage({ darkMode }) {
 
         </div>
         <div className='right-container'>
-          <MapContainer style={{ height: "100%", width: "100%" }} center={[42.505, -8.09]} zoom={5} scrollWheelZoom={false}>
+          <MapContainer  style={{ height: "100%", width: "100%" }} center={[40, -7.79]} zoom={7} scrollWheelZoom={false}>
                   <TileLayer
                       attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                       
                   />
-                  {geojsonData && 
-                 <GeoJSON data={geojsonData} />
-                    }
+                  
+                  {geojsonData && <GeoJSON data={geojsonData}  style={geoJSONStyle}  onEachFeature={onEachFeature}  />}
               </MapContainer>
         </div>    
     </div>

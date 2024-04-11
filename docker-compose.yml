@@ -1,0 +1,75 @@
+version: '3.1'
+
+services:
+    db:
+        image: postgis/postgis:15-3.3
+        restart: "no"
+        environment:
+            POSTGRES_DB: wish
+            POSTGRES_USER: test
+            POSTGRES_PASSWORD: password
+        ports:
+            - "5432:5432"
+        volumes:
+            - ./data:/var/lib/postgresql/data
+        networks:
+          - internal-net
+
+    pgadmin:
+        image: dpage/pgadmin4
+        restart: "no"
+        environment:
+            PGADMIN_DEFAULT_EMAIL: admin@wish.com
+            PGADMIN_DEFAULT_PASSWORD: wishmasterpassword
+
+        ports:
+            - "5050:80"
+        networks:
+          - internal-net
+
+    geoserver:
+        image: kartoza/geoserver:latest
+        environment:
+            GEOSERVER_DATA_DIR: /opt/geoserver/data_dir
+            GEOSERVER_ADMIN_USER: adminwish
+            GEOSERVER_ADMIN_PASSWORD: wishgeoserver
+            POSTGRES_DB: wish
+            POSTGRES_USER: test
+            POSTGRES_PASSWORD: password
+            POSTGRES_HOST: db
+            POSTGRES_PORT: 5432
+        ports:
+            - "8081:8080"
+        volumes:
+            - ./geoserver_data:/opt/geoserver/data_dir
+        networks:
+          - internal-net
+
+    backend:
+        build: ./where_is_home
+        ports:
+          - "8000:8000"
+        environment:
+          - POSTGRES_NAME=wish
+          - POSTGRES_USER=test
+          - POSTGRES_PASSWORD=password
+        networks:
+          - internal-net
+        depends_on:
+          - db
+        volumes:
+          - .:/code
+
+
+
+volumes:
+  data:
+    name: wish_data
+
+networks:
+  internal-net:
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.139.0.0/16
+

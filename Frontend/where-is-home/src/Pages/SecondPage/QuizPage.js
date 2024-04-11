@@ -42,65 +42,119 @@ function QuizPage({ darkMode }) {
     <div className={`SearchPage ${darkMode ? 'dark-mode' : 'light-mode'}`}>
         <div className="left-store">
             <div className='search-filters'>
-                <div className="label-slider-container">
-                    <label className="label_metric" htmlFor="security-slider">{t('security')}</label>
-                    <toolcool-range-slider
-                    id="security-slider"
-                    name="security"
-                    min="0"
-                    max="100"
-                    value="50"
-                    theme="rect"></toolcool-range-slider>
+                <div className="static-text">
+                    <p>Texto estático acima das labels</p>
                 </div>
-                <div className="label-slider-container">
-                    <label className="label_metric" htmlFor="health-slider">{t('health')}</label>
-                    <toolcool-range-slider
-                    id="health-slider"
-                    name="health"
-                    min="0"
-                    max="100"
-                    value="50"
-                    theme="rect"></toolcool-range-slider>
-                </div>
-                <div className="label-slider-container">
-                    <label className="label_metric" htmlFor="nature-slider">{t('nature')}</label>
-                    <toolcool-range-slider
-                    id="nature-slider"
-                    name="nature"
-                    min="0"
-                    max="100"
-                    value="50"
-                    theme="rect"></toolcool-range-slider>
-                </div>
-                <div className="label-slider-container">
-                    <label className="label_metric" htmlFor="sports-slider">{t('sports')}</label>
-                    <toolcool-range-slider
-                    id="sports-slider"
-                    name="sports"
-                    min="0"
-                    max="100"
-                    value="50"
-                    theme="rect"></toolcool-range-slider>
-                </div>
-                <div className="label-slider-container">
-                    <label className="label_metric" htmlFor="life-slider">{t('life')}</label>
-                    <toolcool-range-slider
-                    id="life-slider"
-                    name="life"
-                    min="0"
-                    max="100"
-                    value="50"
-                    theme="rect"></toolcool-range-slider>
-                </div>
+                <div className="label-scroll-container">
+                    <div className="label-slider-container">
+                        <label className="label_metric" htmlFor="commerce-slider">{t('Commerce')}</label>
+                        <div className="slider-minmax">
+                            <div className='tool'>
+                                <toolcool-range-slider
+                                    id="commerce-slider"
+                                    name="commerce"
+                                    min="0"
+                                    max="100"
+                                    value="50"
+                                    theme="rect"
+                                ></toolcool-range-slider>
+                            </div>
+                            <div className="min-max-text">
+                                <span>Nothing</span>
+                                <span>Very Important</span>
+                            </div>
+                        </div>
+                    </div>
 
-            <div className="button-container">
-            <button className="button-small-round" onClick={handlePreviousClick}>
-                <span className="button-icon">Previous</span> {/* Replace with actual icon */}
-            </button>
-            <button className="button-small-round" onClick={handleSearchClick}>
-                <span className="button-icon">Search🔍</span> {/* Replace with actual icon */}
-            </button>
-            </div>
+                    <div className="label-slider-container">
+                        <label className="label_metric" htmlFor="social_leisure-slider">{t('Social leisure')}</label>
+                        <div className="slider-minmax">
+                            <toolcool-range-slider
+                            id="social_leisure-slider"
+                            name="social_leisure"
+                            min="0"
+                            max="100"
+                            value="50"
+                            theme="rect"></toolcool-range-slider>
+                            <div className="min-max-text">
+                                <span>Nothing</span>
+                                <span>Very Important</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="label-slider-container">
+                        <label className="label_metric" htmlFor="health-slider">{t('Health')}</label>
+                        <div className="slider-minmax">
+                            <toolcool-range-slider
+                            id="health-slider"
+                            name="health"
+                            min="0"
+                            max="100"
+                            value="50"
+                            theme="rect"></toolcool-range-slider>
+                            <div className="min-max-text">
+                                <span>Nothing</span>
+                                <span>Very Important</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="label-slider-container">
+                        <label className="label_metric" htmlFor="nature_sports-slider">{t('Nature sports')}</label>
+                        <div className="slider-minmax">
+                            <toolcool-range-slider
+                            id="nature_sports-slider"
+                            name="nature_sports"
+                            min="0"
+                            max="100"
+                            value="50"
+                            theme="rect"></toolcool-range-slider>
+                            <div className="min-max-text">
+                                <span>Nothing</span>
+                                <span>Very Important</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="label-slider-container">
+                        <label className="label_metric" htmlFor="service-slider">{t('Service')}</label>
+                        <div className="slider-minmax">
+                            <toolcool-range-slider
+                            id="service-slider"
+                            name="service"
+                            min="0"
+                            max="100"
+                            value="50"
+                            theme="rect"></toolcool-range-slider>
+                            <div className="min-max-text">
+                                <span>Nothing</span>
+                                <span>Very Important</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="label-slider-container">
+                        <label className="label_metric" htmlFor="education-slider">{t('Education')}</label>
+                        <div className="slider-minmax">
+                            <toolcool-range-slider
+                            id="education-slider"
+                            name="education"
+                            min="0"
+                            max="100"
+                            value="50"
+                            theme="rect"></toolcool-range-slider>
+                            <div className="min-max-text">
+                                <span>Nothing</span>
+                                <span>Very Important</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>    
+                <div className="button-container">
+                    <button className="button-small-round" onClick={handlePreviousClick}>
+                        <span className="button-icon">Previous</span> {/* Replace with actual icon */}
+                    </button>
+                    <button className="button-small-round" onClick={handleSearchClick}>
+                        <span className="button-icon">Search🔍</span> {/* Replace with actual icon */}
+                    </button>
+                </div>
             </div>
 
         </div>

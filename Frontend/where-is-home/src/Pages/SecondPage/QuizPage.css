@@ -7,7 +7,9 @@
   font-family: 'Space Mono Bold 700', sans-serif;
   overflow-y: hidden;
   overflow-x: hidden;
-  padding-top: 8%;
+
+  padding-top: 5%;
+
   display: grid;
   grid-template-columns: 50% 50%;
   grid-gap: 10px;
@@ -19,7 +21,6 @@
   border-right: 2px solid white;
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
 
 }
 
@@ -28,29 +29,61 @@
     flex: 1;
     width: 90%;
     margin: auto;
-    padding-top: 2%;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
     z-index: 2;
+    height: 100%;
   }
 
+  
   .label-slider-container {
     display: flex;
     align-items: center;
-    height: 60px;
+    height: 50px;
+    border: 1px solid #ccc; 
+    padding: 10px;
+    margin-bottom: 30px;
+    border-radius: 5px;
 }
+.static-text{
+  height: 15%;
+}
+
+.label-scroll-container{
+  height: 70%;
+  overflow-y: auto;
+
+}
+.slider-minmax{
+  height:100%;
+}
+
+.min-max-text {
+  display: flex;
+  justify-content: space-between; /* Isso alinha os elementos nos extremos opostos */
+  align-items: center; /* Isso alinha os elementos verticalmente */
+  margin-top: 10px;
+  color: #faf9f9;
+  font-size: 0.8rem;
+}
+
 .label_metric{
   width: 50%;
+  margin-left: 20px;
 }
   
   .search-filters label {
-    margin-top: 10px;
     font-size: 1.2rem;
     color: var(--navbar-border);
     letter-spacing: 0.1rem;
     text-align: left;
   }
+
+  .tool{
+    height: 50%;
+    position: relative;
+  }
+
   
   .search-filters toolcool-range-slider {
     --slider-height: 0.5rem;
@@ -68,18 +101,20 @@
   .button-container {
     display: flex;
     justify-content: space-between; 
-    padding: 0 50%; 
-    margin-left: -40%;
+    height: auto;
+    
   }
 
   
 .button-small-round {
     border: none;
     outline: none;
-    border-radius: 50px;
+    border-radius: 20px;
     padding: 10px 20px;
     font-size: 1.2rem;
     display: flex;
+    height: 40px;
+    width: 130px;
     justify-content: center;
     align-items: center;
     margin: 10px; /* space around button */
@@ -96,7 +131,7 @@
   
   /* Icon Styling */
   .button-icon {
-    font-size: 1.5rem; /* size of the icon */
+    font-size: 1.2rem; /* size of the icon */
   }
 
 
@@ -134,6 +169,8 @@
     .toolcool-range-slider {
     --slider-bg-fill: var(--navbar-border);
     --pointer-shadow: none;
+    position: absolute; /* Adicionando posição absoluta */
+    bottom: 0;
     }
     
     /* Changes for dark and light mode of the sliders */
@@ -150,3 +187,18 @@
     --pointer-border: 1px solid hsl(201, 72%, 59%);
     
     }
+
+    .toolcool-range-slider:hover::before {
+      content: "Legenda";
+      position: absolute;
+      top: -30px; /* Posição vertical da legenda */
+      left: 50%; /* Posição horizontal da legenda */
+      transform: translateX(-50%);
+      background-color: rgba(0, 0, 0, 0.8); /* Cor de fundo da legenda */
+      color: white; /* Cor do texto da legenda */
+      padding: 5px 10px; /* Espaçamento interno da legenda */
+      border-radius: 5px; /* Arredondamento dos cantos da legenda */
+      font-size: 12px; /* Tamanho da fonte da legenda */
+      z-index: 1; /* Para garantir que a legenda esteja acima do slider */
+    }
+    

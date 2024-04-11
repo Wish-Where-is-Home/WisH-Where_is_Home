@@ -35,18 +35,29 @@
     height: 100%;
   }
 
+
   
   .label-slider-container {
     display: flex;
     align-items: center;
-    height: 50px;
+    height: 10%;
     border: 1px solid #ccc; 
     padding: 10px;
-    margin-bottom: 30px;
+    margin-top: 2%;
     border-radius: 5px;
 }
+
+.label-slider-container-first{
+  display: flex;
+  align-items: center;
+  height: 10%;
+  border: 1px solid #ccc; 
+  padding: 10px;
+  border-radius: 5px;
+}
+
 .static-text{
-  height: 15%;
+  height: 14%;
 }
 
 .label-scroll-container{
@@ -62,7 +73,6 @@
   display: flex;
   justify-content: space-between; /* Isso alinha os elementos nos extremos opostos */
   align-items: center; /* Isso alinha os elementos verticalmente */
-  margin-top: 10px;
   color: #faf9f9;
   font-size: 0.8rem;
 }
@@ -80,8 +90,7 @@
   }
 
   .tool{
-    height: 50%;
-    position: relative;
+    margin-top: 6%;
   }
 
   
@@ -110,14 +119,12 @@
     border: none;
     outline: none;
     border-radius: 20px;
-    padding: 10px 20px;
     font-size: 1.2rem;
     display: flex;
-    height: 40px;
+    height: 35px;
     width: 130px;
     justify-content: center;
     align-items: center;
-    margin: 10px; /* space around button */
     background-color: var(--button-color); /* button color */
     color: var(--button-text-color); /* button text color */
     cursor: pointer;
@@ -142,8 +149,32 @@
   
   
   
- 
-  
+
+.static-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.static-text-container{
+  width: 100%;
+}
+
+.static-text h1 {
+  margin-bottom: 10px; 
+  color: var(--h1-color);
+  margin-top: 0;
+  font-size: 2.5rem;
+
+}
+.static-text p {
+  margin-left: 12%;
+  text-align: left;
+  margin-top: 3%;
+  font-size: 1.2rem;
+  color: var(--h1-color);
+}
+
   /* Dark Mode Styling */
   .dark-mode {
     --background-color: #2D2D2D;
@@ -152,8 +183,11 @@
     --button-color: #5f79b7;
     --button-text-color: #FFFFFF;
     --button-hover-color: #2D4373;
+    --h1-color: #FFFFFF;
   }
-  
+  .light-mode .min-max-text span {
+    color: #000000; /* Cor preta */
+  }
   /*
   Light Mode Styling */
 .light-mode {
@@ -163,6 +197,7 @@
     --button-color: #2D4373;
     --button-text-color: #FFFFFF;
     --button-hover-color: #5f79b7;
+    --h1-color: #000000;
     }
     
     /* Adjustments for slider thumb and track */
@@ -170,7 +205,7 @@
     --slider-bg-fill: var(--navbar-border);
     --pointer-shadow: none;
     position: absolute; /* Adicionando posição absoluta */
-    bottom: 0;
+    margin-top: 20px;
     }
     
     /* Changes for dark and light mode of the sliders */
@@ -200,5 +235,46 @@
       border-radius: 5px; /* Arredondamento dos cantos da legenda */
       font-size: 12px; /* Tamanho da fonte da legenda */
       z-index: 1; /* Para garantir que a legenda esteja acima do slider */
+    }
+    
+
+
+    .search-filters .MuiSlider-root {
+      color: #475569; /* Default slider color */
+    }
+
+    
+
+    
+    .dark-mode .search-filters .MuiSlider-thumb {
+      background-color: #2d2d2d; /* Dark mode thumb color */
+      border: 1px solid #f5f6f7;
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+    
+    .dark-mode .search-filters .MuiSlider-track {
+      background-color: #475569; /* Dark mode track color */
+    }
+    
+    .dark-mode .search-filters .MuiSlider-rail {
+      background-color: #ffffff; /* Dark mode rail color */
+    }
+    
+
+    
+    .light-mode .search-filters .MuiSlider-thumb {
+      background-color: #fff; /* Light mode thumb color */
+      border: 1px solid #000000; /* Light mode thumb border color */
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+    
+    .light-mode .search-filters .MuiSlider-track {
+      background-color: #475569; /* Light mode track color */
+    }
+    
+    .light-mode .search-filters .MuiSlider-rail {
+      background-color: #6886a8; /* Light mode rail color */
     }
     

@@ -16,6 +16,7 @@ function QuizPage({ darkMode }) {
   const [geojsonData, setGeojsonData] = useState(null);
   const [selectedDistrict, setSelectedDistrict] = useState('');
   const [districtId, setDistrictId] = useState('');
+  const [mapCenter, setMapCenter] = useState([40, -7.79]);
 
 
   useEffect(() => {
@@ -23,7 +24,6 @@ function QuizPage({ darkMode }) {
     if (location.state) {
       setSelectedDistrict(location.state.selectedDistrict);
       setDistrictId(location.state.districtId);
-      console.log(location.state.districtId);
     }
   }, [location.state]);
 
@@ -50,33 +50,55 @@ function QuizPage({ darkMode }) {
 
   
   const geoJSONStyle = {
-    color: 'blue', // cor do contorno
-    weight: 2, // largura do contorno
-    fillColor: 'lightblue', // cor de preenchimento
-    fillOpacity: 0.5, // opacidade do preenchimento
+    color: 'black', 
+    weight: 3, 
   };
-
-
-
-
 
 
   useEffect(() => {
     const fetchGeojsonData = async () => {
+      console.log(districtId);
       try {
-        const url = 'http://mednat.ieeta.pt:9009/geoserver/wish/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=wish%3Afreguesias&outputFormat=application%2Fjson&srsname=EPSG:4326';
-        const response = await fetch(url);
-        const data = await response.json();
-        console.log(data);
-        setGeojsonData(data);
+       
+        if (districtId === "0") {
+     
+          const url = 'http://mednat.ieeta.pt:9009/geoserver/wish/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=wish%3Adistritos&outputFormat=application%2Fjson&srsname=EPSG:4326';
+          const response = await fetch(url);
+          const data = await response.json();
+    
+          console.log(data);
+    
+          setGeojsonData(data);
+        } else {
+          const url = 'http://mednat.ieeta.pt:9009/geoserver/wish/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=wish%3Amunicipios&outputFormat=application%2Fjson&srsname=EPSG:4326';
+          const response = await fetch(url);
+          const data = await response.json();
+    
+          console.log(data);
+    
+          const filteredFeatures = data.features.filter(feature => feature.properties.code_distrito === districtId);
+    
+          const filteredData = {
+            type: "FeatureCollection",
+            features: filteredFeatures
+          };
+    
+          console.log(filteredData);
+    
+          
+          if (filteredFeatures.length > 0) {
+            setGeojsonData(filteredData);
+          }
+        }
       } catch (error) {
         console.error('Error fetching GeoJSON data:', error);
       }
     };
-  
+    
     fetchGeojsonData();
-  }, []);
- 
+  }, [districtId]);
+  
+  
 
   useEffect(() => {
     const sliders = document.querySelectorAll('toolcool-range-slider');
@@ -222,7 +244,7 @@ function QuizPage({ darkMode }) {
 
         </div>
         <div className='right-container'>
-          <MapContainer  style={{ height: "100%", width: "100%" }} center={[40, -7.79]} zoom={7} scrollWheelZoom={false}>
+          <MapContainer  style={{ height: "100%", width: "100%" }} center={mapCenter}  zoom={7} scrollWheelZoom={false}>
                   <TileLayer
                       attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

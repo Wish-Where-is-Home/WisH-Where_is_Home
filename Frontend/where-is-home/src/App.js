@@ -9,6 +9,7 @@ import AboutUs from './Pages/AboutUs/AboutUs';
 import PropertiesPage from './Pages/PropertiesPage/PropertiesPage';
 import InitMetrics from './Pages/Metrics/InitMetrics';
 import Metrics from './Components/Metrics/Metrics';
+import Questions from './Pages/Questions/Questions';
 
 
 import { initializeApp } from "firebase/app";
@@ -76,6 +77,7 @@ function App() {
           <Route exact path="/properties" element={<PropertiesPage darkMode={darkMode} />} />
           <Route exact path="/metrics" element={<Metrics  darkMode={darkMode} />} />
           <Route exact path="/initMetrics" element={<InitMetrics darkMode={darkMode} />} />
+          <Route exact path="/questions" element={<Questions darkMode={darkMode} />} />
         </Routes>
       </Router>
     </div>

@@ -104,7 +104,26 @@ function QuizPage({ darkMode }) {
           
           setMapCenter([40, -7.79]);
           setMinZoom(7);
-          console.log(data);
+
+        }else if (districtId.length === 4){
+          const url = `http://mednat.ieeta.pt:9009/geoserver/wish/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=wish%3Afreguesias&outputFormat=application%2Fjson&srsname=EPSG:4326`;
+          const response = await fetch(url);
+          const data = await response.json();
+          const filteredFeatures = data.features.filter(feature => feature.properties.code_municipio === districtId);
+          const filteredData = {
+            type: "FeatureCollection",
+            features: filteredFeatures
+          };
+          setGeojsonData(filteredData);
+          const firstFeatureCoordinates = getFirstFeatureCoordinates(filteredFeatures);
+          if (firstFeatureCoordinates) {
+            setMapCenter(firstFeatureCoordinates);
+          }
+          setMinZoom(12);
+          console.log(filteredData);
+          
+
+
         } else {
           
           const url = 'http://mednat.ieeta.pt:9009/geoserver/wish/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=wish%3Amunicipios&outputFormat=application%2Fjson&srsname=EPSG:4326';
@@ -121,7 +140,7 @@ function QuizPage({ darkMode }) {
             setMapCenter(firstFeatureCoordinates);
           }
           setMinZoom(10);
-          console.log(filteredData);
+          
           
         }
       } catch (error) {
@@ -458,7 +477,7 @@ function QuizPage({ darkMode }) {
                             position: "absolute",
                             left: "10px",
                             bottom:"10px",
-                            width:"200px",
+                            width:"300px",
                             height:"35px",
                             zIndex: "1000",
                             backgroundColor: "var(--background-color)",
@@ -467,7 +486,7 @@ function QuizPage({ darkMode }) {
                             alignItems: "center",
                             borderRadius: "10px",
                         }}>
-                          <p style={{marginLeft: "10px", color: "white",whiteSpace: "nowrap",color: "var(--blacktowhite)",fontSize:"12px"}}>
+                          <p style={{marginLeft: "10px", color: "white",whiteSpace: "nowrap",color: "var(--blacktowhite)"}}>
                             {hoveredDistrict ? hoveredDistrict : t('hover')}
                             </p>
                         </div>

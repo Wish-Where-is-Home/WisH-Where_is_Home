@@ -25,8 +25,7 @@ SECRET_KEY = 'django-insecure-b1^fv=#y+bui3dlt!napm7!*w(l7x-au0m58g18ocfj@e)ilrj
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'mednat.ieeta.pt']
 
 # Application definition
 
@@ -37,7 +36,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-]
+    'django.contrib.gis',
+    'corsheaders',
+    'rest_framework',
+    ]
+
+APPEND_SLASH = False
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -47,7 +51,25 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    
 ]
+
+CORS_ALLOW_ALL_ORIGINS = True
+
+CORS_ALLOW_CREDENTIALS = True
+
+
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+
+CORS_TRUSTED_ORIGINS = ['*']
 
 ROOT_URLCONF = 'where_is_home.urls'
 
@@ -75,8 +97,12 @@ WSGI_APPLICATION = 'where_is_home.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'wish',
+        'USER': 'test',
+        'PASSWORD': 'password',
+        'HOST': 'db',  # Nome do serviço da base de dados no docker-compose
+        'PORT': '5432',
     }
 }
 
@@ -121,3 +147,21 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+FIREBASE_CONFIG = {
+    'apiKey': "AIzaSyDGcTX2Ry6N0IUgPDRxiu0iJZanmfi41Dw",
+  
+    'authDomain': "wish-9b245.firebaseapp.com",
+  
+    'projectId': "wish-9b245",
+  
+    'storageBucket': "wish-9b245.appspot.com",
+  
+    'messagingSenderId': "364387023023",
+  
+    'appId': "1:364387023023:web:bf11ec82e5c252c44cfc5a",
+  
+    'measurementId': "G-CZ6JHQCLWR"
+  
+}

@@ -4,7 +4,7 @@ import 'toolcool-range-slider';
 import { useTranslation } from "react-i18next";
 import './QuizPage.css';
 import "leaflet/dist/leaflet.css";
-import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
+import { MapContainer, TileLayer, GeoJSON,Tooltip } from 'react-leaflet';
 import L from 'leaflet';
 
 import Slider from '@mui/material/Slider';
@@ -21,11 +21,12 @@ function QuizPage({ darkMode }) {
   const [geojsonData, setGeojsonData] = useState(null);
   const [selectedDistrict, setSelectedDistrict] = useState('');
   const [districtId, setDistrictId] = useState('');
-  const [mapCenter, setMapCenter] = useState([40, -7.79]);
+  const [mapCenter, setMapCenter] = useState([null, null]);
+  const [minZoom, setMinZoom] = useState(null);
+  const [hoveredDistrict, setHoveredDistrict] = useState('');
 
 
   useEffect(() => {
-    // Access location state to get the selected district and its ID
     if (location.state) {
       setSelectedDistrict(location.state.selectedDistrict);
       setDistrictId(location.state.districtId);
@@ -59,9 +60,6 @@ function QuizPage({ darkMode }) {
 
 
 
-
-
-
   const handlePreviousClick = () => {
     console.log('Previous button clicked');
   };
@@ -71,48 +69,60 @@ function QuizPage({ darkMode }) {
    
   };
 
-
   
   const geoJSONStyle = {
     color: 'black', 
     weight: 3, 
   };
 
+  const handleDistrictClick = (event) => {
+    const clickedDistrictId = event.target.feature.id.split('.')[1];
+    console.log(clickedDistrictId);
+    setDistrictId(clickedDistrictId); // Atualiza o districtId com o ID do distrito clicado
+  };
+
+  const getFirstFeatureCoordinates = (features) => {
+    if (features.length === 0) return null;
+    const firstFeature = features[0];
+    const firstCoordinates = firstFeature.geometry.coordinates[0][0];
+    const correctedCoordinates = [firstCoordinates[1], firstCoordinates[0]];
+    return correctedCoordinates;
+  };
+  
 
   useEffect(() => {
     const fetchGeojsonData = async () => {
-      console.log(districtId);
+        setGeojsonData(null);
+          setMinZoom(null);
+          setMapCenter([null,null]);
       try {
-       
         if (districtId === "0") {
-     
           const url = 'http://mednat.ieeta.pt:9009/geoserver/wish/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=wish%3Adistritos&outputFormat=application%2Fjson&srsname=EPSG:4326';
           const response = await fetch(url);
           const data = await response.json();
-    
-          console.log(data);
-    
           setGeojsonData(data);
+          
+          setMapCenter([40, -7.79]);
+          setMinZoom(7);
+          console.log(data);
         } else {
+          
           const url = 'http://mednat.ieeta.pt:9009/geoserver/wish/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=wish%3Amunicipios&outputFormat=application%2Fjson&srsname=EPSG:4326';
           const response = await fetch(url);
           const data = await response.json();
-    
-          console.log(data);
-    
           const filteredFeatures = data.features.filter(feature => feature.properties.code_distrito === districtId);
-    
           const filteredData = {
             type: "FeatureCollection",
             features: filteredFeatures
           };
-    
-          console.log(filteredData);
-    
-          
-          if (filteredFeatures.length > 0) {
-            setGeojsonData(filteredData);
+          setGeojsonData(filteredData);
+          const firstFeatureCoordinates = getFirstFeatureCoordinates(filteredFeatures);
+          if (firstFeatureCoordinates) {
+            setMapCenter(firstFeatureCoordinates);
           }
+          setMinZoom(10);
+          console.log(filteredData);
+          
         }
       } catch (error) {
         console.error('Error fetching GeoJSON data:', error);
@@ -121,7 +131,8 @@ function QuizPage({ darkMode }) {
     
     fetchGeojsonData();
   }, [districtId]);
-  
+
+ 
   
 
   useEffect(() => {
@@ -140,12 +151,21 @@ function QuizPage({ darkMode }) {
 
 
   const onEachFeature = (feature, layer) => {
-
-
     if (feature.properties && feature.properties.dsg) {
-      layer.bindPopup(feature.properties.dsg);
+      layer.on({
+        mouseover: function (e) {
+          setHoveredDistrict(feature.properties.dsg);
+        },
+        mouseout: function (e) {
+          setHoveredDistrict('');
+        },
+        click: function (e) {
+          handleDistrictClick(e); 
+        }
+      });
     }
   };
+  
 
   return (
     <div className={`SearchPage ${darkMode ? 'dark-mode' : 'light-mode'}`}>
@@ -153,7 +173,7 @@ function QuizPage({ darkMode }) {
             <div className='search-filters'>
                 <div className="static-text">
                     <div className="static-text-container">
-                        <h1>Aveiro</h1>
+                        <h1>{selectedDistrict}</h1>
                     </div>
                     <p>What are you looking for? </p>
                 </div>
@@ -424,8 +444,9 @@ function QuizPage({ darkMode }) {
             </div>
 
         </div>
+        {mapCenter[0] !==null && mapCenter[1] !==null && (
         <div className='right-container'>
-          <MapContainer  style={{ height: "100%", width: "100%" }} center={mapCenter}  zoom={7} scrollWheelZoom={false}>
+          <MapContainer   style={{ height: "100%", width: "100%" }} center={mapCenter}  zoom={minZoom} minZoom={minZoom} scrollWheelZoom={false}>
                   <TileLayer
                       attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -433,8 +454,26 @@ function QuizPage({ darkMode }) {
                   />
                   
                   {geojsonData && <GeoJSON data={geojsonData}  style={geoJSONStyle}  onEachFeature={onEachFeature}  />}
+                  <div style={{
+                            position: "absolute",
+                            left: "10px",
+                            bottom:"10px",
+                            width:"200px",
+                            height:"35px",
+                            zIndex: "1000",
+                            backgroundColor: "var(--background-color)",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            borderRadius: "10px",
+                        }}>
+                          <p style={{marginLeft: "10px", color: "white",whiteSpace: "nowrap",color: "var(--blacktowhite)",fontSize:"12px"}}>
+                            {hoveredDistrict ? hoveredDistrict : t('hover')}
+                            </p>
+                        </div>
               </MapContainer>
         </div>    
+         )}
     </div>
   );
 }

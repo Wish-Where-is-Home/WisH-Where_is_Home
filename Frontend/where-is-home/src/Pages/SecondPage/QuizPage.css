@@ -166,10 +166,12 @@
 }
 
 .static-text h1 {
-  margin-bottom: 10px; 
+  margin-bottom: 40px; 
   color: var(--h1-color);
   margin-top: 0;
-  font-size: 2rem;
+  font-size: 1.9rem;
+
+  max-height: 2rem;
 
 }
 .static-text p {

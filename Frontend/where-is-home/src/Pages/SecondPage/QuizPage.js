@@ -103,12 +103,22 @@ function QuizPage({ darkMode }) {
 
   const getFirstFeatureCoordinates = (features) => {
     if (features.length === 0) return null;
+    
     const firstFeature = features[0];
-    const firstCoordinates = firstFeature.geometry.coordinates[0][0];
-    const correctedCoordinates = [firstCoordinates[1], firstCoordinates[0]];
- 
-    return correctedCoordinates;
+    let firstCoordinates = firstFeature.geometry.coordinates[0][0];
+  
+    if (Array.isArray(firstCoordinates[0])) {
+    
+      firstCoordinates = [firstCoordinates[0][1], firstCoordinates[0][0]];
+    } else {
+      
+      firstCoordinates = [firstCoordinates[1], firstCoordinates[0]];
+    }
+  
+  
+    return firstCoordinates;
   };
+  
 
   const calculateCenterOfFeatures = (features) => {
     let totalX = 0;
@@ -142,6 +152,11 @@ function QuizPage({ darkMode }) {
    
     const centerX = totalX / totalCount;
     const centerY = totalY / totalCount;
+
+    if (centerX === null && centerY === null){
+      centerX=39.6686;
+      centerY=-8.1332;
+    }
   
     return [centerY, centerX]; 
   };

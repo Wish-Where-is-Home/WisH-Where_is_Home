@@ -78,7 +78,7 @@ function QuizPage({ darkMode }) {
   const handleDistrictClick = (event) => {
     const clickedDistrictId = event.target.feature.id.split('.')[1];
     console.log(clickedDistrictId);
-    setDistrictId(clickedDistrictId); // Atualiza o districtId com o ID do distrito clicado
+    setDistrictId(clickedDistrictId); 
   };
 
   const getFirstFeatureCoordinates = (features) => {
@@ -86,11 +86,51 @@ function QuizPage({ darkMode }) {
     const firstFeature = features[0];
     const firstCoordinates = firstFeature.geometry.coordinates[0][0];
     const correctedCoordinates = [firstCoordinates[1], firstCoordinates[0]];
+    console.log(correctedCoordinates);
     return correctedCoordinates;
   };
+
+  const calculateCenterOfFeatures = (features) => {
+    let totalX = 0;
+    let totalY = 0;
+    let totalCount = 0;
+  
+    features.forEach(feature => {
+      const geometry = feature.geometry;
+  
+      if (geometry.type === 'Polygon') {
+        const coordinates = geometry.coordinates[0]; 
+  
+        coordinates.forEach(coordinate => {
+          totalX += coordinate[0];
+          totalY += coordinate[1];
+          totalCount++;
+        });
+      } else if (geometry.type === 'MultiLineString') {
+        const lines = geometry.coordinates;
+  
+        lines.forEach(line => {
+          line.forEach(coordinate => {
+            totalX += coordinate[0];
+            totalY += coordinate[1];
+            totalCount++;
+          });
+        });
+      }
+    });
+  
+   
+    const centerX = totalX / totalCount;
+    const centerY = totalY / totalCount;
+  
+    return [centerY, centerX]; 
+  };
+  
   
 
   useEffect(() => {
+
+    console.log(districtId);
     const fetchGeojsonData = async () => {
         setGeojsonData(null);
           setMinZoom(null);
@@ -102,46 +142,44 @@ function QuizPage({ darkMode }) {
           const data = await response.json();
           setGeojsonData(data);
           
-          setMapCenter([40, -7.79]);
+          setMapCenter([39.6686,-8.1332]);
           setMinZoom(7);
 
         }else if (districtId.length === 4){
-          const url = `http://mednat.ieeta.pt:9009/geoserver/wish/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=wish%3Afreguesias&outputFormat=application%2Fjson&srsname=EPSG:4326`;
+          const url = `http://mednat.ieeta.pt:9009/geoserver/wish/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=wish%3Afreguesias&outputFormat=application%2Fjson&srsname=EPSG:4326&CQL_FILTER=code_municipio='${districtId}'`;
           const response = await fetch(url);
           const data = await response.json();
-          const filteredFeatures = data.features.filter(feature => feature.properties.code_municipio === districtId);
-          const filteredData = {
-            type: "FeatureCollection",
-            features: filteredFeatures
-          };
-          setGeojsonData(filteredData);
-          const firstFeatureCoordinates = getFirstFeatureCoordinates(filteredFeatures);
+         
+          setGeojsonData(data);
+          const firstFeatureCoordinates = getFirstFeatureCoordinates(data.features);
           if (firstFeatureCoordinates) {
             setMapCenter(firstFeatureCoordinates);
           }
           setMinZoom(12);
-          console.log(filteredData);
-          
+        }else if (districtId.length === 6){
+            const url = `http://mednat.ieeta.pt:9009/geoserver/wish/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=wish%3Asubseccao&outputFormat=application%2Fjson&CQL_FILTER=code_freguesia='${districtId}'`;
+            const response = await fetch(url);
+            const data = await response.json(); 
+            console.log(data);
+            setGeojsonData(data);
+            const centerCoordinates = calculateCenterOfFeatures(data.features);
 
-
+            if (centerCoordinates){
+              setMapCenter(centerCoordinates);
+            }
+           
+            setMinZoom(13);
         } else {
-          
-          const url = 'http://mednat.ieeta.pt:9009/geoserver/wish/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=wish%3Amunicipios&outputFormat=application%2Fjson&srsname=EPSG:4326';
-          const response = await fetch(url);
+            const url = `http://mednat.ieeta.pt:9009/geoserver/wish/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=wish%3Amunicipios&outputFormat=application%2Fjson&srsname=EPSG:4326&CQL_FILTER=code_distrito='${districtId}'`;
+            const response = await fetch(url);
           const data = await response.json();
-          const filteredFeatures = data.features.filter(feature => feature.properties.code_distrito === districtId);
-          const filteredData = {
-            type: "FeatureCollection",
-            features: filteredFeatures
-          };
-          setGeojsonData(filteredData);
-          const firstFeatureCoordinates = getFirstFeatureCoordinates(filteredFeatures);
+          console.log(data);
+          setGeojsonData(data);
+          const firstFeatureCoordinates = getFirstFeatureCoordinates(data.features);
           if (firstFeatureCoordinates) {
             setMapCenter(firstFeatureCoordinates);
           }
           setMinZoom(10);
-          
-          
         }
       } catch (error) {
         console.error('Error fetching GeoJSON data:', error);
@@ -477,7 +515,7 @@ function QuizPage({ darkMode }) {
                             position: "absolute",
                             left: "10px",
                             bottom:"10px",
-                            width:"300px",
+                            maxWidth:"600px",
                             height:"35px",
                             zIndex: "1000",
                             backgroundColor: "var(--background-color)",
@@ -486,7 +524,7 @@ function QuizPage({ darkMode }) {
                             alignItems: "center",
                             borderRadius: "10px",
                         }}>
-                          <p style={{marginLeft: "10px", color: "white",whiteSpace: "nowrap",color: "var(--blacktowhite)"}}>
+                          <p style={{marginLeft: "10px", color: "white",whiteSpace: "nowrap",color: "var(--blacktowhite)",padding:"0 20px 0 5px"}}>
                             {hoveredDistrict ? hoveredDistrict : t('hover')}
                             </p>
                         </div>

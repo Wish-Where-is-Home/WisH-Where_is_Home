@@ -8,10 +8,15 @@ import { useTranslation } from "react-i18next";
 function Metrics() {
     const [isOpen, setIsOpen] = useState(false);
     const [metricValues, setMetricValues] = useState({
-        Health: [],
-        Nature: [],
-        Entertainment: [],
-        Education: [],
+        "Health": [],
+        "Nature and Environment": [],
+        "Culture": [],
+        "Educational": [],
+        "Sport": [],
+        "Commerce": [],
+        "Social and Leisure": [],
+        "Service": []
+
     });
     const handleSliderChange = (value, metricIndex, genre) => {
         const updatedMetrics = { ...metricValues };
@@ -21,11 +26,16 @@ function Metrics() {
     const [selectedGenre, setSelectedGenre] = useState(null);
 
     const metricNames = {
-        Health: ['Hospital', 'Farmacy', 'Other Thing'],
-        Nature: ['Park', 'Playground', 'Fluvial Beach', 'Hiking Trail'],
-        Entertainment: ['Cinema', 'Stadiums', 'Bars', 'Gaming Rooms'],
-        Education: ['University', 'Primary School', 'Middle School', 'Secondary School', 'Pre-School']
+        Health: ['Hospital', 'Nursing Home', 'Clinic', 'Pharmacy', 'Dentist'],
+        "Nature and Environment": ['Park', 'Playground', 'Fluvial Beach', 'Hiking Trail'],
+        Culture: ['Museum', 'Library', 'Art Gallery', 'Monument', 'Theater'],
+        Educational: ['University', 'Primary School', 'Middle School', 'Secondary School', 'Pre-School'],
+        Sport: ['Gym', 'Swimming Pool', 'Tennis Court', 'Football Field', 'Basketball Court'],
+        Commerce: ['Supermarket', 'Bakery', 'Butchery', 'Fish Market', 'Bookstore'],
+        "Social and Leisure": ['Restaurant', 'Cafe', 'Night Club', 'Cinema'],
+        Service: ['Bank', 'Post Office', 'Police Station', 'Fire Station']
     };
+    
 
     const secondSetOfMetrics = [
         {
@@ -33,16 +43,32 @@ function Metrics() {
             metricsCount: metricNames.Health.length,
         },
         {
-            genre: 'Nature',
-            metricsCount: metricNames.Nature.length,
+            genre: 'Nature and Environment',
+            metricsCount: metricNames["Nature and Environment"].length,
         },
         {
-            genre: 'Entertainment',
-            metricsCount: metricNames.Entertainment.length,
+            genre: 'Culture',
+            metricsCount: metricNames.Culture.length,
         },
         {
-            genre: 'Education',
-            metricsCount: metricNames.Education.length,
+            genre: 'Educational',
+            metricsCount: metricNames.Educational.length,
+        },
+        {
+            genre: 'Sport',
+            metricsCount: metricNames.Sport.length,
+        },
+        {
+            genre: 'Commerce',
+            metricsCount: metricNames.Commerce.length,
+        },
+        {
+            genre: 'Social and Leisure',
+            metricsCount: metricNames["Social and Leisure"].length,
+        },
+        {
+            genre: 'Service',
+            metricsCount: metricNames.Service.length,
         },
     ];
     const handleGenreSelect = (genre) => {

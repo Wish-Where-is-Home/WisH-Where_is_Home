@@ -6,14 +6,20 @@ import 'rc-slider/assets/index.css';
 import {useTranslation} from "react-i18next";
 
 
-function Metrics(){
-    const [isOpen, setIsOpen] = useState(false);
+function Metrics({isOpen, toggleSidebar}){
+   
     const [metricValues, setMetricValues] = useState({
         Health: [], // Initialize with empty array for each genre
         Nature: [],
         Entertainment: [],
         Education: [],
     });
+
+
+    const toggleSidebarInternal = () => {
+        toggleSidebar();
+    };
+
     const handleSliderChange = (value, metricIndex, genre) => {
         // Update the value of the changed metric
         const updatedMetrics = { ...metricValues };
@@ -43,15 +49,12 @@ function Metrics(){
     const handleGenreSelect = (genre) => {
         setSelectedGenre(selectedGenre === genre ? null : genre);
     };
-    const toggleSidebar = () => {
-        setIsOpen(!isOpen);
-    };
     const {t} = useTranslation("common");
 
 
     return (
         <div className={`sidebar-metrics ${isOpen ? 'sidebar-metrics-open' : ''}`}>
-            <div className="sidebar-metrics-toggle" onClick={toggleSidebar}>
+            <div className="sidebar-metrics-toggle" onClick={toggleSidebarInternal}>
                 {isOpen ? <ChevronLeft size={24} /> : <ChevronRight size={24} />} 
             </div>
             <h1 className='PropText-metrics'>{t('AdjustPref')}</h1>

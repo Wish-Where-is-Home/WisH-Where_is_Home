@@ -15,22 +15,23 @@ import { faSquareFull } from '@fortawesome/free-regular-svg-icons';
 import {useTranslation} from "react-i18next";
 
 
-function Sidebar() {
-    const [isOpen, setIsOpen] = useState(false);
+function Sidebar({ isOpen, toggleSidebar }) {
     const [boxes, setBoxes] = useState([]);
 
     useEffect(() => {
         setBoxes(data);
     }, []);
 
-    const toggleSidebar = () => {
-        setIsOpen(!isOpen);
+    const toggleSidebarInternal = () => {
+        toggleSidebar();
     };
+
+ 
     const {t} = useTranslation("common");
 
     return (
         <div className={`sidebar ${isOpen ? 'sidebar-open' : ''}`}>
-            <div className="sidebar-toggle" onClick={toggleSidebar}>
+            <div className="sidebar-toggle"  onClick={toggleSidebarInternal}>
                 {isOpen ? <ChevronRight size={24} /> : <ChevronLeft size={24} />} 
             </div>
             <h1 className='PropText'>{t('Properties')}</h1>

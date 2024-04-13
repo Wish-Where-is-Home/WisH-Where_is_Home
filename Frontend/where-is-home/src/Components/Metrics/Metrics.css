@@ -49,12 +49,19 @@
     font-family: "metropolis-regular", sans-serif;
     font-size: 24px;
     display: flex;
-    flex-direction: row;
-    align-items: center;
+    flex-wrap: wrap; /* Allow items to wrap onto multiple rows */
     justify-content: center;
 }
+
 .navbar-item-metrics {
+    /* Adjust width as needed based on the number of items per row */
+    width: calc(100% / 3); /* Assuming 3 items per row */
+    box-sizing: border-box; /* Ensure padding and borders are included in the width */
     margin-bottom: 5px;
+    display: flex; /* Enable flexbox layout */
+    justify-content: center; /* Center the content horizontally */
+    align-items: center; /* Center the content vertically */
+    text-align: center; /* Center the text horizontally */
 }
 
 .navbar-item-metrics:last-child {
@@ -68,8 +75,9 @@
     font-size: 16px;
     color: #fff;
     padding: 10px;
-    text-align: left;
+    text-align: center;
     transition: background-color 0.3s ease;
+
 }
 
 .navbar-item-metrics button:hover,
@@ -81,6 +89,7 @@
     height: 100%;
     width: 70%;
     margin:  10% 15%;
+    
 }
 
 .slider-item {

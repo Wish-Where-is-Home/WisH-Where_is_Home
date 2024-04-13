@@ -8,3 +8,8 @@
     padding-top: 4%;
 }
 
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out {
+  background-color: var(--background-color) !important;
+  color: var(--blacktowhite) !important;
+}

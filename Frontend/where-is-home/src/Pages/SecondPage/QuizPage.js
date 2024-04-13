@@ -1,4 +1,4 @@
-import React, { useRef, useEffect,useState} from 'react';
+import React, {  useRef,useEffect,useState} from 'react';
 import { useLocation } from 'react-router-dom';
 import 'toolcool-range-slider';
 import { useTranslation } from "react-i18next";
@@ -25,6 +25,8 @@ function QuizPage({ darkMode }) {
   const [minZoom, setMinZoom] = useState(null);
   const [hoveredDistrict, setHoveredDistrict] = useState('');
 
+  const mapRef = useRef(null);
+  const geoJsonRef = useRef(null);
 
   useEffect(() => {
     if (location.state) {
@@ -132,9 +134,6 @@ function QuizPage({ darkMode }) {
 
     console.log(districtId);
     const fetchGeojsonData = async () => {
-        setGeojsonData(null);
-          setMinZoom(null);
-          setMapCenter([null,null]);
       try {
         if (districtId === "0") {
           const url = 'http://mednat.ieeta.pt:9009/geoserver/wish/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=wish%3Adistritos&outputFormat=application%2Fjson&srsname=EPSG:4326';
@@ -188,6 +187,23 @@ function QuizPage({ darkMode }) {
     
     fetchGeojsonData();
   }, [districtId]);
+
+  useEffect(() => {
+    if (mapRef.current) {
+      mapRef.current.setView(mapCenter, minZoom);
+    }
+  }, [mapCenter, minZoom]);
+
+
+  useEffect(() => {
+    if (geoJsonRef.current && geojsonData) {
+      geoJsonRef.current.clearLayers();
+      L.geoJSON(geojsonData, {
+        style: geoJSONStyle,
+        onEachFeature: onEachFeature
+      }).addTo(geoJsonRef.current);
+    }
+  }, [geojsonData]);
 
  
   
@@ -501,16 +517,16 @@ function QuizPage({ darkMode }) {
             </div>
 
         </div>
-        {mapCenter[0] !==null && mapCenter[1] !==null && (
         <div className='right-container'>
-          <MapContainer   style={{ height: "100%", width: "100%" }} center={mapCenter}  zoom={minZoom} minZoom={minZoom} scrollWheelZoom={false}>
+        {mapCenter[0] !== null && mapCenter[1] !== null && (
+          <MapContainer  ref={mapRef}  style={{ height: "100%", width: "100%" }} center={mapCenter}  zoom={minZoom} minZoom={minZoom} scrollWheelZoom={false}>
                   <TileLayer
                       attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                       
                   />
                   
-                  {geojsonData && <GeoJSON data={geojsonData}  style={geoJSONStyle}  onEachFeature={onEachFeature}  />}
+                  {geojsonData && <GeoJSON ref={geoJsonRef} data={geojsonData}  style={geoJSONStyle}  onEachFeature={onEachFeature}  />}
                   <div style={{
                             position: "absolute",
                             left: "10px",
@@ -529,8 +545,8 @@ function QuizPage({ darkMode }) {
                             </p>
                         </div>
               </MapContainer>
+        )}
         </div>    
-         )}
     </div>
   );
 }

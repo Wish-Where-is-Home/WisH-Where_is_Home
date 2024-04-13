@@ -18,7 +18,7 @@
 .left-store {
   position: sticky;
   top: 0;
-  border-right: 2px solid white;
+  border-right: 2px solid var(--blacktowhite);
   display: flex;
   flex-direction: column;
 
@@ -104,12 +104,11 @@
     margin-top: 10px;
     margin-bottom: 20px;
   }
-  
-  /* Button Styling */
+
 
   .button-container {
     display: flex;
-    justify-content: space-between; 
+    justify-content: center; 
     height: auto;
     
   }
@@ -125,34 +124,41 @@
     width: 130px;
     justify-content: center;
     align-items: center;
-    background-color: var(--button-color); /* button color */
-    color: var(--button-text-color); /* button text color */
+    background-color: var(--button-color); 
+    color: var(--button-text-color); 
     cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* subtle shadow */
-    transition: background-color 0.3s; /* smooth color transition */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); 
+    transition: background-color 0.3s; 
   }
   
   .button-small-round:hover {
-    background-color: var(--button-hover-color); /* color on hover */
+    background-color: var(--button-hover-color);
   }
   
   /* Icon Styling */
   .button-icon {
-    font-size: 1.2rem; /* size of the icon */
+    font-size: 1.2rem; 
   }
 
 
   .right-container{
-    width: 100%;
-    height: 90%; 
+    width: 99%;
+    height: 99%; 
   }
 
+  
+
+  .custom-tooltip {
+    background-color: var(--background-color);
+    color: var(--blacktowhite);
+  }
   
 
 .static-text {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  padding-bottom: 1rem;
 }
 
 .static-text-container{
@@ -163,7 +169,7 @@
   margin-bottom: 10px; 
   color: var(--h1-color);
   margin-top: 0;
-  font-size: 2.5rem;
+  font-size: 2rem;
 
 }
 .static-text p {
@@ -174,7 +180,13 @@
   color: var(--h1-color);
 }
 
-  /* Dark Mode Styling */
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out {
+  background-color: var(--background-color) !important;
+  color: var(--blacktowhite) !important;
+}
+
+
   .dark-mode {
     --background-color: #2D2D2D;
     --navbar-border: #FFFFFF;
@@ -263,17 +275,16 @@
 
     
     .light-mode .search-filters .MuiSlider-thumb {
-      background-color: #fff; /* Light mode thumb color */
-      border: 1px solid #000000; /* Light mode thumb border color */
+      background-color: #fff; 
+      border: 1px solid #000000; 
       width: 1.5rem;
       height: 1.5rem;
     }
     
     .light-mode .search-filters .MuiSlider-track {
-      background-color: #475569; /* Light mode track color */
+      background-color: #475569;
     }
     
     .light-mode .search-filters .MuiSlider-rail {
-      background-color: #6886a8; /* Light mode rail color */
+      background-color: #6886a8; 
     }
-    

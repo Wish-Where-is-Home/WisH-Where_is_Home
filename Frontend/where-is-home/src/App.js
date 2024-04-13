@@ -14,11 +14,28 @@ import QuizPage from './Pages/SecondPage/QuizPage';
 function App() {
   const [darkMode, setDarkMode] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [zoneData, setZoneData] = useState(null);
 
   useEffect(() => {
     const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
     setDarkMode(prefersDarkMode);
   }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://mednat.ieeta.pt:9009/api/zone/', { timeout: 10000 });
+        const data = await response.json();
+        console.log(data);
+        setZoneData(data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
 
   useEffect(() => {
     const timer = setTimeout(() => {

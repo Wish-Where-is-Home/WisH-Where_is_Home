@@ -6,6 +6,7 @@ import './QuizPage.css';
 import "leaflet/dist/leaflet.css";
 import { MapContainer, TileLayer, GeoJSON,Tooltip } from 'react-leaflet';
 import L from 'leaflet';
+import Button from '@mui/material/Button';
 
 import Slider from '@mui/material/Slider';
 import Box from '@mui/material/Box';
@@ -22,16 +23,23 @@ function QuizPage({ darkMode }) {
   const [selectedDistrict, setSelectedDistrict] = useState('');
   const [districtId, setDistrictId] = useState('');
   const [mapCenter, setMapCenter] = useState([null, null]);
+  const [Zoom, setZoom] = useState(null);
   const [minZoom, setMinZoom] = useState(null);
-  const [hoveredDistrict, setHoveredDistrict] = useState('');
+ 
+
+  const portugalBounds = [
+    [36.9, -9.5], 
+    [42.2, -6.5]  
+  ];
 
   const mapRef = useRef(null);
   const geoJsonRef = useRef(null);
 
   useEffect(() => {
     if (location.state) {
-      setSelectedDistrict(location.state.selectedDistrict);
+      setSelectedDistrict(location.state.selectedDistrict.replace(/_/g, ' '));
       setDistrictId(location.state.districtId);
+      
     }
   }, [location.state]);
 
@@ -72,15 +80,25 @@ function QuizPage({ darkMode }) {
   };
 
   
-  const geoJSONStyle = {
-    color: 'black', 
-    weight: 3, 
+  const geoJSONStyle = (feature) => {
+    if (!feature) return {}; 
+  
+    const id = feature.id.split('.')[1]; 
+    const fillColor = id % 2 === 0 ? 'green' : 'red';
+  
+    return {
+      color: 'black', 
+      weight: 3,
+      fillColor: fillColor,
+      fillOpacity: 0.5
+    };
   };
+  
 
   const handleDistrictClick = (event) => {
     const clickedDistrictId = event.target.feature.id.split('.')[1];
-    console.log(clickedDistrictId);
-    setDistrictId(clickedDistrictId); 
+    setDistrictId(clickedDistrictId);
+    setSelectedDistrict(event.target.feature.properties.dsg); 
   };
 
   const getFirstFeatureCoordinates = (features) => {
@@ -88,7 +106,7 @@ function QuizPage({ darkMode }) {
     const firstFeature = features[0];
     const firstCoordinates = firstFeature.geometry.coordinates[0][0];
     const correctedCoordinates = [firstCoordinates[1], firstCoordinates[0]];
-    console.log(correctedCoordinates);
+ 
     return correctedCoordinates;
   };
 
@@ -132,7 +150,6 @@ function QuizPage({ darkMode }) {
 
   useEffect(() => {
 
-    console.log(districtId);
     const fetchGeojsonData = async () => {
       try {
         if (districtId === "0") {
@@ -142,6 +159,7 @@ function QuizPage({ darkMode }) {
           setGeojsonData(data);
           
           setMapCenter([39.6686,-8.1332]);
+          setZoom(7);
           setMinZoom(7);
 
         }else if (districtId.length === 4){
@@ -154,12 +172,14 @@ function QuizPage({ darkMode }) {
           if (firstFeatureCoordinates) {
             setMapCenter(firstFeatureCoordinates);
           }
-          setMinZoom(12);
+          setZoom(12);
+          
+      
         }else if (districtId.length === 6){
             const url = `http://mednat.ieeta.pt:9009/geoserver/wish/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=wish%3Asubseccao&outputFormat=application%2Fjson&CQL_FILTER=code_freguesia='${districtId}'`;
             const response = await fetch(url);
             const data = await response.json(); 
-            console.log(data);
+           
             setGeojsonData(data);
             const centerCoordinates = calculateCenterOfFeatures(data.features);
 
@@ -167,18 +187,21 @@ function QuizPage({ darkMode }) {
               setMapCenter(centerCoordinates);
             }
            
-            setMinZoom(13);
+            setZoom(13);
+          
         } else {
             const url = `http://mednat.ieeta.pt:9009/geoserver/wish/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=wish%3Amunicipios&outputFormat=application%2Fjson&srsname=EPSG:4326&CQL_FILTER=code_distrito='${districtId}'`;
             const response = await fetch(url);
           const data = await response.json();
-          console.log(data);
+       
           setGeojsonData(data);
           const firstFeatureCoordinates = getFirstFeatureCoordinates(data.features);
           if (firstFeatureCoordinates) {
             setMapCenter(firstFeatureCoordinates);
           }
-          setMinZoom(10);
+          setZoom(10);
+          setMinZoom(7);
+        
         }
       } catch (error) {
         console.error('Error fetching GeoJSON data:', error);
@@ -190,9 +213,10 @@ function QuizPage({ darkMode }) {
 
   useEffect(() => {
     if (mapRef.current) {
-      mapRef.current.setView(mapCenter, minZoom);
+      mapRef.current.setView(mapCenter,Zoom,minZoom);
+      
     }
-  }, [mapCenter, minZoom]);
+  }, [mapCenter, Zoom,minZoom]);
 
 
   useEffect(() => {
@@ -204,6 +228,21 @@ function QuizPage({ darkMode }) {
       }).addTo(geoJsonRef.current);
     }
   }, [geojsonData]);
+
+
+  const goBackPoligon = () => {
+   
+
+    if (districtId.length > 2) {
+      const newDistrictId = districtId.slice(0, -2);
+      setDistrictId(newDistrictId);
+    }else{
+      if (districtId.length==2 && districtId!=="0" ){
+        setSelectedDistrict("Portugal")
+        setDistrictId("0");
+      }
+    }
+  };
 
  
   
@@ -227,10 +266,12 @@ function QuizPage({ darkMode }) {
     if (feature.properties && feature.properties.dsg) {
       layer.on({
         mouseover: function (e) {
-          setHoveredDistrict(feature.properties.dsg);
+          const districtName = feature.properties.dsg; 
+          const tooltip = L.tooltip({ direction: 'center',class: 'custom-tooltip' }).setContent(districtName);
+          this.bindTooltip(tooltip).openTooltip();
         },
         mouseout: function (e) {
-          setHoveredDistrict('');
+          this.unbindTooltip();
         },
         click: function (e) {
           handleDistrictClick(e); 
@@ -507,11 +548,8 @@ function QuizPage({ darkMode }) {
                     </div>
                 </div>    
                 <div className="button-container">
-                    <button className="button-small-round" onClick={handlePreviousClick}>
-                        <span className="button-icon">Previous</span> {/* Replace with actual icon */}
-                    </button>
                     <button className="button-small-round" onClick={handleSearchClick}>
-                        <span className="button-icon">Search 🔍</span> {/* Replace with actual icon */}
+                        <span className="button-icon">Search 🔍</span> 
                     </button>
                 </div>
             </div>
@@ -519,7 +557,13 @@ function QuizPage({ darkMode }) {
         </div>
         <div className='right-container'>
         {mapCenter[0] !== null && mapCenter[1] !== null && (
-          <MapContainer  ref={mapRef}  style={{ height: "100%", width: "100%" }} center={mapCenter}  zoom={minZoom} minZoom={minZoom} scrollWheelZoom={false}>
+          <MapContainer  ref={mapRef}  style={{ height: "100%", width: "100%" }} 
+          center={mapCenter}  
+          zoom={Zoom} 
+          minZoom={minZoom} 
+          maxBounds={portugalBounds} 
+          maxBoundsViscosity={1}
+        >
                   <TileLayer
                       attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -527,23 +571,10 @@ function QuizPage({ darkMode }) {
                   />
                   
                   {geojsonData && <GeoJSON ref={geoJsonRef} data={geojsonData}  style={geoJSONStyle}  onEachFeature={onEachFeature}  />}
-                  <div style={{
-                            position: "absolute",
-                            left: "10px",
-                            bottom:"10px",
-                            maxWidth:"600px",
-                            height:"35px",
-                            zIndex: "1000",
-                            backgroundColor: "var(--background-color)",
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            borderRadius: "10px",
-                        }}>
-                          <p style={{marginLeft: "10px", color: "white",whiteSpace: "nowrap",color: "var(--blacktowhite)",padding:"0 20px 0 5px"}}>
-                            {hoveredDistrict ? hoveredDistrict : t('hover')}
-                            </p>
-                        </div>
+                  <Button variant="contained" style={{ position: 'absolute', top: '10px', right: '20px',zIndex: "1000",  backgroundColor: "var(--background-color)",color:"var(--blacktowhite)"}} onClick={goBackPoligon}>
+                    Back
+                  </Button>
+                  
               </MapContainer>
         )}
         </div>    

@@ -1,6 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import 'toolcool-range-slider';
 import { useTranslation } from "react-i18next";
 import './QuizPage.css';
 import "leaflet/dist/leaflet.css";

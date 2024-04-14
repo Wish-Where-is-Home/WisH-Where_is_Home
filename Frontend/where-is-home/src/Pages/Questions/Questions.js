@@ -179,12 +179,6 @@ function Questions({ slidersValues,darkMode, handlePreviousClick }) {
         });
     };
 
-
-    const valueLabelFormat = (value) => {
-        const labels = ['Not Important', 'Slightly Important', 'Moderate', 'Important', 'Very Important'];
-        return labels[Math.round(value * 4)];
-    };
-
     const renderSlidersForTab = () => {
         return sliderGroupings[tabs[activeTab]].map((group, index) => (
             <div key={`slider-${activeTab}-${index}`}>
@@ -206,7 +200,7 @@ function Questions({ slidersValues,darkMode, handlePreviousClick }) {
     };
 
     return (
-        <div className={`SearchPage ${darkMode ? 'dark-mode' : 'light-mode'}`}>
+        <div className={`SearchPage2 ${darkMode ? 'dark-mode' : 'light-mode'}`}>
             <div className='search-filters'>
                 <div className='tab-buttons'>
                     {filteredTabs.map((tabName, index) => (

@@ -203,12 +203,14 @@ function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,z
 
 
     useEffect(() => {
-        function calculateScores(zoneData, sliderValuesMetricsupdated, sliderValuesThemesupdated) {
+        function calculateScores(zoneData, sliderValuesThemesupdated, sliderValuesMetricsupdated) {
             if (zoneData !== null) {
                 const scores = {};
                 const data = zoneData;
                 const sliderValuesMetrics = sliderValuesMetricsupdated;  
                 const sliderValuesThemes = sliderValuesThemesupdated;
+                console.log("Slider Values Metrics: ", sliderValuesMetrics);
+                console.log("Slider Values Themes: ", sliderValuesThemes);
     
                 const metricsMapping = {
                     'sports_center': { id: 1, theme: 3 },
@@ -227,7 +229,7 @@ function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,z
                     'services': { id: 14, theme: 4 },
                     'kindergarten': { id: 15, theme: 5 },
                     'university': { id: 16, theme: 5 },
-                    'entertainment': { id: 17, theme: 1 },
+                    'entretainment': { id: 17, theme: 1 },
                     'pharmacy': { id: 18, theme: 2 },
                     'swimming_pool': { id: 19, theme: 3 },
                     'bank': { id: 20, theme: 4 },
@@ -242,7 +244,6 @@ function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,z
                     'car_park': { id: 29, theme: 4 }
                 };
     
-                // Verifica se sliderValuesThemes é um objeto válido
                 if (typeof sliderValuesThemes === 'object' && sliderValuesThemes !== null) {
                     for (const id in data.distritos) {
                         if (data.distritos.hasOwnProperty(id)) {
@@ -252,35 +253,38 @@ function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,z
                                 if (data.distritos[id].hasOwnProperty(metric)) {
                                     const metricsMappingEntry = metricsMapping[metric];
                                     if (metricsMappingEntry) {
-                                        const SliderValueMetrics = sliderValuesMetrics.find(slider => slider.id === metricsMappingEntry.id);
+                                        const SliderValueMetrics = sliderValuesMetrics[metricsMappingEntry.id];
                                         if (SliderValueMetrics) {
-                                            const metricScore = parseFloat(data.distritos[id][metric]) * SliderValueMetrics.value;
+                                            const metricScore = parseFloat(data.distritos[id][metric]) * SliderValueMetrics;
+                                            console.log(`Metric: ${metric}, Score: ${metricScore}`);
                                             modifiedMetrics[metric] = metricScore;
-                                        } else {
-                                            console.error(`Slider with ID ${metricsMappingEntry.id} not found in sliderValuesMetrics.`);
                                         }
                                     } else {
                                         console.error(`Metrics mapping entry not found for metric ${metric}.`);
                                     }
                                 }
                             }
-    
+                            
+                            console.log("Modified Metrics: ", modifiedMetrics);
+
                             let score = 0;
                             for (const metric in modifiedMetrics) {
                                 if (modifiedMetrics.hasOwnProperty(metric)) {
+                                    console.log("Metric: ", metric);
                                     score += modifiedMetrics[metric];
                                     const themeId = metricsMapping[metric].theme;
-                                    const SliderValueTheme = sliderValuesThemes[themeId]; // Acessa o valor do tema usando o ID do tema
-                                    scores[id] = score * SliderValueTheme;
+                                    const SliderValueTheme = sliderValuesThemes[themeId];
+                                    console.log("Slider Value Theme: ", SliderValueTheme);
+                                    scores[id] = score * SliderValueTheme.value;
                                 }
                             }
                         }
                     }
     
-                    console.log(scores);
+                    console.log("scores2", scores);
                     return scores;
                 } else {
-                    console.error("sliderValuesThemes is not a valid object.");
+                    console.error("sliderValuesThemes is not an array.");
                     return null;
                 }
             }

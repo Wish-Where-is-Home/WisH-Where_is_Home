@@ -8,10 +8,45 @@ import Login_register from './Pages/Login-register/Login_register';
 import AboutUs from './Pages/AboutUs/AboutUs';
 import MetricsPage from './Pages/MetricsPage/MetricsPage';
 import PropertiesPage from './Pages/PropertiesPage/PropertiesPage';
+import InitMetrics from './Pages/Metrics/InitMetrics';
+import Metrics from './Components/Metrics/Metrics';
+import Questions from './Pages/Questions/Questions';
+
+
+import { initializeApp } from "firebase/app";
+
+import { getAnalytics } from "firebase/analytics";
+
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  const firebaseConfig = {
+
+    apiKey: "AIzaSyDGcTX2Ry6N0IUgPDRxiu0iJZanmfi41Dw",
+  
+    authDomain: "wish-9b245.firebaseapp.com",
+  
+    projectId: "wish-9b245",
+  
+    storageBucket: "wish-9b245.appspot.com",
+  
+    messagingSenderId: "364387023023",
+  
+    appId: "1:364387023023:web:bf11ec82e5c252c44cfc5a",
+  
+    measurementId: "G-CZ6JHQCLWR"
+  
+  };
+
+  const app = initializeApp(firebaseConfig);
+
+  const analytics = getAnalytics(app);
+  
+  
+
+  
 
   useEffect(() => {
     const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -39,8 +74,7 @@ function App() {
         <Routes>
           <Route exact path="/" element={<Homepage darkMode={darkMode} />} />
           <Route exact path="/aboutus" element={<AboutUs darkMode={darkMode}/>}/>
-          <Route exact path="/login" element={<Login_register  darkMode={darkMode} />} />
-          <Route exact path="/properties" element={<PropertiesPage darkMode={darkMode} />} />
+          <Route exact path="/login" element={<Login_register  darkMode={darkMode} firebaseConfig={firebaseConfig} />} />
           <Route exact path="/metricspage" element={<MetricsPage  darkMode={darkMode} />} />
         </Routes>
       </Router>

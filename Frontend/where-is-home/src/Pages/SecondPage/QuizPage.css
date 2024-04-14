@@ -1,7 +1,7 @@
 .SearchPage {
   height: 100vh;
   width: 100%;
-  display: flex;
+  display: grid;
   flex-direction: column;
   background-color: var(--background-color);
   font-family: 'Space Mono Bold 700', sans-serif;
@@ -10,7 +10,6 @@
 
   padding-top: 5%;
 
-  display: grid;
   grid-template-columns: 50% 50%;
   grid-gap: 10px;
 }
@@ -91,18 +90,6 @@
 
   .tool{
     margin-top: 6%;
-  }
-
-  
-  .search-filters toolcool-range-slider {
-    --slider-height: 0.5rem;
-    --pointer-width: 1.5rem;
-    --pointer-height: 1.5rem;
-    --slider-bg: var(--navbar-border);
-    --pointer-bg: var(--background-color);
-    --pointer-border: 1px solid var(--navbar-border);
-    margin-top: 10px;
-    margin-bottom: 20px;
   }
 
 
@@ -212,44 +199,6 @@
     --button-hover-color: #5f79b7;
     --h1-color: #000000;
     }
-    
-    /* Adjustments for slider thumb and track */
-    .toolcool-range-slider {
-    --slider-bg-fill: var(--navbar-border);
-    --pointer-shadow: none;
-    position: absolute; /* Adicionando posição absoluta */
-    margin-top: 20px;
-    }
-    
-    /* Changes for dark and light mode of the sliders */
-    .dark-mode .toolcool-range-slider {
-    --slider-bg: #5f79b7;
-    --pointer-bg: #dcdcdc;
-    --pointer-border: 1px solid hsla(0, 0%, 88%, 0.5);
-
-    }
-    
-    .light-mode .toolcool-range-slider {
-    --slider-bg: #2D4373;
-    --pointer-bg: #fff;
-    --pointer-border: 1px solid hsl(201, 72%, 59%);
-    
-    }
-
-    .toolcool-range-slider:hover::before {
-      content: "Legenda";
-      position: absolute;
-      top: -30px; /* Posição vertical da legenda */
-      left: 50%; /* Posição horizontal da legenda */
-      transform: translateX(-50%);
-      background-color: rgba(0, 0, 0, 0.8); /* Cor de fundo da legenda */
-      color: white; /* Cor do texto da legenda */
-      padding: 5px 10px; /* Espaçamento interno da legenda */
-      border-radius: 5px; /* Arredondamento dos cantos da legenda */
-      font-size: 12px; /* Tamanho da fonte da legenda */
-      z-index: 1; /* Para garantir que a legenda esteja acima do slider */
-    }
-    
 
 
     .search-filters .MuiSlider-root {

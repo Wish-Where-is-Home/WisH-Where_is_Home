@@ -609,7 +609,7 @@ function QuizPage({ darkMode, zoneData }) {
           </div>
         </div>
       ) : (
-        <Questions slidersValues={slidersValues} darkMode={darkMode} handlePreviousClick={handlePreviousClick}  gotoThirdPage={gotothirdpage} />
+        <Questions slidersValues={slidersValues} darkMode={darkMode} handlePreviousClick={handlePreviousClick}  gotoThirdPage={gotothirdpage} zoneData={zoneData} />
       )
       }
 

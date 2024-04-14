@@ -5,7 +5,7 @@ import './Questions.css';
 import Slider from '@mui/material/Slider';
 import Box from '@mui/material/Box';
 
-function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage }) {
+function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,zoneData }) {
     const { t } = useTranslation("common");
 
     const sliderGroupings = {
@@ -199,6 +199,98 @@ function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage }
         ));
     };
 
+   
+
+
+    useEffect(() => {
+        function calculateScores(zoneData, sliderValuesMetricsupdated, sliderValuesThemesupdated) {
+            if (zoneData !== null) {
+                const scores = {};
+                const data = zoneData;
+                const sliderValuesMetrics = sliderValuesMetricsupdated;  
+                const sliderValuesThemes = sliderValuesThemesupdated;
+    
+                const metricsMapping = {
+                    'sports_center': { id: 1, theme: 3 },
+                    'commerce': { id: 2, theme: 0 },
+                    'bakery': { id: 3, theme: 0 },
+                    'food_court': { id: 4, theme: 0 },
+                    'nightlife': { id: 5, theme: 1 },
+                    'camping': { id: 6, theme: 3 },
+                    'health_services': { id: 7, theme: 2 },
+                    'hotel': { id: 8, theme: 1 },
+                    'supermarket': { id: 9, theme: 0 },
+                    'culture': { id: 10, theme: 1 },
+                    'school': { id: 11, theme: 5 },
+                    'library': { id: 12, theme: 5 },
+                    'parks': { id: 13, theme: 3 },
+                    'services': { id: 14, theme: 4 },
+                    'kindergarten': { id: 15, theme: 5 },
+                    'university': { id: 16, theme: 5 },
+                    'entertainment': { id: 17, theme: 1 },
+                    'pharmacy': { id: 18, theme: 2 },
+                    'swimming_pool': { id: 19, theme: 3 },
+                    'bank': { id: 20, theme: 4 },
+                    'post_office': { id: 21, theme: 4 },
+                    'hospital': { id: 22, theme: 2 },
+                    'clinic': { id: 23, theme: 2 },
+                    'veterinary': { id: 24, theme: 2 },
+                    'beach_river': { id: 25, theme: 3 },
+                    'industrial_zone': { id: 26, theme: 3 },
+                    'bicycle_path': { id: 27, theme: 3 },
+                    'walking_routes': { id: 28, theme: 3 },
+                    'car_park': { id: 29, theme: 4 }
+                };
+    
+                // Verifica se sliderValuesThemes é um objeto válido
+                if (typeof sliderValuesThemes === 'object' && sliderValuesThemes !== null) {
+                    for (const id in data.distritos) {
+                        if (data.distritos.hasOwnProperty(id)) {
+                            const modifiedMetrics = {};
+    
+                            for (const metric in data.distritos[id]) {
+                                if (data.distritos[id].hasOwnProperty(metric)) {
+                                    const metricsMappingEntry = metricsMapping[metric];
+                                    if (metricsMappingEntry) {
+                                        const SliderValueMetrics = sliderValuesMetrics.find(slider => slider.id === metricsMappingEntry.id);
+                                        if (SliderValueMetrics) {
+                                            const metricScore = parseFloat(data.distritos[id][metric]) * SliderValueMetrics.value;
+                                            modifiedMetrics[metric] = metricScore;
+                                        } else {
+                                            console.error(`Slider with ID ${metricsMappingEntry.id} not found in sliderValuesMetrics.`);
+                                        }
+                                    } else {
+                                        console.error(`Metrics mapping entry not found for metric ${metric}.`);
+                                    }
+                                }
+                            }
+    
+                            let score = 0;
+                            for (const metric in modifiedMetrics) {
+                                if (modifiedMetrics.hasOwnProperty(metric)) {
+                                    score += modifiedMetrics[metric];
+                                    const themeId = metricsMapping[metric].theme;
+                                    const SliderValueTheme = sliderValuesThemes[themeId]; // Acessa o valor do tema usando o ID do tema
+                                    scores[id] = score * SliderValueTheme;
+                                }
+                            }
+                        }
+                    }
+    
+                    console.log(scores);
+                    return scores;
+                } else {
+                    console.error("sliderValuesThemes is not a valid object.");
+                    return null;
+                }
+            }
+        }
+    
+        calculateScores(zoneData, slidersValues, sliderValues);
+    
+    }, [slidersValues, sliderValues]);
+    
+
 
     return (
         <div className={`SearchPage2 ${darkMode ? 'dark-mode' : 'light-mode'}`}>
@@ -227,86 +319,5 @@ function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage }
         </div>
     );
 }
-
-function calculateScores(zoneData, sliderValuesMetricsupdated, sliderValuesThemesupdated) {
-    const scores = {};
-  
-    console.log("321", zoneData);
-    console.log("123" , updatedValues);
-    const data = zoneData;
-    const sliderValuesMetrics = sliderValuesMetricsupdated;  // trocar nome para metrics
-    const sliderValuesThemes = sliderValuesThemesupdated; //alterar para os valores dos temas
-    console.log(data);
-    console.log(sliderValuesMetrics);
-    console.log(sliderValuesThemes);
-  
-    const metricsMapping = {
-        'sports_center': { id: 1, theme: 3 },
-        'commerce': { id: 2, theme: 0 },
-        'bakery': { id: 3, theme: 0 },
-        'food_court': { id: 4, theme: 0 },
-        'nightlife': { id: 5, theme: 1 },
-        'camping': { id: 6, theme: 3 },
-        'health_services': { id: 7, theme: 2 },
-        'hotel': { id: 8, theme: 1 },
-        'supermarket': { id: 9, theme: 0 },
-        'culture': { id: 10, theme: 1 },
-        'school': { id: 11, theme: 5 },
-        'library': { id: 12, theme: 5 },
-        'parks': { id: 13, theme: 3 },
-        'services': { id: 14, theme: 4 },
-        'kindergarten': { id: 15, theme: 5 },
-        'university': { id: 16, theme: 5 },
-        'entertainment': { id: 17, theme: 1 },
-        'pharmacy': { id: 18, theme: 2 },
-        'swimming_pool': { id: 19, theme: 3 },
-        'bank': { id: 20, theme: 4 },
-        'post_office': { id: 21, theme: 4 },
-        'hospital': { id: 22, theme: 2 },
-        'clinic': { id: 23, theme: 2 },
-        'veterinary': { id: 24, theme: 2 },
-        'beach_river': { id: 25, theme: 3 },
-        'industrial_zone': { id: 26, theme: 3 },
-        'bicycle_path': { id: 27, theme: 3 },
-        'walking_routes': { id: 28, theme: 3 },
-        'car_park': { id: 29, theme: 4 }
-    };
-    
-  
-    // Iterate over each distrito
-    for (const id in data.distritos) {
-      if (data.distritos.hasOwnProperty(id)) {
-        // Initialize an empty object to store the modified metrics
-        const modifiedMetrics = {};
-  
-        // Iterate over each metric in the distrito
-        for (const metric in data.distritos[id]) {
-          if (data.distritos[id].hasOwnProperty(metric)) {
-
-            const SliderValueMetrics = sliderValuesMetrics.find(slider => slider.id === metricsMapping[metric].id).value;
-            const metricScore = parseFloat(data.distritos[id][metric]) * SliderValueMetrics;
-
-            modifiedMetrics[metric] = metricScore;
-          }
-        }
-
-        // Iterate over each theme in the distrito and calculate the score from each metric multiplyed by the theme Slider value
-        let score = 0;
-        for (const metric in modifiedMetrics) {
-          if (modifiedMetrics.hasOwnProperty(metric)) {
-            score += modifiedMetrics[metric];
-          }
-        }
-        const SliderValueTheme = sliderValuesThemes.find(slider => slider.id === metricsMapping[metric].theme).value;
-
-        scores[id] = score * SliderValueTheme;
-      }
-    }
-  
-    console.log(scores);
-    return scores;
-}
-  
-  
 
 export default Questions;

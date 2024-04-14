@@ -32,8 +32,8 @@ function QuizPage({ darkMode, zoneData }) {
 
 
   const portugalBounds = [
-    [36.9, -9.5],
-    [42.2, -6.5]
+    [36, -10],
+    [43, -6]
   ];
 
   const mapRef = useRef(null);
@@ -330,7 +330,7 @@ function QuizPage({ darkMode, zoneData }) {
 
 
   const gotothirdpage = () =>{
-    navigate('/metricspage', {state: {districtId,IdType} }) //todo 
+    navigate('/metricspage', {state: {districtId,IdType} })
 }
 
 

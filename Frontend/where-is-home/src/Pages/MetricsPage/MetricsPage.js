@@ -35,10 +35,10 @@ function MetricsPage() {
 }, [location.state]);
 
 
-    const portugalBounds = [
-        [36.9, -9.5], 
-        [42.2, -6.5]  
-      ];
+  const portugalBounds = [
+    [36, -10],
+    [43, -6]
+  ];
 
     const toggleProperties = () => {
         setIsPropertiesOpen(!isPropertiesOpen);

@@ -56,6 +56,11 @@
 
 }
 
+
+.tab-content{
+  min-height: 50vh;
+}
+
 .tab-buttons button:hover {
   background-color: var(--tab-hover-color); 
   transform: translateY(-2px); 
@@ -63,9 +68,9 @@
 }
 
 .tab-buttons button.active {
-  background-color: var(--active-tab-color);
+  background-color: #0c8b89;
   color: #fff;
-  border-color: var(--active-tab-color);
+  border-color: #0dddda;
 }
 
 .tab-content > div {
@@ -105,7 +110,7 @@
   width: 130px;
   justify-content: center;
   align-items: center;
-  background-color: var(--button-color); 
+  background-color: #0dddda; 
   color: var(--button-text-color); 
   cursor: pointer;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); 
@@ -113,15 +118,14 @@
 
 }
 .button-small-round:hover {
-  background-color: var(--button-hover-color);
+  background-color: #13d4d1;
   gap: 10px;
 }
 
 .button-small-round {
-  background-color: var(--active-tab-color);
+  background-color: #0dddda;
   color: #fff;
   border: none;
-  border-radius: 50%;
   padding: 10px 15px;
   cursor: pointer;
   display: flex;

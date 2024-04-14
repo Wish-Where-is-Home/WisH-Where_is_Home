@@ -220,7 +220,7 @@ function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage }
                         <span className="button-icon">Previous</span>
                     </button>
                     <button className="button-small-round" onClick={gotoThirdPage} >
-                        <span className="button-icon">Search🔍</span>
+                        <span className="button-icon">Search <span style={{padding:"50px 0px"}}> </span>🔍</span>
                     </button>
                 </div>
             </div>

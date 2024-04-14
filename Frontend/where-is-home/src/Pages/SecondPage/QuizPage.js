@@ -16,7 +16,7 @@ import 'proj4leaflet';
 
 
 
-function QuizPage({ darkMode }) {
+function QuizPage({ darkMode, zoneData}) {
   const { t } = useTranslation("common");
   const location = useLocation();
   const [geojsonData, setGeojsonData] = useState(null);
@@ -27,7 +27,7 @@ function QuizPage({ darkMode }) {
   const [minZoom, setMinZoom] = useState(null);
   const [showQuestions, setShowQuestions] = useState(false);
 
-
+  const zoneData2 = zoneData;
 
   const portugalBounds = [
     [36.9, -9.5],
@@ -78,6 +78,7 @@ function QuizPage({ darkMode }) {
     });
     setSlidersValues(updatedValues);
     console.log("Slider values:", updatedValues);
+    //calculateScores(zoneData2, updatedValues);
   };
 
 
@@ -94,7 +95,6 @@ function QuizPage({ darkMode }) {
         setShowQuestions(true);  // Show Questions.js and hide sliders
     }
 };
-
 
   const handlePreviousClick = () => {
     console.log('Previous button clicked');

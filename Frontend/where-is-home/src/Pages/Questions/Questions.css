@@ -12,7 +12,7 @@
 }
 
 .SearchPage {
-  height: 100vh;
+  height: 100%;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -20,7 +20,6 @@
   font-family: 'Space Mono Bold 700', sans-serif;
   overflow-y: hidden;
   overflow-x: hidden;
-  padding-top: 10%;
 }
 
 .dark-mode {
@@ -43,7 +42,7 @@
 .tab-buttons {
   display: flex;
   justify-content: center;
-  gap: 30px; 
+  gap: 10%; 
 }
 
 .tab-buttons button {
@@ -80,8 +79,8 @@
   margin-bottom: 5px;
 }
 
-toolcool-range-slider {
-  width: 80%; 
+.dark-mode .MuiSlider-markLabel {
+  color: var(--text-color-dark); /* Ensures labels are white in dark mode */
 }
 
 
@@ -113,6 +112,9 @@ toolcool-range-slider {
   width: 100%;
 }
 
+
+
+
 /* Responsive adjustments */
 @media (max-width: 767px) {
   .SearchPage {
@@ -123,9 +125,6 @@ toolcool-range-slider {
       flex-direction: column;
   }
 
-  toolcool-range-slider {
-      width: 100%;
-  }
 
   .tab-buttons {
       gap: 15px;

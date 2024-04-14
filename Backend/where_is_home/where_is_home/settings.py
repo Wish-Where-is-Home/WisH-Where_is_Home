@@ -37,7 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-]
+    'corsheaders',
+    'rest_framework',
+    ]
+
+APPEND_SLASH = False
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -47,7 +51,30 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    
 ]
+
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000", 
+]
+
+CORS_ALLOW_CREDENTIALS = True
+
+
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+
+CORS_TRUSTED_ORIGINS = ['https://localhost:3000','https://*.127.0.0.1']
+
+
 
 ROOT_URLCONF = 'where_is_home.urls'
 
@@ -121,3 +148,21 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+FIREBASE_CONFIG = {
+    'apiKey': "AIzaSyDGcTX2Ry6N0IUgPDRxiu0iJZanmfi41Dw",
+  
+    'authDomain': "wish-9b245.firebaseapp.com",
+  
+    'projectId': "wish-9b245",
+  
+    'storageBucket': "wish-9b245.appspot.com",
+  
+    'messagingSenderId': "364387023023",
+  
+    'appId': "1:364387023023:web:bf11ec82e5c252c44cfc5a",
+  
+    'measurementId': "G-CZ6JHQCLWR"
+  
+}

@@ -6,13 +6,17 @@ import {useTranslation} from "react-i18next";
 import videobackground from './../../Assets/Video/videobackground.mp4';
 import { FaInfoCircle } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import LoadingModal from '../../Components/LoadingModal/LoadingModal';
+import { useAuth } from '../../AuthContext/AuthContext';
+
+
 
 
 function Homepage( {darkMode}) {
     const [selectedDistrict, setSelectedDistrict] = useState('Portugal');
     const [modalVisible, setModalVisible] = useState(false);
     const [modalContent, setModalContent] = useState('');
+
+    const { isAuthenticated,userInfo,logoutUser} = useAuth();
 
 
     const navigate = useNavigate();

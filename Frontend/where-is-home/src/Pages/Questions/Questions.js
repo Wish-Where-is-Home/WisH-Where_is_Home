@@ -6,6 +6,10 @@ import Slider from '@mui/material/Slider';
 import Box from '@mui/material/Box';
 
 function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,zoneData }) {
+    //fake values for zone
+    const zone = 'subseccao';
+
+
     const { t } = useTranslation("common");
 
     const sliderGroupings = {
@@ -118,7 +122,6 @@ function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,z
                 [id]: newValue
             }), {});
 
-            console.log("Updating Sliders: ");
             groupIds.forEach(id => {
                 console.log(`ID: ${id}, New Value: ${newValue}`);
             });
@@ -154,14 +157,12 @@ function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,z
 
 
     useEffect(() => {
-        function calculateScores(zoneData, sliderValuesThemesupdated, sliderValuesMetricsupdated) {
+        function calculateScores(zoneData, sliderValuesThemesupdated, sliderValuesMetricsupdated, zoneType) {
             if (zoneData !== null) {
                 const scores = {};
                 const data = zoneData;
                 const sliderValuesMetrics = sliderValuesMetricsupdated;  
                 const sliderValuesThemes = sliderValuesThemesupdated;
-                console.log("Slider Values Metrics: ", sliderValuesMetrics);
-                console.log("Slider Values Themes: ", sliderValuesThemes);
     
                 const metricsMapping = {
                     'sports_center': { id: 1, theme: 3 },
@@ -196,18 +197,17 @@ function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,z
                 };
     
                 if (typeof sliderValuesThemes === 'object' && sliderValuesThemes !== null) {
-                    for (const id in data.distritos) {
-                        if (data.distritos.hasOwnProperty(id)) {
+                    for (const id in data[zoneType]) {
+                        if (data[zoneType].hasOwnProperty(id)) {
                             const modifiedMetrics = {};
     
-                            for (const metric in data.distritos[id]) {
-                                if (data.distritos[id].hasOwnProperty(metric)) {
+                            for (const metric in data[zoneType][id]) {
+                                if (data[zoneType][id].hasOwnProperty(metric)) {
                                     const metricsMappingEntry = metricsMapping[metric];
                                     if (metricsMappingEntry) {
                                         const SliderValueMetrics = sliderValuesMetrics[metricsMappingEntry.id];
                                         if (SliderValueMetrics) {
-                                            const metricScore = parseFloat(data.distritos[id][metric]) * SliderValueMetrics;
-                                            console.log(`Metric: ${metric}, Score: ${metricScore}`);
+                                            const metricScore = parseFloat(data[zoneType][id][metric]) * SliderValueMetrics;
                                             modifiedMetrics[metric] = metricScore;
                                         }
                                     } else {
@@ -216,16 +216,13 @@ function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,z
                                 }
                             }
                             
-                            console.log("Modified Metrics: ", modifiedMetrics);
 
                             let score = 0;
                             for (const metric in modifiedMetrics) {
                                 if (modifiedMetrics.hasOwnProperty(metric)) {
-                                    console.log("Metric: ", metric);
                                     score += modifiedMetrics[metric];
                                     const themeId = metricsMapping[metric].theme;
                                     const SliderValueTheme = sliderValuesThemes[themeId];
-                                    console.log("Slider Value Theme: ", SliderValueTheme);
                                     scores[id] = score * SliderValueTheme.value;
                                 }
                             }
@@ -240,8 +237,28 @@ function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,z
                 }
             }
         }
-    
-        calculateScores(zoneData, slidersValues, sliderValues);
+
+        // Determine the zone type based on the 'zone' variable
+        let zoneType;
+        switch (zone) {
+            case 'distritos':
+                zoneType = 'distritos';
+                break;
+            case 'municipios':
+                zoneType = 'municipios';
+                break;
+            case 'freguesias':
+                zoneType = 'freguesias';
+                break;
+            case 'subseccao':
+                zoneType = 'subseccao';
+                break;
+            default:
+                console.error('Invalid zone type.');
+                return;
+        }
+        
+        calculateScores(zoneData, slidersValues, sliderValues, zoneType);
     
     }, [slidersValues, sliderValues]);
     

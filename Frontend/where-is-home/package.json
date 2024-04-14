@@ -21,7 +21,11 @@
     "firebase": "^10.9.0",
     "firebaseui": "^6.1.0",
     "fortawesome": "^0.0.1-security",
+    "geojson": "^0.5.0",
     "i18next": "^23.10.1",
+    "leaflet": "^1.9.4",
+    "leaflet-providers": "^2.0.0",
+    "proj4leaflet": "^1.0.2",
     "jsonwebtoken": "^9.0.2",
     "jwt-decode": "^4.0.0",
     "mui": "^0.0.1",
@@ -31,13 +35,17 @@
     "react-feather": "^2.0.10",
     "react-i18next": "^14.1.0",
     "react-icons": "^5.0.1",
+    "react-leaflet": "^4.2.1",
     "react-router-dom": "^6.22.3",
     "react-scripts": "5.0.1",
     "react-slick": "^0.30.2",
     "slick-carousel": "^1.8.1",
+    "toolcool-range-slider": "^4.0.28",
+
     "stream-browserify": "^3.0.0",
     "toolcool-range-slider": "^4.0.28",
     "util": "^0.12.5",
+
     "web-vitals": "^2.1.4"
   },
   "scripts": {

@@ -8,9 +8,10 @@ import Login_register from './Pages/Login-register/Login_register';
 import AboutUs from './Pages/AboutUs/AboutUs';
 import MetricsPage from './Pages/MetricsPage/MetricsPage';
 import PropertiesPage from './Pages/PropertiesPage/PropertiesPage';
-import InitMetrics from './Pages/Metrics/InitMetrics';
 import Metrics from './Components/Metrics/Metrics';
+import QuizPage from './Pages/SecondPage/QuizPage';
 import Questions from './Pages/Questions/Questions';
+
 
 
 import { initializeApp } from "firebase/app";
@@ -21,6 +22,7 @@ import { getAnalytics } from "firebase/analytics";
 function App() {
   const [darkMode, setDarkMode] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [zoneData, setZoneData] = useState(null);
 
   const firebaseConfig = {
 
@@ -54,6 +56,22 @@ function App() {
   }, []);
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://mednat.ieeta.pt:9009/api/zone/', { timeout: 10000 });
+        const data = await response.json();
+        console.log(data);
+        setZoneData(data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+
+  useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
     }, 1000);
@@ -75,6 +93,7 @@ function App() {
           <Route exact path="/" element={<Homepage darkMode={darkMode} />} />
           <Route exact path="/aboutus" element={<AboutUs darkMode={darkMode}/>}/>
           <Route exact path="/login" element={<Login_register  darkMode={darkMode} firebaseConfig={firebaseConfig} />} />
+          <Route exact path="/quiz" element={<QuizPage darkMode={darkMode} />} />
           <Route exact path="/metricspage" element={<MetricsPage  darkMode={darkMode} />} />
         </Routes>
       </Router>

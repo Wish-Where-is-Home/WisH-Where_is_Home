@@ -78,10 +78,36 @@ function Homepage( {darkMode}) {
     }, []);
 
     const handleButtonClick = (selectedDistrict) => {
-
-            navigate('/properties', { state: { selectedDistrict } });
         
+        const districtIds = {
+            Portugal: "0",
+            Aveiro: "01",
+            Beja: "02",
+            Braga: "03",
+            Braganca: "04",
+            Castelo_Branco: "05",
+            Coimbra: "06",
+            Évora: "07",
+            Faro: "08",
+            Guarda: "09",
+            Leiria: "10",
+            Lisboa: "11",
+            Portalegre: "12",
+            Porto: "13",
+            Santarem: "14",
+            Setúbal: "15",
+            Viana_do_Castelo: "16",
+            Vila_Real: "17",
+            Viseu: "18"
+        };
+    
+        
+        const districtId = districtIds[selectedDistrict];
+    
+        
+        navigate('/quiz', { state: { selectedDistrict, districtId } });
     };
+    
     
 
 return (

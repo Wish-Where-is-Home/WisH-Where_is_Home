@@ -1,10 +1,18 @@
+
+import React, { useState, useEffect } from 'react';
+
 import React, { useState } from 'react';
+
 import { useTranslation } from "react-i18next";
 import './Questions.css';
 import Slider from '@mui/material/Slider';
 import Box from '@mui/material/Box';
 
+
+function Questions({ slidersValues,darkMode, handlePreviousClick }) {
+
 function Questions({ darkMode }) {
+
     const { t } = useTranslation("common");
 
     const sliderGroupings = {
@@ -45,11 +53,21 @@ function Questions({ darkMode }) {
             { name: "Higher Education", ids: ['35'] },
             { name: "Vocational Training", ids: ['61', '103'] }
         ]
+
+    };    
+    
+    const tabs = ['Commerce', 'Social Leisure', 'Health', 'Nature Sports', 'Service', 'Education'];
+
+
+
+    const [showSliders, setShowSliders] = useState(true);
+
     };
     
     const [showSliders, setShowSliders] = useState(true);
     const [activeTab, setActiveTab] = useState(0);
     const tabs = ['Commerce', 'Social Leisure', 'Health', 'Nature Sports', 'Service', 'Education'];
+
 
     const sliderConfigs = [
         { Id: '1', label: 'caravan_site', min: 0, max: 1 },
@@ -134,8 +152,7 @@ function Questions({ darkMode }) {
         { Id: '136', label: 'post_office', min: 0, max: 1 },
         { Id: '137', label: 'fire_station', min: 0, max: 1 }
     ];
-    
-    
+
     const buildInitialState = () => {
         const values = {};
         Object.values(sliderGroupings).flat(2).forEach(id => {
@@ -143,28 +160,56 @@ function Questions({ darkMode }) {
         });
         return values;
     };
+
+
+    const [ sliderValues, setSliderValues] = useState(buildInitialState());
+
+    const filteredTabs = tabs.filter((tab, index) => slidersValues[index].value > 0);
+
+    const [activeTab, setActiveTab] = useState(0);
+
+    useEffect(() => {
+      // This effect sets the first available tab where value > 0 as active tab
+      const firstAvailableTab = slidersValues.findIndex(slider => slider.value > 0);
+      setActiveTab(firstAvailableTab >= 0 ? firstAvailableTab : 0);
+    }, [slidersValues]);
+
+
+
     
     const [sliderValues, setSliderValues] = useState(buildInitialState());
     
+
     const onSliderChange = (newValue, groupIds) => {
         setSliderValues(prevValues => {
             const updatedValues = groupIds.reduce((acc, id) => ({
                 ...acc,
                 [id]: newValue
             }), {});
-    
+
             // Log the changes for debugging
             console.log("Updating Sliders: ");
             groupIds.forEach(id => {
                 console.log(`ID: ${id}, New Value: ${newValue}`);
             });
-    
+
             return {
                 ...prevValues,
                 ...updatedValues
             };
         });
     };
+
+
+    const renderSlidersForTab = () => {
+        return sliderGroupings[tabs[activeTab]].map((group, index) => (
+            <div key={`slider-${activeTab}-${index}`}>
+                <label>{group.name}</label>
+                <Box sx={{ width: 300 }}>
+                    <Slider
+                        aria-label={group.name}
+                        value={sliderValues[activeTab]}
+
     
 
     const valueLabelFormat = (value) => {
@@ -186,12 +231,26 @@ function Questions({ darkMode }) {
                         min={0}
                         max={1}
                         onChange={(event, newValue) => onSliderChange(newValue, group.ids)}
+
                         valueLabelFormat={valueLabelFormat}
+
                     />
                 </Box>
             </div>
         ));
     };
+
+
+    return (
+        <div className={`SearchPage2 ${darkMode ? 'dark-mode' : 'light-mode'}`}>
+            <div className='search-filters'>
+                <div className='tab-buttons'>
+                    {filteredTabs.map((tabName, index) => (
+                        <button
+                            key={index}
+                            className={activeTab === tabs.indexOf(tabName) ? 'active' : ''}
+                            onClick={() => setActiveTab(tabs.indexOf(tabName))}
+
     
     
     
@@ -205,6 +264,7 @@ function Questions({ darkMode }) {
                             key={index}
                             className={activeTab === index ? 'active' : ''}
                             onClick={() => setActiveTab(index)}
+
                         >{tabName}</button>
                     ))}
                 </div>
@@ -212,7 +272,11 @@ function Questions({ darkMode }) {
                     {renderSlidersForTab()}
                 </div>
                 <div className="button-container">
+
+                    <button className="button-small-round" onClick={handlePreviousClick}>
+
                     <button className="button-small-round" onClick={() => console.log('Previous button clicked')}>
+
                         <span className="button-icon">Previous</span>
                     </button>
                     <button className="button-small-round" onClick={() => console.log('Search button clicked')}>
@@ -220,9 +284,11 @@ function Questions({ darkMode }) {
                     </button>
                 </div>
             </div>
+
             <div className='map-container'>
                 {/* Map would be included here */}
             </div>
+
         </div>
     );
 }

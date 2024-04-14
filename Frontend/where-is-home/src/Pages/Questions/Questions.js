@@ -1,18 +1,11 @@
 
 import React, { useState, useEffect } from 'react';
-
-import React, { useState } from 'react';
-
 import { useTranslation } from "react-i18next";
 import './Questions.css';
 import Slider from '@mui/material/Slider';
 import Box from '@mui/material/Box';
 
-
 function Questions({ slidersValues,darkMode, handlePreviousClick }) {
-
-function Questions({ darkMode }) {
-
     const { t } = useTranslation("common");
 
     const sliderGroupings = {
@@ -53,7 +46,6 @@ function Questions({ darkMode }) {
             { name: "Higher Education", ids: ['35'] },
             { name: "Vocational Training", ids: ['61', '103'] }
         ]
-
     };    
     
     const tabs = ['Commerce', 'Social Leisure', 'Health', 'Nature Sports', 'Service', 'Education'];
@@ -61,13 +53,6 @@ function Questions({ darkMode }) {
 
 
     const [showSliders, setShowSliders] = useState(true);
-
-    };
-    
-    const [showSliders, setShowSliders] = useState(true);
-    const [activeTab, setActiveTab] = useState(0);
-    const tabs = ['Commerce', 'Social Leisure', 'Health', 'Nature Sports', 'Service', 'Education'];
-
 
     const sliderConfigs = [
         { Id: '1', label: 'caravan_site', min: 0, max: 1 },
@@ -153,6 +138,7 @@ function Questions({ darkMode }) {
         { Id: '137', label: 'fire_station', min: 0, max: 1 }
     ];
 
+
     const buildInitialState = () => {
         const values = {};
         Object.values(sliderGroupings).flat(2).forEach(id => {
@@ -160,7 +146,6 @@ function Questions({ darkMode }) {
         });
         return values;
     };
-
 
     const [ sliderValues, setSliderValues] = useState(buildInitialState());
 
@@ -174,11 +159,6 @@ function Questions({ darkMode }) {
       setActiveTab(firstAvailableTab >= 0 ? firstAvailableTab : 0);
     }, [slidersValues]);
 
-
-
-    
-    const [sliderValues, setSliderValues] = useState(buildInitialState());
-    
 
     const onSliderChange = (newValue, groupIds) => {
         setSliderValues(prevValues => {
@@ -200,7 +180,6 @@ function Questions({ darkMode }) {
         });
     };
 
-
     const renderSlidersForTab = () => {
         return sliderGroupings[tabs[activeTab]].map((group, index) => (
             <div key={`slider-${activeTab}-${index}`}>
@@ -209,37 +188,17 @@ function Questions({ darkMode }) {
                     <Slider
                         aria-label={group.name}
                         value={sliderValues[activeTab]}
-
-    
-
-    const valueLabelFormat = (value) => {
-        const labels = ['Not Important', 'Slightly Important', 'Moderate', 'Important', 'Very Important'];
-        return labels[Math.round(value * 4)];
-    };
-    
-    const renderSlidersForTab = () => {
-        return sliderGroupings[tabs[activeTab]].map((group, index) => (
-            <div key={`slider-${activeTab}-${index}`}>
-                <label>{group.name}</label> {/* Display the name of the slider */}
-                <Box sx={{ width: 300 }}>
-                    <Slider
-                        aria-label={group.name}
-                        value={sliderValues[group.ids[0]]} // Assumes all in group have same value
                         valueLabelDisplay="auto"
                         step={0.25}
                         marks={[{ value: 0, label: 'Not Important' }, { value: 1, label: 'Very Important' }]}
                         min={0}
                         max={1}
                         onChange={(event, newValue) => onSliderChange(newValue, group.ids)}
-
-                        valueLabelFormat={valueLabelFormat}
-
                     />
                 </Box>
             </div>
         ));
     };
-
 
     return (
         <div className={`SearchPage2 ${darkMode ? 'dark-mode' : 'light-mode'}`}>
@@ -250,21 +209,6 @@ function Questions({ darkMode }) {
                             key={index}
                             className={activeTab === tabs.indexOf(tabName) ? 'active' : ''}
                             onClick={() => setActiveTab(tabs.indexOf(tabName))}
-
-    
-    
-    
-
-    return (
-        <div className={`SearchPage ${darkMode ? 'dark-mode' : 'light-mode'}`}>
-            <div className='search-filters'>
-                <div className='tab-buttons'>
-                    {tabs.map((tabName, index) => (
-                        <button
-                            key={index}
-                            className={activeTab === index ? 'active' : ''}
-                            onClick={() => setActiveTab(index)}
-
                         >{tabName}</button>
                     ))}
                 </div>
@@ -272,11 +216,7 @@ function Questions({ darkMode }) {
                     {renderSlidersForTab()}
                 </div>
                 <div className="button-container">
-
                     <button className="button-small-round" onClick={handlePreviousClick}>
-
-                    <button className="button-small-round" onClick={() => console.log('Previous button clicked')}>
-
                         <span className="button-icon">Previous</span>
                     </button>
                     <button className="button-small-round" onClick={() => console.log('Search button clicked')}>
@@ -284,11 +224,6 @@ function Questions({ darkMode }) {
                     </button>
                 </div>
             </div>
-
-            <div className='map-container'>
-                {/* Map would be included here */}
-            </div>
-
         </div>
     );
 }

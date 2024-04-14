@@ -1,4 +1,4 @@
-/* Questions.css */
+
 :root {
   --background-color-light: #f0f0f0;
   --background-color-dark: #333;
@@ -11,26 +11,7 @@
   --tab-hover-color: #a6b8d4; 
 }
 
-.SearchPage2 {
-  height: 100vh;
 
-.SearchPage {
-  height: 100%;
-
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  background-color: var(--background-color);
-  font-family: 'Space Mono Bold 700', sans-serif;
-  overflow-y: hidden;
-  overflow-x: hidden;
-
-
-  padding-top: 5%;
-  grid-template-columns: 50% 50%;
-  grid-gap: 10px;
-
-}
 
 .dark-mode {
   background-color: var(--background-color-dark);
@@ -42,22 +23,6 @@
   color: var(--text-color-light);
 }
 
-.search-filters {
-
-  flex: 1;
-  width: 90%;
-  margin: auto;
-  display: flex;
-  flex-direction: column;
-  z-index: 2;
-  height: 100%;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-
-}
 
 .tab-buttons {
   display: flex;
@@ -68,7 +33,6 @@
 .tab-buttons button {
   background-color: var(--inactive-tab-color);
   border: 2px solid transparent; 
-  border-radius: 10px; 
 
   padding: 10px 15px;
 
@@ -110,14 +74,13 @@
 
   color: var(--text-color-dark); 
 
-  color: var(--text-color-dark); /* Ensures labels are white in dark mode */
+  color: var(--text-color-dark); 
 
 }
 
 
 .button-container {
   display: flex;
-
   justify-content: center; 
   height: auto;
   gap: 20px;
@@ -173,7 +136,7 @@
 
 
 
-/* Responsive adjustments */
+
 @media (max-width: 767px) {
   .SearchPage {
       padding: 10px;

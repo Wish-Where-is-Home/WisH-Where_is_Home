@@ -6,9 +6,12 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
 import Login_register from './Pages/Login-register/Login_register';
 import AboutUs from './Pages/AboutUs/AboutUs';
+import MetricsPage from './Pages/MetricsPage/MetricsPage';
 import PropertiesPage from './Pages/PropertiesPage/PropertiesPage';
 import Metrics from './Components/Metrics/Metrics';
 import QuizPage from './Pages/SecondPage/QuizPage';
+import Questions from './Pages/Questions/Questions';
+
 
 
 import { initializeApp } from "firebase/app";
@@ -90,9 +93,8 @@ function App() {
           <Route exact path="/" element={<Homepage darkMode={darkMode} />} />
           <Route exact path="/aboutus" element={<AboutUs darkMode={darkMode}/>}/>
           <Route exact path="/login" element={<Login_register  darkMode={darkMode} firebaseConfig={firebaseConfig} />} />
-          <Route exact path="/properties" element={<PropertiesPage darkMode={darkMode} />} />
-          <Route exact path="/metrics" element={<Metrics  darkMode={darkMode} />} />
           <Route exact path="/quiz" element={<QuizPage darkMode={darkMode} />} />
+          <Route exact path="/metricspage" element={<MetricsPage  darkMode={darkMode} />} />
         </Routes>
       </Router>
     </div>

@@ -1,19 +1,17 @@
 .sidebar {
   position: fixed;
   top: 70px; 
-  right: -27%; 
-  width: 28%;
+  right: -33%; 
+  width: 33%;
   height: calc(100% - 70px); 
   background-color: black;
   transition: right 0.3s ease; 
   z-index: 1000; 
-  
-  
-  
+
 }
 
 .sidebar-open {
-  right: 0; 
+  right: 0;
 }
 
 .sidebar-toggle {
@@ -28,6 +26,12 @@
   z-index: 1001; 
 
 }
+
+.sidebar-content {
+  overflow-y: auto;
+  max-height: calc(100% - 70px); 
+}
+
 
 .sidebar-link {
   color: #fff;
@@ -48,6 +52,7 @@
   width: 100%;
   margin-bottom: 40px;
   height: 140px;
+  padding-right: 10px;
 }
 
 .PropText{
@@ -65,6 +70,7 @@
   width: 290px;
   position: relative;
   margin-left: 10px; 
+  
 }
 
 .box .overlap-group {
@@ -78,6 +84,7 @@
   box-shadow: 0px 4px 4px #00000040;
   height: 140px; 
   width: 100%; 
+  
 }
 
 .box .quantidades {

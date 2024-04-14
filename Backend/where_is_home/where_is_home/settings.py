@@ -25,8 +25,7 @@ SECRET_KEY = 'django-insecure-b1^fv=#y+bui3dlt!napm7!*w(l7x-au0m58g18ocfj@e)ilrj
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'mednat.ieeta.pt']
 
 # Application definition
 
@@ -37,6 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.gis',
     'corsheaders',
     'rest_framework',
     ]
@@ -55,10 +55,7 @@ MIDDLEWARE = [
     
 ]
 
-
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000", 
-]
+CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOW_CREDENTIALS = True
 
@@ -72,9 +69,7 @@ CORS_ALLOW_METHODS = [
     'PUT',
 ]
 
-CORS_TRUSTED_ORIGINS = ['https://localhost:3000','https://*.127.0.0.1']
-
-
+CORS_TRUSTED_ORIGINS = ['*']
 
 ROOT_URLCONF = 'where_is_home.urls'
 
@@ -102,8 +97,12 @@ WSGI_APPLICATION = 'where_is_home.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'wish',
+        'USER': 'test',
+        'PASSWORD': 'password',
+        'HOST': 'db',  # Nome do serviço da base de dados no docker-compose
+        'PORT': '5432',
     }
 }
 

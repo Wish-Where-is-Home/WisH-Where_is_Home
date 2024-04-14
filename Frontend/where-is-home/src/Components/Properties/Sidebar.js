@@ -23,6 +23,7 @@ function Sidebar({ isOpen, toggleSidebar }) {
     }, []);
 
     const toggleSidebarInternal = () => {
+        
         toggleSidebar();
     };
 

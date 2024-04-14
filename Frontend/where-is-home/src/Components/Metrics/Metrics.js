@@ -30,7 +30,8 @@ function Metrics({isOpen, toggleSidebar}){
         updatedMetrics[genre][metricIndex] = value;
         setMetricValues(updatedMetrics);
     };
-    const [selectedGenre, setSelectedGenre] = useState(null);
+    const [selectedGenre, setSelectedGenre] = useState('Health');
+
 
     const metricNames = {
         Health: ['Hospital', 'Nursing Home', 'Clinic', 'Pharmacy', 'Dentist'],

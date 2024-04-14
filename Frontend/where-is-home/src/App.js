@@ -93,7 +93,7 @@ function App() {
           <Route exact path="/" element={<Homepage darkMode={darkMode} />} />
           <Route exact path="/aboutus" element={<AboutUs darkMode={darkMode}/>}/>
           <Route exact path="/login" element={<Login_register  darkMode={darkMode} firebaseConfig={firebaseConfig} />} />
-          <Route exact path="/quiz" element={<QuizPage darkMode={darkMode} zoneData= {zoneData}/>} />
+          <Route exact path="/quiz" element={<QuizPage darkMode={darkMode} zoneData={zoneData} />} />
           <Route exact path="/metricspage" element={<MetricsPage  darkMode={darkMode} />} />
         </Routes>
       </Router>

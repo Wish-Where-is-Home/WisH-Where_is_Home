@@ -16,7 +16,8 @@ function MetricsPage() {
     const [isMetricsOpen, setIsMetricsOpen] = useState(false);
     const [geojsonData, setGeojsonData] = useState(null);
     const [selectedDistrict, setSelectedDistrict] = useState('');
-    const [districtId, setDistrictId] = useState('0');
+    const [districtId, setDistrictId] = useState('');
+    const [IdType,setIdType] =useState('');
     const [mapCenter, setMapCenter] = useState([null, null]);
     const [Zoom, setZoom] = useState(null);
     const [minZoom, setMinZoom] = useState(null);
@@ -26,10 +27,18 @@ function MetricsPage() {
     const mapRef = useRef(null);
   const geoJsonRef = useRef(null);
 
-    const portugalBounds = [
-        [36.9, -9.5], 
-        [42.2, -6.5]  
-      ];
+  useEffect(() => {
+    if (location.state && location.state.districtId && location.state.IdType) {
+        setDistrictId(location.state.districtId);
+        setIdType(location.state.IdType); 
+    }
+}, [location.state]);
+
+
+  const portugalBounds = [
+    [36, -10],
+    [43, -6]
+  ];
 
     const toggleProperties = () => {
         setIsPropertiesOpen(!isPropertiesOpen);

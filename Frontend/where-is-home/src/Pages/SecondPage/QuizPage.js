@@ -7,7 +7,7 @@ import { MapContainer, TileLayer, GeoJSON, Tooltip } from 'react-leaflet';
 import L from 'leaflet';
 import Questions from '../Questions/Questions.js';
 import Button from '@mui/material/Button';
-
+import { useNavigate } from 'react-router-dom';
 import Slider from '@mui/material/Slider';
 import Box from '@mui/material/Box';
 
@@ -16,22 +16,24 @@ import 'proj4leaflet';
 
 
 
-function QuizPage({ darkMode, zoneData}) {
+function QuizPage({ darkMode, zoneData }) {
   const { t } = useTranslation("common");
   const location = useLocation();
   const [geojsonData, setGeojsonData] = useState(null);
   const [selectedDistrict, setSelectedDistrict] = useState('');
   const [districtId, setDistrictId] = useState('');
+  const [IdType, setIdType] = useState('');
   const [mapCenter, setMapCenter] = useState([null, null]);
   const [Zoom, setZoom] = useState(null);
   const [minZoom, setMinZoom] = useState(null);
   const [showQuestions, setShowQuestions] = useState(false);
+  const navigate = useNavigate();
+  
 
-  const zoneData2 = zoneData;
 
   const portugalBounds = [
-    [36.9, -9.5],
-    [42.2, -6.5]
+    [36, -10],
+    [43, -6]
   ];
 
   const mapRef = useRef(null);
@@ -41,18 +43,23 @@ function QuizPage({ darkMode, zoneData}) {
     if (location.state) {
       setSelectedDistrict(location.state.selectedDistrict.replace(/_/g, ' '));
       setDistrictId(location.state.districtId);
+      if (location.state.districtId === "0"){
+        setIdType("distritos");
+      }else{
+        setIdType("municipios");
+      }
 
     }
   }, [location.state]);
 
   const sliderOptions = ['Not Important', 'Slightly Important', 'Moderate', 'Important', 'Very Important'];
   const [slidersValues, setSlidersValues] = useState([
-    { id: 0, value: 0 },  // Commerce
-    { id: 1, value: 0 },  // Social Leisure
-    { id: 2, value: 0 },  // Health
-    { id: 3, value: 0 },  // Nature Sports
-    { id: 4, value: 0 },  // Service
-    { id: 5, value: 0 }   // Education
+    { id: 0, value: 0 },  
+    { id: 1, value: 0 },  
+    { id: 2, value: 0 }, 
+    { id: 3, value: 0 },  
+    { id: 4, value: 0 },  
+    { id: 5, value: 0 }   
   ]);
 
   const handleSliderChange = (index, value) => {
@@ -86,19 +93,19 @@ function QuizPage({ darkMode, zoneData}) {
   const handleSearchClick = () => {
     console.log('Search button clicked');
 
-    // Check if all sliders are at zero
+   
     const allZero = slidersValues.every(slider => slider.value === 0);
 
     if (allZero) {
         alert('You must be interested in at least one subject.');
     } else {
-        setShowQuestions(true);  // Show Questions.js and hide sliders
+        setShowQuestions(true);  
     }
 };
 
   const handlePreviousClick = () => {
     console.log('Previous button clicked');
-    setShowQuestions(false); // Hide Questions.js and show sliders
+    setShowQuestions(false); 
   };
 
 
@@ -195,7 +202,7 @@ function QuizPage({ darkMode, zoneData}) {
           const response = await fetch(url);
           const data = await response.json();
           setGeojsonData(data);
-
+          setIdType('distritos');
           setMapCenter([39.6686, -8.1332]);
           setZoom(7);
           setMinZoom(7);
@@ -206,6 +213,7 @@ function QuizPage({ darkMode, zoneData}) {
           const data = await response.json();
 
           setGeojsonData(data);
+          setIdType('freguesias');
           const firstFeatureCoordinates = getFirstFeatureCoordinates(data.features);
           if (firstFeatureCoordinates) {
             setMapCenter(firstFeatureCoordinates);
@@ -219,6 +227,7 @@ function QuizPage({ darkMode, zoneData}) {
           const data = await response.json();
 
           setGeojsonData(data);
+          setIdType('subseccao');
           const centerCoordinates = calculateCenterOfFeatures(data.features);
 
           if (centerCoordinates) {
@@ -237,6 +246,7 @@ function QuizPage({ darkMode, zoneData}) {
           if (firstFeatureCoordinates) {
             setMapCenter(firstFeatureCoordinates);
           }
+          setIdType('municipios');
           setZoom(10);
           setMinZoom(7);
 
@@ -317,6 +327,11 @@ function QuizPage({ darkMode, zoneData}) {
       });
     }
   };
+
+
+  const gotothirdpage = () =>{
+    navigate('/metricspage', {state: {districtId,IdType} })
+}
 
 
   return (
@@ -588,13 +603,13 @@ function QuizPage({ darkMode, zoneData}) {
             </div>
             <div className="button-container">
               <button className="button-small-round" onClick={handleSearchClick}>
-                <span className="button-icon">Search 🔍</span>
+                <span className="button-icon">Next</span>
               </button>
             </div>
           </div>
         </div>
       ) : (
-        <Questions slidersValues={slidersValues} darkMode={darkMode} handlePreviousClick={handlePreviousClick} />
+        <Questions slidersValues={slidersValues} darkMode={darkMode} handlePreviousClick={handlePreviousClick}  gotoThirdPage={gotothirdpage} />
       )
       }
 

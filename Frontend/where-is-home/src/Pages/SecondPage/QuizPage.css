@@ -20,6 +20,7 @@
   border-right: 2px solid var(--blacktowhite);
   display: flex;
   flex-direction: column;
+  max-width: 100%;
 
 }
 
@@ -27,6 +28,7 @@
   .search-filters {
     flex: 1;
     width: 90%;
+    max-width: 90%;
     margin: auto;
     display: flex;
     flex-direction: column;
@@ -186,7 +188,7 @@
     --h1-color: #FFFFFF;
   }
   .light-mode .min-max-text span {
-    color: #000000; /* Cor preta */
+    color: #000000; 
   }
   /*
   Light Mode Styling */
@@ -202,7 +204,7 @@
 
 
     .search-filters .MuiSlider-root {
-      color: #475569; /* Default slider color */
+      color: #475569; 
     }
 
     

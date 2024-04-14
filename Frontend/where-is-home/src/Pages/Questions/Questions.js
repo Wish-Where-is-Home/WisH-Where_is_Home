@@ -5,7 +5,7 @@ import './Questions.css';
 import Slider from '@mui/material/Slider';
 import Box from '@mui/material/Box';
 
-function Questions({ slidersValues,darkMode, handlePreviousClick }) {
+function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage }) {
     const { t } = useTranslation("common");
 
     const sliderGroupings = {
@@ -154,7 +154,7 @@ function Questions({ slidersValues,darkMode, handlePreviousClick }) {
     const [activeTab, setActiveTab] = useState(0);
 
     useEffect(() => {
-      // This effect sets the first available tab where value > 0 as active tab
+     
       const firstAvailableTab = slidersValues.findIndex(slider => slider.value > 0);
       setActiveTab(firstAvailableTab >= 0 ? firstAvailableTab : 0);
     }, [slidersValues]);
@@ -167,7 +167,6 @@ function Questions({ slidersValues,darkMode, handlePreviousClick }) {
                 [id]: newValue
             }), {});
 
-            // Log the changes for debugging
             console.log("Updating Sliders: ");
             groupIds.forEach(id => {
                 console.log(`ID: ${id}, New Value: ${newValue}`);
@@ -200,6 +199,7 @@ function Questions({ slidersValues,darkMode, handlePreviousClick }) {
         ));
     };
 
+
     return (
         <div className={`SearchPage2 ${darkMode ? 'dark-mode' : 'light-mode'}`}>
             <div className='search-filters'>
@@ -215,11 +215,11 @@ function Questions({ slidersValues,darkMode, handlePreviousClick }) {
                 <div className='tab-content'>
                     {renderSlidersForTab()}
                 </div>
-                <div className="button-container">
+                <div className="button-container2">
                     <button className="button-small-round" onClick={handlePreviousClick}>
                         <span className="button-icon">Previous</span>
                     </button>
-                    <button className="button-small-round" onClick={() => console.log('Search button clicked')}>
+                    <button className="button-small-round" onClick={gotoThirdPage} >
                         <span className="button-icon">Search🔍</span>
                     </button>
                 </div>

@@ -130,8 +130,8 @@ const zone = IdType;
 
 
   const portugalBounds = [
-    [36, -10],
-    [43, -6]
+    [34, -12],
+    [45, -6]
   ];
 
     const toggleProperties = () => {
@@ -217,83 +217,82 @@ const zone = IdType;
     };
 
 
-  const calculateFillColor = (score, minScore, maxScore) => {
-    const minColor = [255, 0, 0]; 
-    const midColor = [255, 255, 0]; 
-    const maxColor = [0, 255, 0]; 
-
-    if (score === maxScore) {
-        return `rgb(${maxColor[0]}, ${maxColor[1]}, ${maxColor[2]})`;
-    }
-
-    let color;
-    if (score <= (minScore + maxScore) / 3) {
-        const proportion = (score - minScore) / ((minScore + maxScore) / 2 - minScore);
-        color = minColor.map((channel, i) =>
-            Math.round(channel + proportion * (midColor[i] - channel))
-        );
-    } else {
-        const proportion = (score - (minScore + maxScore) / 2) / ((maxScore - minScore) / 2);
-        color = midColor.map((channel, i) =>
-            Math.round(channel + proportion * (maxColor[i] - channel))
-        );
-    }
-
-    return `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
-};
-
-const geoJSONStyle = (feature) => {
-    if (!feature) return {};
-
-
-
-
-    if (scores === null || scores === undefined) {
-        return {
-            fillColor: 'transparent',
-            weight: 2,
-            color: 'black',
-            fillOpacity: 0.4
-        };
-     }
-
-
-    const filteredScores = {}; 
-    if (districtId > 2){
-        for (const key in scores) {
-          if (key.startsWith(districtId)) {
+    const calculateFillColor = (index, totalColors) => {
+      const green = [0, 255, 0];
+      const yellow = [255, 255, 0];
+      const orange = [255, 165, 0];
+      const red = [255, 0, 0];
+  
+      let color;
+  
+      if (index === 0) {
+          color = red; // Invertendo a ordem: primeiro é vermelho
+      } else if (index === totalColors - 1) {
+          color = green; // Invertendo a ordem: último é verde
+      } else {
+          const percent = index / (totalColors - 1);
+          if (percent < 0.5) {
+              // Interpolando entre amarelo e laranja
+              const ratio = percent / 0.5;
+              color = [
+                  yellow[0] + (orange[0] - yellow[0]) * ratio,
+                  yellow[1] + (orange[1] - yellow[1]) * ratio,
+                  yellow[2] + (orange[2] - yellow[2]) * ratio
+              ];
+          } else {
+              // Interpolando entre verde e amarelo
+              const ratio = (percent - 0.4) / 0.5;
+              color = [
+                  green[0] + (yellow[0] - green[0]) * ratio,
+                  green[1] + (yellow[1] - green[1]) * ratio,
+                  green[2] + (yellow[2] - green[2]) * ratio
+              ];
+          }
+      }
+  
+      // Retornando a cor resultante como uma string rgb
+      return `rgb(${Math.round(color[0])}, ${Math.round(color[1])}, ${Math.round(color[2])})`;
+  };
+  
+  
+  const geoJSONStyle = (feature) => {
+      if (!feature || !scores) {
+          return {
+              fillColor: 'transparent',
+              weight: 2,
+              color: 'black',
+              fillOpacity: 0.4
+          };
+      }
+  
+      const filteredScores = {};
+      if (districtId > 2) {
+          for (const key in scores) {
+              if (key.startsWith(districtId)) {
+                  filteredScores[key] = scores[key];
+              }
+          }
+      } else {
+          for (const key in scores) {
               filteredScores[key] = scores[key];
           }
       }
-    }else{
-      for (const key in scores) {
-            filteredScores[key] = scores[key];
-      }
-    }
   
-   console.log(filteredScores);
-
-    let minScore = Infinity;
-    let maxScore = -Infinity;
-    for (const id in scores) {
-        const score = filteredScores[id];
-        if (score < minScore) minScore = score;
-        if (score > maxScore) maxScore = score;
-    }
-
-    const id = feature.id.split('.')[1];
-    const score = scores[id] || 0;
-
+      const id = feature.id.split('.')[1];
+      const score = scores[id] || 0;
   
-    const fillColor = calculateFillColor(score, minScore, maxScore);
-
-    return {
-        fillColor: fillColor,
-        weight: 2,
-        color: 'black',
-        fillOpacity: 0.4
-    };
-};
+      const sortedScores = Object.entries(filteredScores).sort((a, b) => a[1] - b[1]); // Ordenando ao contrário
+      const totalColors = sortedScores.length;
+  
+      const fillColor = calculateFillColor(sortedScores.findIndex(entry => entry[0] === id), totalColors);
+  
+      return {
+          fillColor: fillColor,
+          weight: 2,
+          color: 'black',
+          fillOpacity: 0.4
+      };
+  };
 
 
     

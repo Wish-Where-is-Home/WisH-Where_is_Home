@@ -29,14 +29,22 @@ function QuizPage({ darkMode, zoneData,scores,updateScores}) {
   const [minZoom, setMinZoom] = useState(null);
   const [showQuestions, setShowQuestions] = useState(false);
   const navigate = useNavigate();
+
+  const [slidersValues, setSlidersValues] = useState([
+    { id: 0, value: 0 },  
+    { id: 1, value: 0 },  
+    { id: 2, value: 0 }, 
+    { id: 3, value: 0 },  
+    { id: 4, value: 0 },  
+    { id: 5, value: 0 }   
+  ]);
   
 
+const portugalBounds = [
+  [34, -12],
+  [45, -6]
+];
 
-
-  const portugalBounds = [
-    [36, -10],
-    [43, -6]
-  ];
 
   const mapRef = useRef(null);
   const geoJsonRef = useRef(null);
@@ -55,14 +63,6 @@ function QuizPage({ darkMode, zoneData,scores,updateScores}) {
   }, [location.state]);
 
   const sliderOptions = ['Not Important', 'Slightly Important', 'Moderate', 'Important', 'Very Important'];
-  const [slidersValues, setSlidersValues] = useState([
-    { id: 0, value: 0 },  
-    { id: 1, value: 0 },  
-    { id: 2, value: 0 }, 
-    { id: 3, value: 0 },  
-    { id: 4, value: 0 },  
-    { id: 5, value: 0 }   
-  ]);
 
   const handleSliderChange = (index, value) => {
     const updatedSliders = slidersValues.map((slider, idx) => {
@@ -111,83 +111,74 @@ function QuizPage({ darkMode, zoneData,scores,updateScores}) {
   };
 
 
-  const calculateFillColor = (score, minScore, maxScore) => {
-    const minColor = [255, 0, 0]; 
-    const midColor = [255, 255, 0]; 
-    const maxColor = [0, 255, 0]; 
-
-    if (score === maxScore) {
-        return `rgb(${maxColor[0]}, ${maxColor[1]}, ${maxColor[2]})`;
-    }
+  const calculateFillColor = (index, totalColors) => {
+    const green = [0, 255, 0];
+    const yellow = [255, 255, 0];
+    const orange = [255, 165, 0];
+    const red = [255, 0, 0];
 
     let color;
-    if (score <= (minScore + maxScore) / 3) {
-        const proportion = (score - minScore) / ((minScore + maxScore) / 2 - minScore);
-        color = minColor.map((channel, i) =>
-            Math.round(channel + proportion * (midColor[i] - channel))
-        );
+
+    if (index === 0) {
+        color = red; // Invertendo a ordem: primeiro é vermelho
+    } else if (index === totalColors - 1) {
+        color = green; // Invertendo a ordem: último é verde
     } else {
-        const proportion = (score - (minScore + maxScore) / 2) / ((maxScore - minScore) / 2);
-        color = midColor.map((channel, i) =>
-            Math.round(channel + proportion * (maxColor[i] - channel))
-        );
+        const percent = index / (totalColors - 1);
+        if (percent < 0.5) {
+            // Interpolando entre amarelo e laranja
+            const ratio = percent / 0.5;
+            color = [
+                yellow[0] + (orange[0] - yellow[0]) * ratio,
+                yellow[1] + (orange[1] - yellow[1]) * ratio,
+                yellow[2] + (orange[2] - yellow[2]) * ratio
+            ];
+        } else {
+            // Interpolando entre verde e amarelo
+            const ratio = (percent - 0.4) / 0.5;
+            color = [
+                green[0] + (yellow[0] - green[0]) * ratio,
+                green[1] + (yellow[1] - green[1]) * ratio,
+                green[2] + (yellow[2] - green[2]) * ratio
+            ];
+        }
     }
 
-    return `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
+    // Retornando a cor resultante como uma string rgb
+    return `rgb(${Math.round(color[0])}, ${Math.round(color[1])}, ${Math.round(color[2])})`;
 };
 
+
 const geoJSONStyle = (feature) => {
-    if (!feature) return {};
-
-    if (slidersValues.every(slider => slider.value === 0)) {
-      
-      return {
-          fillColor: 'transparent',
-          weight: 2,
-          color: 'black',
-          fillOpacity: 0.4
-      };
-  }
-
-
-    if (scores === null || scores === undefined) {
+    if (!feature || !scores || slidersValues.every(slider => slider.value === 0)) {
         return {
             fillColor: 'transparent',
             weight: 2,
             color: 'black',
             fillOpacity: 0.4
         };
-     }
-
-
-    const filteredScores = {}; 
-    if (districtId > 2){
-        for (const key in scores) {
-          if (key.startsWith(districtId)) {
-              filteredScores[key] = scores[key];
-          }
-      }
-    }else{
-      for (const key in scores) {
-            filteredScores[key] = scores[key];
-      }
     }
-  
-   console.log(filteredScores);
 
-    let minScore = Infinity;
-    let maxScore = -Infinity;
-    for (const id in scores) {
-        const score = filteredScores[id];
-        if (score < minScore) minScore = score;
-        if (score > maxScore) maxScore = score;
+    const filteredScores = {};
+    if (districtId > 2) {
+        for (const key in scores) {
+            if (key.startsWith(districtId)) {
+                filteredScores[key] = scores[key];
+            }
+        }
+    } else {
+        for (const key in scores) {
+            filteredScores[key] = scores[key];
+        }
     }
 
     const id = feature.id.split('.')[1];
     const score = scores[id] || 0;
 
-  
-    const fillColor = calculateFillColor(score, minScore, maxScore);
+    const sortedScores = Object.entries(filteredScores).sort((a, b) => a[1] - b[1]); // Ordenando ao contrário
+    const totalColors = sortedScores.length;
+
+    const fillColor = calculateFillColor(sortedScores.findIndex(entry => entry[0] === id), totalColors);
 
     return {
         fillColor: fillColor,
@@ -196,8 +187,6 @@ const geoJSONStyle = (feature) => {
         fillOpacity: 0.4
     };
 };
-
-
 
 
   const handleDistrictClick = (event) => {
@@ -428,7 +417,7 @@ const geoJSONStyle = (feature) => {
                     <Box sx={{ width: 300 }}>
                       <Slider
                         aria-label="Importance"
-                        defaultValue={0}
+                        defaultValue={slidersValues[0]}
                         valueLabelDisplay="auto"
                         step={25}
                         id="commerce"
@@ -472,7 +461,7 @@ const geoJSONStyle = (feature) => {
                     <Box sx={{ width: 300 }}>
                       <Slider
                         aria-label="Importance"
-                        defaultValue={0}
+                        defaultValue={slidersValues[1]}
                         valueLabelDisplay="auto"
                         step={25}
                         id="social_leisure"
@@ -514,7 +503,7 @@ const geoJSONStyle = (feature) => {
                     <Box sx={{ width: 300 }}>
                       <Slider
                         aria-label="Importance"
-                        defaultValue={0}
+                        defaultValue={slidersValues[2]}
                         valueLabelDisplay="auto"
                         step={25}
                         id="health"
@@ -556,7 +545,7 @@ const geoJSONStyle = (feature) => {
                     <Box sx={{ width: 300 }}>
                       <Slider
                         aria-label="Importance"
-                        defaultValue={0}
+                        defaultValue={slidersValues[3]}
                         valueLabelDisplay="auto"
                         step={25}
                         id="nature_sports"
@@ -598,7 +587,7 @@ const geoJSONStyle = (feature) => {
                     <Box sx={{ width: 300 }}>
                       <Slider
                         aria-label="Importance"
-                        defaultValue={0}
+                        defaultValue={slidersValues[4]}
                         valueLabelDisplay="auto"
                         step={25}
                         id="service"
@@ -640,7 +629,7 @@ const geoJSONStyle = (feature) => {
                     <Box sx={{ width: 300 }}>
                       <Slider
                         aria-label="Importance"
-                        defaultValue={0}
+                        defaultValue={slidersValues[5]}
                         valueLabelDisplay="auto"
                         step={25}
                         id="education"

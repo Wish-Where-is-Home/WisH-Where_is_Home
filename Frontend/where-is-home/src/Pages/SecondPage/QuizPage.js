@@ -75,20 +75,7 @@ const portugalBounds = [
   };
 
 
-  const onSliderChange = (value, id) => {
-    console.log('Slider value:', value);
-    const updatedValues = slidersValues.map(slider => {
-      if (slider.id === id) {
-        console.log('ENTREI:', id);
-        return { ...slider, value: value / 100 };
-      } else {
-        return slider;
-      }
-    });
-    setSlidersValues(updatedValues);
- 
-    //calculateScores(zoneData2, updatedValues);
-  };
+
 
 
 
@@ -360,19 +347,6 @@ const geoJSONStyle = (feature) => {
 
 
 
-  // useEffect(() => {
-  //   const sliders = document.querySelectorAll('toolcool-range-slider');
-
-  //   sliders.forEach(slider => {
-  //     slider.addEventListener('change', onSliderChange);
-  //   });
-
-  //   return () => {
-  //     sliders.forEach(slider => {
-  //       slider.removeEventListener('change', onSliderChange);
-  //     });
-  //   };
-  // }, []);
 
 
   const onEachFeature = (feature, layer) => {

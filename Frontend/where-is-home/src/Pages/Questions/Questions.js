@@ -133,6 +133,11 @@ function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,z
         });
     };
 
+    const valueLabelFormat = (value) => {
+        const labels = ['Not Important', 'Slightly Important', 'Moderate', 'Important', 'Very Important'];
+        return labels[Math.round(value * 4)];
+    };
+
     const renderSlidersForTab = () => {
         return sliderGroupings[tabs[activeTab]].map((group, index) => (
             <div key={`slider-${activeTab}-${index}`}>
@@ -140,13 +145,15 @@ function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,z
                 <Box sx={{ width: 300 }}>
                     <Slider
                         aria-label={group.name}
-                        value={sliderValues[activeTab]}
+                        value={sliderValues[group.ids[0]]}
                         valueLabelDisplay="auto"
                         step={0.25}
                         marks={[{ value: 0, label: 'Not Important' }, { value: 1, label: 'Very Important' }]}
                         min={0}
                         max={1}
                         onChange={(event, newValue) => onSliderChange(newValue, group.ids)}
+                        valueLabelFormat={valueLabelFormat}
+
                     />
                 </Box>
             </div>

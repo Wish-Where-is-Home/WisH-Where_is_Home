@@ -17,6 +17,7 @@ import 'proj4leaflet';
 
 
 function QuizPage({ darkMode, zoneData }) {
+  const [scores, setScores] = useState(null);
   const { t } = useTranslation("common");
   const location = useLocation();
   const [geojsonData, setGeojsonData] = useState(null);
@@ -29,6 +30,9 @@ function QuizPage({ darkMode, zoneData }) {
   const [showQuestions, setShowQuestions] = useState(false);
   const navigate = useNavigate();
   
+  const updateScores = (newScores) => {
+    setScores(newScores);
+};
 
 
   const portugalBounds = [
@@ -109,20 +113,82 @@ function QuizPage({ darkMode, zoneData }) {
   };
 
 
+  const calculateFillColor = (score, minScore, maxScore) => {
+    const minColor = [255, 0, 0]; 
+    const midColor = [255, 255, 0]; 
+    const maxColor = [0, 255, 0]; 
 
-  const geoJSONStyle = (feature) => {
+    if (score === maxScore) {
+        return `rgb(${maxColor[0]}, ${maxColor[1]}, ${maxColor[2]})`;
+    }
+
+    let color;
+    if (score <= (minScore + maxScore) / 3) {
+        const proportion = (score - minScore) / ((minScore + maxScore) / 2 - minScore);
+        color = minColor.map((channel, i) =>
+            Math.round(channel + proportion * (midColor[i] - channel))
+        );
+    } else {
+        const proportion = (score - (minScore + maxScore) / 2) / ((maxScore - minScore) / 2);
+        color = midColor.map((channel, i) =>
+            Math.round(channel + proportion * (maxColor[i] - channel))
+        );
+    }
+
+    return `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
+};
+
+const geoJSONStyle = (feature) => {
     if (!feature) return {};
 
+    if (scores === null || scores === undefined) {
+        return {
+            fillColor: 'transparent',
+            weight: 2,
+            color: 'black',
+            fillOpacity: 0.4
+        };
+     }
+
+
+    const filteredScores = {}; 
+    if (districtId > 2){
+        for (const key in scores) {
+          if (key.startsWith(districtId)) {
+              filteredScores[key] = scores[key];
+          }
+      }
+    }else{
+      for (const key in scores) {
+            filteredScores[key] = scores[key];
+      }
+    }
+  
+   console.log(filteredScores);
+
+    let minScore = Infinity;
+    let maxScore = -Infinity;
+    for (const id in scores) {
+        const score = filteredScores[id];
+        if (score < minScore) minScore = score;
+        if (score > maxScore) maxScore = score;
+    }
+
     const id = feature.id.split('.')[1];
-    const fillColor = id % 2 === 0 ? 'green' : 'red';
+    const score = scores[id] || 0;
+
+  
+    const fillColor = calculateFillColor(score, minScore, maxScore);
 
     return {
-      color: 'black',
-      weight: 3,
-      fillColor: fillColor,
-      fillOpacity: 0.5
+        fillColor: fillColor,
+        weight: 2,
+        color: 'black',
+        fillOpacity: 0.4
     };
-  };
+};
+
+
 
 
   const handleDistrictClick = (event) => {
@@ -275,7 +341,7 @@ function QuizPage({ darkMode, zoneData }) {
         onEachFeature: onEachFeature
       }).addTo(geoJsonRef.current);
     }
-  }, [geojsonData]);
+  }, [geojsonData,geoJSONStyle]);
 
 
   const goBackPoligon = () => {
@@ -609,7 +675,7 @@ function QuizPage({ darkMode, zoneData }) {
           </div>
         </div>
       ) : (
-        <Questions slidersValues={slidersValues} darkMode={darkMode} handlePreviousClick={handlePreviousClick}  gotoThirdPage={gotothirdpage} zoneData={zoneData} />
+        <Questions slidersValues={slidersValues} darkMode={darkMode} handlePreviousClick={handlePreviousClick}  gotoThirdPage={gotothirdpage} zoneData={zoneData} IdType={IdType} updateScores={updateScores}/>
       )
       }
 

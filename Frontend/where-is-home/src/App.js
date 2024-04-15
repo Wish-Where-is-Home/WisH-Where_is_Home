@@ -58,7 +58,7 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://mednat.ieeta.pt:9009/api/zone/', { timeout: 10000 });
+        const response = await fetch('http://mednat.ieeta.pt:9009/api/zone/', { timeout: 2000 });
         const data = await response.json();
         console.log(data);
         setZoneData(data);

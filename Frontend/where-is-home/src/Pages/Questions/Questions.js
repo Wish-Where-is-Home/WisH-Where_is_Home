@@ -5,9 +5,9 @@ import './Questions.css';
 import Slider from '@mui/material/Slider';
 import Box from '@mui/material/Box';
 
-function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,zoneData }) {
+function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,zoneData, IdType,updateScores }) {
     //fake values for zone
-    const zone = 'subseccao';
+    const zone = IdType;
 
 
     const { t } = useTranslation("common");
@@ -238,29 +238,11 @@ function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,z
             }
         }
 
-        // Determine the zone type based on the 'zone' variable
-        let zoneType;
-        switch (zone) {
-            case 'distritos':
-                zoneType = 'distritos';
-                break;
-            case 'municipios':
-                zoneType = 'municipios';
-                break;
-            case 'freguesias':
-                zoneType = 'freguesias';
-                break;
-            case 'subseccao':
-                zoneType = 'subseccao';
-                break;
-            default:
-                console.error('Invalid zone type.');
-                return;
-        }
+       
         
-        calculateScores(zoneData, slidersValues, sliderValues, zoneType);
-    
-    }, [slidersValues, sliderValues]);
+        const calculatedScores=calculateScores(zoneData, slidersValues, sliderValues, zone);
+        updateScores(calculatedScores);
+    }, [slidersValues, sliderValues,IdType]);
     
 
 

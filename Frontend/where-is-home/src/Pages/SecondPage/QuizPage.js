@@ -16,8 +16,8 @@ import 'proj4leaflet';
 
 
 
-function QuizPage({ darkMode, zoneData }) {
-  const [scores, setScores] = useState(null);
+function QuizPage({ darkMode, zoneData,scores,updateScores}) {
+  
   const { t } = useTranslation("common");
   const location = useLocation();
   const [geojsonData, setGeojsonData] = useState(null);
@@ -30,9 +30,7 @@ function QuizPage({ darkMode, zoneData }) {
   const [showQuestions, setShowQuestions] = useState(false);
   const navigate = useNavigate();
   
-  const updateScores = (newScores) => {
-    setScores(newScores);
-};
+
 
 
   const portugalBounds = [
@@ -407,7 +405,7 @@ const geoJSONStyle = (feature) => {
 
 
   const gotothirdpage = () =>{
-    navigate('/metricspage', {state: {districtId,IdType} })
+    navigate('/metricspage', {state: {districtId,IdType,scores} })
 }
 
 

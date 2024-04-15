@@ -236,10 +236,9 @@ function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,z
                         }
                     }
     
-                    console.log("scores2", scores);
+                   
                     return scores;
                 } else {
-                    console.error("sliderValuesThemes is not an array.");
                     return null;
                 }
             }

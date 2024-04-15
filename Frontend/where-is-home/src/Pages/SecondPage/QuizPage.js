@@ -86,14 +86,14 @@ const portugalBounds = [
       }
     });
     setSlidersValues(updatedValues);
-    console.log("Slider values:", updatedValues);
+ 
     //calculateScores(zoneData2, updatedValues);
   };
 
 
 
   const handleSearchClick = () => {
-    console.log('Search button clicked');
+  
 
    
     const allZero = slidersValues.every(slider => slider.value === 0);
@@ -106,7 +106,7 @@ const portugalBounds = [
 };
 
   const handlePreviousClick = () => {
-    console.log('Previous button clicked');
+    
     setShowQuestions(false); 
   };
 
@@ -120,13 +120,13 @@ const portugalBounds = [
     let color;
 
     if (index === 0) {
-        color = red; // Invertendo a ordem: primeiro é vermelho
+        color = red;
     } else if (index === totalColors - 1) {
-        color = green; // Invertendo a ordem: último é verde
+        color = green;
     } else {
         const percent = index / (totalColors - 1);
         if (percent < 0.5) {
-            // Interpolando entre amarelo e laranja
+          
             const ratio = percent / 0.5;
             color = [
                 yellow[0] + (orange[0] - yellow[0]) * ratio,
@@ -134,7 +134,7 @@ const portugalBounds = [
                 yellow[2] + (orange[2] - yellow[2]) * ratio
             ];
         } else {
-            // Interpolando entre verde e amarelo
+           
             const ratio = (percent - 0.4) / 0.5;
             color = [
                 green[0] + (yellow[0] - green[0]) * ratio,
@@ -144,7 +144,7 @@ const portugalBounds = [
         }
     }
 
-    // Retornando a cor resultante como uma string rgb
+   
     return `rgb(${Math.round(color[0])}, ${Math.round(color[1])}, ${Math.round(color[2])})`;
 };
 
@@ -158,9 +158,10 @@ const geoJSONStyle = (feature) => {
             fillOpacity: 0.4
         };
     }
+    console.log(districtId);
 
     const filteredScores = {};
-    if (districtId > 2) {
+    if (districtId.length >= 2) {
         for (const key in scores) {
             if (key.startsWith(districtId)) {
                 filteredScores[key] = scores[key];
@@ -173,11 +174,11 @@ const geoJSONStyle = (feature) => {
     }
 
     const id = feature.id.split('.')[1];
-    const score = scores[id] || 0;
+   
 
-    const sortedScores = Object.entries(filteredScores).sort((a, b) => a[1] - b[1]); // Ordenando ao contrário
+    const sortedScores = Object.entries(filteredScores).sort((a, b) => a[1] - b[1]); 
     const totalColors = sortedScores.length;
-
+    console.log(sortedScores);
     const fillColor = calculateFillColor(sortedScores.findIndex(entry => entry[0] === id), totalColors);
 
     return {

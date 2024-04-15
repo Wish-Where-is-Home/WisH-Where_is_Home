@@ -360,19 +360,19 @@ const geoJSONStyle = (feature) => {
 
 
 
-  useEffect(() => {
-    const sliders = document.querySelectorAll('toolcool-range-slider');
+  // useEffect(() => {
+  //   const sliders = document.querySelectorAll('toolcool-range-slider');
 
-    sliders.forEach(slider => {
-      slider.addEventListener('change', onSliderChange);
-    });
+  //   sliders.forEach(slider => {
+  //     slider.addEventListener('change', onSliderChange);
+  //   });
 
-    return () => {
-      sliders.forEach(slider => {
-        slider.removeEventListener('change', onSliderChange);
-      });
-    };
-  }, []);
+  //   return () => {
+  //     sliders.forEach(slider => {
+  //       slider.removeEventListener('change', onSliderChange);
+  //     });
+  //   };
+  // }, []);
 
 
   const onEachFeature = (feature, layer) => {
@@ -408,17 +408,17 @@ const geoJSONStyle = (feature) => {
               <div className="static-text-container">
                 <h1>{selectedDistrict}</h1>
               </div>
-              <p>What are you looking for? </p>
+              <p>{t('label_metric')} </p>
             </div>
             <div className="label-scroll-container">
               <div className="label-slider-container-first">
-                <label className="label_metric" htmlFor="commerce-slider">{t('Commerce')}</label>
+                <label className="label_metric" htmlFor="commerce-slider">{t('commerce')}</label>
                 <div className="slider-minmax">
                   <div className='tool'>
                     <Box sx={{ width: 300 }}>
                       <Slider
                         aria-label="Importance"
-                        defaultValue={slidersValues[0]}
+                        value={slidersValues[0].value}
                         valueLabelDisplay="auto"
                         step={25}
                         id="commerce"
@@ -441,28 +441,27 @@ const geoJSONStyle = (feature) => {
                               return '';
                           }
                         }}
-                        onChange={(event, value) => onSliderChange(value, 0)}
-
+                        onChange={(event, value) => handleSliderChange(0, value)}
                       />
 
                     </Box>
                   </div>
                   <div className="min-max-text">
-                    <span>Nothing</span>
-                    <span>Very Important</span>
+                    <span>{t('nothing')}</span>
+                    <span>{t('very_Important')}</span>
                   </div>
 
                 </div>
               </div>
 
               <div className="label-slider-container">
-                <label className="label_metric" htmlFor="social_leisure-slider">{t('Social leisure')}</label>
+                <label className="label_metric" htmlFor="social_leisure-slider">{t('social_leisure')}</label>
                 <div className="slider-minmax">
                   <div className='tool'>
                     <Box sx={{ width: 300 }}>
                       <Slider
                         aria-label="Importance"
-                        defaultValue={slidersValues[1]}
+                        value={slidersValues[1].value}
                         valueLabelDisplay="auto"
                         step={25}
                         id="social_leisure"
@@ -485,15 +484,15 @@ const geoJSONStyle = (feature) => {
                               return '';
                           }
                         }}
-                        onChange={(event, value) => onSliderChange(value, 1)}
+                        onChange={(event, value) => handleSliderChange(1, value)}
 
                       />
 
                     </Box>
                   </div>
                   <div className="min-max-text">
-                    <span>Nothing</span>
-                    <span>Very Important</span>
+                    <span>{t('nothing')}</span>
+                    <span>{t('very_Important')}</span>
                   </div>
                 </div>
               </div>
@@ -504,7 +503,7 @@ const geoJSONStyle = (feature) => {
                     <Box sx={{ width: 300 }}>
                       <Slider
                         aria-label="Importance"
-                        defaultValue={slidersValues[2]}
+                        value={slidersValues[2].value}
                         valueLabelDisplay="auto"
                         step={25}
                         id="health"
@@ -527,26 +526,26 @@ const geoJSONStyle = (feature) => {
                               return '';
                           }
                         }}
-                        onChange={(event, value) => onSliderChange(value, 2)}
+                        onChange={(event, value) => handleSliderChange(2, value)}
 
                       />
 
                     </Box>
                   </div>
                   <div className="min-max-text">
-                    <span>Nothing</span>
-                    <span>Very Important</span>
+                    <span>{t('nothing')}</span>
+                    <span>{t('very_Important')}</span>
                   </div>
                 </div>
               </div>
               <div className="label-slider-container">
-                <label className="label_metric" htmlFor="nature_sports-slider">{t('Nature sports')}</label>
+                <label className="label_metric" htmlFor="nature_sports-slider">{t('nature_sports')}</label>
                 <div className="slider-minmax">
                   <div className='tool'>
                     <Box sx={{ width: 300 }}>
                       <Slider
                         aria-label="Importance"
-                        defaultValue={slidersValues[3]}
+                        value={slidersValues[3].value}
                         valueLabelDisplay="auto"
                         step={25}
                         id="nature_sports"
@@ -569,26 +568,26 @@ const geoJSONStyle = (feature) => {
                               return '';
                           }
                         }}
-                        onChange={(event, value) => onSliderChange(value, 3)}
+                        onChange={(event, value) => handleSliderChange(3, value)}
 
                       />
 
                     </Box>
                   </div>
                   <div className="min-max-text">
-                    <span>Nothing</span>
-                    <span>Very Important</span>
+                    <span>{t('nothing')}</span>
+                    <span>{t('very_Important')}</span>
                   </div>
                 </div>
               </div>
               <div className="label-slider-container">
-                <label className="label_metric" htmlFor="service-slider">{t('Service')}</label>
+                <label className="label_metric" htmlFor="service-slider">{t('services')}</label>
                 <div className="slider-minmax">
                   <div className='tool'>
                     <Box sx={{ width: 300 }}>
                       <Slider
                         aria-label="Importance"
-                        defaultValue={slidersValues[4]}
+                        value={slidersValues[4].value}
                         valueLabelDisplay="auto"
                         step={25}
                         id="service"
@@ -611,15 +610,15 @@ const geoJSONStyle = (feature) => {
                               return '';
                           }
                         }}
-                        onChange={(event, value) => onSliderChange(value, 4)}
+                        onChange={(event, value) => handleSliderChange(4, value)}
 
                       />
 
                     </Box>
                   </div>
                   <div className="min-max-text">
-                    <span>Nothing</span>
-                    <span>Very Important</span>
+                    <span>{t('nothing')}</span>
+                    <span>{t('very_Important')}</span>
                   </div>
                 </div>
               </div>
@@ -630,7 +629,7 @@ const geoJSONStyle = (feature) => {
                     <Box sx={{ width: 300 }}>
                       <Slider
                         aria-label="Importance"
-                        defaultValue={slidersValues[5]}
+                        value={slidersValues[5].value}
                         valueLabelDisplay="auto"
                         step={25}
                         id="education"
@@ -653,28 +652,28 @@ const geoJSONStyle = (feature) => {
                               return '';
                           }
                         }}
-                        onChange={(event, value) => onSliderChange(value, 5)}
+                        onChange={(event, value) => handleSliderChange(5, value)}
 
                       />
 
                     </Box>
                   </div>
                   <div className="min-max-text">
-                    <span>Nothing</span>
-                    <span>Very Important</span>
+                    <span>{t('nothing')}</span>
+                    <span>{t('very_Important')}</span>
                   </div>
                 </div>
               </div>
             </div>
             <div className="button-container">
               <button className="button-small-round" onClick={handleSearchClick}>
-                <span className="button-icon">Next</span>
+                <span className="button-icon">{t('next')}</span>
               </button>
             </div>
           </div>
         </div>
       ) : (
-        <Questions slidersValues={slidersValues} darkMode={darkMode} handlePreviousClick={handlePreviousClick}  gotoThirdPage={gotothirdpage} zoneData={zoneData} IdType={IdType} updateScores={updateScores}/>
+        <Questions slidersValues={slidersValues} darkMode={darkMode} handlePreviousClick={handlePreviousClick}  gotoThirdPage={gotothirdpage} zoneData={zoneData} IdType={IdType} updateScores={updateScores} />
       )
       }
 

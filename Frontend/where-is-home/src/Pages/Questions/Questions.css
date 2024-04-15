@@ -13,9 +13,10 @@
 
 
 .SearchPage2{
-  height: 100%;
   max-width: 100%;
   border-right: 2px solid var(--blacktowhite) ;
+  max-height: 90vh;
+  overflow-y: auto !important;
 }
 
 
@@ -29,6 +30,10 @@
   color: var(--text-color-light);
 }
 
+.nature-sports-margin {
+  margin-top: 20rem;
+}
+
 
 .tab-buttons {
   margin-top: 2rem;
@@ -36,7 +41,7 @@
   justify-content: center;
   gap: 5%; 
   max-width: 100%;
-  margin-bottom: 6rem;
+  margin-bottom: 3rem;
 }
 
 .tab-buttons button {
@@ -98,7 +103,7 @@
   justify-content: center; 
   height: auto;
   gap: 20px;
-  margin-top: 7rem;
+  margin-top: 5rem;
 }
 
 .button-small-round {

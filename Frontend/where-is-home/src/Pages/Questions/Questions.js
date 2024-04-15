@@ -268,7 +268,7 @@ function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,z
                 <div className='tab-content'>
                     {renderSlidersForTab()}
                 </div>
-                <div className="button-container2">
+                <div className={`button-container2 ${tabs[activeTab] === 'Nature Sports' ? ' nature-sports-margin' : ''}`}>
                     <button className="button-small-round" onClick={handlePreviousClick}>
                         <span className="button-icon">Previous</span>
                     </button>

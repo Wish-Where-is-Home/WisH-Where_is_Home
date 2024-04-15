@@ -6,7 +6,7 @@ import Slider from '@mui/material/Slider';
 import Box from '@mui/material/Box';
 
 function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,zoneData, IdType,updateScores }) {
-    //fake values for zone
+
     const zone = IdType;
 
 
@@ -14,37 +14,39 @@ function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,z
 
     const sliderGroupings = {
         'Commerce': [
-            { name: "General Commerce", ids: ['2'] },
-            { name: "Specialized Commerce", ids: ['3'] },
-            { name: "Retail Outlets", ids: ['4'] },
-            { name: "Supermarkets", ids: ['9'] }
+            { name: "Commerce", ids: ['2'] },
+            { name: "Bakery", ids: ['3'] },
+            { name: "Food Courts", ids: ['4'] },
+            { name: "Supermarket", ids: ['9'] }
         ],
         'Social Leisure': [
-            { name: "Sports Centers", ids: ['5'] },
-            { name: "Hotels", ids: ['8'] },
-            { name: "Entertainment Venues", ids: ['17'] }
+            { name: "Nightlife", ids: ['5'] },
+            { name: "Hotel", ids: ['8'] },
+            { name: "Culture", ids: ['10'] },
+            { name: "Entertainment", ids: ['17'] }
         ],
         'Health': [
             { name: "Health Services", ids: ['7'] },
-            { name: "Hospitals", ids: ['22'] },
-            { name: "Clinics", ids: ['23'] },
-            { name: "Pharmacies", ids: ['18'] },
-            { name: "Veterinary Services", ids: ['24'] }
+            { name: "Pharmacy", ids: ['18'] },
+            { name: "Hospital", ids: ['22'] },
+            { name: "Clinic", ids: ['23'] },
+            { name: "Veterinary", ids: ['24'] }
         ],
         'Nature Sports': [
+            { name: "Sports Center", ids: ['1'] },
             { name: "Camp Sites", ids: ['6'] },
             { name: "Parks", ids: ['13'] },
-            { name: "Beaches & Rivers", ids: ['25'] },
-            { name: "Industrial Zones", ids: ['26'] },
+            { name: "Swimming Pool", ids: ['19'] },
+            { name: "Beach River", ids: ['25'] },
             { name: "Bicycle Paths", ids: ['27'] },
-            { name: "Walking Routes", ids: ['28'] },
-            { name: "Car Parks", ids: ['29'] }
+            { name: "Walking Routes", ids: ['28'] }
         ],
         'Service': [
             { name: "Emergency Services", ids: ['14'] },
-            { name: "Banking Services", ids: ['20'] },
-            { name: "Postal Services", ids: ['21'] },
-            { name: "Public Facilities", ids: ['19'] }
+            { name: "Banks", ids: ['20'] },
+            { name: "Post Offices", ids: ['21'] },
+            { name: "Industrial Zones", ids: ['26'] },
+            { name: "Car Parks", ids: ['29'] }
         ],
         'Education': [
             { name: "Schools", ids: ['11'] },

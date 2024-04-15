@@ -141,6 +141,17 @@ function QuizPage({ darkMode, zoneData }) {
 const geoJSONStyle = (feature) => {
     if (!feature) return {};
 
+    if (slidersValues.every(slider => slider.value === 0)) {
+      
+      return {
+          fillColor: 'transparent',
+          weight: 2,
+          color: 'black',
+          fillOpacity: 0.4
+      };
+  }
+
+
     if (scores === null || scores === undefined) {
         return {
             fillColor: 'transparent',
@@ -341,7 +352,7 @@ const geoJSONStyle = (feature) => {
         onEachFeature: onEachFeature
       }).addTo(geoJsonRef.current);
     }
-  }, [geojsonData,geoJSONStyle]);
+  }, [geojsonData,geoJSONStyle,slidersValues]);
 
 
   const goBackPoligon = () => {

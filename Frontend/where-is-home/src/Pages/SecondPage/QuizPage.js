@@ -76,26 +76,26 @@ const portugalBounds = [
 
 
 const sliderGroupings = {
-  'Commerce': [
+  [t('commerce')]: [
       { name: "Commerce", ids: ['2'] },
       { name: "Bakery", ids: ['3'] },
       { name: "Food Courts", ids: ['4'] },
       { name: "Supermarket", ids: ['9'] }
   ],
-  'Social Leisure': [
+  [t('social_leisure')]: [
       { name: "Nightlife", ids: ['5'] },
       { name: "Hotel", ids: ['8'] },
       { name: "Culture", ids: ['10'] },
       { name: "Entertainment", ids: ['17'] }
   ],
-  'Health': [
+  [t('health')]: [
       { name: "Health Services", ids: ['7'] },
       { name: "Pharmacy", ids: ['18'] },
       { name: "Hospital", ids: ['22'] },
       { name: "Clinic", ids: ['23'] },
       { name: "Veterinary", ids: ['24'] }
   ],
-  'Nature Sports': [
+  [t('nature_sports')]: [
       { name: "Sports Center", ids: ['1'] },
       { name: "Camp Sites", ids: ['6'] },
       { name: "Parks", ids: ['13'] },
@@ -104,14 +104,14 @@ const sliderGroupings = {
       { name: "Bicycle Paths", ids: ['27'] },
       { name: "Walking Routes", ids: ['28'] }
   ],
-  'Service': [
+  [t('services')]: [
       { name: "Emergency Services", ids: ['14'] },
       { name: "Banks", ids: ['20'] },
       { name: "Post Offices", ids: ['21'] },
       { name: "Industrial Zones", ids: ['26'] },
       { name: "Car Parks", ids: ['29'] }
   ],
-  'Education': [
+  [t('Education')]: [
       { name: "Schools", ids: ['11'] },
       { name: "Libraries", ids: ['12'] },
       { name: "Kindergartens", ids: ['15'] },

@@ -14,7 +14,7 @@ function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,z
 
    
     
-    const tabs = ['Commerce', 'Social Leisure', 'Health', 'Nature Sports', 'Service', 'Education'];
+    const tabs = [t('commerce'),t('social_leisure'),t('health'), t('nature_sports'),t('services'), t('Education')];
 
 
 
@@ -84,7 +84,7 @@ function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,z
     };
 
     const valueLabelFormat = (value) => {
-        const labels = ['Not Important', 'Slightly Important', 'Moderate', 'Important', 'Very Important'];
+        const labels = [t('notimportant'), t('slightly'), t('moderate'), t('important'), t('very_Important')];
         return labels[Math.round(value * 4)];
     };
 
@@ -98,7 +98,7 @@ function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,z
                         value={sliderValuesCruz[group.ids[0]]}
                         valueLabelDisplay="auto"
                         step={0.25}
-                        marks={[{ value: 0, label: 'Not Important' }, { value: 1, label: 'Very Important' }]}
+                        marks={[{ value: 0, label: t('notimportant') }, { value: 1, label: t('very_Important') }]}
                         min={0}
                         max={1}
                         onChange={(event, newValue) => onSliderChange(newValue, group.ids)}

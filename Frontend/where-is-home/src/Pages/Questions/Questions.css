@@ -62,8 +62,32 @@
 }
 
 
-.tab-content{
-  min-height: 50vh;
+.slider-container {
+  display: flex;
+  align-items: center;
+  height: 10%;
+  border: 1px solid #ccc; 
+  padding: 10px 10px;
+  border-radius: 5px;
+  margin-bottom: 3%;
+  
+}
+
+.dark-mode .slider-container {
+  --slider-bg-color: #333; 
+}
+
+.light-mode .slider-container {
+  --slider-bg-color: #fff; 
+}
+
+.label{
+  width: 50%;
+  margin-left: 20px;
+}
+
+.slider-lefties{
+  height:100%;
 }
 
 .tab-buttons button:hover {
@@ -78,22 +102,12 @@
   border-color: #0dddda;
 }
 
-.tab-content > div {
-  margin: 10px 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
 
-.tab-content label {
-  margin-bottom: 5px;
-}
 
 .dark-mode .MuiSlider-markLabel {
 
   color: var(--text-color-dark); 
 
-  color: var(--text-color-dark); 
 
 }
 
@@ -125,18 +139,6 @@
 .button-small-round:hover {
   background-color: #13d4d1;
   gap: 10px;
-}
-
-.button-small-round {
-  background-color: #0dddda;
-  color: #fff;
-  border: none;
-  padding: 10px 15px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
 }
 
 .button-icon {

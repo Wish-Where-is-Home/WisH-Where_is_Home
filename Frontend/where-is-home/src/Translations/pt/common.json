@@ -28,13 +28,17 @@
     "sports": "Desporto",
     "life": "Vida",
     "sliderDescription": "Quão importante é isto para si?",
-    "textaboutus":"Bem-vindo ao nosso projeto dedicado a ajudá-lo a encontrar o lugar ideal para viver. Nosso objetivo é facilitar esse processo desafiador, fornecendo ferramentas e informações confiáveis para escolhas informadas. Acreditamos que onde escolhemos viver impacta diretamente nossa felicidade e bem-estar. Seja você um nômade digital, uma família ou alguém em busca de novas oportunidades, estamos aqui para guiá-lo em sua jornada. Junte-se a nós enquanto exploramos diferentes localidades e descobrimos onde você pode encontrar seu próprio pedaço de paraíso. Sua busca pelo lugar perfeito começa aqui.",
     "label_metric": "O que está à procura?",
     "commerce": "Comércio",
     "nature_sports": "Natureza e Desporto",
     "services": "Serviços",
     "nothing": "Nada",
+    "notimportant": "Não Importante",
+    "slightly": "Um Pouco Importante",
+    "moderate": "Moderado",
+    "important": "Importante",
     "very_Important": "Muito Importante",
     "next": "Próximo",
-    "social_leisure": "Lazer Social"
+    "social_leisure": "Lazer Social",
+    "back":"Atrás"
 }

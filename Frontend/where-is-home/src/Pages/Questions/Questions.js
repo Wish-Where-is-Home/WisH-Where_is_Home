@@ -5,57 +5,14 @@ import './Questions.css';
 import Slider from '@mui/material/Slider';
 import Box from '@mui/material/Box';
 
-function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,zoneData, IdType,updateScores }) {
+function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,zoneData, IdType,updateScores,sliderValuesCruz,setSliderValuesCruz,sliderGroupings}) {
 
     const zone = IdType;
 
 
     const { t } = useTranslation("common");
 
-    const sliderGroupings = {
-        'Commerce': [
-            { name: "Commerce", ids: ['2'] },
-            { name: "Bakery", ids: ['3'] },
-            { name: "Food Courts", ids: ['4'] },
-            { name: "Supermarket", ids: ['9'] }
-        ],
-        'Social Leisure': [
-            { name: "Nightlife", ids: ['5'] },
-            { name: "Hotel", ids: ['8'] },
-            { name: "Culture", ids: ['10'] },
-            { name: "Entertainment", ids: ['17'] }
-        ],
-        'Health': [
-            { name: "Health Services", ids: ['7'] },
-            { name: "Pharmacy", ids: ['18'] },
-            { name: "Hospital", ids: ['22'] },
-            { name: "Clinic", ids: ['23'] },
-            { name: "Veterinary", ids: ['24'] }
-        ],
-        'Nature Sports': [
-            { name: "Sports Center", ids: ['1'] },
-            { name: "Camp Sites", ids: ['6'] },
-            { name: "Parks", ids: ['13'] },
-            { name: "Swimming Pool", ids: ['19'] },
-            { name: "Beach River", ids: ['25'] },
-            { name: "Bicycle Paths", ids: ['27'] },
-            { name: "Walking Routes", ids: ['28'] }
-        ],
-        'Service': [
-            { name: "Emergency Services", ids: ['14'] },
-            { name: "Banks", ids: ['20'] },
-            { name: "Post Offices", ids: ['21'] },
-            { name: "Industrial Zones", ids: ['26'] },
-            { name: "Car Parks", ids: ['29'] }
-        ],
-        'Education': [
-            { name: "Schools", ids: ['11'] },
-            { name: "Libraries", ids: ['12'] },
-            { name: "Kindergartens", ids: ['15'] },
-            { name: "Universities", ids: ['16'] }
-        ]
-    };
-    
+   
     
     const tabs = ['Commerce', 'Social Leisure', 'Health', 'Nature Sports', 'Service', 'Education'];
 
@@ -96,15 +53,6 @@ function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,z
     ];    
 
 
-    const buildInitialState = () => {
-        const values = {};
-        Object.values(sliderGroupings).flat(2).forEach(id => {
-            values[id] = 0;
-        });
-        return values;
-    };
-
-    const [ sliderValues, setSliderValues] = useState(buildInitialState());
 
     const filteredTabs = tabs.filter((tab, index) => slidersValues[index].value > 0);
 
@@ -118,7 +66,7 @@ function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,z
 
 
     const onSliderChange = (newValue, groupIds) => {
-        setSliderValues(prevValues => {
+        setSliderValuesCruz(prevValues => {
             const updatedValues = groupIds.reduce((acc, id) => ({
                 ...acc,
                 [id]: newValue
@@ -147,7 +95,7 @@ function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,z
                 <Box sx={{ width: 300 }}>
                     <Slider
                         aria-label={group.name}
-                        value={sliderValues[group.ids[0]]}
+                        value={sliderValuesCruz[group.ids[0]]}
                         valueLabelDisplay="auto"
                         step={0.25}
                         marks={[{ value: 0, label: 'Not Important' }, { value: 1, label: 'Very Important' }]}
@@ -248,9 +196,9 @@ function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,z
 
        
         
-        const calculatedScores=calculateScores(zoneData, slidersValues, sliderValues, zone);
+        const calculatedScores=calculateScores(zoneData, slidersValues, sliderValuesCruz, zone);
         updateScores(calculatedScores);
-    }, [slidersValues, sliderValues,IdType]);
+    }, [slidersValues, sliderValuesCruz,IdType]);
     
 
 

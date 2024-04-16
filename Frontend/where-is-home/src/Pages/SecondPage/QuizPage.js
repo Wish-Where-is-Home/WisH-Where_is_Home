@@ -75,7 +75,64 @@ const portugalBounds = [
   };
 
 
+const sliderGroupings = {
+  'Commerce': [
+      { name: "Commerce", ids: ['2'] },
+      { name: "Bakery", ids: ['3'] },
+      { name: "Food Courts", ids: ['4'] },
+      { name: "Supermarket", ids: ['9'] }
+  ],
+  'Social Leisure': [
+      { name: "Nightlife", ids: ['5'] },
+      { name: "Hotel", ids: ['8'] },
+      { name: "Culture", ids: ['10'] },
+      { name: "Entertainment", ids: ['17'] }
+  ],
+  'Health': [
+      { name: "Health Services", ids: ['7'] },
+      { name: "Pharmacy", ids: ['18'] },
+      { name: "Hospital", ids: ['22'] },
+      { name: "Clinic", ids: ['23'] },
+      { name: "Veterinary", ids: ['24'] }
+  ],
+  'Nature Sports': [
+      { name: "Sports Center", ids: ['1'] },
+      { name: "Camp Sites", ids: ['6'] },
+      { name: "Parks", ids: ['13'] },
+      { name: "Swimming Pool", ids: ['19'] },
+      { name: "Beach River", ids: ['25'] },
+      { name: "Bicycle Paths", ids: ['27'] },
+      { name: "Walking Routes", ids: ['28'] }
+  ],
+  'Service': [
+      { name: "Emergency Services", ids: ['14'] },
+      { name: "Banks", ids: ['20'] },
+      { name: "Post Offices", ids: ['21'] },
+      { name: "Industrial Zones", ids: ['26'] },
+      { name: "Car Parks", ids: ['29'] }
+  ],
+  'Education': [
+      { name: "Schools", ids: ['11'] },
+      { name: "Libraries", ids: ['12'] },
+      { name: "Kindergartens", ids: ['15'] },
+      { name: "Universities", ids: ['16'] }
+  ]
+};
 
+
+
+
+const buildInitialState = () => {
+  const values = {};
+  Object.values(sliderGroupings).flat(2).forEach(id => {
+      values[id] = 0;
+  });
+  return values;
+};
+
+
+
+const [ sliderValuesCruz, setSliderValuesCruz] = useState(buildInitialState());
 
 
 
@@ -103,6 +160,10 @@ const portugalBounds = [
     const yellow = [255, 255, 0];
     const orange = [255, 165, 0];
     const red = [255, 0, 0];
+
+    if(totalColors===1){
+      return green
+    }
 
     let color;
 
@@ -402,15 +463,15 @@ const geoJSONStyle = (feature) => {
                         valueLabelFormat={(value) => {
                           switch (value) {
                             case 0:
-                              return 'Not Important';
+                              return t('notimportant');
                             case 25:
-                              return 'Slightly Important';
+                              return t('slightly');
                             case 50:
-                              return 'Moderate';
+                              return t('moderate');
                             case 75:
-                              return 'Important';
+                              return t('important');
                             case 100:
-                              return 'Very Important';
+                              return t('very_Important');
                             default:
                               return '';
                           }
@@ -445,15 +506,15 @@ const geoJSONStyle = (feature) => {
                         valueLabelFormat={(value) => {
                           switch (value) {
                             case 0:
-                              return 'Not Important';
+                              return t('notimportant');
                             case 25:
-                              return 'Slightly Important';
+                              return t('slightly');
                             case 50:
-                              return 'Moderate';
+                              return t('moderate');
                             case 75:
-                              return 'Important';
+                              return t('important');
                             case 100:
-                              return 'Very Important';
+                              return t('very_Important');
                             default:
                               return '';
                           }
@@ -487,15 +548,15 @@ const geoJSONStyle = (feature) => {
                         valueLabelFormat={(value) => {
                           switch (value) {
                             case 0:
-                              return 'Not Important';
+                              return t('notimportant');
                             case 25:
-                              return 'Slightly Important';
+                              return t('slightly');
                             case 50:
-                              return 'Moderate';
+                              return t('moderate');
                             case 75:
-                              return 'Important';
+                              return t('important');
                             case 100:
-                              return 'Very Important';
+                              return t('very_Important');
                             default:
                               return '';
                           }
@@ -529,15 +590,15 @@ const geoJSONStyle = (feature) => {
                         valueLabelFormat={(value) => {
                           switch (value) {
                             case 0:
-                              return 'Not Important';
+                              return t('notimportant');
                             case 25:
-                              return 'Slightly Important';
+                              return t('slightly');
                             case 50:
-                              return 'Moderate';
+                              return t('moderate');
                             case 75:
-                              return 'Important';
+                              return t('important');
                             case 100:
-                              return 'Very Important';
+                              return t('very_Important');
                             default:
                               return '';
                           }
@@ -571,15 +632,15 @@ const geoJSONStyle = (feature) => {
                         valueLabelFormat={(value) => {
                           switch (value) {
                             case 0:
-                              return 'Not Important';
+                              return t('notimportant');
                             case 25:
-                              return 'Slightly Important';
+                              return t('slightly');
                             case 50:
-                              return 'Moderate';
+                              return t('moderate');
                             case 75:
-                              return 'Important';
+                              return t('important');
                             case 100:
-                              return 'Very Important';
+                              return t('very_Important');
                             default:
                               return '';
                           }
@@ -613,15 +674,15 @@ const geoJSONStyle = (feature) => {
                         valueLabelFormat={(value) => {
                           switch (value) {
                             case 0:
-                              return 'Not Important';
+                              return t('notimportant');
                             case 25:
-                              return 'Slightly Important';
+                              return t('slightly');
                             case 50:
-                              return 'Moderate';
+                              return t('moderate');
                             case 75:
-                              return 'Important';
+                              return t('important');
                             case 100:
-                              return 'Very Important';
+                              return t('very_Important');
                             default:
                               return '';
                           }
@@ -647,7 +708,7 @@ const geoJSONStyle = (feature) => {
           </div>
         </div>
       ) : (
-        <Questions slidersValues={slidersValues} darkMode={darkMode} handlePreviousClick={handlePreviousClick}  gotoThirdPage={gotothirdpage} zoneData={zoneData} IdType={IdType} updateScores={updateScores} />
+        <Questions slidersValues={slidersValues} darkMode={darkMode} handlePreviousClick={handlePreviousClick}  gotoThirdPage={gotothirdpage} zoneData={zoneData} IdType={IdType} updateScores={updateScores} sliderValuesCruz={sliderValuesCruz} setSliderValuesCruz={setSliderValuesCruz}  sliderGroupings={sliderGroupings}/>
       )
       }
 
@@ -669,7 +730,7 @@ const geoJSONStyle = (feature) => {
 
             {geojsonData && <GeoJSON ref={geoJsonRef} data={geojsonData} style={geoJSONStyle} onEachFeature={onEachFeature} />}
             <Button variant="contained" style={{ position: 'absolute', top: '10px', right: '20px', zIndex: "1000", backgroundColor: "var(--background-color)", color: "var(--blacktowhite)" }} onClick={goBackPoligon}>
-              Back
+              {t('back')}
             </Button>
 
           </MapContainer>

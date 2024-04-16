@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import './Metrics.css';
 import { ChevronLeft, ChevronRight } from 'react-feather';
 import Slider from 'rc-slider';
+import Handle from 'rc-slider/lib/Handles/Handle';
 import 'rc-slider/assets/index.css';
 import { useTranslation } from "react-i18next";
+import { Tooltip } from '@mui/material';
 
 
-function Metrics({isOpen, toggleSidebar}){
-   
+function Metrics({ darkMode, isOpen, toggleSidebar }) {
+
     const [metricValues, setMetricValues] = useState({
         "Health": [],
         "Nature and Environment": [],
@@ -25,11 +27,11 @@ function Metrics({isOpen, toggleSidebar}){
         toggleSidebar();
     };
 
-    const handleSliderChange = (value, metricIndex, genre) => {
+    /*const handleSliderChange = (value, metricIndex, genre) => {
         const updatedMetrics = { ...metricValues };
         updatedMetrics[genre][metricIndex] = value;
         setMetricValues(updatedMetrics);
-    };
+    };*/
     const [selectedGenre, setSelectedGenre] = useState('Health');
 
 
@@ -43,7 +45,7 @@ function Metrics({isOpen, toggleSidebar}){
         "Social and Leisure": ['Restaurant', 'Cafe', 'Night Club', 'Cinema'],
         Service: ['Bank', 'Post Office', 'Police Station', 'Fire Station']
     };
-    
+
 
     const secondSetOfMetrics = [
         {
@@ -82,45 +84,72 @@ function Metrics({isOpen, toggleSidebar}){
     const handleGenreSelect = (genre) => {
         setSelectedGenre(selectedGenre === genre ? null : genre);
     };
-    const {t} = useTranslation("common");
+    const { t } = useTranslation("common");
 
+
+    const handleSliderChange = (value, metricIndex, genre) => {
+        const updatedMetrics = { ...metricValues };
+        updatedMetrics[genre][metricIndex] = value;
+        setMetricValues(updatedMetrics);
+    };
+
+    const handle = (props) => {
+        const { value, dragging, index, ...restProps } = props;
+        return (
+            <Tooltip
+                prefixCls="rc-slider-tooltip"
+                overlay={valueLabelFormat(value)}
+                visible={dragging}
+                placement="top"
+                key={index}
+            >
+                <Handle value={value} {...restProps} />
+            </Tooltip>
+        );
+    };
+
+    const valueLabelFormat = (value) => {
+        const labels = [t('notimportant'), t('slightly'), t('moderate'), t('important'), t('very_Important')];
+        return labels[Math.floor(value / 25)]; // Assuming the slider range is still 0-100
+    };
+
+    const marks = {
+        0: t('notimportant'),
+        100: t('very_Important'),
+    };
 
     return (
-        <div className={`sidebar-metrics ${isOpen ? 'sidebar-metrics-open' : ''}`}>
-            <div className="sidebar-metrics-toggle" onClick={toggleSidebarInternal}>
-                {isOpen ? <ChevronLeft size={24} /> : <ChevronRight size={24} />} 
+        <div className={`sidebar-metrics ${isOpen ? 'sidebar-metrics-open' : ''} ${darkMode ? 'dark-mode' : 'light-mode'}`}>
+            <div className="sidebar-metrics-toggle" onClick={toggleSidebar}>
+                {isOpen ? <ChevronLeft size={24} /> : <ChevronRight size={24} />}
             </div>
             <h1 className='PropText-metrics'>{t('AdjustPref')}</h1>
-
-            <div className="box-container-metrics" >
-                <div className="first-text-metrics"></div>
-                <div className="box-metrics" style={{ display: isOpen ? 'block' : 'none' }}>
-
-                </div>
-            </div>
-
-
             <div className='navbar-list-metrics'>
                 {secondSetOfMetrics.map((item, index) => (
                     <div key={index} className={`navbar-item-metrics ${selectedGenre === item.genre ? 'active' : ''}`}>
-                        <button onClick={() => handleGenreSelect(item.genre)}>{t(item.genre)}</button>
+                        <button onClick={() => setSelectedGenre(item.genre === selectedGenre ? null : item.genre)}>
+                            {t(item.genre)}
+                        </button>
                     </div>
                 ))}
             </div>
             <div className="metrics-container">
                 {selectedGenre && (
-                    Array.from({ length: secondSetOfMetrics.find((item) => item.genre === selectedGenre).metricsCount }).map((_, metricIndex) => (
+                    metricNames[selectedGenre].map((name, metricIndex) => (
                         <div key={metricIndex} className="slider-item">
-                            <label> {metricNames[selectedGenre][metricIndex]}:</label>
-                            <div className="slider-container">
+                            <label>{name}:</label>
+                            <div className="slider-container2">
                                 <Slider
                                     min={0}
-                                    max={5}
+                                    max={100}
                                     value={metricValues[selectedGenre]?.[metricIndex] || 0}
                                     onChange={(value) => handleSliderChange(value, metricIndex, selectedGenre)}
+                                    handle={handle}
+                                    marks={marks}
+                                    step={25}
                                 />
                             </div>
-                            <span>{metricValues[selectedGenre]?.[metricIndex] || 0}</span>
+                            <span>{valueLabelFormat(metricValues[selectedGenre]?.[metricIndex] || 0)}</span>
                         </div>
                     ))
                 )}

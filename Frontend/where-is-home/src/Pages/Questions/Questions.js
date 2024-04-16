@@ -90,8 +90,9 @@ function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,z
 
     const renderSlidersForTab = () => {
         return sliderGroupings[tabs[activeTab]].map((group, index) => (
-            <div key={`slider-${activeTab}-${index}`}>
-                <label>{group.name}</label>
+            <div key={`slider-${activeTab}-${index}`} className="slider-container">
+                <label className="label">{group.name}</label>
+                <div className='slider-lefties'>
                 <Box sx={{ width: 300 }}>
                     <Slider
                         aria-label={group.name}
@@ -103,12 +104,13 @@ function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,z
                         max={1}
                         onChange={(event, newValue) => onSliderChange(newValue, group.ids)}
                         valueLabelFormat={valueLabelFormat}
-
                     />
                 </Box>
+                </div>
             </div>
         ));
     };
+    
 
    
 

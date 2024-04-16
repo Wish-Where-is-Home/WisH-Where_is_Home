@@ -430,7 +430,7 @@ const geoJSONStyle = (feature) => {
 
 
   const gotothirdpage = () =>{
-    navigate('/metricspage', {state: {districtId,IdType,scores} })
+    navigate('/metricspage', {state: {districtId,IdType,scores,slidersValues,sliderValuesCruz} })
 }
 
 

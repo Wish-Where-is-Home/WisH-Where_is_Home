@@ -9,7 +9,7 @@ import { MapContainer, TileLayer,GeoJSON } from 'react-leaflet';
 import L from 'leaflet';
 import Button from '@mui/material/Button';
 
-function MetricsPage(zoneData,updateScores) {
+function MetricsPage({darkMode,zoneData,scores,updateScores}) {
     const {t} = useTranslation("common");
     const location = useLocation();
     const [isPropertiesOpen, setIsPropertiesOpen] = useState(false);
@@ -23,7 +23,8 @@ function MetricsPage(zoneData,updateScores) {
     const [minZoom, setMinZoom] = useState(null);
     const [zoomButtonPosition, setZoomButtonPosition] = useState('10px');
     const [zoom2buttonPosition,setZoom2ButtonPosition] = useState('10px');
-    const [scores,setScores] = useState(null);
+    const [slidersValues,setSlidersValues] = useState(null);
+    const [sliderValuesCruz,setSliderValuesCruz] = useState(null);
 
     const mapRef = useRef(null);
     const geoJsonRef = useRef(null);
@@ -33,99 +34,100 @@ function MetricsPage(zoneData,updateScores) {
     if (location.state && location.state.districtId && location.state.IdType) {
         setDistrictId(location.state.districtId);
         setIdType(location.state.IdType); 
-        setScores(location.state.scores);
+        setSlidersValues(location.state.slidersValues);
+        setSliderValuesCruz(location.state.sliderValuesCruz);
     }
 }, [location.state]);
 
 const zone = IdType;
 
-// useEffect(() => {
-//   function calculateScores(zoneData, sliderValuesThemesupdated, sliderValuesMetricsupdated, zoneType) {
-//       if (zoneData !== null) {
-//           const scores = {};
-//           const data = zoneData;
-//           const sliderValuesMetrics = sliderValuesMetricsupdated;  
-//           const sliderValuesThemes = sliderValuesThemesupdated;
 
-//           const metricsMapping = {
-//               'sports_center': { id: 1, theme: 3 },
-//               'commerce': { id: 2, theme: 0 },
-//               'bakery': { id: 3, theme: 0 },
-//               'food_court': { id: 4, theme: 0 },
-//               'nightlife': { id: 5, theme: 1 },
-//               'camping': { id: 6, theme: 3 },
-//               'health_services': { id: 7, theme: 2 },
-//               'hotel': { id: 8, theme: 1 },
-//               'supermarket': { id: 9, theme: 0 },
-//               'culture': { id: 10, theme: 1 },
-//               'school': { id: 11, theme: 5 },
-//               'library': { id: 12, theme: 5 },
-//               'parks': { id: 13, theme: 3 },
-//               'services': { id: 14, theme: 4 },
-//               'kindergarten': { id: 15, theme: 5 },
-//               'university': { id: 16, theme: 5 },
-//               'entretainment': { id: 17, theme: 1 },
-//               'pharmacy': { id: 18, theme: 2 },
-//               'swimming_pool': { id: 19, theme: 3 },
-//               'bank': { id: 20, theme: 4 },
-//               'post_office': { id: 21, theme: 4 },
-//               'hospital': { id: 22, theme: 2 },
-//               'clinic': { id: 23, theme: 2 },
-//               'veterinary': { id: 24, theme: 2 },
-//               'beach_river': { id: 25, theme: 3 },
-//               'industrial_zone': { id: 26, theme: 3 },
-//               'bicycle_path': { id: 27, theme: 3 },
-//               'walking_routes': { id: 28, theme: 3 },
-//               'car_park': { id: 29, theme: 4 }
-//           };
+useEffect(() => {
+  function calculateScores(zoneData, sliderValuesThemesupdated, sliderValuesMetricsupdated, zoneType) {
+      if (zoneData !== null) {
+          const scores = {};
+          const data = zoneData;
+          const sliderValuesMetrics = sliderValuesMetricsupdated;  
+          const sliderValuesThemes = sliderValuesThemesupdated;
 
-//           if (typeof sliderValuesThemes === 'object' && sliderValuesThemes !== null) {
-//               for (const id in data[zoneType]) {
-//                   if (data[zoneType].hasOwnProperty(id)) {
-//                       const modifiedMetrics = {};
+          const metricsMapping = {
+              'sports_center': { id: 1, theme: 3 },
+              'commerce': { id: 2, theme: 0 },
+              'bakery': { id: 3, theme: 0 },
+              'food_court': { id: 4, theme: 0 },
+              'nightlife': { id: 5, theme: 1 },
+              'camping': { id: 6, theme: 3 },
+              'health_services': { id: 7, theme: 2 },
+              'hotel': { id: 8, theme: 1 },
+              'supermarket': { id: 9, theme: 0 },
+              'culture': { id: 10, theme: 1 },
+              'school': { id: 11, theme: 5 },
+              'library': { id: 12, theme: 5 },
+              'parks': { id: 13, theme: 3 },
+              'services': { id: 14, theme: 4 },
+              'kindergarten': { id: 15, theme: 5 },
+              'university': { id: 16, theme: 5 },
+              'entretainment': { id: 17, theme: 1 },
+              'pharmacy': { id: 18, theme: 2 },
+              'swimming_pool': { id: 19, theme: 3 },
+              'bank': { id: 20, theme: 4 },
+              'post_office': { id: 21, theme: 4 },
+              'hospital': { id: 22, theme: 2 },
+              'clinic': { id: 23, theme: 2 },
+              'veterinary': { id: 24, theme: 2 },
+              'beach_river': { id: 25, theme: 3 },
+              'industrial_zone': { id: 26, theme: 3 },
+              'bicycle_path': { id: 27, theme: 3 },
+              'walking_routes': { id: 28, theme: 3 },
+              'car_park': { id: 29, theme: 4 }
+          };
 
-//                       for (const metric in data[zoneType][id]) {
-//                           if (data[zoneType][id].hasOwnProperty(metric)) {
-//                               const metricsMappingEntry = metricsMapping[metric];
-//                               if (metricsMappingEntry) {
-//                                   const SliderValueMetrics = sliderValuesMetrics[metricsMappingEntry.id];
-//                                   if (SliderValueMetrics) {
-//                                       const metricScore = parseFloat(data[zoneType][id][metric]) * SliderValueMetrics;
-//                                       modifiedMetrics[metric] = metricScore;
-//                                   }
-//                               } else {
-//                                   console.error(`Metrics mapping entry not found for metric ${metric}.`);
-//                               }
-//                           }
-//                       }
+          if (typeof sliderValuesThemes === 'object' && sliderValuesThemes !== null) {
+              for (const id in data[zoneType]) {
+                  if (data[zoneType].hasOwnProperty(id)) {
+                      const modifiedMetrics = {};
+
+                      for (const metric in data[zoneType][id]) {
+                          if (data[zoneType][id].hasOwnProperty(metric)) {
+                              const metricsMappingEntry = metricsMapping[metric];
+                              if (metricsMappingEntry) {
+                                  const SliderValueMetrics = sliderValuesMetrics[metricsMappingEntry.id];
+                                  if (SliderValueMetrics) {
+                                      const metricScore = parseFloat(data[zoneType][id][metric]) * SliderValueMetrics;
+                                      modifiedMetrics[metric] = metricScore;
+                                  }
+                              } else {
+                                  console.error(`Metrics mapping entry not found for metric ${metric}.`);
+                              }
+                          }
+                      }
                       
 
-//                       let score = 0;
-//                       for (const metric in modifiedMetrics) {
-//                           if (modifiedMetrics.hasOwnProperty(metric)) {
-//                               score += modifiedMetrics[metric];
-//                               const themeId = metricsMapping[metric].theme;
-//                               const SliderValueTheme = sliderValuesThemes[themeId];
-//                               scores[id] = score * SliderValueTheme.value;
-//                           }
-//                       }
-//                   }
-//               }
+                      let score = 0;
+                      for (const metric in modifiedMetrics) {
+                          if (modifiedMetrics.hasOwnProperty(metric)) {
+                              score += modifiedMetrics[metric];
+                              const themeId = metricsMapping[metric].theme;
+                              const SliderValueTheme = sliderValuesThemes[themeId];
+                              scores[id] = score * SliderValueTheme.value;
+                          }
+                      }
+                  }
+              }
 
-//               console.log("scores2", scores);
-//               return scores;
-//           } else {
-//               console.error("sliderValuesThemes is not an array.");
-//               return null;
-//           }
-//       }
-//   }
+             
+              return scores;
+          } else {
+              return null;
+          }
+      }
+  }
 
  
   
-//   const calculatedScores=calculateScores(zoneData, slidersValues, sliderValues, zone);
-//   updateScores(calculatedScores);
-// }, [slidersValues, sliderValues,IdType]);
+  const calculatedScores=calculateScores(zoneData, slidersValues, sliderValuesCruz, zone);
+  updateScores(calculatedScores);
+}, [slidersValues, sliderValuesCruz,IdType]);
 
 
 
@@ -266,7 +268,7 @@ const zone = IdType;
       }
   
       const filteredScores = {};
-      if (districtId > 2) {
+      if (districtId.length >= 2) {
           for (const key in scores) {
               if (key.startsWith(districtId)) {
                   filteredScores[key] = scores[key];

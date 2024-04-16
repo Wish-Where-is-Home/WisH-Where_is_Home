@@ -75,7 +75,7 @@ const Login_register = ({ darkMode,firebaseConfig }) => {
             console.log("User signed in with Google:", user);
     
             // Create token
-            const tokenResponse = await fetch('http://localhost:8000/loginusers/', {
+            const tokenResponse = await fetch('http://mednat.ieeta.pt:9009/loginusers/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

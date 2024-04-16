@@ -19,6 +19,10 @@ export const AuthProvider = ({ children }) => {
         
         const { email, name, id } = decodedToken;
 
+        console.log (email);
+        console.log(name);
+        console.log(id);
+
         setUserInfo({ email, name, id });
     } catch (error) {
         console.error('Error decoding token:', error);
@@ -62,7 +66,7 @@ export const AuthProvider = ({ children }) => {
           const userId = response.user.uid;
           
         
-          const tokenResponse = await fetch('http://localhost:8000/loginusers/', {
+          const tokenResponse = await fetch('http://mednat.ieeta.pt:9009/loginusers/', {
               method: 'POST',
               headers: {
                   'Content-Type': 'application/json'

@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './Metrics.css';
 import { ChevronLeft, ChevronRight } from 'react-feather';
-import Slider from 'rc-slider';
-import Handle from 'rc-slider/lib/Handles/Handle';
+import Slider from '@mui/material/Slider';
 import 'rc-slider/assets/index.css';
 import { useTranslation } from "react-i18next";
-import { Tooltip } from '@mui/material';
 
 
 function Metrics({ darkMode, isOpen, toggleSidebar, zone, zoneData, slidersValues, sliderValuesCruz, updateScores, setSliderValuesCruz }) {
@@ -118,11 +116,6 @@ function Metrics({ darkMode, isOpen, toggleSidebar, zone, zoneData, slidersValue
     const valueLabelFormat = (value) => {
         const labels = [t('notimportant'), t('slightly'), t('moderate'), t('important'), t('very_Important')];
         return labels[Math.round(value * 4)];
-    };
-
-    const marks = {
-        0: t('notimportant'),
-        100: t('very_Important'),
     };
 
     const onSliderChange = (newValue, groupIds) => {
@@ -267,7 +260,7 @@ function Metrics({ darkMode, isOpen, toggleSidebar, zone, zoneData, slidersValue
                                                     max={1}
                                                     value={sliderValuesCruz[group.ids[0]]}
                                                     valueLabelDisplay="auto"
-                                                    onChange={(newValue) => onSliderChange(newValue, group.ids)}
+                                                    onChange={(event, newValue) => onSliderChange(newValue, group.ids)}
                                                     marks={[{ value: 0, label: t('notimportant') }, { value: 1, label: t('very_Important') }]}
                                                     step={0.25}
                                                     valueLabelFormat={valueLabelFormat}

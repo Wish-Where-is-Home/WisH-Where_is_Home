@@ -62,7 +62,7 @@ const portugalBounds = [
     }
   }, [location.state]);
 
-  const sliderOptions = ['Not Important', 'Slightly Important', 'Moderate', 'Important', 'Very Important'];
+  const sliderOptions = [t('notimportant'), t('slightly'), t('moderate'), t('important'), t('very_Important')];
 
   const handleSliderChange = (index, value) => {
     const updatedSliders = slidersValues.map((slider, idx) => {
@@ -202,7 +202,7 @@ const geoJSONStyle = (feature) => {
         return {
             fillColor: 'transparent',
             weight: 2,
-            color: 'black',
+            color: darkMode ? 'white' : 'black',
             fillOpacity: 0.3
         };
     }
@@ -233,7 +233,7 @@ const geoJSONStyle = (feature) => {
         fillColor: fillColor,
         weight: 2,
         color: darkMode ? 'white' : 'black',
-        fillOpacity: 0.2
+        fillOpacity: darkMode ? 0.2 : 0.4
     };
 };
 
@@ -430,6 +430,7 @@ const geoJSONStyle = (feature) => {
 
 
   const gotothirdpage = () =>{
+   
     navigate('/metricspage', {state: {districtId,IdType,scores,slidersValues,sliderValuesCruz} })
 }
 

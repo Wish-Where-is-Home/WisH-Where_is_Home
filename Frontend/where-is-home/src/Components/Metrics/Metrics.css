@@ -17,12 +17,11 @@
     position: fixed;
     top: 70px;
     left: -30%;
-    /* Adjusted from right: -27% to left: -30% */
     width: 30%;
     height: calc(100% - 70px);
     transition: left 0.3s ease;
-    /* Adjusted from right to left */
-    z-index: 700;
+    
+    z-index: 1000;
     
 }
 
@@ -125,7 +124,7 @@
 .metrics-container {
     height: 100%;
     width: 70%;
-    margin: 10% 15%;
+    margin: 10% 12%;
 }
 
 .slider-item {
@@ -156,11 +155,12 @@
 
 .slider-container2 {
     align-items: center;
-    height: 10%;
+    height: 4rem;
     border: 1px solid #ccc; 
-    padding: 10px 10px;
+    padding: 10px 20px;
     border-radius: 5px;
     margin-bottom: 3%;
+    width: 100%;
     margin-left: 5%;
     margin-right: 5%;
 
@@ -192,3 +192,4 @@
 .slider-container2 .rc-slider-step {
     background-color: var(--slider-track-color);
 }
+

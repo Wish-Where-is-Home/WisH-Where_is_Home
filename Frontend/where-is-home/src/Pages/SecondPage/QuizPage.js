@@ -75,50 +75,49 @@ const portugalBounds = [
   };
 
 
-const sliderGroupings = {
-  [t('commerce')]: [
-      { name: "Commerce", ids: ['2'] },
-      { name: "Bakery", ids: ['3'] },
-      { name: "Food Courts", ids: ['4'] },
-      { name: "Supermarket", ids: ['9'] }
-  ],
-  [t('social_leisure')]: [
-      { name: "Nightlife", ids: ['5'] },
-      { name: "Hotel", ids: ['8'] },
-      { name: "Culture", ids: ['10'] },
-      { name: "Entertainment", ids: ['17'] }
-  ],
-  [t('health')]: [
-      { name: "Health Services", ids: ['7'] },
-      { name: "Pharmacy", ids: ['18'] },
-      { name: "Hospital", ids: ['22'] },
-      { name: "Clinic", ids: ['23'] },
-      { name: "Veterinary", ids: ['24'] }
-  ],
-  [t('nature_sports')]: [
-      { name: "Sports Center", ids: ['1'] },
-      { name: "Camp Sites", ids: ['6'] },
-      { name: "Parks", ids: ['13'] },
-      { name: "Swimming Pool", ids: ['19'] },
-      { name: "Beach River", ids: ['25'] },
-      { name: "Bicycle Paths", ids: ['27'] },
-      { name: "Walking Routes", ids: ['28'] }
-  ],
-  [t('services')]: [
-      { name: "Emergency Services", ids: ['14'] },
-      { name: "Banks", ids: ['20'] },
-      { name: "Post Offices", ids: ['21'] },
-      { name: "Industrial Zones", ids: ['26'] },
-      { name: "Car Parks", ids: ['29'] }
-  ],
-  [t('Education')]: [
-      { name: "Schools", ids: ['11'] },
-      { name: "Libraries", ids: ['12'] },
-      { name: "Kindergartens", ids: ['15'] },
-      { name: "Universities", ids: ['16'] }
-  ]
-};
-
+  const sliderGroupings = {
+    [t('commerce')]: [
+        { name: t("commerce"), ids: ['2'] },
+        { name: t("Bakery"), ids: ['3'] },
+        { name: t("Food Courts"), ids: ['4'] },
+        { name: t("Supermarket"), ids: ['9'] }
+    ],
+    [t('social_leisure')]: [
+        { name: t("Nightlife"), ids: ['5'] },
+        { name: t("Hotel"), ids: ['8'] },
+        { name: t("Culture"), ids: ['10'] },
+        { name: t("Entertainment"), ids: ['17'] }
+    ],
+    [t('health')]: [
+        { name: t("Health Services"), ids: ['7'] },
+        { name: t("Pharmacy"), ids: ['18'] },
+        { name: t("Hospital"), ids: ['22'] },
+        { name: t("Clinic"), ids: ['23'] },
+        { name: t("Veterinary"), ids: ['24'] }
+    ],
+    [t('nature_sports')]: [
+        { name: t("Sports Center"), ids: ['1'] },
+        { name: t("Camp Sites"), ids: ['6'] },
+        { name: t("Parks"), ids: ['13'] },
+        { name: t("Swimming Pool"), ids: ['19'] },
+        { name: t("Beach River"), ids: ['25'] },
+        { name: t("Bicycle Paths"), ids: ['27'] },
+        { name: t("Walking Routes"), ids: ['28'] }
+    ],
+    [t('services')]: [
+        { name: t("Emergency Services"), ids: ['14'] },
+        { name: t("Banks"), ids: ['20'] },
+        { name: t("Post Offices"), ids: ['21'] },
+        { name: t("Industrial Zones"), ids: ['26'] },
+        { name: t("Car Parks"), ids: ['29'] }
+    ],
+    [t('Education')]: [
+        { name: t("Schools"), ids: ['11'] },
+        { name: t("Libraries"), ids: ['12'] },
+        { name: t("Kindergartens"), ids: ['15'] },
+        { name: t("Universities"), ids: ['16'] }
+    ]
+  };
 
 
 

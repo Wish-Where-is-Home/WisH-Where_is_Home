@@ -42,6 +42,36 @@
     "important":"Important",
     "next":"Next",
     "pquizpage":"What are you looking for?",
-    "back":"Back"
+    "back":"Back",
+
+
+    "Bakery": "Bakery",
+    "FoodCourts":"Food Courts",
+    "Supermarket":"Supermarket",
+    "NightLife":"Nightlife",
+    "Hotel":"Hotel",
+    "HealthServices":"Health Services",
+    "Pharmacy":"Pharmacy",
+    "Hospital":"Hospital",
+    "Clinic":"Clinic",
+    "Veterinary":"Veterinary",
+    "SportsCenter":"Sports Center",
+    "Camp Sites":"Camp Sites",
+    "Parks":"Parks",
+    "Swimming Pool":"Swimming Pool",
+    "Beach River":"Beach River",
+    "Bicycle Paths":"Bicycle Paths",
+    "Walking Routes":"Walking Routes",
+    "EmergencyServices":"EmergencyServices",
+    "Banks":"Banks",
+    "PostOffices":"Post Offices",
+    "IndustrialZones":"Industrial zones",
+    "Carparks":"Car parks",
+    "Schools":"Schools",
+    "Libracies":"Libracies",
+    "Kindergartens":"Kindergartens",
+    "Universities":"Universities"
+    
+
 
 }

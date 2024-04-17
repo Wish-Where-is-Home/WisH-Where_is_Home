@@ -26,6 +26,7 @@ function MetricsPage({darkMode,zoneData,scores,updateScores}) {
     const [slidersValues,setSlidersValues] = useState(null);
     const [sliderValuesCruz,setSliderValuesCruz] = useState(null);
 
+
     const mapRef = useRef(null);
     const geoJsonRef = useRef(null);
 
@@ -283,7 +284,7 @@ useEffect(() => {
       const id = feature.id.split('.')[1];
       const score = scores[id] || 0;
   
-      const sortedScores = Object.entries(filteredScores).sort((a, b) => a[1] - b[1]); // Ordenando ao contrário
+      const sortedScores = Object.entries(filteredScores).sort((a, b) => a[1] - b[1]); 
       const totalColors = sortedScores.length;
   
       const fillColor = calculateFillColor(sortedScores.findIndex(entry => entry[0] === id), totalColors);
@@ -292,7 +293,7 @@ useEffect(() => {
           fillColor: fillColor,
           weight: 2,
           color: 'black',
-          fillOpacity: 0.4
+          fillOpacity: 0.1
       };
   };
 
@@ -301,6 +302,8 @@ useEffect(() => {
     
   
     useEffect(() => {
+
+      console.log(sliderValuesCruz)
 
       const fetchGeojsonData = async () => {
         try {
@@ -445,7 +448,7 @@ useEffect(() => {
                         
                     </MapContainer>
               )}
-            <Metrics isOpen={isMetricsOpen} toggleSidebar={toggleMetrics} />
+            {/* <Metrics isOpen={isMetricsOpen} toggleSidebar={toggleMetrics} sliderValuesCruz={sliderValuesCruz} setSliderValuesCruz={setSliderValuesCruz}  /> */}
         </div>
     );
 }

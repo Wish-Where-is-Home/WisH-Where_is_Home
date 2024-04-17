@@ -22,6 +22,7 @@ export const AuthProvider = ({ children }) => {
         console.log (email);
         console.log(name);
         console.log(id);
+        console.log(typeof(id));
 
         setUserInfo({ email, name, id });
     } catch (error) {

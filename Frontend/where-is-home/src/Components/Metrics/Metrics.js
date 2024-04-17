@@ -6,19 +6,9 @@ import 'rc-slider/assets/index.css';
 import { useTranslation } from "react-i18next";
 
 
-function Metrics({isOpen, toggleSidebar}){
+function Metrics({isOpen, toggleSidebar,sliderValuesCruz,setSliderValuesCruz}){
    
-    const [metricValues, setMetricValues] = useState({
-        "Health": [],
-        "Nature and Environment": [],
-        "Culture": [],
-        "Educational": [],
-        "Sport": [],
-        "Commerce": [],
-        "Social and Leisure": [],
-        "Service": []
-
-    });
+   
 
 
     const toggleSidebarInternal = () => {
@@ -26,23 +16,12 @@ function Metrics({isOpen, toggleSidebar}){
     };
 
     const handleSliderChange = (value, metricIndex, genre) => {
-        const updatedMetrics = { ...metricValues };
+        const updatedMetrics = { ...sliderValuesCruz };
         updatedMetrics[genre][metricIndex] = value;
-        setMetricValues(updatedMetrics);
+        setSliderValuesCruz(updatedMetrics);
     };
     const [selectedGenre, setSelectedGenre] = useState('Health');
 
-
-    const metricNames = {
-        Health: ['Hospital', 'Nursing Home', 'Clinic', 'Pharmacy', 'Dentist'],
-        "Nature and Environment": ['Park', 'Playground', 'Fluvial Beach', 'Hiking Trail'],
-        Culture: ['Museum', 'Library', 'Art Gallery', 'Monument', 'Theater'],
-        Educational: ['University', 'Primary School', 'Middle School', 'Secondary School', 'Pre-School'],
-        Sport: ['Gym', 'Swimming Pool', 'Tennis Court', 'Football Field', 'Basketball Court'],
-        Commerce: ['Supermarket', 'Bakery', 'Butchery', 'Fish Market', 'Bookstore'],
-        "Social and Leisure": ['Restaurant', 'Cafe', 'Night Club', 'Cinema'],
-        Service: ['Bank', 'Post Office', 'Police Station', 'Fire Station']
-    };
     
 
     const secondSetOfMetrics = [
@@ -116,11 +95,11 @@ function Metrics({isOpen, toggleSidebar}){
                                 <Slider
                                     min={0}
                                     max={5}
-                                    value={metricValues[selectedGenre]?.[metricIndex] || 0}
+                                    value={[selectedGenre]?.[metricIndex] || 0}
                                     onChange={(value) => handleSliderChange(value, metricIndex, selectedGenre)}
                                 />
                             </div>
-                            <span>{metricValues[selectedGenre]?.[metricIndex] || 0}</span>
+                            <span>{sliderValuesCruz[selectedGenre]?.[metricIndex] || 0}</span>
                         </div>
                     ))
                 )}

@@ -203,7 +203,7 @@ const geoJSONStyle = (feature) => {
             fillColor: 'transparent',
             weight: 2,
             color: 'black',
-            fillOpacity: 0.4
+            fillOpacity: 0.3
         };
     }
     console.log(districtId);
@@ -233,7 +233,7 @@ const geoJSONStyle = (feature) => {
         fillColor: fillColor,
         weight: 2,
         color: 'black',
-        fillOpacity: 0.4
+        fillOpacity: 0.2
     };
 };
 

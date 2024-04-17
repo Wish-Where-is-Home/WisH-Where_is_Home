@@ -23,7 +23,7 @@
 
 
 .light-mode{
-  --background-color: var(--background-color-light);
+  --background-color2: var(--background-color-light);
   --blacktowhite:var(--blacktowhite-light) ;
   --text-shadow: var(--text-shadow-light);
   --hometitle:var(--hometitle-light);
@@ -33,7 +33,7 @@
 
 
 .dark-mode{
-  --background-color: var(--background-color-dark);
+  --background-color2: var(--background-color-dark);
   --blacktowhite:var(--blacktowhite-dark) ;
   --text-shadow: var(--text-shadow-dark);
   --hometitle:var(--hometitle-dark);

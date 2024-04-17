@@ -110,7 +110,7 @@ function Metrics({ darkMode, isOpen, toggleSidebar }) {
 
     const valueLabelFormat = (value) => {
         const labels = [t('notimportant'), t('slightly'), t('moderate'), t('important'), t('very_Important')];
-        return labels[Math.floor(value / 25)]; // Assuming the slider range is still 0-100
+        return labels[Math.floor(value / 25)]; 
     };
 
     const marks = {
@@ -124,35 +124,37 @@ function Metrics({ darkMode, isOpen, toggleSidebar }) {
                 {isOpen ? <ChevronLeft size={24} /> : <ChevronRight size={24} />}
             </div>
             <h1 className='PropText-metrics'>{t('AdjustPref')}</h1>
-            <div className='navbar-list-metrics'>
-                {secondSetOfMetrics.map((item, index) => (
-                    <div key={index} className={`navbar-item-metrics ${selectedGenre === item.genre ? 'active' : ''}`}>
-                        <button onClick={() => setSelectedGenre(item.genre === selectedGenre ? null : item.genre)}>
-                            {t(item.genre)}
-                        </button>
-                    </div>
-                ))}
-            </div>
-            <div className="metrics-container">
-                {selectedGenre && (
-                    metricNames[selectedGenre].map((name, metricIndex) => (
-                        <div key={metricIndex} className="slider-item">
-                            <label>{name}:</label>
-                            <div className="slider-container2">
-                                <Slider
-                                    min={0}
-                                    max={100}
-                                    value={metricValues[selectedGenre]?.[metricIndex] || 0}
-                                    onChange={(value) => handleSliderChange(value, metricIndex, selectedGenre)}
-                                    handle={handle}
-                                    marks={marks}
-                                    step={25}
-                                />
-                            </div>
-                            <span>{valueLabelFormat(metricValues[selectedGenre]?.[metricIndex] || 0)}</span>
+            <div className='sidebar-content'>
+                <div className='navbar-list-metrics'>
+                    {secondSetOfMetrics.map((item, index) => (
+                        <div key={index} className={`navbar-item-metrics ${selectedGenre === item.genre ? 'active' : ''}`}>
+                            <button onClick={() => setSelectedGenre(item.genre === selectedGenre ? null : item.genre)}>
+                                {t(item.genre)}
+                            </button>
                         </div>
-                    ))
-                )}
+                    ))}
+                </div>
+                <div className="metrics-container">
+                    {selectedGenre && (
+                        metricNames[selectedGenre].map((name, metricIndex) => (
+                            <div key={metricIndex} className="slider-item">
+                                <label>{name}:</label>
+                                <div className="slider-container2">
+                                    <Slider
+                                        min={0}
+                                        max={100}
+                                        value={metricValues[selectedGenre]?.[metricIndex] || 0}
+                                        onChange={(value) => handleSliderChange(value, metricIndex, selectedGenre)}
+                                        handle={handle}
+                                        marks={marks}
+                                        step={25}
+                                    />
+                                </div>
+                                <span>{valueLabelFormat(metricValues[selectedGenre]?.[metricIndex] || 0)}</span>
+                            </div>
+                        ))
+                    )}
+                </div>
             </div>
         </div>
     );

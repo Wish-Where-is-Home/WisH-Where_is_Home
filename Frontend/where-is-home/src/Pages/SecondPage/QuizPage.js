@@ -232,7 +232,7 @@ const geoJSONStyle = (feature) => {
     return {
         fillColor: fillColor,
         weight: 2,
-        color: 'black',
+        color: darkMode ? 'white' : 'black',
         fillOpacity: 0.2
     };
 };

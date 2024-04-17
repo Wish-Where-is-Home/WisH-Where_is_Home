@@ -11,6 +11,8 @@
 }
 
 
+
+
 .sidebar-metrics {
     position: fixed;
     top: 70px;
@@ -20,7 +22,7 @@
     height: calc(100% - 70px);
     transition: left 0.3s ease;
     /* Adjusted from right to left */
-    z-index: 1000;
+    z-index: 700;
     
 }
 
@@ -33,7 +35,7 @@
     top: 50%;
     right: -30px;
     padding: 10px;
-    background-color: var(--background-color-dark);
+    background-color: var(--background-color2);
     color: rgba(13, 221, 218, 1);
     border: none;
     cursor: pointer;
@@ -124,7 +126,6 @@
     height: 100%;
     width: 70%;
     margin: 10% 15%;
-
 }
 
 .slider-item {

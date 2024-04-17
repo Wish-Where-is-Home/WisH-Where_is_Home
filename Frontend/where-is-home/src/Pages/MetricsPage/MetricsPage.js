@@ -263,7 +263,7 @@ useEffect(() => {
           return {
               fillColor: 'transparent',
               weight: 2,
-              color: 'black',
+              color: darkMode ? 'white' : 'black',
               fillOpacity: 0.4
           };
       }
@@ -292,8 +292,8 @@ useEffect(() => {
       return {
           fillColor: fillColor,
           weight: 2,
-          color: 'black',
-          fillOpacity: 0.1
+          color: 'white',
+          fillOpacity: 0.3
       };
   };
 
@@ -425,7 +425,7 @@ useEffect(() => {
 
     return (
         <div className="metrics-page-container">
-             <Properties isOpen={isPropertiesOpen} toggleSidebar={toggleProperties} />
+             <Properties  darkMode={darkMode} isOpen={isPropertiesOpen} toggleSidebar={toggleProperties} />
             
              {mapCenter[0] !== null && mapCenter[1] !== null && (
                 <MapContainer  ref={mapRef}  style={{ height: "100%", width: "100%" }} 

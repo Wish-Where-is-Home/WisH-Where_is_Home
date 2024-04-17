@@ -59,6 +59,18 @@ const portugalBounds = [
         setIdType("municipios");
       }
 
+      if (location.state.slidersValues){
+        setSlidersValues(location.state.slidersValues);
+      }
+
+      if (location.state.sliderValuesCruz){
+        setSliderValuesCruz(location.state.sliderValuesCruz);
+      }
+
+      if(location.state.zone){
+        setIdType(location.state.zone);
+      }
+
     }
   }, [location.state]);
 
@@ -430,7 +442,7 @@ const geoJSONStyle = (feature) => {
 
   const gotothirdpage = () =>{
    
-    navigate('/metricspage', {state: {districtId,IdType,scores,slidersValues,sliderValuesCruz} })
+    navigate('/metricspage', {state: {selectedDistrict,districtId,IdType,scores,slidersValues,sliderValuesCruz} })
 }
 
 

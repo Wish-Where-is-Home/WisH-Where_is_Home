@@ -6,7 +6,7 @@ import 'rc-slider/assets/index.css';
 import { useTranslation } from "react-i18next";
 
 
-function Metrics({ darkMode, isOpen, toggleSidebar, zone, zoneData, slidersValues, sliderValuesCruz, updateScores, setSliderValuesCruz }) {
+function Metrics({ darkMode, isOpen, toggleSidebar, zone, zoneData, slidersValues, sliderValuesCruz, updateScores, setSliderValuesCruz,handleGoBackPage }) {
 
     const { t } = useTranslation("common");
 
@@ -227,6 +227,8 @@ function Metrics({ darkMode, isOpen, toggleSidebar, zone, zoneData, slidersValue
         updateScores(calculatedScores);
     }, [slidersValues, sliderValuesCruz,zone]);
 
+
+    
   
 
     return (
@@ -274,8 +276,10 @@ function Metrics({ darkMode, isOpen, toggleSidebar, zone, zoneData, slidersValue
                         ))
                     )}
                 </div>
-                <div>
-                    <button type="button" onClick={}
+                <div className='metricspage-buttons-sections'>
+                    <button type="button" onClick={handleGoBackPage}>
+                        {t('back')}
+                    </button>
                 </div>
             </div>
         </div>

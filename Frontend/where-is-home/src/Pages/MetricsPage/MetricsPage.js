@@ -6,6 +6,7 @@ import Properties from '../../Components/Properties/Sidebar';
 import Metrics from '../../Components/Metrics/Metrics';
 import "leaflet/dist/leaflet.css";
 import { MapContainer, TileLayer,GeoJSON } from 'react-leaflet';
+import { useNavigate } from 'react-router-dom';
 import L from 'leaflet';
 import Button from '@mui/material/Button';
 
@@ -26,7 +27,7 @@ function MetricsPage({darkMode,zoneData,scores,updateScores}) {
     const [slidersValues,setSlidersValues] = useState(null);
     const [sliderValuesCruz,setSliderValuesCruz] = useState(null);
 
-
+    const navigate = useNavigate();
     const mapRef = useRef(null);
     const geoJsonRef = useRef(null);
 
@@ -37,6 +38,7 @@ function MetricsPage({darkMode,zoneData,scores,updateScores}) {
         setIdType(location.state.IdType); 
         setSlidersValues(location.state.slidersValues);
         setSliderValuesCruz(location.state.sliderValuesCruz);
+        setSelectedDistrict(location.state.selectedDistrict);
     }
 }, [location.state]);
 
@@ -333,6 +335,12 @@ const zone = IdType;
           });
         }
       };
+
+
+      function handleGoBackPage() {
+        navigate('/quiz', {state: {selectedDistrict,districtId,IdType,scores,slidersValues,sliderValuesCruz} })
+    }
+
       
 
     return (
@@ -361,7 +369,7 @@ const zone = IdType;
                     </MapContainer>
               )}
             {(slidersValues !== null && sliderValuesCruz !== null) && (
-            <Metrics isOpen={isMetricsOpen} toggleSidebar={toggleMetrics} darkMode={darkMode} zone={zone} zoneData={zoneData} slidersValues={slidersValues} sliderValuesCruz={sliderValuesCruz} updateScores={updateScores} setSliderValuesCruz={setSliderValuesCruz}/>
+            <Metrics isOpen={isMetricsOpen} toggleSidebar={toggleMetrics} darkMode={darkMode} zone={zone} zoneData={zoneData} slidersValues={slidersValues} sliderValuesCruz={sliderValuesCruz} updateScores={updateScores} setSliderValuesCruz={setSliderValuesCruz} handleGoBackPage={handleGoBackPage}/>
           )}
         </div>
     );

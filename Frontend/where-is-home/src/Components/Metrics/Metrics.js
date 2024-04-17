@@ -59,7 +59,7 @@ function Metrics({ darkMode, isOpen, toggleSidebar, zone, zoneData, slidersValue
         [t('commerce')]: [
             { name: t("commerce"), ids: ['2'] },
             { name: t("Bakery"), ids: ['3'] },
-            { name: t("Food Courts"), ids: ['4'] },
+            { name: t("FoodCourts"), ids: ['4'] },
             { name: t("Supermarket"), ids: ['9'] }
         ],
         [t('social_leisure')]: [
@@ -69,27 +69,27 @@ function Metrics({ darkMode, isOpen, toggleSidebar, zone, zoneData, slidersValue
             { name: t("Entertainment"), ids: ['17'] }
         ],
         [t('health')]: [
-            { name: t("Health Services"), ids: ['7'] },
+            { name: t("HealthServices"), ids: ['7'] },
             { name: t("Pharmacy"), ids: ['18'] },
             { name: t("Hospital"), ids: ['22'] },
             { name: t("Clinic"), ids: ['23'] },
             { name: t("Veterinary"), ids: ['24'] }
         ],
         [t('nature_sports')]: [
-            { name: t("Sports Center"), ids: ['1'] },
-            { name: t("Camp Sites"), ids: ['6'] },
+            { name: t("SportsCenter"), ids: ['1'] },
+            { name: t("CampSites"), ids: ['6'] },
             { name: t("Parks"), ids: ['13'] },
-            { name: t("Swimming Pool"), ids: ['19'] },
-            { name: t("Beach River"), ids: ['25'] },
+            { name: t("SwimmingPool"), ids: ['19'] },
+            { name: t("BeachRiver"), ids: ['25'] },
             { name: t("Bicycle Paths"), ids: ['27'] },
             { name: t("Walking Routes"), ids: ['28'] }
         ],
         [t('services')]: [
-            { name: t("Emergency Services"), ids: ['14'] },
+            { name: t("EmergencyServices"), ids: ['14'] },
             { name: t("Banks"), ids: ['20'] },
-            { name: t("Post Offices"), ids: ['21'] },
-            { name: t("Industrial Zones"), ids: ['26'] },
-            { name: t("Car Parks"), ids: ['29'] }
+            { name: t("PostOffices"), ids: ['21'] },
+            { name: t("IndustrialZones"), ids: ['26'] },
+            { name: t("CarParks"), ids: ['29'] }
         ],
         [t('Education')]: [
             { name: t("Schools"), ids: ['11'] },

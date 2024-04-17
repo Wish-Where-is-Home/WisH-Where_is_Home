@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../AuthContext/AuthContext';
 
 
-
+console.log("Token:", localStorage.getItem('token'));
 
 function Homepage( {darkMode}) {
     const [selectedDistrict, setSelectedDistrict] = useState('Portugal');

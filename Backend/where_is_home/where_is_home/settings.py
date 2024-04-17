@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.gis',
     'corsheaders',
     'rest_framework',
+    'drf_yasg',
+    'where_is_home'
     ]
 
 APPEND_SLASH = False

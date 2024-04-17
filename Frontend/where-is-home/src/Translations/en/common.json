@@ -42,6 +42,13 @@
     "important":"Important",
     "next":"Next",
     "pquizpage":"What are you looking for?",
-    "back":"Back"
+    "back":"Back",
+    "name": "Name",
+    "address": "Address",
+    "phone": "Phone",
+    "email": "Email",
+    "save": "Save",
+    "preferences": "Preferences",
+    "profile": "Profile"
 
 }

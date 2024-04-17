@@ -40,5 +40,12 @@
     "very_Important": "Muito Importante",
     "next": "Próximo",
     "social_leisure": "Lazer Social",
+    "profile": "Perfil",
+    "name": "Nome",
+    "address": "Morada",
+    "phone": "Telemóvel",
+    "email": "Email",
+    "save": "Salvar",
+    "preferences": "Preferências",
     "back":"Atrás"
 }

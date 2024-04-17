@@ -448,7 +448,7 @@ useEffect(() => {
                         
                     </MapContainer>
               )}
-            {/* <Metrics isOpen={isMetricsOpen} toggleSidebar={toggleMetrics} sliderValuesCruz={sliderValuesCruz} setSliderValuesCruz={setSliderValuesCruz}  /> */}
+            <Metrics isOpen={isMetricsOpen} toggleSidebar={toggleMetrics} darkMode={darkMode} />
         </div>
     );
 }

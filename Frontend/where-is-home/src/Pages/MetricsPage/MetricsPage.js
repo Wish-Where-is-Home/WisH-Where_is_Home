@@ -355,7 +355,7 @@ const zone = IdType;
                         
                         {geojsonData && <GeoJSON ref={geoJsonRef} data={geojsonData}  style={geoJSONStyle}  onEachFeature={onEachFeature}  />}
                         <Button variant="contained" style={{ position: 'absolute', top: '10px', right: zoomButtonPosition,zIndex: "400",  backgroundColor: "var(--background-color)",color:"var(--blacktowhite)"}} onClick={goBackPoligon}>
-                          Back
+                          {t('zoomOut')}
                         </Button>
                         
                     </MapContainer>

@@ -730,7 +730,7 @@ const geoJSONStyle = (feature) => {
 
             {geojsonData && <GeoJSON ref={geoJsonRef} data={geojsonData} style={geoJSONStyle} onEachFeature={onEachFeature} />}
             <Button variant="contained" style={{ position: 'absolute', top: '10px', right: '20px', zIndex: "1000", backgroundColor: "var(--background-color)", color: "var(--blacktowhite)" }} onClick={goBackPoligon}>
-              {t('back')}
+            {t('zoomOut')}
             </Button>
 
           </MapContainer>

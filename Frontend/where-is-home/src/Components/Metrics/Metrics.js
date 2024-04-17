@@ -281,6 +281,9 @@ function Metrics({ darkMode, isOpen, toggleSidebar, zone, zoneData, slidersValue
                         ))
                     )}
                 </div>
+                <div>
+                    <button type="button" onClick={}
+                </div>
             </div>
         </div>
     );

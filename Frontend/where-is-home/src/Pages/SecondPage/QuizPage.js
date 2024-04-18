@@ -14,9 +14,6 @@ import { useAuth } from '../../AuthContext/AuthContext';
 import 'proj4leaflet';
 
 
-
-
-
 function QuizPage({ darkMode, zoneData,scores,updateScores}) {
   const { isAuthenticated,userInfo} = useAuth();
   const { t } = useTranslation("common");
@@ -533,8 +530,7 @@ const handleSavePreferences = () => {
 Object.keys(locationMappings).forEach(id => {
   const key = locationMappings[id];
   let value = 0;
-  
-  // Acessando o valor correto em sliderValuesCruz
+
   const sliderValue = sliderValuesCruz[id];
 
   if (sliderValue !== undefined) {
@@ -543,8 +539,8 @@ Object.keys(locationMappings).forEach(id => {
   
 
   
-  // Aqui você pode usar key para mapear com metricsMapping se necessário
-  const metric = metricsMapping[key]; // Isso retornará o objeto com id e theme
+
+  const metric = metricsMapping[key]; 
   
   data[key] = value;
 });
@@ -572,6 +568,17 @@ Object.keys(locationMappings).forEach(id => {
   .catch(error => {
     console.error('Error saving preferences:', error);
   });
+};
+
+
+const [openModalMap, setOpenModalMap] = useState(false);
+
+const handleOpenModalMap = () => {
+  setOpenModalMap(true);
+};
+
+const handleCloseModal = () => {
+  setOpenModalMap(false);
 };
 
 
@@ -873,13 +880,14 @@ Object.keys(locationMappings).forEach(id => {
             />
 
             {geojsonData && <GeoJSON ref={geoJsonRef} data={geojsonData} style={geoJSONStyle} onEachFeature={onEachFeature} />}
-            <Button variant="contained" style={{ position: 'absolute', top: '10px', right: '20px', zIndex: "1000", backgroundColor: "var(--background-color)", color: "var(--blacktowhite)" }} onClick={goBackPoligon}>
-            {t('zoomOut')}
-            </Button>
+              <Button variant="contained" style={{ position: 'absolute', top: '10px', right: '20px', zIndex: "1000", backgroundColor: "var(--background-color)", color: "var(--blacktowhite)" }} onClick={goBackPoligon}>
+              {t('zoomOut')}
+              </Button>
 
-            <Button variant="contained" style={{ position: 'absolute', bottom: '10px', right: '20px', zIndex: "1000", backgroundColor: "var(--background-color)", color: "var(--blacktowhite)" }}>
-            ?
-            </Button>
+              <Button variant="contained" style={{ position: 'absolute', bottom: '120px', right: '20px', zIndex: "1000", backgroundColor: "var(--background-color)", color: "var(--blacktowhite)", borderRadius:"20rem" }} onClick={handleOpenModalMap}>
+              ?
+              </Button>
+             
 
           </MapContainer>
         )}

@@ -46,6 +46,8 @@ class GenerateTokenView(APIView):
             user = User.objects.get(id=user_id)
         except User.DoesNotExist:
             user = User.objects.create(id=user_id, nome=name, email=email)
+            preferences = UserPreference.objects.create(id=user_id)
+
 
         expiration_time = datetime.utcnow() + timedelta(hours=1)
 

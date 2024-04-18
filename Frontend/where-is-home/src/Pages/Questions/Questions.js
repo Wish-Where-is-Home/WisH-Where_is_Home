@@ -90,26 +90,27 @@ function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,z
 
     const renderSlidersForTab = () => {
         return sliderGroupings[tabs[activeTab]].map((group, index) => (
-            <div key={`slider-${activeTab}-${index}`} className="slider-container">
+            <div key={`slider-${activeTab}-${index}`} className="slider-container" style={{ marginTop: index === 0 ? '30px' : '0' }}>
                 <label className="label">{group.name}</label>
                 <div className='slider-lefties'>
-                <Box sx={{ width: 300 }}>
-                    <Slider
-                        aria-label={group.name}
-                        value={sliderValuesCruz[group.ids[0]]}
-                        valueLabelDisplay="auto"
-                        step={0.25}
-                        marks={[{ value: 0, label: t('notimportant') }, { value: 1, label: t('very_Important') }]}
-                        min={0}
-                        max={1}
-                        onChange={(event, newValue) => onSliderChange(newValue, group.ids)}
-                        valueLabelFormat={valueLabelFormat}
-                    />
-                </Box>
+                    <Box sx={{ width: 300, marginRight: "50px" }}>
+                        <Slider
+                            aria-label={group.name}
+                            value={sliderValuesCruz[group.ids[0]]}
+                            valueLabelDisplay="auto"
+                            step={0.25}
+                            marks={[{ value: 0, label: t('notimportant') }, { value: 1, label: t('very_Important') }]}
+                            min={0}
+                            max={1}
+                            onChange={(event, newValue) => onSliderChange(newValue, group.ids)}
+                            valueLabelFormat={valueLabelFormat}
+                        />
+                    </Box>
                 </div>
             </div>
         ));
     };
+    
     
 
    
@@ -206,6 +207,7 @@ function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,z
 
     return (
         <div className={`SearchPage2 ${darkMode ? 'dark-mode' : 'light-mode'}`}>
+            
             <div className='search-filters'>
                 <div className='tab-buttons'>
                     {filteredTabs.map((tabName, index) => (
@@ -216,16 +218,19 @@ function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,z
                         >{tabName}</button>
                     ))}
                 </div>
-                <div className='tab-content'>
-                    {renderSlidersForTab()}
-                </div>
-                <div className={`button-container2 ${tabs[activeTab] === 'Nature Sports' ? ' nature-sports-margin' : ''}`}>
-                    <button className="button-small-round" onClick={handlePreviousClick}>
-                        <span className="button-icon">Previous</span>
-                    </button>
-                    <button className="button-small-round" onClick={gotoThirdPage} >
-                        <span className="button-icon">Search <span style={{padding:"50px 0px"}}> </span>🔍</span>
-                    </button>
+                <div className='sidebar-content'>
+                    <div className='tab-content'>
+                        {renderSlidersForTab()}
+                    </div>
+                
+                    <div className={`button-container2 ${tabs[activeTab] === 'Nature Sports' ? ' nature-sports-margin' : ''}`}>
+                        <button className="button-small-round" onClick={handlePreviousClick}>
+                            <span className="button-icon">Previous</span>
+                        </button>
+                        <button className="button-small-round" onClick={gotoThirdPage} >
+                            <span className="button-icon">Search <span style={{padding:"50px 0px"}}> </span>🔍</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

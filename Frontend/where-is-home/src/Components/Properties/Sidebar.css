@@ -6,7 +6,7 @@
   height: calc(100% - 70px); 
   background-color: black;
   transition: right 0.3s ease; 
-  z-index: 1000; 
+  z-index: 700; 
 
 }
 
@@ -19,7 +19,7 @@
   top: 50%; 
   left: -30px; 
   padding: 10px;
-  background-color: #292828;
+  background-color: var(--background-color2);
   color: rgba(13, 221, 218, 1);
   border: none;
   cursor: pointer;

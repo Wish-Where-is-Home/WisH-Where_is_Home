@@ -18,7 +18,6 @@ const Login_register = ({ darkMode,firebaseConfig }) => {
     const[emailLogin,setEmailLogin] = useState('');
     const[passwordLogin,setPasswordLogin] = useState('');
 
-
     const [nameRegister,setNameRegister] = useState('');
     const [emailRegister, setEmailRegister] = useState('');
     const [passwordRegister, setPasswordRegister] = useState('');

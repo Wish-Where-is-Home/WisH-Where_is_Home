@@ -24,6 +24,12 @@
 
 }
 
+.dark-mode .leaflet-layer {
+  filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+}
+
+
+
   
   .search-filters {
     flex: 1;

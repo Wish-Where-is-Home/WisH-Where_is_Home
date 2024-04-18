@@ -15,7 +15,7 @@ import { faSquareFull } from '@fortawesome/free-regular-svg-icons';
 import {useTranslation} from "react-i18next";
 
 
-function Sidebar({ isOpen, toggleSidebar }) {
+function Sidebar({darkMode, isOpen, toggleSidebar }) {
     const [boxes, setBoxes] = useState([]);
 
     useEffect(() => {
@@ -31,7 +31,7 @@ function Sidebar({ isOpen, toggleSidebar }) {
     const {t} = useTranslation("common");
 
     return (
-        <div className={`sidebar ${isOpen ? 'sidebar-open' : ''}`}>
+        <div className={`sidebar ${isOpen ? 'sidebar-open' : ''} ${darkMode ? 'dark-mode' : 'light-mode'}`}>
             <div className="sidebar-toggle"  onClick={toggleSidebarInternal}>
                 {isOpen ? <ChevronRight size={24} /> : <ChevronLeft size={24} />} 
             </div>

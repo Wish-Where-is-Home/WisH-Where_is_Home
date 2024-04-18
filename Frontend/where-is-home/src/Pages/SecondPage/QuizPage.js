@@ -59,10 +59,22 @@ const portugalBounds = [
         setIdType("municipios");
       }
 
+      if (location.state.slidersValues){
+        setSlidersValues(location.state.slidersValues);
+      }
+
+      if (location.state.sliderValuesCruz){
+        setSliderValuesCruz(location.state.sliderValuesCruz);
+      }
+
+      if(location.state.zone){
+        setIdType(location.state.zone);
+      }
+
     }
   }, [location.state]);
 
-  const sliderOptions = ['Not Important', 'Slightly Important', 'Moderate', 'Important', 'Very Important'];
+  const sliderOptions = [t('notimportant'), t('slightly'), t('moderate'), t('important'), t('very_Important')];
 
   const handleSliderChange = (index, value) => {
     const updatedSliders = slidersValues.map((slider, idx) => {
@@ -75,50 +87,49 @@ const portugalBounds = [
   };
 
 
-const sliderGroupings = {
-  [t('commerce')]: [
-      { name: "Commerce", ids: ['2'] },
-      { name: "Bakery", ids: ['3'] },
-      { name: "Food Courts", ids: ['4'] },
-      { name: "Supermarket", ids: ['9'] }
-  ],
-  [t('social_leisure')]: [
-      { name: "Nightlife", ids: ['5'] },
-      { name: "Hotel", ids: ['8'] },
-      { name: "Culture", ids: ['10'] },
-      { name: "Entertainment", ids: ['17'] }
-  ],
-  [t('health')]: [
-      { name: "Health Services", ids: ['7'] },
-      { name: "Pharmacy", ids: ['18'] },
-      { name: "Hospital", ids: ['22'] },
-      { name: "Clinic", ids: ['23'] },
-      { name: "Veterinary", ids: ['24'] }
-  ],
-  [t('nature_sports')]: [
-      { name: "Sports Center", ids: ['1'] },
-      { name: "Camp Sites", ids: ['6'] },
-      { name: "Parks", ids: ['13'] },
-      { name: "Swimming Pool", ids: ['19'] },
-      { name: "Beach River", ids: ['25'] },
-      { name: "Bicycle Paths", ids: ['27'] },
-      { name: "Walking Routes", ids: ['28'] }
-  ],
-  [t('services')]: [
-      { name: "Emergency Services", ids: ['14'] },
-      { name: "Banks", ids: ['20'] },
-      { name: "Post Offices", ids: ['21'] },
-      { name: "Industrial Zones", ids: ['26'] },
-      { name: "Car Parks", ids: ['29'] }
-  ],
-  [t('Education')]: [
-      { name: "Schools", ids: ['11'] },
-      { name: "Libraries", ids: ['12'] },
-      { name: "Kindergartens", ids: ['15'] },
-      { name: "Universities", ids: ['16'] }
-  ]
-};
-
+  const sliderGroupings = {
+    [t('commerce')]: [
+        { name: t("commerce"), ids: ['2'] },
+        { name: t("Bakery"), ids: ['3'] },
+        { name: t("FoodCourts"), ids: ['4'] },
+        { name: t("Supermarket"), ids: ['9'] }
+    ],
+    [t('social_leisure')]: [
+        { name: t("Nightlife"), ids: ['5'] },
+        { name: t("Hotel"), ids: ['8'] },
+        { name: t("Culture"), ids: ['10'] },
+        { name: t("Entertainment"), ids: ['17'] }
+    ],
+    [t('health')]: [
+        { name: t("HealthServices"), ids: ['7'] },
+        { name: t("Pharmacy"), ids: ['18'] },
+        { name: t("Hospital"), ids: ['22'] },
+        { name: t("Clinic"), ids: ['23'] },
+        { name: t("Veterinary"), ids: ['24'] }
+    ],
+    [t('nature_sports')]: [
+        { name: t("SportsCenter"), ids: ['1'] },
+        { name: t("CampSites"), ids: ['6'] },
+        { name: t("Parks"), ids: ['13'] },
+        { name: t("SwimmingPool"), ids: ['19'] },
+        { name: t("BeachRiver"), ids: ['25'] },
+        { name: t("BicyclePaths"), ids: ['27'] },
+        { name: t("WalkingRoutes"), ids: ['28'] }
+    ],
+    [t('services')]: [
+        { name: t("EmergencyServices"), ids: ['14'] },
+        { name: t("Banks"), ids: ['20'] },
+        { name: t("PostOffices"), ids: ['21'] },
+        { name: t("IndustrialZones"), ids: ['26'] },
+        { name: t("CarParks"), ids: ['29'] }
+    ],
+    [t('Education')]: [
+        { name: t("Schools"), ids: ['11'] },
+        { name: t("Libraries"), ids: ['12'] },
+        { name: t("Kindergartens"), ids: ['15'] },
+        { name: t("Universities"), ids: ['16'] }
+    ]
+  };
 
 
 
@@ -202,8 +213,8 @@ const geoJSONStyle = (feature) => {
         return {
             fillColor: 'transparent',
             weight: 2,
-            color: 'black',
-            fillOpacity: 0.4
+            color: darkMode ? 'white' : 'black',
+            fillOpacity: 0.3
         };
     }
     console.log(districtId);
@@ -232,8 +243,8 @@ const geoJSONStyle = (feature) => {
     return {
         fillColor: fillColor,
         weight: 2,
-        color: 'black',
-        fillOpacity: 0.4
+        color: darkMode ? 'white' : 'black',
+        fillOpacity: darkMode ? 0.2 : 0.4
     };
 };
 
@@ -430,7 +441,8 @@ const geoJSONStyle = (feature) => {
 
 
   const gotothirdpage = () =>{
-    navigate('/metricspage', {state: {districtId,IdType,scores,slidersValues,sliderValuesCruz} })
+   
+    navigate('/metricspage', {state: {selectedDistrict,districtId,IdType,scores,slidersValues,sliderValuesCruz} })
 }
 
 
@@ -730,7 +742,7 @@ const geoJSONStyle = (feature) => {
 
             {geojsonData && <GeoJSON ref={geoJsonRef} data={geojsonData} style={geoJSONStyle} onEachFeature={onEachFeature} />}
             <Button variant="contained" style={{ position: 'absolute', top: '10px', right: '20px', zIndex: "1000", backgroundColor: "var(--background-color)", color: "var(--blacktowhite)" }} onClick={goBackPoligon}>
-              {t('back')}
+            {t('zoomOut')}
             </Button>
 
           </MapContainer>

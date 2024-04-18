@@ -501,7 +501,7 @@ const handleSavePreferences = () => {
 
 
   
-  fetch('/path/para/sua/view/', {
+  fetch('http://mednat.ieeta.pt:9009/users/preferences/update/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -510,7 +510,7 @@ const handleSavePreferences = () => {
   })
   .then(response => {
     if (response.ok) {
-     
+      alert("Data sucessfully saved")
       console.log('Preferences saved successfully');
     } else {
       throw new Error('Failed to save preferences');

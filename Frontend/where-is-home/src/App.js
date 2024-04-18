@@ -12,6 +12,7 @@ import Metrics from './Components/Metrics/Metrics';
 import QuizPage from './Pages/SecondPage/QuizPage';
 import Questions from './Pages/Questions/Questions';
 import { useAuth } from './AuthContext/AuthContext';
+import ProfilePage from './Pages/ProfilePage/ProfilePage';
 
 
 

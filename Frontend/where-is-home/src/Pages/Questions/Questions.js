@@ -7,7 +7,7 @@ import Box from '@mui/material/Box';
 import { useAuth } from '../../AuthContext/AuthContext';
 
 
-function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,zoneData, IdType,updateScores,sliderValuesCruz,setSliderValuesCruz,sliderGroupings}) {
+function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,zoneData, IdType,updateScores,sliderValuesCruz,setSliderValuesCruz,sliderGroupings, handleSavePreferences,metricsMapping}) {
     const { isAuthenticated} = useAuth();
     const zone = IdType;
 
@@ -93,37 +93,6 @@ function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,z
                 const sliderValuesMetrics = sliderValuesMetricsupdated;  
                 const sliderValuesThemes = sliderValuesThemesupdated;
     
-                const metricsMapping = {
-                    'sports_center': { id: 1, theme: 3 },
-                    'commerce': { id: 2, theme: 0 },
-                    'bakery': { id: 3, theme: 0 },
-                    'food_court': { id: 4, theme: 0 },
-                    'nightlife': { id: 5, theme: 1 },
-                    'camping': { id: 6, theme: 3 },
-                    'health_services': { id: 7, theme: 2 },
-                    'hotel': { id: 8, theme: 1 },
-                    'supermarket': { id: 9, theme: 0 },
-                    'culture': { id: 10, theme: 1 },
-                    'school': { id: 11, theme: 5 },
-                    'library': { id: 12, theme: 5 },
-                    'parks': { id: 13, theme: 3 },
-                    'services': { id: 14, theme: 4 },
-                    'kindergarten': { id: 15, theme: 5 },
-                    'university': { id: 16, theme: 5 },
-                    'entretainment': { id: 17, theme: 1 },
-                    'pharmacy': { id: 18, theme: 2 },
-                    'swimming_pool': { id: 19, theme: 3 },
-                    'bank': { id: 20, theme: 4 },
-                    'post_office': { id: 21, theme: 4 },
-                    'hospital': { id: 22, theme: 2 },
-                    'clinic': { id: 23, theme: 2 },
-                    'veterinary': { id: 24, theme: 2 },
-                    'beach_river': { id: 25, theme: 3 },
-                    'industrial_zone': { id: 26, theme: 3 },
-                    'bicycle_path': { id: 27, theme: 3 },
-                    'walking_routes': { id: 28, theme: 3 },
-                    'car_park': { id: 29, theme: 4 }
-                };
     
                 if (typeof sliderValuesThemes === 'object' && sliderValuesThemes !== null) {
                     for (const id in data[zoneType]) {
@@ -200,7 +169,7 @@ function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,z
                             <span className="button-icon">Search <span style={{padding:"50px 0px"}}> </span>🔍</span>
                         </button>
                         {isAuthenticated && (
-                        <button className="button-small-round" type="button">
+                        <button className="button-small-round" type="button" onClick={ handleSavePreferences}>
                             {t('guardar')}
                         </button>
                     ) }

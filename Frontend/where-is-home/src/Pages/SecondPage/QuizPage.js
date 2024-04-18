@@ -16,6 +16,7 @@ import 'proj4leaflet';
 
 
 
+
 function QuizPage({ darkMode, zoneData,scores,updateScores}) {
   const { isAuthenticated,userInfo} = useAuth();
   const { t } = useTranslation("common");
@@ -29,6 +30,8 @@ function QuizPage({ darkMode, zoneData,scores,updateScores}) {
   const [minZoom, setMinZoom] = useState(null);
   const [showQuestions, setShowQuestions] = useState(false);
   const navigate = useNavigate();
+  const [hoveredDistrictId, setHoveredDistrictId] = useState(null);
+
 
   const [slidersValues, setSlidersValues] = useState([
     { id: 0, value: 0 },  
@@ -209,6 +212,7 @@ const [ sliderValuesCruz, setSliderValuesCruz] = useState(buildInitialState());
 
 
 const geoJSONStyle = (feature) => {
+  
     if (!feature || !scores || slidersValues.every(slider => slider.value === 0)) {
         return {
             fillColor: 'transparent',
@@ -216,8 +220,8 @@ const geoJSONStyle = (feature) => {
             color: darkMode ? 'white' : 'black',
             fillOpacity: 0.3
         };
-    }
-    console.log(districtId);
+    } 
+
 
     const filteredScores = {};
     if (districtId.length >= 2) {
@@ -237,7 +241,6 @@ const geoJSONStyle = (feature) => {
 
     const sortedScores = Object.entries(filteredScores).sort((a, b) => a[1] - b[1]); 
     const totalColors = sortedScores.length;
-    console.log(sortedScores);
     const fillColor = calculateFillColor(sortedScores.findIndex(entry => entry[0] === id), totalColors);
 
     return {
@@ -417,6 +420,38 @@ const geoJSONStyle = (feature) => {
   };
 
 
+  const metricsMapping = {
+    'sports_center': { id: 1, theme: 3 },
+    'commerce': { id: 2, theme: 0 },
+    'bakery': { id: 3, theme: 0 },
+    'food_court': { id: 4, theme: 0 },
+    'nightlife': { id: 5, theme: 1 },
+    'camping': { id: 6, theme: 3 },
+    'health_services': { id: 7, theme: 2 },
+    'hotel': { id: 8, theme: 1 },
+    'supermarket': { id: 9, theme: 0 },
+    'culture': { id: 10, theme: 1 },
+    'school': { id: 11, theme: 5 },
+    'library': { id: 12, theme: 5 },
+    'parks': { id: 13, theme: 3 },
+    'services': { id: 14, theme: 4 },
+    'kindergarten': { id: 15, theme: 5 },
+    'university': { id: 16, theme: 5 },
+    'entretainment': { id: 17, theme: 1 },
+    'pharmacy': { id: 18, theme: 2 },
+    'swimming_pool': { id: 19, theme: 3 },
+    'bank': { id: 20, theme: 4 },
+    'post_office': { id: 21, theme: 4 },
+    'hospital': { id: 22, theme: 2 },
+    'clinic': { id: 23, theme: 2 },
+    'veterinary': { id: 24, theme: 2 },
+    'beach_river': { id: 25, theme: 3 },
+    'industrial_zone': { id: 26, theme: 3 },
+    'bicycle_path': { id: 27, theme: 3 },
+    'walking_routes': { id: 28, theme: 3 },
+    'car_park': { id: 29, theme: 4 }
+};
+
 
 
 
@@ -428,9 +463,11 @@ const geoJSONStyle = (feature) => {
           const districtName = feature.properties.dsg;
           const tooltip = L.tooltip({ direction: 'center', class: 'custom-tooltip' }).setContent(districtName);
           this.bindTooltip(tooltip).openTooltip();
+         
         },
         mouseout: function (e) {
           this.unbindTooltip();
+          const originalStyle = geoJSONStyle(feature);
         },
         click: function (e) {
           handleDistrictClick(e);
@@ -446,6 +483,8 @@ const geoJSONStyle = (feature) => {
 }
 
 const handleSavePreferences = () => {
+
+  const token = localStorage.getItem('token');
   const data = {
     
     theme_commerce: slidersValues[0].value,
@@ -490,13 +529,26 @@ const handleSavePreferences = () => {
     29: 'car_park'
   };
 
-  Object.keys(sliderValuesCruz).forEach(id => {
-    const key = locationMappings[id];
-    if (key) {
-      data[key] = sliderValuesCruz[id].value || 0;
-    }
-  });
 
+Object.keys(locationMappings).forEach(id => {
+  const key = locationMappings[id];
+  let value = 0;
+  
+  // Acessando o valor correto em sliderValuesCruz
+  const sliderValue = sliderValuesCruz[id];
+
+  if (sliderValue !== undefined) {
+      value = sliderValue;
+  }
+  
+
+  
+  // Aqui você pode usar key para mapear com metricsMapping se necessário
+  const metric = metricsMapping[key]; // Isso retornará o objeto com id e theme
+  
+  data[key] = value;
+});
+  
   console.log(data);
 
 
@@ -505,6 +557,7 @@ const handleSavePreferences = () => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
     },
     body: JSON.stringify(data)
   })
@@ -799,7 +852,7 @@ const handleSavePreferences = () => {
           </div>
         </div>
       ) : (
-        <Questions slidersValues={slidersValues} darkMode={darkMode} handlePreviousClick={handlePreviousClick}  gotoThirdPage={gotothirdpage} zoneData={zoneData} IdType={IdType} updateScores={updateScores} sliderValuesCruz={sliderValuesCruz} setSliderValuesCruz={setSliderValuesCruz}  sliderGroupings={sliderGroupings}/>
+        <Questions slidersValues={slidersValues} darkMode={darkMode} handlePreviousClick={handlePreviousClick}  gotoThirdPage={gotothirdpage} zoneData={zoneData} IdType={IdType} updateScores={updateScores} sliderValuesCruz={sliderValuesCruz} setSliderValuesCruz={setSliderValuesCruz}  sliderGroupings={sliderGroupings}  handleSavePreferences={ handleSavePreferences} metricsMapping={metricsMapping}/>
       )
       }
 
@@ -822,6 +875,10 @@ const handleSavePreferences = () => {
             {geojsonData && <GeoJSON ref={geoJsonRef} data={geojsonData} style={geoJSONStyle} onEachFeature={onEachFeature} />}
             <Button variant="contained" style={{ position: 'absolute', top: '10px', right: '20px', zIndex: "1000", backgroundColor: "var(--background-color)", color: "var(--blacktowhite)" }} onClick={goBackPoligon}>
             {t('zoomOut')}
+            </Button>
+
+            <Button variant="contained" style={{ position: 'absolute', bottom: '10px', right: '20px', zIndex: "1000", backgroundColor: "var(--background-color)", color: "var(--blacktowhite)" }}>
+            ?
             </Button>
 
           </MapContainer>

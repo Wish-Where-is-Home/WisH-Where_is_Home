@@ -14,11 +14,6 @@ function ProfilePage({ darkMode }) {
     const [isExpandedServices, setIsExpandedServices] = useState(false);
     const [isExpandedEducation, setIsExpandedEducation] = useState(false);
 
-
-    const handleSaveClick = (e) => {
-        e.preventDefault();
-        alert('Saved!');
-    }
     const [slidersValues, setSlidersValues] = useState([
         { id: 0, value: 0 },  
         { id: 1, value: 0 },  
@@ -27,6 +22,17 @@ function ProfilePage({ darkMode }) {
         { id: 4, value: 0 },  
         { id: 5, value: 0 }   
     ]);
+
+    const [isEditMode, setIsEditMode] = useState(false);
+
+    const [userData, setUserData] = useState({
+        name: 'John Doe',
+        address: '123 Main St',
+        phone: '555-1234',
+        email: 'john@example.com',
+        password: '********'
+    });
+
 
     const handleSliderChange = (index, value) => {
         if (value === 0) {
@@ -82,6 +88,20 @@ function ProfilePage({ darkMode }) {
                 console.error("Invalid theme provided to toggleExpansion");
         }
     };
+
+    const toggleEditMode = () => {
+        setIsEditMode(!isEditMode);
+    };
+
+    const handleSaveClick = () => {
+        setIsEditMode(false); 
+        alert('Dados salvos!');
+    };
+
+    const handleCancelClick = () => {
+        setIsEditMode(false); 
+    };
+
 
     //Questions
 
@@ -215,45 +235,66 @@ function ProfilePage({ darkMode }) {
                     
                     <div className='form-container2'>
                         <form>
-                            <div className='form-group-row2'>
+                        <div className='form-group-row2'>
                                 <div className='form-group-label2'>
-                                    <label htmlFor='name'>{t('name')}</label>
+                                    <label htmlFor='name'>{t('name')}:</label>
                                 </div>
                                 <div className='form-group-input2'>
-                                    <input type='text' id='name' name='name' />
+                                    {isEditMode ? (
+                                        <input type='text' id='name' name='name' value={userData.name} onChange={(e) => setUserData({ ...userData, name: e.target.value })} />
+                                    ) : (
+                                        <span>{userData.name}</span>
+                                    )}
                                 </div>
                             </div>
                             <div className='form-group-row2'>
                                 <div className='form-group-label2'>
-                                    <label htmlFor='address'>{t('address')}</label>
+                                    <label htmlFor='address'>{t('address')}:</label>
                                 </div>
                                 <div className='form-group-input2'>
-                                    <input type='text' id='address' name='address' />
+                                    {isEditMode ? (
+                                        <input type='text' id='address' name='address' value={userData.address} onChange={(e) => setUserData({ ...userData, address: e.target.value })} />
+                                    ) : (
+                                        <span>{userData.address}</span>
+                                    )}
                                 </div>
                             </div>
                             <div className='form-group-row2'>
                                 <div className='form-group-label2'>
-                                    <label htmlFor='phone'>{t('phone')}</label>
+                                    <label htmlFor='phone'>{t('phone')}:</label>
                                 </div>
                                 <div className='form-group-input2'>
-                                    <input type='text' id='phone' name='phone' />
+                                    {isEditMode ? (
+                                        <input type='text' id='phone' name='phone' value={userData.phone} onChange={(e) => setUserData({ ...userData, phone: e.target.value })} />
+                                    ) : (
+                                        <span>{userData.phone}</span>
+                                    )}
                                 </div>
                             </div>
                             <div className='form-group-row2'>
                                 <div className='form-group-label2'>
-                                    <label htmlFor='email'>{t('email')}</label>
+                                    <label htmlFor='email'>{t('email')}:</label>
                                 </div>
                                 <div className='form-group-input2'>
-                                    <input type='email' id='email' name='email' />
+                                    {isEditMode ? (
+                                        <input type='text' id='email' name='email' value={userData.email} onChange={(e) => setUserData({ ...userData, email: e.target.value })} />
+                                    ) : (
+                                        <span>{userData.email}</span>
+                                    )}
                                 </div>
                             </div>
                             <div className='form-group-row2'>
                                 <div className='form-group-label2'>
-                                    <label htmlFor='password'>{t('password')}</label>
+                                <label htmlFor='password'>{t('password')}:</label>
                                 </div>
                                 <div className='form-group-input2'>
-                                    <input type='password' id='password' name='password' />
+                                    {isEditMode ? (
+                                        <input type='password' id='password' name='password' value={userData.password} onChange={(e) => setUserData({ ...userData, password: e.target.value })} />
+                                    ) : (
+                                        <span>{userData.password}</span>
+                                    )}
                                 </div>
+
                             </div>
                             <div className='button-save-div2'>
                                 <button className="button-save2" onClick={handleSaveClick}>{t('save')}</button>

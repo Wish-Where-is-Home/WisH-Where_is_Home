@@ -43,8 +43,13 @@
     "next":"Next",
     "pquizpage":"What are you looking for?",
     "back":"Back",
-
-
+    "name": "Name",
+    "address": "Address",
+    "phone": "Phone",
+    "email": "Email",
+    "save": "Save",
+    "preferences": "Preferences",
+    "profile": "Profile",
     "Bakery": "Bakery",
     "FoodCourts":"Food Courts",
     "Supermarket":"Supermarket",
@@ -71,9 +76,5 @@
     "Libracies":"Libracies",
     "Kindergartens":"Kindergartens",
     "Universities":"Universities",
-
     "zoomOut":"zoom out"
-    
-
-
 }

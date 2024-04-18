@@ -7,10 +7,13 @@ import Metrics from '../../Components/Metrics/Metrics';
 import "leaflet/dist/leaflet.css";
 import { MapContainer, TileLayer,GeoJSON } from 'react-leaflet';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../AuthContext/AuthContext';
 import L from 'leaflet';
 import Button from '@mui/material/Button';
 
+
 function MetricsPage({darkMode,zoneData,scores,updateScores}) {
+    const { isAuthenticated} = useAuth();
     const {t} = useTranslation("common");
     const location = useLocation();
     const [isPropertiesOpen, setIsPropertiesOpen] = useState(false);

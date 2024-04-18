@@ -4,11 +4,13 @@ import { ChevronLeft, ChevronRight } from 'react-feather';
 import Slider from '@mui/material/Slider';
 import 'rc-slider/assets/index.css';
 import { useTranslation } from "react-i18next";
+import { useAuth } from '../../AuthContext/AuthContext';
 
 
 function Metrics({ darkMode, isOpen, toggleSidebar, zone, zoneData, slidersValues, sliderValuesCruz, updateScores, setSliderValuesCruz,handleGoBackPage }) {
 
     const { t } = useTranslation("common");
+    const { isAuthenticated} = useAuth();
 
     const toggleSidebarInternal = () => {
         toggleSidebar();
@@ -280,6 +282,11 @@ function Metrics({ darkMode, isOpen, toggleSidebar, zone, zoneData, slidersValue
                     <button type="button" onClick={handleGoBackPage}>
                         {t('back')}
                     </button>
+                    {isAuthenticated && (
+                        <button type="button" onClick={handleGoBackPage}>
+                            {t('guardar')}
+                        </button>
+                    ) }
                 </div>
             </div>
         </div>

@@ -10,14 +10,14 @@ import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
 import Slider from '@mui/material/Slider';
 import Box from '@mui/material/Box';
-
+import { useAuth } from '../../AuthContext/AuthContext';
 import 'proj4leaflet';
 
 
 
 
 function QuizPage({ darkMode, zoneData,scores,updateScores}) {
-  
+  const { isAuthenticated,userInfo} = useAuth();
   const { t } = useTranslation("common");
   const location = useLocation();
   const [geojsonData, setGeojsonData] = useState(null);
@@ -444,6 +444,85 @@ const geoJSONStyle = (feature) => {
    
     navigate('/metricspage', {state: {selectedDistrict,districtId,IdType,scores,slidersValues,sliderValuesCruz} })
 }
+
+const handleSavePreferences = () => {
+  const data = {
+    
+    theme_commerce: slidersValues[0].value,
+    theme_social_leisure: slidersValues[1].value,
+    theme_health: slidersValues[2].value,
+    theme_nature_sports: slidersValues[3].value,
+    theme_services: slidersValues[4].value,
+    theme_education: slidersValues[5].value,
+
+  };
+
+
+  const locationMappings = {
+    1: 'sports_center',
+    2: 'commerce',
+    3: 'bakery',
+    4: 'food_court',
+    5: 'nightlife',
+    6: 'camping',
+    7: 'health_services',
+    8: 'hotel',
+    9: 'supermarket',
+    10: 'culture',
+    11: 'school',
+    12: 'library',
+    13: 'parks',
+    14: 'services',
+    15: 'kindergarten',
+    16: 'university',
+    17: 'entertainment',
+    18: 'pharmacy',
+    19: 'swimming_pool',
+    20: 'bank',
+    21: 'post_office',
+    22: 'hospital',
+    23: 'clinic',
+    24: 'veterinary',
+    25: 'beach_river',
+    26: 'industrial_zone',
+    27: 'bicycle_path',
+    28: 'walking_routes',
+    29: 'car_park'
+  };
+
+  Object.keys(sliderValuesCruz).forEach(id => {
+    const key = locationMappings[id];
+    if (key) {
+      data[key] = sliderValuesCruz[id].value || 0;
+    }
+  });
+
+  console.log(data);
+
+
+  
+  fetch('/path/para/sua/view/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data)
+  })
+  .then(response => {
+    if (response.ok) {
+     
+      console.log('Preferences saved successfully');
+    } else {
+      throw new Error('Failed to save preferences');
+    }
+  })
+  .catch(error => {
+    console.error('Error saving preferences:', error);
+  });
+};
+
+
+
 
 
   return (

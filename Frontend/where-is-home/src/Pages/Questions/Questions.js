@@ -4,9 +4,11 @@ import { useTranslation } from "react-i18next";
 import './Questions.css';
 import Slider from '@mui/material/Slider';
 import Box from '@mui/material/Box';
+import { useAuth } from '../../AuthContext/AuthContext';
+
 
 function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,zoneData, IdType,updateScores,sliderValuesCruz,setSliderValuesCruz,sliderGroupings}) {
-
+    const { isAuthenticated} = useAuth();
     const zone = IdType;
 
 
@@ -15,42 +17,7 @@ function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,z
    
     
     const tabs = [t('commerce'),t('social_leisure'),t('health'), t('nature_sports'),t('services'), t('Education')];
-
-
-
-    const [showSliders, setShowSliders] = useState(true);
-
-    const sliderConfigs = [
-        { Id: '1', label: 'sports_center', min: 0, max: 1 },
-        { Id: '2', label: 'commerce', min: 0, max: 1 },
-        { Id: '3', label: 'bakery', min: 0, max: 1 },
-        { Id: '4', label: 'food_court', min: 0, max: 1 },
-        { Id: '5', label: 'nightlife', min: 0, max: 1 },
-        { Id: '6', label: 'camping', min: 0, max: 1 },
-        { Id: '7', label: 'health_services', min: 0, max: 1 },
-        { Id: '8', label: 'hotel', min: 0, max: 1 },
-        { Id: '9', label: 'supermarket', min: 0, max: 1 },
-        { Id: '10', label: 'culture', min: 0, max: 1 },
-        { Id: '11', label: 'school', min: 0, max: 1 },
-        { Id: '12', label: 'library', min: 0, max: 1 },
-        { Id: '13', label: 'parks', min: 0, max: 1 },
-        { Id: '14', label: 'services', min: 0, max: 1 },
-        { Id: '15', label: 'kindergarten', min: 0, max: 1 },
-        { Id: '16', label: 'university', min: 0, max: 1 },
-        { Id: '17', label: 'entertainment', min: 0, max: 1 },
-        { Id: '18', label: 'pharmacy', min: 0, max: 1 },
-        { Id: '19', label: 'swimming_pool', min: 0, max: 1 },
-        { Id: '20', label: 'bank', min: 0, max: 1 },
-        { Id: '21', label: 'post_office', min: 0, max: 1 },
-        { Id: '22', label: 'hospital', min: 0, max: 1 },
-        { Id: '23', label: 'clinic', min: 0, max: 1 },
-        { Id: '24', label: 'veterinary', min: 0, max: 1 },
-        { Id: '25', label: 'beach_river', min: 0, max: 1 },
-        { Id: '26', label: 'industrial_zone', min: 0, max: 1 },
-        { Id: '27', label: 'bicycle_path', min: 0, max: 1 },
-        { Id: '28', label: 'walking_routes', min: 0, max: 1 },
-        { Id: '29', label: 'car_park', min: 0, max: 1 }
-    ];    
+ 
 
 
 
@@ -81,6 +48,8 @@ function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,z
                 ...updatedValues
             };
         });
+
+        console.log(sliderValuesCruz);
     };
 
     const valueLabelFormat = (value) => {
@@ -230,6 +199,11 @@ function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,z
                         <button className="button-small-round" onClick={gotoThirdPage} >
                             <span className="button-icon">Search <span style={{padding:"50px 0px"}}> </span>🔍</span>
                         </button>
+                        {isAuthenticated && (
+                        <button className="button-small-round" type="button">
+                            {t('guardar')}
+                        </button>
+                    ) }
                     </div>
                 </div>
             </div>

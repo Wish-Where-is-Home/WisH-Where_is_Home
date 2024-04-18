@@ -318,6 +318,12 @@ h2 {
   margin-left: 20px;
 }
 
+.form-group-input2 span {
+  text-align: left;
+  align-items: left;
+  align-content: end;
+}
+
 
 
 

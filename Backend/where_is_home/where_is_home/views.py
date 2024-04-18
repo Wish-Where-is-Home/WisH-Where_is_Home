@@ -41,11 +41,12 @@ class GenerateTokenView(APIView):
         email = request.data.get('email')
         name = request.data.get('name')
         user_id = request.data.get('id')
+        role = 'normal'
 
         try:
             user = User.objects.get(id=user_id)
         except User.DoesNotExist:
-            user = User.objects.create(id=user_id, nome=name, email=email)
+            user = User.objects.create(id=user_id, nome=name, email=email, role=role)
             preferences = UserPreference.objects.create(id=user_id)
 
 

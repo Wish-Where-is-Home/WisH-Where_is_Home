@@ -64,7 +64,7 @@
 }
 
 .form-group-input2 {
-    width: 70%;
+    width: 100%;
 
 }
 
@@ -319,14 +319,71 @@ h2 {
 }
 
 .form-group-input2 span {
+  display: block;
   text-align: left;
-  align-items: left;
-  align-content: end;
+  margin-top: 1%;
+}
+
+
+.button-edit{
+  border: none;
+    outline: none;
+    border-radius: 20px;
+    font-size: 1.2rem;
+    display: flex;
+    height: 35px;
+    width: 130px;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--button-color); 
+    color: var(--button-text-color); 
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); 
+    transition: background-color 0.3s; 
+}
+
+.button-group2{
+  display: flex;
+  justify-content: center;
 }
 
 
 
+.button-save{
+  border: none;
+  outline: none;
+  border-radius: 20px;
+  font-size: 1.2rem;
+  display: flex;
+  height: 35px;
+  width: 130px;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--button-color); 
+  color: var(--button-text-color); 
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); 
+  transition: background-color 0.3s; 
+  margin-left: 5%;
+}
 
+.button-cancel{
+  border: none;
+  outline: none;
+  border-radius: 20px;
+  font-size: 1.2rem;
+  display: flex;
+  height: 35px;
+  width: 130px;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--button-color); 
+  color: var(--button-text-color); 
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); 
+  transition: background-color 0.3s; 
+  margin-right: 5%;
+}
 
 
 

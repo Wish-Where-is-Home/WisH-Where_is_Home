@@ -296,8 +296,15 @@ function ProfilePage({ darkMode }) {
                                 </div>
 
                             </div>
-                            <div className='button-save-div2'>
-                                <button className="button-save2" onClick={handleSaveClick}>{t('save')}</button>
+                            <div className='button-group2'>
+                                {!isEditMode ? (
+                                    <button type="button" className="button-edit" onClick={toggleEditMode}>{t('edit')}</button>
+                                ) : (
+                                    <>
+                                        <button type="button" className="button-cancel" onClick={handleCancelClick}>{t('cancel')}</button>
+                                        <button type="button" className="button-save" onClick={handleSaveClick}>{t('save')}</button>
+                                    </>
+                                )}
                             </div>
                         </form>
                     </div>

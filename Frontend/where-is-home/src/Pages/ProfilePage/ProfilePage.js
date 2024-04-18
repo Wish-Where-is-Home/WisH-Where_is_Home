@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import Slider from '@mui/material/Slider';
 import Box from '@mui/material/Box';
 import { BsChevronDown, BsChevronUp } from 'react-icons/bs';
+import { useNavigate } from 'react-router-dom';
 
 function ProfilePage({ darkMode }) {
     const { t } = useTranslation("common");
@@ -13,7 +14,8 @@ function ProfilePage({ darkMode }) {
     const [isExpandedNatureSports, setIsExpandedNatureSports] = useState(false);
     const [isExpandedServices, setIsExpandedServices] = useState(false);
     const [isExpandedEducation, setIsExpandedEducation] = useState(false);
-
+    const navigate = useNavigate();
+    
     const [slidersValues, setSlidersValues] = useState([
         { id: 0, value: 0 },  
         { id: 1, value: 0 },  
@@ -26,14 +28,106 @@ function ProfilePage({ darkMode }) {
     const [isEditMode, setIsEditMode] = useState(false);
 
     const [userData, setUserData] = useState({
-        name: 'John Doe',
-        address: '123 Main St',
-        phone: '555-1234',
+        nome: 'John Doe',
+        endereco: '123 Main St',
+        telemovel: '555-1234',
         email: 'john@example.com',
-        password: '********'
+        password:'*****'
     });
 
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            navigate('/login');
+        } else {
+            fetch('http://mednat.ieeta.pt:9009/users/', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Falha ao obter dados do usuário');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data);
+                setUserData(data);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+            fetch('http://mednat.ieeta.pt:9009/users/preferences/', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Falha ao obter dados do usuário');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Preferences:' ,data);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        }
+    }, []); 
+    // update user info 
+    // fetch('http://mednat.ieeta.pt:9009/users/update/', {
+    //     method: 'POST',
+    //     headers: {
+    //         'Authorization': `Bearer ${token}`
+    //     },
+    //     body: JSON.stringify({
+    //         "nome": nome_atualizado,
+    //         "endereco": endereco_atualizado,
+    //         "telemovel": telemovel_atualizado,
 
+    //     })
+    // })
+    // .then(response => {
+    //     if (!response.ok) {
+    //         throw new Error('Falha ao obter dados do usuário');
+    //     }
+    //     return response.json();
+    // })
+    // .then(data => {
+    //     console.log('Preferences:', data);
+    // })
+    // .catch(error => {
+    //     console.error(error);
+    // });
+
+    // update preferences info 
+    // fetch('http://mednat.ieeta.pt:9009/users/preferences/update/', {
+    //     method: 'POST',
+    //     headers: {
+    //         'Authorization': `Bearer ${token}`
+    //     },
+    //     body: JSON.stringify({
+    //        PEDE ESTA PARTE AO VASCO
+
+    //     })
+    // })
+    // .then(response => {
+    //     if (!response.ok) {
+    //         throw new Error('Falha ao obter dados do usuário');
+    //     }
+    //     return response.json();
+    // })
+    // .then(data => {
+    //     console.log('Preferences:', data);
+    // })
+    // .catch(error => {
+    //     console.error(error);
+    // });
     const handleSliderChange = (index, value) => {
         if (value === 0) {
             switch (index) {
@@ -241,9 +335,9 @@ function ProfilePage({ darkMode }) {
                                 </div>
                                 <div className='form-group-input2'>
                                     {isEditMode ? (
-                                        <input type='text' id='name' name='name' value={userData.name} onChange={(e) => setUserData({ ...userData, name: e.target.value })} />
+                                        <input type='text' id='name' name='name' value={userData.nome} onChange={(e) => setUserData({ ...userData, name: e.target.value })} />
                                     ) : (
-                                        <span>{userData.name}</span>
+                                        <span>{userData.nome}</span>
                                     )}
                                 </div>
                             </div>
@@ -253,9 +347,9 @@ function ProfilePage({ darkMode }) {
                                 </div>
                                 <div className='form-group-input2'>
                                     {isEditMode ? (
-                                        <input type='text' id='address' name='address' value={userData.address} onChange={(e) => setUserData({ ...userData, address: e.target.value })} />
+                                        <input type='text' id='address' name='address' value={userData.endereco} onChange={(e) => setUserData({ ...userData, address: e.target.value })} />
                                     ) : (
-                                        <span>{userData.address}</span>
+                                        <span>{userData.endereco}</span>
                                     )}
                                 </div>
                             </div>
@@ -265,9 +359,9 @@ function ProfilePage({ darkMode }) {
                                 </div>
                                 <div className='form-group-input2'>
                                     {isEditMode ? (
-                                        <input type='text' id='phone' name='phone' value={userData.phone} onChange={(e) => setUserData({ ...userData, phone: e.target.value })} />
+                                        <input type='text' id='phone' name='phone' value={userData.telemovel} onChange={(e) => setUserData({ ...userData, phone: e.target.value })} />
                                     ) : (
-                                        <span>{userData.phone}</span>
+                                        <span>{userData.telemovel}</span>
                                     )}
                                 </div>
                             </div>
@@ -289,7 +383,7 @@ function ProfilePage({ darkMode }) {
                                 </div>
                                 <div className='form-group-input2'>
                                     {isEditMode ? (
-                                        <input type='password' id='password' name='password' value={userData.password} onChange={(e) => setUserData({ ...userData, password: e.target.value })} />
+                                        <input type='text' id='password' name='password' value={userData.password} onChange={(e) => setUserData({ ...userData, password: e.target.value })} />
                                     ) : (
                                         <span>{userData.password}</span>
                                     )}

@@ -42,14 +42,11 @@ class GenerateTokenView(APIView):
         name = request.data.get('name')
         user_id = request.data.get('id')
         role = 'normal'
-
         try:
             user = User.objects.get(id=user_id)
         except User.DoesNotExist:
             user = User.objects.create(id=user_id, nome=name, email=email, role=role)
             preferences = UserPreference.objects.create(id=user_id)
-
-
         expiration_time = datetime.utcnow() + timedelta(hours=1)
 
         token_payload = {
@@ -72,13 +69,13 @@ class UpdateUserView(APIView):
         user_id = token_result['success']
         user = get_object_or_404(User, id=user_id)
 
-        nome = request.POST.get('nome')
-        endereco = request.POST.get('endereco')
-        telemovel = request.POST.get('telemovel')
+        # Obtém os dados do corpo da solicitação
+        data = request.data
 
-        user.nome = nome
-        user.endereco = endereco
-        user.telemovel = telemovel
+        # Atualiza as informações do usuário com os dados da solicitação
+        user.nome = data.get('nome', user.nome)
+        user.endereco = data.get('endereco', user.endereco)
+        user.telemovel = data.get('telemovel', user.telemovel)
 
         user.save()
 
@@ -171,9 +168,9 @@ class UpdateUserPreferenceView(APIView):
         if request.method == 'POST':
             # Verifica se o usuário já existe no banco de dados
             user_preference, created = UserPreference.objects.get_or_create(id=user_id)
-
             # Obtém os dados do corpo da solicitação
-            data = request.POST
+            data = request.data
+            print("request.data",data)            
 
             # Atualiza os campos com os dados da solicitação
             user_preference.sports_center = data.get('sports_center', user_preference.sports_center)

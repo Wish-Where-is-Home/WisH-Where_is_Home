@@ -88,8 +88,9 @@ function Navbar({ darkMode, toggleDarkMode }) {
                                        <FontAwesomeIcon icon={faUser} />
                                         {showDropdown && (
                                             <ul className="menu-dropdown">
-                                                <li><a href="/profilepage">Profile</a></li>
-                                                <li><a onClick={handleLogout}>Logout</a></li>
+                                                <li><a href="/profilepage">{t('profile')}</a></li>
+                                                <li><a href="/profilepage">{t('sellpropertie')}</a></li>
+                                                <li><a onClick={handleLogout}>{t('logout')}</a></li>
                                             </ul>
                                         )}
                                     </li>

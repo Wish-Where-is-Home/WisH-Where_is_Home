@@ -13,6 +13,7 @@ import QuizPage from './Pages/SecondPage/QuizPage';
 import Questions from './Pages/Questions/Questions';
 import { useAuth } from './AuthContext/AuthContext';
 import ProfilePage from './Pages/ProfilePage/ProfilePage';
+import AdminPage from './Pages/AdminPage/AdminPage';
 
 
 
@@ -114,6 +115,7 @@ function App() {
           <Route exact path="/quiz" element={<QuizPage darkMode={darkMode} zoneData={zoneData} scores={scores} updateScores={updateScores} />} />
           <Route exact path="/metricspage" element={<MetricsPage  darkMode={darkMode} zoneData={zoneData} scores={scores} updateScores={updateScores} />} />
           <Route exact path="/profilepage" element={<ProfilePage darkMode={darkMode} zoneData={zoneData} scores={scores} updateScores={updateScores} />} />
+          <Route exact path="/admin" element={<AdminPage darkMode={darkMode} />} />
         </Routes>
       </Router>
     </div>

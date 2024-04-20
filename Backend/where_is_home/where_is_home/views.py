@@ -287,7 +287,7 @@ class UpdateRoomStatus(APIView):
 
             if status == 'accepted':
                 # Atualiza o estado para aceito
-                quarto.estado = 'accepted'
+                quarto.estado = 'approved'
                 quarto.coments_by_admin = None  # Limpa o campo de comentário
                 quarto.save()
                 return JsonResponse({"message": "Room status updated to accepted."})

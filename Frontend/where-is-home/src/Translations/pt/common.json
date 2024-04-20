@@ -79,5 +79,8 @@
     "zoomOut":"Reduzir o zoom",
     "guardar":"Guardar",
     "logout":"Sair",
-    "sellpropertie":"Vender Propriedades"
+    "sellpropertie":"Vender Propriedades",
+    "close":"Fechar",
+    "modalp":"Você deseja manter as métricas salvas?",
+    "yes":"Sim"
 }

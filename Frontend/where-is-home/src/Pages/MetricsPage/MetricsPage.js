@@ -341,7 +341,8 @@ const zone = IdType;
 
 
       function handleGoBackPage() {
-        navigate('/quiz', {state: {selectedDistrict,districtId,IdType,scores,slidersValues,sliderValuesCruz} })
+        const camefromback=true;
+        navigate('/quiz', {state: {selectedDistrict,districtId,IdType,scores,slidersValues,sliderValuesCruz,camefromback} })
     }
 
       

@@ -80,7 +80,10 @@
     "zoomOut":"zoom out",
     "guardar":"Save",
     "logout":"Logout",
-    "sellpropertie":"Sell Properties"
+    "sellpropertie":"Sell Properties",
+    "close":"Close",
+    "modalp":"Do you want to keep the saved metrics?",
+    "yes":"Yes"
 
     
     

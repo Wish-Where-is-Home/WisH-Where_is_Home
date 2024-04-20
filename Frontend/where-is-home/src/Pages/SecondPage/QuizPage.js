@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import Slider from '@mui/material/Slider';
 import Box from '@mui/material/Box';
 import { useAuth } from '../../AuthContext/AuthContext';
+import ModalW from '../../Components/ModalW/ModalW.js';
 import 'proj4leaflet';
 
 
@@ -28,6 +29,9 @@ function QuizPage({ darkMode, zoneData,scores,updateScores}) {
   const [showQuestions, setShowQuestions] = useState(false);
   const navigate = useNavigate();
   const [hoveredDistrictId, setHoveredDistrictId] = useState(null);
+  const [camefromback,setCameFromBack]=useState(false);
+  const [OpenPreferencesModal,setOpenPreferencesModal] = useState(true);
+  const [metricsSaved, setMetricsSaved] = useState(false);
 
 
   const [slidersValues, setSlidersValues] = useState([
@@ -44,6 +48,36 @@ const portugalBounds = [
   [34, -12],
   [45, -6]
 ];
+
+useEffect(() => {
+  const fetchUserMetrics = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch('http://mednat.ieeta.pt:9009/users/preferences/', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        const metricsSaved = Object.values(data).some(value => value !== null && value !== "0.0000");
+        setMetricsSaved(metricsSaved);
+        console.log(metricsSaved);
+
+
+      } else {
+        throw new Error('Failed to fetch user metrics');
+      }
+    } catch (error) {
+      console.error('Error fetching user metrics:', error);
+    }
+  };
+
+  fetchUserMetrics();
+}, []);
 
 
   const mapRef = useRef(null);
@@ -69,6 +103,10 @@ const portugalBounds = [
 
       if(location.state.zone){
         setIdType(location.state.zone);
+      }
+
+      if (location.state.camefromback){
+        setCameFromBack(location.state.camefromback);
       }
 
     }
@@ -577,8 +615,112 @@ const handleOpenModalMap = () => {
   setOpenModalMap(true);
 };
 
+
+
 const handleCloseModal = () => {
-  setOpenModalMap(false);
+  setOpenPreferencesModal(false);
+  setCameFromBack(false);
+};
+
+const handleKeepMetrics = async () => {
+
+  const locationMappings = {
+    1: 'sports_center',
+    2: 'commerce',
+    3: 'bakery',
+    4: 'food_court',
+    5: 'nightlife',
+    6: 'camping',
+    7: 'health_services',
+    8: 'hotel',
+    9: 'supermarket',
+    10: 'culture',
+    11: 'school',
+    12: 'library',
+    13: 'parks',
+    14: 'services',
+    15: 'kindergarten',
+    16: 'university',
+    17: 'entertainment',
+    18: 'pharmacy',
+    19: 'swimming_pool',
+    20: 'bank',
+    21: 'post_office',
+    22: 'hospital',
+    23: 'clinic',
+    24: 'veterinary',
+    25: 'beach_river',
+    26: 'industrial_zone',
+    27: 'bicycle_path',
+    28: 'walking_routes',
+    29: 'car_park'
+  };
+
+  try {
+    const token = localStorage.getItem('token');
+    const response = await fetch('http://mednat.ieeta.pt:9009/users/preferences/', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    if (response.ok) {
+      const backendData = await response.json();
+        const nature_sportsValue = parseFloat(backendData['theme_nature_sports']) || 0;
+        const commerceValue =  parseFloat(backendData['theme_commerce']) || 0;
+        const educationValue =  parseFloat(backendData['theme_education']) || 0;
+        const healthValue =  parseFloat(backendData['theme_health']) || 0;
+        const serviceValue =  parseFloat(backendData['theme_service']) || 0;
+        const social_leisureValue =  parseFloat(backendData['theme_social_leisure']) || 0;
+
+        delete backendData['theme_nature_sports'];
+        delete backendData['theme_commerce'];
+        delete backendData['theme_education'];
+        delete backendData['theme_health'];
+        delete backendData['theme_service'];
+        delete backendData['theme_social_leisure'];
+       
+        const updatedSlidersValues = slidersValues.map(slider => {
+          switch (slider.id) {
+            case 3:
+              return { ...slider, value: nature_sportsValue };
+            case 0:
+              return { ...slider, value: commerceValue };
+            case 5:
+              return { ...slider, value: educationValue };
+            case 2:
+              return { ...slider, value: healthValue };
+            case 4:
+              return { ...slider, value: serviceValue };
+            case 1:
+              return { ...slider, value: social_leisureValue };
+            default:
+              return slider;
+          }
+        });
+
+
+        Object.entries(locationMappings).forEach(([id, key]) => {
+          const value = parseFloat(backendData[key]) || 0;
+          if (value !== 0) {
+            setSliderValuesCruz(prevState => ({
+              ...prevState,
+              [id]: value
+            }));
+          }
+        });
+
+        
+        setSlidersValues(updatedSlidersValues);
+        setOpenPreferencesModal(false);
+     
+    } else {
+      console.error('Failed to fetch preferences data');
+    }
+  } catch (error) {
+    console.error('Error fetching preferences data:', error);
+  }
 };
 
 
@@ -892,6 +1034,9 @@ const handleCloseModal = () => {
           </MapContainer>
         )}
       </div>
+      {!camefromback && isAuthenticated &&  metricsSaved && OpenPreferencesModal && (
+        <ModalW handleCloseModal={handleCloseModal} handleKeepMetrics={handleKeepMetrics}/>
+      )}
     </div >
   );
 }

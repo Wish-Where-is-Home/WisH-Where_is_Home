@@ -75,6 +75,8 @@
     "Kindergartens": "Jardins de infância",
     "Universities": "Universidades",
     "edit": "Editar",
+    "confirmModal": "Tem a certeza que deseja guardar as alterações?",
+    "cancel": "Cancelar",
 
     "zoomOut":"Reduzir o zoom"
 }

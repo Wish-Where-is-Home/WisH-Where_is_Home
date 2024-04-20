@@ -384,25 +384,57 @@ h2 {
   transition: background-color 0.3s; 
   margin-right: 5%;
 }
-
-
-
-
-
-
 .dark-mode {
-    --button-color: #5f79b7;
-    --button-text-color: #FFFFFF;
-    --button-hover-color: #2D4373;
-    --input-background-color: #a1a3ad;
-
-  }
-
+  --button-color: #5f79b7;
+  --button-text-color: #FFFFFF;
+  --button-hover-color: #2D4373;
+  --input-background-color: #a1a3ad;
+}
 
 .light-mode {
-    --button-color: #2D4373;
-    --button-text-color: #FFFFFF;
-    --button-hover-color: #5f79b7;
+  --button-color: #2D4373;
+  --button-text-color: #FFFFFF;
+  --button-hover-color: #5f79b7;
+}
 
-    }
+.btn-confirmation-editProfile {
+  border: none;
+  outline: none;
+  border-radius: 20px;
+  font-size: 1.2rem;
+  display: flex;
+  height: 35px;
+  width: 130px;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--button-color); 
+  color: var(--button-text-color); 
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); 
+  transition: background-color 0.3s; 
+  margin-left: 5%;
+}
 
+.btn-confirmation-editProfile:hover {
+  background-color: var(--button-hover-color);
+}
+
+.div-btn-modal-profile{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 5px;
+}
+
+.box_Profile{
+  border-radius: 5px;
+  width: 30%;
+  height: 10%;
+  background-color: var(--background-color);
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+}

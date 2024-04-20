@@ -2,9 +2,10 @@ import React, { useRef, useEffect, useState } from 'react';
 import './ProfilePage.css';
 import { useTranslation } from "react-i18next";
 import Slider from '@mui/material/Slider';
-import Box from '@mui/material/Box';
 import { BsChevronDown, BsChevronUp } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
+import { Modal, Box, Typography } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 
 function ProfilePage({ darkMode }) {
     const { t } = useTranslation("common");
@@ -15,7 +16,12 @@ function ProfilePage({ darkMode }) {
     const [isExpandedServices, setIsExpandedServices] = useState(false);
     const [isExpandedEducation, setIsExpandedEducation] = useState(false);
     const navigate = useNavigate();
+
+    const [metricsSaved, setMetricsSaved] = useState(false);
     
+
+    const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+
     const [slidersValues, setSlidersValues] = useState([
         { id: 0, value: 0 },  
         { id: 1, value: 0 },  
@@ -28,12 +34,80 @@ function ProfilePage({ darkMode }) {
     const [isEditMode, setIsEditMode] = useState(false);
 
     const [userData, setUserData] = useState({
-        nome: 'John Doe',
-        endereco: '123 Main St',
-        telemovel: '555-1234',
-        email: 'john@example.com',
-        password:'*****'
+        nome: '',
+        endereco: '',
+        telemovel: '',
+        email: '',
+        password:''
     });
+    
+    const openConfirmationModal = () => setShowConfirmationModal(true);
+    const closeConfirmationModal = () => setShowConfirmationModal(false);
+
+    const handleSaveClick = () => {
+        openConfirmationModal(); 
+      };
+
+
+
+    const handleCancelSave = () => {
+        closeConfirmationModal();
+    };
+
+    
+
+
+
+    const handleConfirmSave = () => {
+        closeConfirmationModal();
+        setIsEditMode(false);
+
+        const token = localStorage.getItem('token');
+        setIsEditMode(false); 
+
+        const updatedUserData = {
+            nome: document.getElementById('name').value,
+            endereco: document.getElementById('address').value,
+            telemovel: document.getElementById('phone').value,
+            email: userData.email, 
+            password: userData.password
+        };
+        setUserData(updatedUserData);
+        
+      
+        // Make a fetch request to update user data
+        fetch('http://mednat.ieeta.pt:9009/users/update/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            nome: updatedUserData.nome,
+            endereco: updatedUserData.endereco,
+            telemovel: updatedUserData.telemovel,
+          })
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Falha ao atualizar dados do usuário');
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log('User data updated:', data);
+          alert('Dados salvos!');
+          // Você pode opcionalmente atualizar o estado local de userData, se necessário
+        })
+        .catch(error => {
+          console.error(error);
+          // Manipule os erros adequadamente, como mostrando uma mensagem de erro ao usuário
+        });
+    };
+
+    
+    
+    
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -59,75 +133,12 @@ function ProfilePage({ darkMode }) {
             .catch(error => {
                 console.error(error);
             });
-            fetch('http://mednat.ieeta.pt:9009/users/preferences/', {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Falha ao obter dados do usuário');
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log('Preferences:' ,data);
-            })
-            .catch(error => {
-                console.error(error);
-            });
+            
         }
     }, []); 
-    // update user info 
-    // fetch('http://mednat.ieeta.pt:9009/users/update/', {
-    //     method: 'POST',
-    //     headers: {
-    //         'Authorization': `Bearer ${token}`
-    //     },
-    //     body: JSON.stringify({
-    //         "nome": nome_atualizado,
-    //         "endereco": endereco_atualizado,
-    //         "telemovel": telemovel_atualizado,
 
-    //     })
-    // })
-    // .then(response => {
-    //     if (!response.ok) {
-    //         throw new Error('Falha ao obter dados do usuário');
-    //     }
-    //     return response.json();
-    // })
-    // .then(data => {
-    //     console.log('Preferences:', data);
-    // })
-    // .catch(error => {
-    //     console.error(error);
-    // });
-
-    // update preferences info 
-    // fetch('http://mednat.ieeta.pt:9009/users/preferences/update/', {
-    //     method: 'POST',
-    //     headers: {
-    //         'Authorization': `Bearer ${token}`
-    //     },
-    //     body: JSON.stringify({
-    //        PEDE ESTA PARTE AO VASCO
-
-    //     })
-    // })
-    // .then(response => {
-    //     if (!response.ok) {
-    //         throw new Error('Falha ao obter dados do usuário');
-    //     }
-    //     return response.json();
-    // })
-    // .then(data => {
-    //     console.log('Preferences:', data);
-    // })
-    // .catch(error => {
-    //     console.error(error);
-    // });
+    
+   
     const handleSliderChange = (index, value) => {
         if (value === 0) {
             switch (index) {
@@ -187,14 +198,12 @@ function ProfilePage({ darkMode }) {
         setIsEditMode(!isEditMode);
     };
 
-    const handleSaveClick = () => {
-        setIsEditMode(false); 
-        alert('Dados salvos!');
-    };
 
     const handleCancelClick = () => {
         setIsEditMode(false); 
     };
+
+
 
 
     //Questions
@@ -260,8 +269,33 @@ function ProfilePage({ darkMode }) {
         });
         return values;
     };
+
     const [ sliderValuesCruz, setSliderValuesCruz] = useState(buildInitialState());
 
+    
+    const mapPreferenceDataToSliders = (preferenceData) => {
+        const sliderMapping = {
+          commerce: 0,
+          social_leisure: 1,
+          health: 2,
+          nature_sports: 3,
+          services: 4,
+          education: 5
+          // Mapeie outras chaves conforme necessário
+        };
+    
+        const updatedSliders = slidersValues.map((slider, index) => {
+          const preferenceKey = Object.keys(preferenceData)[index];
+          if (preferenceKey in sliderMapping) {
+            const value = parseFloat(preferenceData[preferenceKey]);
+            return { ...slider, value };
+          }
+          return slider;
+        });
+    
+        setSlidersValues(updatedSliders);
+      };
+      
 
 
     useEffect(() => {
@@ -270,8 +304,36 @@ function ProfilePage({ darkMode }) {
       setActiveTab(firstAvailableTab >= 0 ? firstAvailableTab : 0);
     }, [slidersValues]);
 
+    useEffect(() => {
+        const fetchUserMetrics = async () => {
+          try {
+            const token = localStorage.getItem('token');
+            const response = await fetch('http://mednat.ieeta.pt:9009/users/preferences/', {
+              method: 'GET',
+              headers: {
+                'Authorization': `Bearer ${token}`
+              }
+            });
       
-      const onSliderChange = (newValue, groupIds) => {
+            if (response.ok) {
+              const data = await response.json();
+              console.log("data",data);
+              mapPreferenceDataToSliders(data);
+      
+      
+            } else {
+              throw new Error('Failed to fetch user metrics');
+            }
+          } catch (error) {
+            console.error('Error fetching user metrics:', error);
+          }
+        };
+      
+        fetchUserMetrics();
+      }, []);
+
+      
+    const onSliderChange = (newValue, groupIds) => {
         setSliderValuesCruz(prevValues => {
             const updatedValues = groupIds.reduce((acc, id) => ({
                 ...acc,
@@ -316,6 +378,95 @@ function ProfilePage({ darkMode }) {
             </div>
         ));
     };
+    const handleSavePreferences = () => {
+
+        const token = localStorage.getItem('token');
+        const data = {
+          
+          theme_commerce: slidersValues[0].value,
+          theme_social_leisure: slidersValues[1].value,
+          theme_health: slidersValues[2].value,
+          theme_nature_sports: slidersValues[3].value,
+          theme_services: slidersValues[4].value,
+          theme_education: slidersValues[5].value,
+      
+        };
+      
+      
+        const locationMappings = {
+          1: 'sports_center',
+          2: 'commerce',
+          3: 'bakery',
+          4: 'food_court',
+          5: 'nightlife',
+          6: 'camping',
+          7: 'health_services',
+          8: 'hotel',
+          9: 'supermarket',
+          10: 'culture',
+          11: 'school',
+          12: 'library',
+          13: 'parks',
+          14: 'services',
+          15: 'kindergarten',
+          16: 'university',
+          17: 'entertainment',
+          18: 'pharmacy',
+          19: 'swimming_pool',
+          20: 'bank',
+          21: 'post_office',
+          22: 'hospital',
+          23: 'clinic',
+          24: 'veterinary',
+          25: 'beach_river',
+          26: 'industrial_zone',
+          27: 'bicycle_path',
+          28: 'walking_routes',
+          29: 'car_park'
+        };
+      
+      
+      Object.keys(locationMappings).forEach(id => {
+        const key = locationMappings[id];
+        let value = 0;
+      
+        const sliderValue = sliderValuesCruz[id];
+      
+        if (sliderValue !== undefined) {
+            value = sliderValue;
+        }
+        
+      
+        
+      
+        
+        data[key] = value;
+      });
+        
+        console.log("DATA TO UPDATE",data);
+      
+      
+        
+        fetch('http://mednat.ieeta.pt:9009/users/preferences/update/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify(data)
+        })
+        .then(response => {
+          if (response.ok) {
+            alert("Data sucessfully saved")
+            console.log('Preferences saved successfully');
+          } else {
+            throw new Error('Failed to save preferences');
+          }
+        })
+        .catch(error => {
+          console.error('Error saving preferences:', error);
+        });
+      };
 
 
 
@@ -370,14 +521,10 @@ function ProfilePage({ darkMode }) {
                                     <label htmlFor='email'>{t('email')}:</label>
                                 </div>
                                 <div className='form-group-input2'>
-                                    {isEditMode ? (
-                                        <input type='text' id='email' name='email' value={userData.email} onChange={(e) => setUserData({ ...userData, email: e.target.value })} />
-                                    ) : (
-                                        <span>{userData.email}</span>
-                                    )}
+                                    <span>{userData.email}</span>
                                 </div>
                             </div>
-                            <div className='form-group-row2'>
+                            {/* <div className='form-group-row2'>
                                 <div className='form-group-label2'>
                                 <label htmlFor='password'>{t('password')}:</label>
                                 </div>
@@ -388,8 +535,7 @@ function ProfilePage({ darkMode }) {
                                         <span>{userData.password}</span>
                                     )}
                                 </div>
-
-                            </div>
+                            </div> */}
                             <div className='button-group2'>
                                 {!isEditMode ? (
                                     <button type="button" className="button-edit" onClick={toggleEditMode}>{t('edit')}</button>
@@ -400,10 +546,39 @@ function ProfilePage({ darkMode }) {
                                     </>
                                 )}
                             </div>
+                            {/* Modal de confirmação */}
+                            
+                            <Modal
+                                open={showConfirmationModal}
+                                aria-labelledby="modal-modal-title"
+                                aria-describedby="modal-modal-description"
+                            >
+                                <Box className={`box_Profile ${darkMode ? 'dark-mode' : 'light-mode'}`} >        
+
+                                    <CloseIcon onClick={closeConfirmationModal} sx={{ position: 'absolute', top: 0, right: 0, margin: 1, cursor: 'pointer' }} />
+                                    
+                                    <Typography id="modal-modal-title" variant="h6" component="h5">
+                                        {t('confirmModal')}
+                                    </Typography>
+                                    
+                                    <div className='div-btn-modal-profile' >
+                                        <button className="btn-confirmation-editProfile" onClick={handleConfirmSave}>{t('save')}</button>
+                                        <button className="btn-confirmation-editProfile" onClick={handleCancelSave}>{t('cancel')}</button>
+                                    </div>
+
+                                </Box>
+                            </Modal>
+
+
+
                         </form>
                     </div>
                 </div>
             </div>
+
+
+
+            {/*Preferences*/}
             <div className='right-container2'>
                 <div className='search-filters2'>
                     <div className="static-text-preferences">
@@ -419,22 +594,22 @@ function ProfilePage({ darkMode }) {
                                         aria-label="Importance"
                                         value={slidersValues[0].value}
                                         valueLabelDisplay="auto"
-                                        step={25}
+                                        step={0.25}
                                         id="commerce"
                                         marks
                                         min={0}
-                                        max={100}
+                                        max={1}
                                         valueLabelFormat={(value) => {
                                         switch (value) {
                                             case 0:
                                             return t('notimportant');
-                                            case 25:
+                                            case 0.25:
                                             return t('slightly');
-                                            case 50:
+                                            case 0.5:
                                             return t('moderate');
-                                            case 75:
+                                            case 0.75:
                                             return t('important');
-                                            case 100:
+                                            case 1:
                                             return t('very_Important');
                                             default:
                                             return '';
@@ -476,22 +651,22 @@ function ProfilePage({ darkMode }) {
                                         aria-label="Importance"
                                         value={slidersValues[1].value}
                                         valueLabelDisplay="auto"
-                                        step={25}
+                                        step={0.25}
                                         id="social_leisure"
                                         marks
                                         min={0}
-                                        max={100}
+                                        max={1}
                                         valueLabelFormat={(value) => {
                                         switch (value) {
                                             case 0:
                                             return t('notimportant');
-                                            case 25:
+                                            case 0.25:
                                             return t('slightly');
-                                            case 50:
+                                            case 0.5:
                                             return t('moderate');
-                                            case 75:
+                                            case 0.75:
                                             return t('important');
-                                            case 100:
+                                            case 1:
                                             return t('very_Important');
                                             default:
                                             return '';
@@ -530,22 +705,22 @@ function ProfilePage({ darkMode }) {
                                         aria-label="Importance"
                                         value={slidersValues[2].value}
                                         valueLabelDisplay="auto"
-                                        step={25}
+                                        step={0.25}
                                         id="health"
                                         marks
                                         min={0}
-                                        max={100}
+                                        max={1}
                                         valueLabelFormat={(value) => {
                                         switch (value) {
                                             case 0:
                                             return t('notimportant');
-                                            case 25:
+                                            case 0.25:
                                             return t('slightly');
-                                            case 50:
+                                            case 0.5:
                                             return t('moderate');
-                                            case 75:
+                                            case 0.75:
                                             return t('important');
-                                            case 100:
+                                            case 1:
                                             return t('very_Important');
                                             default:
                                             return '';
@@ -584,22 +759,22 @@ function ProfilePage({ darkMode }) {
                                         aria-label="Importance"
                                         value={slidersValues[3].value}
                                         valueLabelDisplay="auto"
-                                        step={25}
+                                        step={0.25}
                                         id="nature_sports"
                                         marks
                                         min={0}
-                                        max={100}
+                                        max={1}
                                         valueLabelFormat={(value) => {
                                         switch (value) {
                                             case 0:
                                             return t('notimportant');
-                                            case 25:
+                                            case 0.25:
                                             return t('slightly');
-                                            case 50:
+                                            case 0.5:
                                             return t('moderate');
-                                            case 75:
+                                            case 0.75:
                                             return t('important');
-                                            case 100:
+                                            case 1:
                                             return t('very_Important');
                                             default:
                                             return '';
@@ -638,22 +813,22 @@ function ProfilePage({ darkMode }) {
                                         aria-label="Importance"
                                         value={slidersValues[4].value}
                                         valueLabelDisplay="auto"
-                                        step={25}
+                                        step={0.25}
                                         id="service"
                                         marks
                                         min={0}
-                                        max={100}
+                                        max={1}
                                         valueLabelFormat={(value) => {
                                         switch (value) {
                                             case 0:
                                             return t('notimportant');
-                                            case 25:
+                                            case 0.25:
                                             return t('slightly');
-                                            case 50:
+                                            case 0.5:
                                             return t('moderate');
-                                            case 75:
+                                            case 0.75:
                                             return t('important');
-                                            case 100:
+                                            case 1:
                                             return t('very_Important');
                                             default:
                                             return '';
@@ -692,22 +867,22 @@ function ProfilePage({ darkMode }) {
                                         aria-label="Importance"
                                         value={slidersValues[5].value}
                                         valueLabelDisplay="auto"
-                                        step={25}
+                                        step={0.25}
                                         id="education"
                                         marks
                                         min={0}
-                                        max={100}
+                                        max={1}
                                         valueLabelFormat={(value) => {
                                         switch (value) {
                                             case 0:
                                             return t('notimportant');
-                                            case 25:
+                                            case 0.25:
                                             return t('slightly');
-                                            case 50:
+                                            case 0.5:
                                             return t('moderate');
-                                            case 75:
+                                            case 0.75:
                                             return t('important');
-                                            case 100:
+                                            case 1:
                                             return t('very_Important');
                                             default:
                                             return '';
@@ -740,7 +915,7 @@ function ProfilePage({ darkMode }) {
                         
                     </div>
                     <div className='button-save-div-pref2'>
-                        <button className="button-save-pref2" onClick={handleSaveClick}>{t('save')}</button>
+                        <button className="button-save-pref2" onClick={handleSavePreferences}>{t('save')}</button>
                     </div>
                 </div>
             </div>

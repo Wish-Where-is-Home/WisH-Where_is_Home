@@ -62,7 +62,7 @@
     cursor: pointer;
   }
   
-  .residenceDetails {
+  .residenceDetails2 {
     display: flex;
     justify-content: space-between;
     gap: 20px;
@@ -91,7 +91,7 @@
   }
   
   .light-mode .residenceDetailsPrice {
-    background-color: #333;
+    background-color: rgba(202, 240, 241, 0.47);
   }
   
   .residenceDetailsPrice > h1 {

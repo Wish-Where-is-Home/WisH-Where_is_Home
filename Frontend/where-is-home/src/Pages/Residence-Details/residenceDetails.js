@@ -90,7 +90,7 @@ const ResidenceDetails = ({ darkMode }) => {
               </div>
             ))}
           </div>
-          <div className="residenceDetails">
+          <div className="residenceDetails2">
             <div className="residenceDetailsTexts">
               <p className="residenceDesc">
                 Aqui vou descrever porque é que este apartamento é tão perfeito para alunos estudantes da Universidade de Aveiro.

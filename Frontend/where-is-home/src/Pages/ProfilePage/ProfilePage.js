@@ -270,60 +270,17 @@ function ProfilePage({ darkMode }) {
         return values;
     };
 
+    
+
     const [ sliderValuesCruz, setSliderValuesCruz] = useState(buildInitialState());
 
-    
-    const mapPreferenceDataToSliders = (preferenceData) => {
-        const locationMappings = {
-            1: 'sports_center',
-            2: 'commerce',
-            3: 'bakery',
-            4: 'food_court',
-            5: 'nightlife',
-            6: 'camping',
-            7: 'health_services',
-            8: 'hotel',
-            9: 'supermarket',
-            10: 'culture',
-            11: 'school',
-            12: 'library',
-            13: 'parks',
-            14: 'services',
-            15: 'kindergarten',
-            16: 'university',
-            17: 'entertainment',
-            18: 'pharmacy',
-            19: 'swimming_pool',
-            20: 'bank',
-            21: 'post_office',
-            22: 'hospital',
-            23: 'clinic',
-            24: 'veterinary',
-            25: 'beach_river',
-            26: 'industrial_zone',
-            27: 'bicycle_path',
-            28: 'walking_routes',
-            29: 'car_park'
-          };
-        const updatedSliders = slidersValues.map((slider, index) => {
-            const key = locationMappings[index+2]; // Ajuste do índice para corresponder às chaves em locationMappings
-            if (key && preferenceData[key] !== undefined) {
-                const value = parseFloat(preferenceData[key]);
-                return { ...slider, value };
-            }
-            return slider;
+    const buildInitialStateSliders = () => {
+        const initialState = {};
+        Object.keys(sliderValuesCruz).forEach(id => {
+            initialState[id] = 0;
         });
-
-        console.log("Updated Sliders AQUIIIIIIIIIII",updatedSliders);
-    
-        setSlidersValues(updatedSliders);
+        return initialState;
     };
-    
-    
-    
-    
-      
-
 
     useEffect(() => {
      
@@ -334,31 +291,106 @@ function ProfilePage({ darkMode }) {
 
     useEffect(() => {
         const fetchUserMetrics = async () => {
-          try {
-            const token = localStorage.getItem('token');
-            const response = await fetch('http://mednat.ieeta.pt:9009/users/preferences/', {
-              method: 'GET',
-              headers: {
-                'Authorization': `Bearer ${token}`
+            const locationMappings = {
+                1: 'sports_center',
+                2: 'commerce',
+                3: 'bakery',
+                4: 'food_court',
+                5: 'nightlife',
+                6: 'camping',
+                7: 'health_services',
+                8: 'hotel',
+                9: 'supermarket',
+                10: 'culture',
+                11: 'school',
+                12: 'library',
+                13: 'parks',
+                14: 'services',
+                15: 'kindergarten',
+                16: 'university',
+                17: 'entertainment',
+                18: 'pharmacy',
+                19: 'swimming_pool',
+                20: 'bank',
+                21: 'post_office',
+                22: 'hospital',
+                23: 'clinic',
+                24: 'veterinary',
+                25: 'beach_river',
+                26: 'industrial_zone',
+                27: 'bicycle_path',
+                28: 'walking_routes',
+                29: 'car_park'
+              };
+            
+              try {
+                const token = localStorage.getItem('token');
+                const response = await fetch('http://mednat.ieeta.pt:9009/users/preferences/', {
+                  method: 'GET',
+                  headers: {
+                    'Authorization': `Bearer ${token}`
+                  }
+                });
+            
+                if (response.ok) {
+                  const backendData = await response.json();
+                    const nature_sportsValue = parseFloat(backendData['theme_nature_sports']) || 0;
+                    const commerceValue =  parseFloat(backendData['theme_commerce']) || 0;
+                    const educationValue =  parseFloat(backendData['theme_education']) || 0;
+                    const healthValue =  parseFloat(backendData['theme_health']) || 0;
+                    const serviceValue =  parseFloat(backendData['theme_service']) || 0;
+                    const social_leisureValue =  parseFloat(backendData['theme_social_leisure']) || 0;
+            
+                    delete backendData['theme_nature_sports'];
+                    delete backendData['theme_commerce'];
+                    delete backendData['theme_education'];
+                    delete backendData['theme_health'];
+                    delete backendData['theme_service'];
+                    delete backendData['theme_social_leisure'];
+                   
+                    const updatedSlidersValues = slidersValues.map(slider => {
+                      switch (slider.id) {
+                        case 3:
+                          return { ...slider, value: nature_sportsValue };
+                        case 0:
+                          return { ...slider, value: commerceValue };
+                        case 5:
+                          return { ...slider, value: educationValue };
+                        case 2:
+                          return { ...slider, value: healthValue };
+                        case 4:
+                          return { ...slider, value: serviceValue };
+                        case 1:
+                          return { ...slider, value: social_leisureValue };
+                        default:
+                          return slider;
+                      }
+                    });
+            
+            
+                    Object.entries(locationMappings).forEach(([id, key]) => {
+                      const value = parseFloat(backendData[key]) || 0;
+                      if (value !== 0) {
+                        setSliderValuesCruz(prevState => ({
+                          ...prevState,
+                          [id]: value
+                        }));
+                      }
+                    });
+            
+                    
+                    setSlidersValues(updatedSlidersValues);
+                    
+                 
+                } else {
+                  console.error('Failed to fetch preferences data');
+                }
+              } catch (error) {
+                console.error('Error fetching preferences data:', error);
               }
-            });
-      
-            if (response.ok) {
-              const data = await response.json();
-              console.log("data",data);
-              mapPreferenceDataToSliders(data);
-      
-      
-            } else {
-              throw new Error('Failed to fetch user metrics');
-            }
-          } catch (error) {
-            console.error('Error fetching user metrics:', error);
-          }
-        };
-      
-        fetchUserMetrics();
-      }, []);
+            };
+            fetchUserMetrics();
+            }, []);
 
       
     const onSliderChange = (newValue, groupIds) => {
@@ -496,6 +528,127 @@ function ProfilePage({ darkMode }) {
           console.error('Error saving preferences:', error);
         });
       };
+
+    const handleResetSliders = () => {
+        const token = localStorage.getItem('token');
+        const data = {
+          
+          theme_commerce: 0,
+          theme_social_leisure: 0,
+          theme_health: 0,
+          theme_nature_sports: 0,
+          theme_services: 0,
+          theme_education: 0,
+      
+        };
+      
+      
+        const locationMappings = {
+          1: 'sports_center',
+          2: 'commerce',
+          3: 'bakery',
+          4: 'food_court',
+          5: 'nightlife',
+          6: 'camping',
+          7: 'health_services',
+          8: 'hotel',
+          9: 'supermarket',
+          10: 'culture',
+          11: 'school',
+          12: 'library',
+          13: 'parks',
+          14: 'services',
+          15: 'kindergarten',
+          16: 'university',
+          17: 'entertainment',
+          18: 'pharmacy',
+          19: 'swimming_pool',
+          20: 'bank',
+          21: 'post_office',
+          22: 'hospital',
+          23: 'clinic',
+          24: 'veterinary',
+          25: 'beach_river',
+          26: 'industrial_zone',
+          27: 'bicycle_path',
+          28: 'walking_routes',
+          29: 'car_park'
+        };
+
+        const nature_sportsValue = 0;
+        const commerceValue = 0;
+        const educationValue = 0;
+        const healthValue = 0;
+        const serviceValue =   0;
+        const social_leisureValue = 0;
+        
+        const updatedSlidersValues = slidersValues.map(slider => {
+            switch (slider.id) {
+            case 3:
+                return { ...slider, value: nature_sportsValue };
+            case 0:
+                return { ...slider, value: commerceValue };
+            case 5:
+                return { ...slider, value: educationValue };
+            case 2:
+                return { ...slider, value: healthValue };
+            case 4:
+                return { ...slider, value: serviceValue };
+            case 1:
+                return { ...slider, value: social_leisureValue };
+            default:
+                return slider;
+            }
+        });
+
+
+        Object.entries(locationMappings).forEach(([id, key]) => {
+
+            setSliderValuesCruz(prevState => ({
+            ...prevState,
+            [id]: 0
+            }));
+            
+          });
+  
+          
+        setSlidersValues(updatedSlidersValues);
+
+        
+      
+      
+        Object.keys(locationMappings).forEach(id => {
+            const key = locationMappings[id];
+            let value = 0;         
+            
+            data[key] = value;
+          });
+            
+            console.log("DATA TO UPDATE",data);
+      
+        
+        fetch('http://mednat.ieeta.pt:9009/users/preferences/update/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify(data)
+        })
+        .then(response => {
+          if (response.ok) {
+            alert("Data sucessfully saved")
+            console.log('Preferences saved successfully');
+          } else {
+            throw new Error('Failed to save preferences');
+          }
+        })
+        .catch(error => {
+          console.error('Error saving preferences:', error);
+        });
+    };
+    
+    
 
 
 
@@ -942,6 +1095,9 @@ function ProfilePage({ darkMode }) {
                             </div>
                         )}
                         
+                    </div>
+                    <div className='button-reset-div-pref2'>
+                        <button className="button-reset-pref2" onClick={handleResetSliders}>Reset</button>
                     </div>
                     <div className='button-save-div-pref2'>
                         <button className="button-save-pref2" onClick={handleSavePreferences}>{t('save')}</button>

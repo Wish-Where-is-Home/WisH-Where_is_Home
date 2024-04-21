@@ -274,27 +274,54 @@ function ProfilePage({ darkMode }) {
 
     
     const mapPreferenceDataToSliders = (preferenceData) => {
-        const sliderMapping = {
-          commerce: 0,
-          social_leisure: 1,
-          health: 2,
-          nature_sports: 3,
-          services: 4,
-          education: 5
-          // Mapeie outras chaves conforme necessário
-        };
-    
+        const locationMappings = {
+            1: 'sports_center',
+            2: 'commerce',
+            3: 'bakery',
+            4: 'food_court',
+            5: 'nightlife',
+            6: 'camping',
+            7: 'health_services',
+            8: 'hotel',
+            9: 'supermarket',
+            10: 'culture',
+            11: 'school',
+            12: 'library',
+            13: 'parks',
+            14: 'services',
+            15: 'kindergarten',
+            16: 'university',
+            17: 'entertainment',
+            18: 'pharmacy',
+            19: 'swimming_pool',
+            20: 'bank',
+            21: 'post_office',
+            22: 'hospital',
+            23: 'clinic',
+            24: 'veterinary',
+            25: 'beach_river',
+            26: 'industrial_zone',
+            27: 'bicycle_path',
+            28: 'walking_routes',
+            29: 'car_park'
+          };
         const updatedSliders = slidersValues.map((slider, index) => {
-          const preferenceKey = Object.keys(preferenceData)[index];
-          if (preferenceKey in sliderMapping) {
-            const value = parseFloat(preferenceData[preferenceKey]);
-            return { ...slider, value };
-          }
-          return slider;
+            const key = locationMappings[index+2]; // Ajuste do índice para corresponder às chaves em locationMappings
+            if (key && preferenceData[key] !== undefined) {
+                const value = parseFloat(preferenceData[key]);
+                return { ...slider, value };
+            }
+            return slider;
         });
+
+        console.log("Updated Sliders AQUIIIIIIIIIII",updatedSliders);
     
         setSlidersValues(updatedSliders);
-      };
+    };
+    
+    
+    
+    
       
 
 
@@ -302,6 +329,7 @@ function ProfilePage({ darkMode }) {
      
       const firstAvailableTab = slidersValues.findIndex(slider => slider.value > 0);
       setActiveTab(firstAvailableTab >= 0 ? firstAvailableTab : 0);
+      console.log("SlidersValues",slidersValues);
     }, [slidersValues]);
 
     useEffect(() => {
@@ -429,6 +457,7 @@ function ProfilePage({ darkMode }) {
       Object.keys(locationMappings).forEach(id => {
         const key = locationMappings[id];
         let value = 0;
+        console.log("SLIDERS CRUZ",sliderValuesCruz);
       
         const sliderValue = sliderValuesCruz[id];
       

@@ -6,6 +6,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSun, faMoon } from '@fortawesome/free-solid-svg-icons';
 import { LanguageSelector } from '../LanguageSelector/LanguageSelector';
 import { useAuth } from '../../AuthContext/AuthContext';
+import { faUser } from '@fortawesome/free-solid-svg-icons'; 
+
 
 
 function Navbar({ darkMode, toggleDarkMode }) {
@@ -38,6 +40,12 @@ function Navbar({ darkMode, toggleDarkMode }) {
     const handleLogout = () => {
         logoutUser(); 
         window.location.reload();
+    };
+
+    const [showDropdown, setShowDropdown] = useState(false);
+
+    const toggleDropdown = () => {
+        setShowDropdown(!showDropdown);
     };
 
 
@@ -76,7 +84,16 @@ function Navbar({ darkMode, toggleDarkMode }) {
                                 {!isAuthenticated ? (
                                     <li><a href="/login">Login</a></li>
                                  ):(
-                                    <li className='logout-menu'><a onClick={handleLogout}>Logout</a></li>
+                                    <li className="user-menu" onClick={toggleDropdown}>
+                                       <FontAwesomeIcon icon={faUser} />
+                                        {showDropdown && (
+                                            <ul className="menu-dropdown">
+                                                <li><a href="/profilepage">{t('profile')}</a></li>
+                                                <li><a href="/profilepage">{t('sellpropertie')}</a></li>
+                                                <li><a onClick={handleLogout}>{t('logout')}</a></li>
+                                            </ul>
+                                        )}
+                                    </li>
                                 )}
                                 
                             </ul>

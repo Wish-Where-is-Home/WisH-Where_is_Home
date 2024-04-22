@@ -11,6 +11,7 @@ import PropertiesPage from './Pages/PropertiesPage/PropertiesPage';
 import Metrics from './Components/Metrics/Metrics';
 import QuizPage from './Pages/SecondPage/QuizPage';
 import Questions from './Pages/Questions/Questions';
+import { useAuth } from './AuthContext/AuthContext';
 import ProfilePage from './Pages/ProfilePage/ProfilePage';
 
 
@@ -25,6 +26,7 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [zoneData, setZoneData] = useState(null);
   const [scores, setScores] = useState(null);
+  const { isAuthenticated,userInfo} = useAuth();
 
 
   const updateScores = (newScores) => {
@@ -94,6 +96,11 @@ function App() {
     setDarkMode(!darkMode);
     document.documentElement.classList.toggle('dark-mode', !darkMode);
   };
+
+
+  function updateuserpreferences(){
+    
+  }
 
   return (
     <div className={`App ${darkMode ? 'dark-mode' : 'light-mode'}`}>

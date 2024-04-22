@@ -79,5 +79,8 @@
     "cancel": "Cancelar",
     "confirmResetModal": "Tem a certeza que deseja redefinir as preferências?",
     "reset": "Redefinir",
-    "zoomOut":"Reduzir o zoom"
+    "zoomOut":"Reduzir o zoom",
+    "guardar":"Guardar",
+    "logout":"Sair",
+    "sellpropertie":"Vender Propriedades"
 }

@@ -10,14 +10,12 @@ import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
 import Slider from '@mui/material/Slider';
 import Box from '@mui/material/Box';
-
+import { useAuth } from '../../AuthContext/AuthContext';
 import 'proj4leaflet';
 
 
-
-
 function QuizPage({ darkMode, zoneData,scores,updateScores}) {
-  
+  const { isAuthenticated,userInfo} = useAuth();
   const { t } = useTranslation("common");
   const location = useLocation();
   const [geojsonData, setGeojsonData] = useState(null);
@@ -29,6 +27,8 @@ function QuizPage({ darkMode, zoneData,scores,updateScores}) {
   const [minZoom, setMinZoom] = useState(null);
   const [showQuestions, setShowQuestions] = useState(false);
   const navigate = useNavigate();
+  const [hoveredDistrictId, setHoveredDistrictId] = useState(null);
+
 
   const [slidersValues, setSlidersValues] = useState([
     { id: 0, value: 0 },  
@@ -209,6 +209,7 @@ const [ sliderValuesCruz, setSliderValuesCruz] = useState(buildInitialState());
 
 
 const geoJSONStyle = (feature) => {
+  
     if (!feature || !scores || slidersValues.every(slider => slider.value === 0)) {
         return {
             fillColor: 'transparent',
@@ -216,8 +217,8 @@ const geoJSONStyle = (feature) => {
             color: darkMode ? 'white' : 'black',
             fillOpacity: 0.3
         };
-    }
-    console.log(districtId);
+    } 
+
 
     const filteredScores = {};
     if (districtId.length >= 2) {
@@ -237,7 +238,6 @@ const geoJSONStyle = (feature) => {
 
     const sortedScores = Object.entries(filteredScores).sort((a, b) => a[1] - b[1]); 
     const totalColors = sortedScores.length;
-    console.log(sortedScores);
     const fillColor = calculateFillColor(sortedScores.findIndex(entry => entry[0] === id), totalColors);
 
     return {
@@ -417,6 +417,38 @@ const geoJSONStyle = (feature) => {
   };
 
 
+  const metricsMapping = {
+    'sports_center': { id: 1, theme: 3 },
+    'commerce': { id: 2, theme: 0 },
+    'bakery': { id: 3, theme: 0 },
+    'food_court': { id: 4, theme: 0 },
+    'nightlife': { id: 5, theme: 1 },
+    'camping': { id: 6, theme: 3 },
+    'health_services': { id: 7, theme: 2 },
+    'hotel': { id: 8, theme: 1 },
+    'supermarket': { id: 9, theme: 0 },
+    'culture': { id: 10, theme: 1 },
+    'school': { id: 11, theme: 5 },
+    'library': { id: 12, theme: 5 },
+    'parks': { id: 13, theme: 3 },
+    'services': { id: 14, theme: 4 },
+    'kindergarten': { id: 15, theme: 5 },
+    'university': { id: 16, theme: 5 },
+    'entretainment': { id: 17, theme: 1 },
+    'pharmacy': { id: 18, theme: 2 },
+    'swimming_pool': { id: 19, theme: 3 },
+    'bank': { id: 20, theme: 4 },
+    'post_office': { id: 21, theme: 4 },
+    'hospital': { id: 22, theme: 2 },
+    'clinic': { id: 23, theme: 2 },
+    'veterinary': { id: 24, theme: 2 },
+    'beach_river': { id: 25, theme: 3 },
+    'industrial_zone': { id: 26, theme: 3 },
+    'bicycle_path': { id: 27, theme: 3 },
+    'walking_routes': { id: 28, theme: 3 },
+    'car_park': { id: 29, theme: 4 }
+};
+
 
 
 
@@ -428,9 +460,11 @@ const geoJSONStyle = (feature) => {
           const districtName = feature.properties.dsg;
           const tooltip = L.tooltip({ direction: 'center', class: 'custom-tooltip' }).setContent(districtName);
           this.bindTooltip(tooltip).openTooltip();
+         
         },
         mouseout: function (e) {
           this.unbindTooltip();
+          const originalStyle = geoJSONStyle(feature);
         },
         click: function (e) {
           handleDistrictClick(e);
@@ -444,6 +478,111 @@ const geoJSONStyle = (feature) => {
    
     navigate('/metricspage', {state: {selectedDistrict,districtId,IdType,scores,slidersValues,sliderValuesCruz} })
 }
+
+const handleSavePreferences = () => {
+
+  const token = localStorage.getItem('token');
+  const data = {
+    
+    theme_commerce: slidersValues[0].value,
+    theme_social_leisure: slidersValues[1].value,
+    theme_health: slidersValues[2].value,
+    theme_nature_sports: slidersValues[3].value,
+    theme_services: slidersValues[4].value,
+    theme_education: slidersValues[5].value,
+
+  };
+
+
+  const locationMappings = {
+    1: 'sports_center',
+    2: 'commerce',
+    3: 'bakery',
+    4: 'food_court',
+    5: 'nightlife',
+    6: 'camping',
+    7: 'health_services',
+    8: 'hotel',
+    9: 'supermarket',
+    10: 'culture',
+    11: 'school',
+    12: 'library',
+    13: 'parks',
+    14: 'services',
+    15: 'kindergarten',
+    16: 'university',
+    17: 'entertainment',
+    18: 'pharmacy',
+    19: 'swimming_pool',
+    20: 'bank',
+    21: 'post_office',
+    22: 'hospital',
+    23: 'clinic',
+    24: 'veterinary',
+    25: 'beach_river',
+    26: 'industrial_zone',
+    27: 'bicycle_path',
+    28: 'walking_routes',
+    29: 'car_park'
+  };
+
+
+Object.keys(locationMappings).forEach(id => {
+  const key = locationMappings[id];
+  let value = 0;
+
+  const sliderValue = sliderValuesCruz[id];
+
+  if (sliderValue !== undefined) {
+      value = sliderValue;
+  }
+  
+
+  
+
+  const metric = metricsMapping[key]; 
+  
+  data[key] = value;
+});
+  
+  console.log(data);
+
+
+  
+  fetch('http://mednat.ieeta.pt:9009/users/preferences/update/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify(data)
+  })
+  .then(response => {
+    if (response.ok) {
+      alert("Data sucessfully saved")
+      console.log('Preferences saved successfully');
+    } else {
+      throw new Error('Failed to save preferences');
+    }
+  })
+  .catch(error => {
+    console.error('Error saving preferences:', error);
+  });
+};
+
+
+const [openModalMap, setOpenModalMap] = useState(false);
+
+const handleOpenModalMap = () => {
+  setOpenModalMap(true);
+};
+
+const handleCloseModal = () => {
+  setOpenModalMap(false);
+};
+
+
+
 
 
   return (
@@ -720,7 +859,7 @@ const geoJSONStyle = (feature) => {
           </div>
         </div>
       ) : (
-        <Questions slidersValues={slidersValues} darkMode={darkMode} handlePreviousClick={handlePreviousClick}  gotoThirdPage={gotothirdpage} zoneData={zoneData} IdType={IdType} updateScores={updateScores} sliderValuesCruz={sliderValuesCruz} setSliderValuesCruz={setSliderValuesCruz}  sliderGroupings={sliderGroupings}/>
+        <Questions slidersValues={slidersValues} darkMode={darkMode} handlePreviousClick={handlePreviousClick}  gotoThirdPage={gotothirdpage} zoneData={zoneData} IdType={IdType} updateScores={updateScores} sliderValuesCruz={sliderValuesCruz} setSliderValuesCruz={setSliderValuesCruz}  sliderGroupings={sliderGroupings}  handleSavePreferences={ handleSavePreferences} metricsMapping={metricsMapping}/>
       )
       }
 
@@ -741,9 +880,14 @@ const geoJSONStyle = (feature) => {
             />
 
             {geojsonData && <GeoJSON ref={geoJsonRef} data={geojsonData} style={geoJSONStyle} onEachFeature={onEachFeature} />}
-            <Button variant="contained" style={{ position: 'absolute', top: '10px', right: '20px', zIndex: "1000", backgroundColor: "var(--background-color)", color: "var(--blacktowhite)" }} onClick={goBackPoligon}>
-            {t('zoomOut')}
-            </Button>
+              <Button variant="contained" style={{ position: 'absolute', top: '10px', right: '20px', zIndex: "1000", backgroundColor: "var(--background-color)", color: "var(--blacktowhite)" }} onClick={goBackPoligon}>
+              {t('zoomOut')}
+              </Button>
+
+              <Button variant="contained" style={{ position: 'absolute', bottom: '120px', right: '20px', zIndex: "1000", backgroundColor: "var(--background-color)", color: "var(--blacktowhite)", borderRadius:"20rem" }} onClick={handleOpenModalMap}>
+              ?
+              </Button>
+             
 
           </MapContainer>
         )}

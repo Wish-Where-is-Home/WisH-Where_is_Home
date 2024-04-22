@@ -19,11 +19,6 @@ export const AuthProvider = ({ children }) => {
         
         const { email, name, id } = decodedToken;
 
-        console.log (email);
-        console.log(name);
-        console.log(id);
-        console.log(typeof(id));
-
         setUserInfo({ email, name, id });
     } catch (error) {
         console.error('Error decoding token:', error);

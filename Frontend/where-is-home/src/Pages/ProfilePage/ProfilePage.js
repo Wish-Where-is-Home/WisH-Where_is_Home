@@ -21,6 +21,7 @@ function ProfilePage({ darkMode }) {
     
 
     const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+    const [showResetModal, setShowResetModal] = useState(false);
 
     const [slidersValues, setSlidersValues] = useState([
         { id: 0, value: 0 },  
@@ -44,6 +45,11 @@ function ProfilePage({ darkMode }) {
     const openConfirmationModal = () => setShowConfirmationModal(true);
     const closeConfirmationModal = () => setShowConfirmationModal(false);
 
+    const closeResetModal = () => setShowResetModal(false);
+    const openResetModal = () => setShowResetModal(true);
+
+
+
     const handleSaveClick = () => {
         openConfirmationModal(); 
       };
@@ -54,6 +60,14 @@ function ProfilePage({ darkMode }) {
         closeConfirmationModal();
     };
 
+    const handleConfirmResetModal = () => {
+        closeResetModal();
+        handleResetSliders();
+    };
+
+    const handleCancelResetModal = () => {
+        closeResetModal();
+    };
     
 
 
@@ -601,19 +615,30 @@ function ProfilePage({ darkMode }) {
             }
         });
 
-
+        
+        
         Object.entries(locationMappings).forEach(([id, key]) => {
-
-            setSliderValuesCruz(prevState => ({
-            ...prevState,
-            [id]: 0
-            }));
-            
+            const value =  0;
+              setSliderValuesCruz(prevState => ({
+                ...prevState,
+                [id]: value
+              }));
           });
   
           
-        setSlidersValues(updatedSlidersValues);
+          setSlidersValues(updatedSlidersValues);
 
+          setIsExpandedCommerce(false);
+
+          setIsExpandedSocialLeisure(false);
+
+          setIsExpandedHealth(false);
+
+          setIsExpandedNatureSports(false);
+
+          setIsExpandedServices(false);
+ 
+          setIsExpandedEducation(false);
         
       
       
@@ -637,7 +662,6 @@ function ProfilePage({ darkMode }) {
         })
         .then(response => {
           if (response.ok) {
-            alert("Data sucessfully saved")
             console.log('Preferences saved successfully');
           } else {
             throw new Error('Failed to save preferences');
@@ -668,7 +692,13 @@ function ProfilePage({ darkMode }) {
                                 </div>
                                 <div className='form-group-input2'>
                                     {isEditMode ? (
-                                        <input type='text' id='name' name='name' value={userData.nome} onChange={(e) => setUserData({ ...userData, name: e.target.value })} />
+                                        <input 
+                                            type='text' 
+                                            id='name' 
+                                            name='name' 
+                                            value={userData.nome} 
+                                            onChange={(e) => setUserData(prevUserData => ({ ...prevUserData, nome: e.target.value }))} 
+                                        />                                    
                                     ) : (
                                         <span>{userData.nome}</span>
                                     )}
@@ -680,7 +710,14 @@ function ProfilePage({ darkMode }) {
                                 </div>
                                 <div className='form-group-input2'>
                                     {isEditMode ? (
-                                        <input type='text' id='address' name='address' value={userData.endereco} onChange={(e) => setUserData({ ...userData, address: e.target.value })} />
+                                        <input 
+                                            type='text' 
+                                            id='address' 
+                                            name='address' 
+                                            value={userData.endereco} 
+                                            onChange={(e) => setUserData(prevUserData => ({ ...prevUserData, endereco: e.target.value }))} 
+                                        />
+                                    
                                     ) : (
                                         <span>{userData.endereco}</span>
                                     )}
@@ -692,7 +729,14 @@ function ProfilePage({ darkMode }) {
                                 </div>
                                 <div className='form-group-input2'>
                                     {isEditMode ? (
-                                        <input type='text' id='phone' name='phone' value={userData.telemovel} onChange={(e) => setUserData({ ...userData, phone: e.target.value })} />
+                                        <input 
+                                            type='text' 
+                                            id='phone' 
+                                            name='phone' 
+                                            value={userData.telemovel} 
+                                            onChange={(e) => setUserData(prevUserData => ({ ...prevUserData, telemovel: e.target.value }))} 
+                                        />
+                                    
                                     ) : (
                                         <span>{userData.telemovel}</span>
                                     )}
@@ -744,8 +788,8 @@ function ProfilePage({ darkMode }) {
                                     </Typography>
                                     
                                     <div className='div-btn-modal-profile' >
-                                        <button className="btn-confirmation-editProfile" onClick={handleConfirmSave}>{t('save')}</button>
                                         <button className="btn-confirmation-editProfile" onClick={handleCancelSave}>{t('cancel')}</button>
+                                        <button className="btn-confirmation-editProfile" onClick={handleConfirmSave}>{t('save')}</button>
                                     </div>
 
                                 </Box>
@@ -1096,12 +1140,32 @@ function ProfilePage({ darkMode }) {
                         )}
                         
                     </div>
-                    <div className='button-reset-div-pref2'>
-                        <button className="button-reset-pref2" onClick={handleResetSliders}>Reset</button>
-                    </div>
+              
                     <div className='button-save-div-pref2'>
+                        <button className="button-reset-pref2" onClick={openResetModal}>{t('reset')}</button>
                         <button className="button-save-pref2" onClick={handleSavePreferences}>{t('save')}</button>
                     </div>
+
+                    <Modal
+                                open={showResetModal}
+                                aria-labelledby="modal-modal-title"
+                                aria-describedby="modal-modal-description"
+                            >
+                                <Box className={`box_Profile ${darkMode ? 'dark-mode' : 'light-mode'}`} >        
+
+                                    <CloseIcon onClick={closeResetModal} sx={{ position: 'absolute', top: 0, right: 0, margin: 1, cursor: 'pointer' }} />
+                                    
+                                    <Typography id="modal-modal-title" variant="h6" component="h5">
+                                        {t('confirmResetModal')}
+                                    </Typography>
+                                    
+                                    <div className='div-btn-modal-profile' >
+                                        <button className="btn-confirmation-editProfile" onClick={handleCancelResetModal}>{t('cancel')}</button>
+                                        <button className="btn-confirmation-editProfile" onClick={handleConfirmResetModal}>{t('reset')}</button>
+                                    </div>
+
+                                </Box>
+                            </Modal>
                 </div>
             </div>
         </div>

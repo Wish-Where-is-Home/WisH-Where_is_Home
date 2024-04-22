@@ -78,6 +78,8 @@
     "Universities":"Universities",
     "edit": "Edit",
     "confirmModal": "Are you sure you want to save the changes?",
+    "confirmResetModal": "Are you sure you want to reset the changes?",
     "cancel": "Cancel",
+    "reset": "Reset",
     "zoomOut":"zoom out"
 }

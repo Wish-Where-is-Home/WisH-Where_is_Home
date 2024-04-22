@@ -3,7 +3,7 @@ import './AdminPage.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilter } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from "react-i18next";
-import { faEye } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faAngleDown } from '@fortawesome/free-solid-svg-icons';
 
 function AdminPage({ darkMode }) {
     const { t } = useTranslation("common");
@@ -14,6 +14,9 @@ function AdminPage({ darkMode }) {
     const [filterOptions, setFilterOptions] = useState({ approved: true, denied: true }); 
     const [showFilters, setShowFilters] = useState(false);
     const [pendingRooms, setPendingRooms] = useState([]);
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [allrooms,setAllRooms]= useState({});
+    const [propertyRooms, setPropertyRooms] = useState({});
 
     const handleTabClick = (tab) => {
         setSelectedTab(tab);
@@ -42,6 +45,14 @@ function AdminPage({ darkMode }) {
 
                 const combinedProps = [...approvedProps, ...deniedProps];
 
+                combinedProps.sort((a, b) => a.id - b.id);
+
+               
+                approvedProps.sort((a, b) => a.id - b.id);
+    
+               
+                deniedProps.sort((a, b) => a.id - b.id);
+
                 setApprovedProperties(approvedProps);
                 setDeniedProperties(deniedProps);
                 setProperties(combinedProps);
@@ -49,6 +60,7 @@ function AdminPage({ darkMode }) {
                 console.error('Error fetching properties:', error);
             }
         };
+        
 
         const fetchPendingRooms = async () => {
             try {
@@ -57,16 +69,42 @@ function AdminPage({ darkMode }) {
                     throw new Error('Failed to fetch pending rooms');
                 }
                 const data = await response.json();
-                console.log(data);
                 setPendingRooms(data.pending_rooms || []);
             } catch (error) {
                 console.error('Error fetching pending rooms:', error);
             }
         };
+
+        const fetchAllRooms = async () => {
+            try {
+                const response = await fetch('http://mednat.ieeta.pt:9009/properties/rooms/all/');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch all rooms');
+                }
+                const data = await response.json();
+                setAllRooms(data.rooms || []);
+            } catch (error) {
+                console.error('Error fetching all rooms:', error);
+            }
+        };
+
         fetchPendingRooms();
         fetchProperties();
+        fetchAllRooms();
         
     }, []);
+
+    const toggleDropdown = async (propertyId) => {
+        
+        const roomsForProperty = allrooms.filter(room => room.imovel_id === propertyId);
+    
+       
+        setPropertyRooms(prevRooms => ({
+            ...prevRooms,
+            [propertyId]: roomsForProperty
+        }));
+    };
+
 
     const handleFilterChange = (option) => {
         setFilterOptions(prevOptions => ({
@@ -96,6 +134,7 @@ function AdminPage({ darkMode }) {
                         <div><strong>Nome</strong></div>
                         <div><strong>Morada</strong></div>
                         <div></div>
+                        <div><strong>State</strong></div>
                     </div>
                     {propertiesToDisplay.map(property => (
                         <div className='propertie-div' key={property.id}>
@@ -106,14 +145,23 @@ function AdminPage({ darkMode }) {
                                 <button className="button-small-round">
                                     <FontAwesomeIcon icon={faEye} />
                                 </button>
-                                {propertiesToDisplay === approvedProperties ? (
-                                <button className="button-small-round">
-                                    Excluir
+                                <button className="button-small-round"onClick={() => toggleDropdown(property.id)}>
+                                    <FontAwesomeIcon icon={faAngleDown} style={{ marginLeft: '5px' }} />
                                 </button>
-                            ) : propertiesToDisplay === deniedProperties ? (
-                                <p style={{textAlign:"center"}}>Excluída</p>
-                            ) : null}
                             </div>
+                            <div>
+                            {property.estado}
+                            </div>
+                            {propertyRooms[property.id] && (
+                            <div>
+                                <h4>Quartos:</h4>
+                                <ul>
+                                    {propertyRooms[property.id].map(room => (
+                                        <li key={room.id}>{room.nome}</li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
                         </div>
                     ))}
                 </>
@@ -141,9 +189,6 @@ function AdminPage({ darkMode }) {
                             <div className="button-container">
                                 <button className="button-small-round">
                                     <FontAwesomeIcon icon={faEye} />
-                                </button>
-                                <button className="button-small-round">
-                                    <span>Check</span>
                                 </button>
                             </div>
                         </div>

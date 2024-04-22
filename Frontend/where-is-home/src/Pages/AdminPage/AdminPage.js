@@ -3,20 +3,22 @@ import './AdminPage.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilter } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from "react-i18next";
-import { faEye, faAngleDown } from '@fortawesome/free-solid-svg-icons';
+import { faEye } from '@fortawesome/free-solid-svg-icons';
+import ModalProperty from '../../Components/ModalProperty/ModalProperty';
 
 function AdminPage({ darkMode }) {
     const { t } = useTranslation("common");
     const [selectedTab, setSelectedTab] = useState('toConfirm');
     const [properties, setProperties] = useState([]);
-    const [approvedProperties, setApprovedProperties] = useState({});
-    const [deniedProperties, setDeniedProperties] = useState({});
-    const [filterOptions, setFilterOptions] = useState({ approved: true, denied: true }); 
+    const [approvedProperties, setApprovedProperties] = useState([]);
+    const [deniedProperties, setDeniedProperties] = useState([]);
+    const [filterOptions, setFilterOptions] = useState({ approved: true, denied: true });
     const [showFilters, setShowFilters] = useState(false);
     const [pendingRooms, setPendingRooms] = useState([]);
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const [allrooms,setAllRooms]= useState({});
+    const [allRooms, setAllRooms] = useState([]);
     const [propertyRooms, setPropertyRooms] = useState({});
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedProperty, setSelectedProperty] = useState(null);
 
     const handleTabClick = (tab) => {
         setSelectedTab(tab);
@@ -37,30 +39,16 @@ function AdminPage({ darkMode }) {
                 }
                 const data2 = await response2.json();
 
-                console.log(data1);
-                console.log(data2);
-
                 const approvedProps = data1.properties || [];
                 const deniedProps = data2.properties || [];
 
-                const combinedProps = [...approvedProps, ...deniedProps];
-
-                combinedProps.sort((a, b) => a.id - b.id);
-
-               
-                approvedProps.sort((a, b) => a.id - b.id);
-    
-               
-                deniedProps.sort((a, b) => a.id - b.id);
-
                 setApprovedProperties(approvedProps);
                 setDeniedProperties(deniedProps);
-                setProperties(combinedProps);
+                setProperties([...approvedProps, ...deniedProps]);
             } catch (error) {
                 console.error('Error fetching properties:', error);
             }
         };
-        
 
         const fetchPendingRooms = async () => {
             try {
@@ -69,6 +57,7 @@ function AdminPage({ darkMode }) {
                     throw new Error('Failed to fetch pending rooms');
                 }
                 const data = await response.json();
+                console.log("rooms",data);
                 setPendingRooms(data.pending_rooms || []);
             } catch (error) {
                 console.error('Error fetching pending rooms:', error);
@@ -91,26 +80,25 @@ function AdminPage({ darkMode }) {
         fetchPendingRooms();
         fetchProperties();
         fetchAllRooms();
-        
     }, []);
-
-    const toggleDropdown = async (propertyId) => {
-        
-        const roomsForProperty = allrooms.filter(room => room.imovel_id === propertyId);
-    
-       
-        setPropertyRooms(prevRooms => ({
-            ...prevRooms,
-            [propertyId]: roomsForProperty
-        }));
-    };
-
 
     const handleFilterChange = (option) => {
         setFilterOptions(prevOptions => ({
             ...prevOptions,
             [option]: !prevOptions[option]
         }));
+    };
+
+    const openModal = (propertyId) => {
+        const property = properties.find(prop => prop.id === propertyId);
+        const roomsForProperty = allRooms.filter(room => room.imovel_id === propertyId);
+        setSelectedProperty({ ...property, rooms: roomsForProperty });
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setSelectedProperty(null);
     };
 
     const displayProperties = () => {
@@ -138,30 +126,15 @@ function AdminPage({ darkMode }) {
                     </div>
                     {propertiesToDisplay.map(property => (
                         <div className='propertie-div' key={property.id}>
-                            <div> <p>{property.id}</p></div>
-                            <div> <p>{property.nome}</p></div>
+                            <div><p>{property.id}</p></div>
+                            <div><p>{property.nome}</p></div>
                             <div><p>{property.morada}</p></div>
                             <div className="button-container">
-                                <button className="button-small-round">
+                                <button className="button-small-round" onClick={() => openModal(property.id)}>
                                     <FontAwesomeIcon icon={faEye} />
                                 </button>
-                                <button className="button-small-round"onClick={() => toggleDropdown(property.id)}>
-                                    <FontAwesomeIcon icon={faAngleDown} style={{ marginLeft: '5px' }} />
-                                </button>
                             </div>
-                            <div>
-                            {property.estado}
-                            </div>
-                            {propertyRooms[property.id] && (
-                            <div>
-                                <h4>Quartos:</h4>
-                                <ul>
-                                    {propertyRooms[property.id].map(room => (
-                                        <li key={room.id}>{room.nome}</li>
-                                    ))}
-                                </ul>
-                            </div>
-                        )}
+                            <div>{property.estado}</div>
                         </div>
                     ))}
                 </>
@@ -183,11 +156,11 @@ function AdminPage({ darkMode }) {
                     </div>
                     {pendingRooms.map(room => (
                         <div className='propertie-div' key={room.id}>
-                            <div> <p>{room.property_info.property_id}</p></div>
-                            <div> <p>{room.property_info.property_name}</p></div>
+                            <div><p>{room.room_info.room_id}</p></div>
+                            <div><p>{room.property_info.property_name}</p></div>
                             <div><p>{room.property_info.property_address}</p></div>
                             <div className="button-container">
-                                <button className="button-small-round">
+                                <button className="button-small-round" onClick={() => openModal(room.property_info.property_id)}>
                                     <FontAwesomeIcon icon={faEye} />
                                 </button>
                             </div>
@@ -206,7 +179,7 @@ function AdminPage({ darkMode }) {
                         className={`achoose-perconfirm ${selectedTab === 'toConfirm' ? 'selected' : ''}`}
                         onClick={() => handleTabClick('toConfirm')}
                     >
-                        <p>Properties to confirm</p>
+                        <p>Bedrooms to confirm</p>
                     </div>
                     <div
                         className={`achoose-confirmed ${selectedTab === 'confirmed' ? 'selected' : ''}`}
@@ -248,7 +221,16 @@ function AdminPage({ darkMode }) {
                     ) : null}
                 </div>
             </div>
+            {isModalOpen && selectedProperty && (
+                <ModalProperty
+                    darkMode={darkMode}
+                    propertyData={selectedProperty}
+                    propertyRooms={selectedProperty.rooms}
+                    closeModal={closeModal}
+                />
+            )}
         </div>
     );
 }
+
 export default AdminPage;

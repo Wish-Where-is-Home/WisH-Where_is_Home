@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './residenceDetails.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -11,6 +11,39 @@ import {
 const ResidenceDetails = ({ darkMode }) => {
   const [slideNumber, setSlideNumber] = useState(0);
   const [open, setOpen] = useState(false);
+  const [propertyDetails, setPropertyDetails] = useState(null);
+  const [showOwnerDetails, setShowOwnerDetails] = useState(false);
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const imovelId = "20";
+      const url = `http://mednat.ieeta.pt:9009/properties/${imovelId}/`;
+
+      try {
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+        console.log(data);
+        setPropertyDetails(data);
+      } catch (error) {
+        console.error('There was a problem with your fetch operation:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+
 
   const photos = [{
     src: "https://cf.bstatic.com/xdata/images/hotel/max1280x900/261707778.jpg?k=56ba0babbcbbfeb3d3e911728831dcbc390ed2cb16c51d88159f82bf751d04c6&o=&hp=1",
@@ -30,7 +63,7 @@ const ResidenceDetails = ({ darkMode }) => {
   {
     src: "https://cf.bstatic.com/xdata/images/hotel/max1280x900/261707389.jpg?k=52156673f9eb6d5d99d3eed9386491a0465ce6f3b995f005ac71abc192dd5827&o=&hp=1",
   },
-];
+  ];
 
   const handleOpen = (i) => {
     setSlideNumber(i);
@@ -38,11 +71,26 @@ const ResidenceDetails = ({ darkMode }) => {
   };
 
   const handleMove = (direction) => {
-    let newSlideNumber = direction === "l" 
-      ? (slideNumber === 0 ? photos.length - 1 : slideNumber - 1)
-      : (slideNumber === photos.length - 1 ? 0 : slideNumber + 1);
+    let newSlideNumber;
+    if (direction === "l") {
+      newSlideNumber = slideNumber === 0 ? photos.length - 1 : slideNumber - 1;
+    } else {
+      newSlideNumber = slideNumber === photos.length - 1 ? 0 : slideNumber + 1;
+    }
     setSlideNumber(newSlideNumber);
   };
+
+  if (!propertyDetails) return <div>Loading...</div>;
+
+  const prices = propertyDetails.quartos.map(room => parseFloat(room.preco_mes));
+  const minPrice = Math.min(...prices);
+  const maxPrice = Math.max(...prices);
+  const priceDisplay = minPrice === maxPrice ? `${minPrice}€` : `Entre ${minPrice}€ a ${maxPrice}€`;
+
+  const toggleOwnerDetails = () => {
+    setShowOwnerDetails(!showOwnerDetails);
+  };
+
 
   return (
     <div className={`residenceDetails ${darkMode ? 'dark-mode' : 'light-mode'}`}>
@@ -70,20 +118,22 @@ const ResidenceDetails = ({ darkMode }) => {
           </div>
         )}
         <div className="residenceWrapper">
-          <h1 className="residenceTitle">Apartamento Perto do Glicínias</h1>
+          <h1 className="residenceTitle">
+            {propertyDetails.property.nome}, piso {propertyDetails.property.piso}
+          </h1>
           <div className="residenceAddress">
             <FontAwesomeIcon icon={faLocationDot} />
-            <span>Avenida do Glicínias, Apartamento Y</span>
+            <span>{propertyDetails.property.morada}</span>
           </div>
           <span className="residencePriceHighlight">
-            Despesas não incluídas.
+            {propertyDetails.property.tipologia} {propertyDetails.property.equipado ? "totalmente equipado." : "por equipar."}
           </span>
           <div className="residenceImages">
-            {photos.map((photo, i) => (
+            {photos.map((photos, i) => (
               <div className="residenceImgWrapper" key={i}>
                 <img
                   onClick={() => handleOpen(i)}
-                  src={photo.src}
+                  src={photos.src}
                   alt=""
                   className="residenceImg"
                 />
@@ -93,18 +143,28 @@ const ResidenceDetails = ({ darkMode }) => {
           <div className="residenceDetails2">
             <div className="residenceDetailsTexts">
               <p className="residenceDesc">
-                Aqui vou descrever porque é que este apartamento é tão perfeito para alunos estudantes da Universidade de Aveiro.
+                {propertyDetails.property.descricao}
+
               </p>
             </div>
             <div className="residenceDetailsPrice">
               <h2>Aproveite esta oportunidade!</h2>
               <span>
-                Alunos até agora adoraram o apartamento!!              
+                {propertyDetails.property.estacionamento_garagem ? "Estacionamento na garagem disponível." : "Estacionamento não incluído."}
+
               </span>
               <h2>
-                <b>350€</b> Mês
+                <b>{priceDisplay}</b> por Mês
               </h2>
-              <button>Reserve or Book Now!</button>
+              <button onClick={toggleOwnerDetails}>Reserve or Book Now!</button>
+              {showOwnerDetails && propertyDetails.owner_info && (
+                <div className="ownerDetails">
+                  <h3>Contact the Owner:</h3>
+                  <p>Name: {propertyDetails.owner_info.nome}</p>
+                  <p>Email: {propertyDetails.owner_info.email}</p>
+                  <p>Phone: {propertyDetails.owner_info.telemovel}</p>
+                </div>
+              )}
             </div>
           </div>
         </div>

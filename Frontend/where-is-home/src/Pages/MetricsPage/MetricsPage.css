@@ -13,3 +13,19 @@
   background-color: var(--background-color) !important;
   color: var(--blacktowhite) !important;
 }
+
+.gradient-modal2 {
+  position: absolute; 
+  top: calc(65% - 2rem); 
+  left: calc(97% - 1.8rem);
+  width: 4rem;
+  height: 12rem;
+  background-color: var(--background-color);
+  z-index: 9999;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+
+}

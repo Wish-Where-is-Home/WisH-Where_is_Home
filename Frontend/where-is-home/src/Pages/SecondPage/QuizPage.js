@@ -32,6 +32,8 @@ function QuizPage({ darkMode, zoneData,scores,updateScores}) {
   const [camefromback,setCameFromBack]=useState(false);
   const [OpenPreferencesModal,setOpenPreferencesModal] = useState(true);
   const [metricsSaved, setMetricsSaved] = useState(false);
+  const [modalVisibleGradient, setModalVisibleGradient] = useState(false);
+  const [averageMetrics,setAverageMetrics] = useState(false);
 
 
   const [slidersValues, setSlidersValues] = useState([
@@ -49,33 +51,64 @@ const portugalBounds = [
   [45, -6]
 ];
 
+const handleModalButtonClick = () => {
+  setModalVisibleGradient(!modalVisibleGradient);
+};
+
 useEffect(() => {
   const fetchUserMetrics = async () => {
     try {
+      
       const token = localStorage.getItem('token');
-      const response = await fetch('http://mednat.ieeta.pt:9009/users/preferences/', {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      if (token) {
+        const response = await fetch('http://mednat.ieeta.pt:9009/users/preferences/', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+      
 
       if (response.ok) {
         const data = await response.json();
         console.log(data);
         const metricsSaved = Object.values(data).some(value => value !== null && value !== "0.0000");
         setMetricsSaved(metricsSaved);
-        console.log(metricsSaved);
-
 
       } else {
         throw new Error('Failed to fetch user metrics');
+      }
       }
     } catch (error) {
       console.error('Error fetching user metrics:', error);
     }
   };
 
+  const fetchAverageMetrics = async () => {
+    try {
+    
+      const responseAverage = await fetch('http://mednat.ieeta.pt:9009/preferences/average/', {
+        method: 'GET',
+      });
+     
+      if (responseAverage.ok) {
+        const dataAverage = await responseAverage.json();
+        setAverageMetrics(dataAverage);
+        console.log(dataAverage);
+
+        
+      
+      } else {
+        throw new Error('Failed to fetch average preferences');
+      }
+    } catch (error) {
+      console.error('Error fetching average preferences:', error);
+    }
+  };
+
+
+
+  fetchAverageMetrics();
   fetchUserMetrics();
 }, []);
 
@@ -771,7 +804,7 @@ const handleKeepMetrics = async () => {
                         }}
                         onChange={(event, value) => handleSliderChange(0, value)}
                       />
-
+                    <div className="average-line" style={{ left: `${averageMetrics.averages['theme_commerce']}%` }}></div>
                     </Box>
                   </div>
                   <div className="min-max-text">
@@ -815,7 +848,7 @@ const handleKeepMetrics = async () => {
                         onChange={(event, value) => handleSliderChange(1, value)}
 
                       />
-
+                      <div className="average-line" style={{ left: `${averageMetrics.averages['theme_social_leisure']}%` }}></div>
                     </Box>
                   </div>
                   <div className="min-max-text">
@@ -857,7 +890,7 @@ const handleKeepMetrics = async () => {
                         onChange={(event, value) => handleSliderChange(2, value)}
 
                       />
-
+                    <div className="average-line" style={{ left: `${averageMetrics.averages['theme_health']}%` }}></div>
                     </Box>
                   </div>
                   <div className="min-max-text">
@@ -899,7 +932,7 @@ const handleKeepMetrics = async () => {
                         onChange={(event, value) => handleSliderChange(3, value)}
 
                       />
-
+                       <div className="average-line" style={{ left: `${averageMetrics.averages['theme_nature_sports']}%` }}></div>
                     </Box>
                   </div>
                   <div className="min-max-text">
@@ -941,7 +974,7 @@ const handleKeepMetrics = async () => {
                         onChange={(event, value) => handleSliderChange(4, value)}
 
                       />
-
+                      <div className="average-line" style={{ left: `${averageMetrics.averages['theme_service']}%` }}></div>
                     </Box>
                   </div>
                   <div className="min-max-text">
@@ -983,7 +1016,7 @@ const handleKeepMetrics = async () => {
                         onChange={(event, value) => handleSliderChange(5, value)}
 
                       />
-
+                      <div className="average-line" style={{ left: `${averageMetrics.averages['theme_education']}%` }}></div>
                     </Box>
                   </div>
                   <div className="min-max-text">
@@ -1001,7 +1034,7 @@ const handleKeepMetrics = async () => {
           </div>
         </div>
       ) : (
-        <Questions slidersValues={slidersValues} darkMode={darkMode} handlePreviousClick={handlePreviousClick}  gotoThirdPage={gotothirdpage} zoneData={zoneData} IdType={IdType} updateScores={updateScores} sliderValuesCruz={sliderValuesCruz} setSliderValuesCruz={setSliderValuesCruz}  sliderGroupings={sliderGroupings}  handleSavePreferences={ handleSavePreferences} metricsMapping={metricsMapping}/>
+        <Questions slidersValues={slidersValues} darkMode={darkMode} handlePreviousClick={handlePreviousClick}  gotoThirdPage={gotothirdpage} zoneData={zoneData} IdType={IdType} updateScores={updateScores} sliderValuesCruz={sliderValuesCruz} setSliderValuesCruz={setSliderValuesCruz}  sliderGroupings={sliderGroupings}  handleSavePreferences={ handleSavePreferences} metricsMapping={metricsMapping} averageMetrics={averageMetrics}/>
       )
       }
 
@@ -1021,14 +1054,23 @@ const handleKeepMetrics = async () => {
 
             />
 
+          
+
             {geojsonData && <GeoJSON ref={geoJsonRef} data={geojsonData} style={geoJSONStyle} onEachFeature={onEachFeature} />}
               <Button variant="contained" style={{ position: 'absolute', top: '10px', right: '20px', zIndex: "1000", backgroundColor: "var(--background-color)", color: "var(--blacktowhite)" }} onClick={goBackPoligon}>
               {t('zoomOut')}
               </Button>
 
-              <Button variant="contained" style={{ position: 'absolute', bottom: '120px', right: '20px', zIndex: "1000", backgroundColor: "var(--background-color)", color: "var(--blacktowhite)", borderRadius:"20rem" }} onClick={handleOpenModalMap}>
+              <Button variant="contained" style={{ position: 'absolute', bottom: '120px', right: '20px', zIndex: "1000", backgroundColor: "var(--background-color)", color: "var(--blacktowhite)", borderRadius:"20rem" }}  onClick={handleModalButtonClick}>
               ?
               </Button>
+
+            {modalVisibleGradient && <div className="gradient-modal">
+              <p>{t('better')}</p>
+              <div className="gradient-vertical"></div>
+              <p>{t('worse')}</p>
+              </div>
+              }
              
 
           </MapContainer>

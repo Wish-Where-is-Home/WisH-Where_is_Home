@@ -82,5 +82,9 @@
     "sellpropertie":"Vender Propriedades",
     "close":"Fechar",
     "modalp":"Você deseja manter as métricas salvas?",
-    "yes":"Sim"
+    "yes":"Sim",
+    "good":"Bom",
+    "bad":"Mau",
+    "better":"Melhor",
+    "worse":"Pior"
 }

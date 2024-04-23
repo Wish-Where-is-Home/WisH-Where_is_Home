@@ -29,10 +29,16 @@ function MetricsPage({darkMode,zoneData,scores,updateScores}) {
     const [zoom2buttonPosition,setZoom2ButtonPosition] = useState('10px');
     const [slidersValues,setSlidersValues] = useState(null);
     const [sliderValuesCruz,setSliderValuesCruz] = useState(null);
+    const [modalVisibleGradient, setModalVisibleGradient] = useState(false);
 
     const navigate = useNavigate();
     const mapRef = useRef(null);
     const geoJsonRef = useRef(null);
+
+
+const handleModalButtonClick = () => {
+  setModalVisibleGradient(!modalVisibleGradient);
+};
 
 
   useEffect(() => {
@@ -369,6 +375,16 @@ const zone = IdType;
                         <Button variant="contained" style={{ position: 'absolute', top: '10px', right: zoomButtonPosition,zIndex: "400",  backgroundColor: "var(--background-color)",color:"var(--blacktowhite)"}} onClick={goBackPoligon}>
                           {t('zoomOut')}
                         </Button>
+                        <Button variant="contained" style={{ position: 'absolute', bottom: '120px', right: '20px', zIndex: "1000", backgroundColor: "var(--background-color)", color: "var(--blacktowhite)", borderRadius:"20rem" }}  onClick={handleModalButtonClick}>
+                          ?
+                          </Button>
+
+                        {modalVisibleGradient && <div className="gradient-modal2">
+                          <p>{t('better')}</p>
+                          <div className="gradient-vertical"></div>
+                          <p>{t('worse')}</p>
+                          </div>
+                          }
                         
                     </MapContainer>
               )}

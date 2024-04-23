@@ -83,10 +83,12 @@
     "sellpropertie":"Sell Properties",
     "close":"Close",
     "modalp":"Do you want to keep the saved metrics?",
-    "yes":"Yes"
+    "yes":"Yes",
+    "good":"Good",
+    "bad":"Bad",
+    "better":"Better",
+    "worse":"Worse"
 
     
-    
-
 
 }

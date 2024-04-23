@@ -94,7 +94,7 @@ function ModalProperty({ darkMode, propertyData, propertyRooms, closeModal }) {
                 <div className="modal-room-container">
                     {propertyRooms.map(room => (
                         <div key={room.id} className="modal-room-card">
-                            <div style={{display:"flex",flexDirection:"column"}}>
+                            <div style={{display:"flex",flexDirection:"column",padding:"15px"}}>
                                 <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
                                         <p style={{ marginRight: '0.5rem' }}><strong>Id:</strong></p>
                                         <p>{room.id}</p>
@@ -112,9 +112,20 @@ function ModalProperty({ darkMode, propertyData, propertyRooms, closeModal }) {
                                         <p>{formatBooleanValue(room.wc_privado)}</p>
                                 </div>
                             </div>
-                            <div style={{display:"flex",flexDirection:"column"}}>
-                            <p style={{ marginRight: '0.5rem' }}><strong>Disponivel:</strong></p>
-                                <p>{formatBooleanValue(room.disponivel)}</p>
+                            <div style={{display:"flex",flexDirection:"column",padding:"15px"}}>
+                                <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
+                                        <p style={{ marginRight: '0.5rem' }}><strong>Disponivel:</strong></p>
+                                        <p>{formatBooleanValue(room.disponivel)}</p>
+                                </div>
+                                <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
+                                        <p style={{ marginRight: '0.5rem' }}><strong>Tipologia:</strong></p>
+                                        <p>{room.tipologia}</p>
+                                </div>
+                                <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row",}}>
+                                        <p style={{ marginRight: '0.5rem' }}><strong>Despesas Incluidas:</strong></p>
+                                        <p>{room.despesas_incluidas}</p>
+                                </div>
+                               
                             </div>
                             <div>
                                 {room.estado === 'denied' ? (

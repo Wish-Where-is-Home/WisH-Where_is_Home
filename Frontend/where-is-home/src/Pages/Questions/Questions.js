@@ -7,7 +7,7 @@ import Box from '@mui/material/Box';
 import { useAuth } from '../../AuthContext/AuthContext';
 
 
-function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,zoneData, IdType,updateScores,sliderValuesCruz,setSliderValuesCruz,sliderGroupings, handleSavePreferences,metricsMapping}) {
+function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,zoneData, IdType,updateScores,sliderValuesCruz,setSliderValuesCruz,sliderGroupings, handleSavePreferences,metricsMapping,averageMetrics}) {
     const { isAuthenticated} = useAuth();
     const zone = IdType;
 
@@ -62,7 +62,7 @@ function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,z
             <div key={`slider-${activeTab}-${index}`} className="slider-container" style={{ marginTop: index === 0 ? '30px' : '0' }}>
                 <label className="label">{group.name}</label>
                 <div className='slider-lefties'>
-                    <Box sx={{ width: 300, marginRight: "50px" }}>
+                    <Box sx={{ width: 300, marginRight: "50px", position: 'relative' }}>
                         <Slider
                             aria-label={group.name}
                             value={sliderValuesCruz[group.ids[0]]}
@@ -74,6 +74,7 @@ function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,z
                             onChange={(event, newValue) => onSliderChange(newValue, group.ids)}
                             valueLabelFormat={valueLabelFormat}
                         />
+                        <div className="average-line" style={{ position: 'absolute', top: 0, left: `${averageMetrics.averages[group.name]}%`, width: '2px', height: '2rem', backgroundColor: 'red', zIndex: 1 }}></div>
                     </Box>
                 </div>
             </div>

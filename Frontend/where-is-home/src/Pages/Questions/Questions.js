@@ -181,7 +181,7 @@ function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,z
                         <div style={{width:"100%",padding:"2rem 0",height: '2rem',display: "flex", flexDirection: "row",alignItems:"center",justifyContent:"center"}}>
                             <div style={{display:"flex", flexDirection:"row"}}>
                                 <div className='average-line2'></div>
-                                <p style={{marginLeft:"1rem",fontSize:"0.8rem"}}>média das métricas de todos os utilizadores da plataforma.</p>
+                                <p style={{marginLeft:"1rem",fontSize:"0.8rem"}}>{t('textoaverage')}</p>
                             </div>
                         </div>
                 </div>

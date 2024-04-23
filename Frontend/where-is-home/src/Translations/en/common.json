@@ -87,7 +87,8 @@
     "good":"Good",
     "bad":"Bad",
     "better":"Better",
-    "worse":"Worse"
+    "worse":"Worse",
+    "textoaverage":"Average of the metrics of all platform users."
 
     
 

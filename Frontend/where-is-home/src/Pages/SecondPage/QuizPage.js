@@ -1057,7 +1057,7 @@ const handleKeepMetrics = async () => {
               <div style={{marginLeft:"5rem",height: '2rem',display: "flex", flexDirection: "row"}}>
                   
                   <div className='average-line'></div>
-                    <p style={{marginLeft:"1rem",fontSize:"0.8rem"}}>média das métricas de todos os utilizadores da plataforma.</p>
+                    <p style={{marginLeft:"1rem",fontSize:"0.8rem"}}>{t('textoaverage')}</p>
                 </div>
             </div>
           </div>

@@ -221,16 +221,53 @@ class PreferenceAverageView(APIView):
 
         if preferences.exists():
             preference_averages = {}
-            fields = [field.name for field in UserPreference._meta.get_fields() if field.name != 'id']
-            for field in fields:
-                field_sum = sum(getattr(preference, field) for preference in preferences)
+            field_mappings = {
+                'commerce': '2',
+                'bakery': '3',
+                'food_court': '4',
+                'supermarket': '9',
+                'nightlife': '5',
+                'hotel': '8',
+                'culture': '10',
+                'entertainment': '17',
+                'health_services': '7',
+                'pharmacy': '18',
+                'hospital': '22',
+                'clinic': '23',
+                'veterinary': '24',
+                'sports_center': '1',
+                'camping': '6',
+                'parks': '13',
+                'swimming_pool': '19',
+                'beach_river': '25',
+                'bicycle_path': '27',
+                'walking_routes': '28',
+                'services': '14',
+                'bank': '20',
+                'post_office': '21',
+                'industrial_zone': '26',
+                'car_park': '29',
+                'school': '11',
+                'library': '12',
+                'kindergarten': '15',
+                'university': '16',
+                'theme_commerce': 'theme_commerce',
+                'theme_social_leisure': 'theme_social_leisure',
+                'theme_health': 'theme_health',
+                'theme_nature_sports': 'theme_nature_sports',
+                'theme_service': 'theme_service',
+                'theme_education': 'theme_education',
+            }
+            
+            for field, id in field_mappings.items():
+                field_sum = sum(getattr(preference, field) or 0 for preference in preferences)
                 field_average = field_sum / len(preferences)
-                preference_averages[field] = field_average
+                preference_averages[id] = field_average
+            
             logger.info(f"Preferences averages retrieved.")
             return JsonResponse({'averages': preference_averages})
         else:
             return JsonResponse({'message': 'No preferences found'}, status=404)
-
 class GetZoneDataView(APIView):
     def get(self, request):
         try:

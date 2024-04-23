@@ -21,7 +21,7 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from .views import GenerateTokenView,GetUserView, UpdateUserView, GetZoneDataView, GetUserPreferenceView, UpdateUserPreferenceView,GetAllProperties, GetPropertyById, GetRoomById, GetAllPropertiesDenied, GetPendingRooms
 from .views import UpdateRoomStatus, OwnerApprovedPropertiesView, OwnerApprovedRoomsView, OwnerDeniedOnHoldPropertiesView, OwnerDeniedOnHoldRoomsView
-from .views import CreateImovel, CreateRoom, UpdateImovel, UpdateRoom, DeleteImovel, DeleteRoom, UpdateRoomAvailability
+from .views import CreateImovel, CreateRoom, UpdateImovel, UpdateRoom, DeleteImovel, DeleteRoom, UpdateRoomAvailability, GetAllRoomsView, PreferenceAverageView
 
 schema_view = get_schema_view(
    openapi.Info(
@@ -49,7 +49,9 @@ urlpatterns = [
     path('properties/denied/', GetAllPropertiesDenied.as_view(), name='get_all_properties_denied'),
     path('properties/<int:imovel_id>/', GetPropertyById.as_view(), name='get_property_by_id'),
     path('properties/rooms/<int:quarto_id>/', GetRoomById.as_view(), name='get_room_by_id'),
+    path('properties/rooms/all/', GetAllRoomsView.as_view(), name='get_all_rooms'),
     path('api/zone/', GetZoneDataView.as_view(), name='get_zone_data'),
+    path('preferences/average/', PreferenceAverageView.as_view(), name='preference_average'),
     path('admin/pending/rooms/', GetPendingRooms.as_view(), name='pending_rooms to admin aprove or denie'),
     path('admin/update/room/status/<int:quarto_id>/', UpdateRoomStatus.as_view(), name='update_room_status'),
     path('owner/approved/properties/', OwnerApprovedPropertiesView.as_view(), name='get_owner_approved_properties'),
@@ -64,3 +66,4 @@ urlpatterns = [
     path('owner/delete/room/<int:quarto_id>/', DeleteRoom.as_view(), name='delete_room'),
     path('owner/update/room/availability/<int:quarto_id>/', UpdateRoomAvailability.as_view(), name='update_room_availability'),
 ]
+

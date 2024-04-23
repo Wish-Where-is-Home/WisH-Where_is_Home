@@ -1,4 +1,3 @@
-from rest_framework.views import APIView, View
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth import authenticate
@@ -11,28 +10,29 @@ from django.http import JsonResponse
 from .models import User, UserPreference, Quarto, Imovel
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework.views import APIView
+import logging
+
+logger = logging.getLogger(__name__)
 
 def check_token(request):
-    # Verifica se a solicitação possui o cabeçalho de autorização
     if 'Authorization' in request.headers:
-        # Extrai o token do cabeçalho de autorização
         auth_header = request.headers['Authorization']
         token = auth_header.split(' ')[1]
 
         try:
-            # Decodifica o token JWT para obter as informações do usuário
             decoded_token = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
-
-            # Retorna o ID do usuário extraído do token
+            
+            logger.info(f"Token decoded")
             return {'success': {'id': decoded_token['id'], 'role': decoded_token.get('role')}}
         except jwt.ExpiredSignatureError:
-            # Se o token estiver expirado, retorna uma resposta de erro
+            logger.error(f"Token expired")
             return {'error': 'expired'}
         except jwt.InvalidTokenError:
-            # Se o token for inválido, retorna uma resposta de erro
+            logger.error(f"Invalid token")
             return {'error': 'not valid'}
     else:
-        # Se o cabeçalho de autorização estiver ausente, retorna uma resposta de erro
+        logger.error(f"Authorization header missing")
         return {'error': 'Authorization header missing'}
 
 class GenerateTokenView(APIView):
@@ -45,6 +45,7 @@ class GenerateTokenView(APIView):
             user = User.objects.get(id=user_id)
             role = user.role
         except User.DoesNotExist:
+            logger.info(f"User not found, creating new user.")
             user = User.objects.create(id=user_id, nome=name, email=email, role='normal')
             preferences = UserPreference.objects.create(id=user_id)
             role = 'normal'
@@ -63,40 +64,35 @@ class UpdateUserView(APIView):
     def post(self, request):
         token_result = check_token(request)
         if 'error' in token_result:
-        # Retorna uma resposta de erro se o token não for válido ou estiver expirado
             return JsonResponse({'error': token_result['error']}, status=401)
 
-        # Extrai o ID do usuário e a função (role) do resultado retornado pela função check_token 
         user_info = token_result['success']
         user_id = user_info.get('id')
         user_role = user_info.get('role')
         user = get_object_or_404(User, id=user_id)
 
-        # Obtém os dados do corpo da solicitação
         data = request.data
-        # Atualiza as informações do usuário com os dados da solicitação
         user.nome = data.get('nome', user.nome)
         user.endereco = data.get('endereco', user.endereco)
         user.telemovel = data.get('telemovel', user.telemovel)
 
         user.save()
-
+        logger.info(f"User {user_id} updated with success.")
         return JsonResponse({'message': 'Info: User updated with success.'})
 
 class GetUserView(APIView):
     def get(self, request):
         token_result = check_token(request)
         if 'error' in token_result:
-        # Retorna uma resposta de erro se o token não for válido ou estiver expirado
             return JsonResponse({'error': token_result['error']}, status=401)
 
-        # Extrai o ID do usuário e a função (role) do resultado retornado pela função check_token 
         user_info = token_result['success']
         user_id = user_info.get('id')
         user_role = user_info.get('role')
 
         user = get_object_or_404(User, id=user_id)
 
+        logger.info(f"User {user_id} info retrieved.")
         return JsonResponse({
             'id': user.id,
             'nome': user.nome,
@@ -110,10 +106,8 @@ class GetUserPreferenceView(APIView):
     def get(self,request):
         token_result = check_token(request)
         if 'error' in token_result:
-        # Retorna uma resposta de erro se o token não for válido ou estiver expirado
             return JsonResponse({'error': token_result['error']}, status=401)
 
-        # Extrai o ID do usuário e a função (role) do resultado retornado pela função check_token 
         user_info = token_result['success']
         user_id = user_info.get('id')
         user_role = user_info.get('role')
@@ -122,6 +116,7 @@ class GetUserPreferenceView(APIView):
 
 
         if request.method == 'GET':
+            logger.info(f"User {user_id} preferences retrieved.")
             return JsonResponse({
                 'id': user.id,
                 'sports_center': user.sports_center,
@@ -167,22 +162,16 @@ class UpdateUserPreferenceView(APIView):
     def post(self, request):
         token_result = check_token(request)
         if 'error' in token_result:
-        # Retorna uma resposta de erro se o token não for válido ou estiver expirado
             return JsonResponse({'error': token_result['error']}, status=401)
 
-        # Extrai o ID do usuário e a função (role) do resultado retornado pela função check_token 
         user_info = token_result['success']
         user_id = user_info.get('id')
         user_role = user_info.get('role')
 
         if request.method == 'POST':
-            # Verifica se o usuário já existe no banco de dados
             user_preference, created = UserPreference.objects.get_or_create(id=user_id)
-            # Obtém os dados do corpo da solicitação
             data = request.data
-            print("request.data",data)            
-
-            # Atualiza os campos com os dados da solicitação
+            
             user_preference.sports_center = data.get('sports_center', user_preference.sports_center)
             user_preference.commerce = data.get('commerce', user_preference.commerce)
             user_preference.bakery = data.get('bakery', user_preference.bakery)
@@ -219,19 +208,32 @@ class UpdateUserPreferenceView(APIView):
             user_preference.theme_service = data.get('theme_service', user_preference.theme_service)
             user_preference.theme_education = data.get('theme_education', user_preference.theme_education)
 
-            # Salva o objeto no banco de dados
             user_preference.save()
 
-            # Retorna uma resposta de sucesso
+            logger.info(f"User {user_id} preferences updated.")
             return JsonResponse({'message': 'User preference added/updated successfully'})
 
-        # Retorna um erro se o método HTTP não for POST
         return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+class PreferenceAverageView(APIView):
+    def get(self, request):
+        preferences = UserPreference.objects.all()
+
+        if preferences.exists():
+            preference_averages = {}
+            fields = [field.name for field in UserPreference._meta.get_fields() if field.name != 'id']
+            for field in fields:
+                field_sum = sum(getattr(preference, field) for preference in preferences)
+                field_average = field_sum / len(preferences)
+                preference_averages[field] = field_average
+            logger.info(f"Preferences averages retrieved.")
+            return JsonResponse({'averages': preference_averages})
+        else:
+            return JsonResponse({'message': 'No preferences found'}, status=404)
 
 class GetZoneDataView(APIView):
     def get(self, request):
         try:
-         # Define as consultas SQL para buscar os dados
             queries = {
                 'distritos': 'SELECT * FROM view_values_by_destrito',
                 'municipios': 'SELECT * FROM view_values_by_municipio',
@@ -245,7 +247,6 @@ class GetZoneDataView(APIView):
                     cursor.execute(query)
                     data = cursor.fetchall()
 
-                # Organiza os dados buscados no formato desejado
                     zone_data = {}
                     for row in data:
                         id = row[0]  # Supondo que o primeiro valor seja o ID
@@ -256,7 +257,7 @@ class GetZoneDataView(APIView):
                             zone_data[id][column_name] = row[i]
 
                     results[zone_type] = zone_data
-
+            logger.info(f"Zone data retrieved.")
             return JsonResponse(results, safe=False)
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
@@ -265,16 +266,14 @@ class UpdateRoomStatus(APIView):
     def post(self, request, quarto_id):
         token_result = check_token(request)
         if 'error' in token_result:
-        # Retorna uma resposta de erro se o token não for válido ou estiver expirado
             return JsonResponse({'error': token_result['error']}, status=401)
 
-        # Extrai o ID do usuário e a função (role) do resultado retornado pela função check_token 
         user_info = token_result['success']
         user_id = user_info.get('id')
         user_role = user_info.get('role')
 
         if user_role != 'admin':
-        # Retorna uma resposta de erro se o usuário não for um administrador
+            logger.error(f"Unauthorized access. Only administrators are allowed.")
             return JsonResponse({'error': 'Unauthorized access. Only administrators are allowed.'}, status=403)
 
         data = request.data
@@ -282,25 +281,24 @@ class UpdateRoomStatus(APIView):
         comment = data.get('comment')
 
         try:
-            # Verifica se o quarto existe
             quarto = Quarto.objects.get(id=quarto_id)
 
             if status == 'accepted':
-                # Atualiza o estado para aceito
+                logger.info(f"Room {quarto_id} status updated to approved.")
                 quarto.estado = 'approved'
                 quarto.coments_by_admin = None  # Limpa o campo de comentário
                 quarto.save()
                 return JsonResponse({"message": "Room status updated to accepted."})
             elif status == 'denied':
-                # Verifica se o comentário está presente
+
                 if not comment:
+                    logger.error(f"Comment is required for denied status on room {quarto_id}.")
                     return JsonResponse({"error": "A comment is required for denied status."}, status=400)
                 
-                # Atualiza o estado para negado e adiciona o comentário
                 quarto.estado = 'denied'
                 quarto.coments_by_admin = comment
                 quarto.save()
-                
+                logger.info(f"Room {quarto_id} status updated to denied with comment.")
                 return JsonResponse({"message": "Room status updated to denied with comment."})
             else:
                 return JsonResponse({"error": "Invalid status provided."}, status=400)
@@ -311,17 +309,12 @@ class UpdateRoomStatus(APIView):
 
 class GetAllProperties(APIView):
     def get(self, request):
-        # Recuperar todos os imóveis
         properties = Imovel.objects.all()
 
-        # Inicializar a lista para armazenar os imóveis a serem serializados
         serialized_properties = []
 
-        # Loop através de todos os imóveis
         for property in properties:
-            # Verifica se todos os quartos do imóvel estão aprovados
             if property.quarto_set.filter(estado='approved').count() == property.quarto_set.count():
-                # Se todos os quartos estiverem aprovados, serializa o imóvel
                 if property.geom:
                     geom_coordinates = (property.geom.x, property.geom.y)
                 else:
@@ -341,28 +334,24 @@ class GetAllProperties(APIView):
                     "equipado": property.equipado,
                     "cozinha": property.cozinha,
                     "wifi": property.wifi,
+                    "estado":'approved',
                     "descricao": property.descricao,
                     "selo": property.selo,
                     "updated_at": property.updated_at
                 }
                 serialized_properties.append(serialized_property)
 
-        # Retorna os imóveis serializados como uma resposta JSON
+        logger.info(f"Approved properties retrieved.")
         return JsonResponse({"properties": serialized_properties})
 
 class GetAllPropertiesDenied(APIView):
     def get(self, request):
-        # Recuperar todos os imóveis
         properties = Imovel.objects.all()
 
-        # Inicializar a lista para armazenar os imóveis a serem serializados
         serialized_properties = []
 
-        # Loop através de todos os imóveis
         for property in properties:
-            # Verifica se todos os quartos do imóvel estão aprovados
             if property.quarto_set.filter(estado='denied').exists():
-                # Se todos os quartos estiverem aprovados, serializa o imóvel
                 if property.geom:
                     geom_coordinates = (property.geom.x, property.geom.y)
                 else:
@@ -381,33 +370,27 @@ class GetAllPropertiesDenied(APIView):
                     "estacionamento_garagem": property.estacionamento_garagem,
                     "equipado": property.equipado,
                     "cozinha": property.cozinha,
+                    "estado":'denied',
                     "wifi": property.wifi,
                     "descricao": property.descricao,
                     "selo": property.selo,
                     "updated_at": property.updated_at
                 }
                 serialized_properties.append(serialized_property)
-
-        # Retorna os imóveis serializados como uma resposta JSON
+        logger.info(f"Denied properties retrieved.")
         return JsonResponse({"properties": serialized_properties})
 
 class GetPendingRooms(APIView):
     def get(self, request):
-        # Recuperar todos os quartos pendentes de aprovação
         pending_rooms = Quarto.objects.filter(estado='on hold')
 
-        # Inicializar a lista para armazenar os quartos serializados
         serialized_rooms = []
 
-        # Loop através de todos os quartos pendentes
         for room in pending_rooms:
-            # Recuperar o imóvel associado ao quarto
             property = room.imovel
 
-            # Recuperar o proprietário do imóvel
             owner = User.objects.get(id=room.imovel.owner)
 
-            # Serializar os dados do proprietário
             owner_info = {
                 'owner_id': owner.id,
                 'owner_name': owner.nome,
@@ -415,7 +398,6 @@ class GetPendingRooms(APIView):
                 'owner_phone': owner.telemovel
             }
 
-            # Serializar os dados do imóvel
             property_info = {
                 'property_id': property.id,
                 'property_name': property.nome,
@@ -435,7 +417,6 @@ class GetPendingRooms(APIView):
                 'property_updated_at': property.updated_at
             }
 
-            # Serializar os dados do quarto
             room_info = {
                 'room_id': room.id,
                 'property_id': property.id,
@@ -451,24 +432,20 @@ class GetPendingRooms(APIView):
                 'updated_at': room.updated_at
             }
 
-            # Adicionar informações ao quarto serializado
             serialized_room = {
                 'owner_info': owner_info,
                 'property_info': property_info,
                 'room_info': room_info
             }
 
-            # Adicionar o quarto serializado à lista
             serialized_rooms.append(serialized_room)
-
-        # Retorna os quartos pendentes serializados como uma resposta JSON
+        logger.info(f"Pending rooms retrieved.")
         return JsonResponse({"pending_rooms": serialized_rooms})
 
 
 class GetPropertyById(APIView):
     def get(self, request, imovel_id):
         try:
-            # Recupera a propriedade pelo ID
             property = Imovel.objects.get(id=imovel_id)
 
             if property.geom:
@@ -477,7 +454,6 @@ class GetPropertyById(APIView):
                 geom_coordinates = None
 
 
-            # Serializa os dados da propriedade
             serialized_property = {
                 "id": property.id,
                 "nome": property.nome,
@@ -521,17 +497,42 @@ class GetPropertyById(APIView):
                'telemovel': user.telemovel,
             } 
 
+            logger.info(f"Property {imovel_id} retrieved.")
             return JsonResponse({"property": serialized_property, "quartos": serialized_quartos, "owner_info":owner_info})
         except Imovel.DoesNotExist:
             return JsonResponse({"error": "A propriedade não foi encontrada."}, status=404)
 
+
+class GetAllRoomsView(APIView):
+    def get(self, request):
+        rooms = Quarto.objects.all()
+
+        serialized_rooms = []
+
+        for room in rooms:
+            serialized_room = {
+                "id": room.id,
+                "imovel_id": room.imovel.id,
+                "despesas_incluidas": room.despesas_incluidas,
+                "wc_privado": room.wc_privado,
+                "preco_mes": str(room.preco_mes),  # Converte para string para evitar erros de serialização JSON
+                "area": str(room.area),  # Converte para string para evitar erros de serialização JSON
+                "tipologia": room.tipologia,
+                "estado": room.estado,
+                "disponivel": room.disponivel,
+                "observacoes": room.observacoes,
+                "coments_by_admin": room.coments_by_admin,
+                "created_at": room.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+                "updated_at": room.updated_at.strftime('%Y-%m-%d %H:%M:%S')
+            }
+            serialized_rooms.append(serialized_room)
+        logger.info(f"All rooms retrieved.")
+        return JsonResponse({"rooms": serialized_rooms})
 class GetRoomById(APIView):
     def get(self, request, quarto_id):
         try:
-            # Recupera o quarto pelo ID
             quarto = Quarto.objects.get(id=quarto_id)
 
-            # Serializa os dados do quarto
             serialized_quarto = {
                 "id": quarto.id,
                 "imovel_id": quarto.imovel_id,
@@ -546,7 +547,6 @@ class GetRoomById(APIView):
                 "updated_at": quarto.updated_at
             }
 
-            # Recupera os detalhes da propriedade associada ao quarto
             imovel = quarto.imovel
             if imovel.geom:
                 geom_coordinates = (imovel.geom.x, imovel.geom.y)
@@ -581,39 +581,32 @@ class GetRoomById(APIView):
             } 
 
 
-            # Retorna a resposta como JsonResponse
+            logger.info(f"Room {quarto_id} retrieved.")
             return JsonResponse({"quarto": serialized_quarto, "imovel": serialized_imovel, "owner":owner_info})
         except Quarto.DoesNotExist:
             return JsonResponse({"error": "O quarto não foi encontrado."}, status=404)
-
 
 class OwnerApprovedPropertiesView(APIView):
     def get(self, request):
         token_result = check_token(request)
         if 'error' in token_result:
-            # Retorna uma resposta de erro se o token não for válido ou estiver expirado
             return JsonResponse({'error': token_result['error']}, status=401)
 
-        # Extrai o ID do usuário e a função (role) do resultado retornado pela função check_token 
         user_info = token_result['success']
         user_id = user_info.get('id')
         user_role = user_info.get('role')
 
-        # Recupera todas as propriedades do proprietário
         properties = Imovel.objects.filter(owner=user_id)
 
-        # Inicializa as listas para armazenar as propriedades e os quartos serializados
         approved_rooms_properties = []
 
 
-        # Loop através de todas as propriedades
         for property in properties:
             if property.geom:
                 geom_coordinates = (property.geom.x, property.geom.y)
             else:
                 geom_coordinates = None
 
-            # Serializa os dados da propriedade
             serialized_property = {
                 "id": property.id,
                 "nome": property.nome,
@@ -635,12 +628,9 @@ class OwnerApprovedPropertiesView(APIView):
 
             rooms = property.quarto_set.all()
 
-            # Verifica se todos os quartos têm estado 'approved'
             if rooms.filter(estado='approved').count() == rooms.count():
-                # Se todos os quartos forem 'approved', adiciona a propriedade à lista correspondente
                 approved_rooms_properties.append(serialized_property)
-
-        # Retorna as propriedades e as listas de quartos correspondentes como uma resposta JSON
+        logger.info(f"Approved properties retrieved.")
         return JsonResponse({
             "approved_rooms_properties": approved_rooms_properties,
         })
@@ -650,26 +640,19 @@ class OwnerApprovedRoomsView(APIView):
     def get(self, request):
         token_result = check_token(request)
         if 'error' in token_result:
-            # Retorna uma resposta de erro se o token não for válido ou estiver expirado
             return JsonResponse({'error': token_result['error']}, status=401)
 
-        # Extrai o ID do usuário e a função (role) do resultado retornado pela função check_token 
         user_info = token_result['success']
         user_id = user_info.get('id')
         user_role = user_info.get('role')
 
-        # Recupera todos os quartos do proprietário
         rooms = Quarto.objects.filter(imovel__owner=user_id)
 
-        # Inicializa a lista para armazenar os quartos serializados
         serialized_rooms = []
 
-        # Loop através de todos os quartos
         for room in rooms:
-            # Recupera o imóvel associado ao quarto
             property = room.imovel
 
-            # Serializa os dados da room
             serialized_room = {
                 "id": room.id,
                 "property_id": property.id,
@@ -684,11 +667,9 @@ class OwnerApprovedRoomsView(APIView):
                 "updated_at": room.updated_at
             }
 
-            # Adiciona o quarto serializado à lista se o estado for 'approved'
             if room.estado == 'approved':
                 serialized_rooms.append(serialized_room)
-
-        # Retorna os quartos serializados como uma resposta JSON
+        logger.info(f"Approved rooms retrieved.")
         return JsonResponse({"rooms": serialized_rooms})
     
 
@@ -696,29 +677,23 @@ class OwnerDeniedOnHoldPropertiesView(APIView):
     def get(self, request):
         token_result = check_token(request)
         if 'error' in token_result:
-            # Retorna uma resposta de erro se o token não for válido ou estiver expirado
             return JsonResponse({'error': token_result['error']}, status=401)
 
-        # Extrai o ID do usuário e a função (role) do resultado retornado pela função check_token 
         user_info = token_result['success']
         user_id = user_info.get('id')
         user_role = user_info.get('role')
 
-        # Recupera todas as propriedades do proprietário
         properties = Imovel.objects.filter(owner=user_id)
 
-        # Inicializa as listas para armazenar as propriedades e os quartos serializados
         denied_rooms_properties = []
         on_hold_rooms_properties = []
 
-        # Loop através de todas as propriedades
         for property in properties:
             if property.geom:
                 geom_coordinates = (property.geom.x, property.geom.y)
             else:
                 geom_coordinates = None
 
-            # Serializa os dados da propriedade
             serialized_property = {
                 "id": property.id,
                 "nome": property.nome,
@@ -740,15 +715,12 @@ class OwnerDeniedOnHoldPropertiesView(APIView):
 
             rooms = property.quarto_set.all()
 
-            # Verifica se todos os quartos têm estado 'approved'
             if rooms.filter(estado='denied').exists():
-                # Se todos os quartos forem 'approved', adiciona a propriedade à lista correspondente
                 denied_rooms_properties.append(serialized_property)
             elif rooms.filter(estado='on hold').exists():
                 on_hold_rooms_properties.append(serialized_property)
 
-
-        # Retorna as propriedades e as listas de quartos correspondentes como uma resposta JSON
+        logger.info(f"Denied and on hold properties retrieved.")
         return JsonResponse({
             "denied_rooms_properties": denied_rooms_properties,
             "on_hold_rooms_properties": on_hold_rooms_properties
@@ -759,27 +731,20 @@ class OwnerDeniedOnHoldRoomsView(APIView):
     def get(self, request):
         token_result = check_token(request)
         if 'error' in token_result:
-            # Retorna uma resposta de erro se o token não for válido ou estiver expirado
             return JsonResponse({'error': token_result['error']}, status=401)
 
-        # Extrai o ID do usuário e a função (role) do resultado retornado pela função check_token 
         user_info = token_result['success']
         user_id = user_info.get('id')
         user_role = user_info.get('role')
 
-        # Recupera todos os quartos do proprietário
         rooms = Quarto.objects.filter(imovel__owner=user_id)
 
-        # Inicializa a lista para armazenar os quartos serializados
         onHold_rooms = []
         denied_rooms = []
 
-        # Loop através de todos os quartos
         for room in rooms:
-            # Recupera o imóvel associado ao quarto
             property = room.imovel
 
-            # Serializa os dados da room
             serialized_room = {
                 "id": room.id,
                 "property_id": property.id,
@@ -795,37 +760,31 @@ class OwnerDeniedOnHoldRoomsView(APIView):
                 "updated_at": room.updated_at
             }
 
-            # Adiciona o quarto serializado à lista se o estado for 'approved'
             if room.estado == 'denied':
                 denied_rooms.append(serialized_room)
             elif room.estado == 'on hold':
                 onHold_rooms.append(serialized_room)
-
-        # Retorna os quartos serializados como uma resposta JSON
+        logger.info(f"Denied and on hold rooms retrieved.")
         return JsonResponse({
             "denied_rooms": denied_rooms,
             "onHold_rooms": onHold_rooms
         })
     
 
-#Create a new imovel
+
 class CreateImovel(APIView):
     def post(self, request):
         token_result = check_token(request)
         if 'error' in token_result:
-            # Retorna uma resposta de erro se o token não for válido ou estiver expirado
             return JsonResponse({'error': token_result['error']}, status=401)
 
-        # Extrai o ID do usuário e a função (role) do resultado retornado pela função check_token 
         user_info = token_result['success']
         user_id = user_info.get('id')
         user_role = user_info.get('role')
 
 
-        # Obtém os dados do corpo da solicitação
         data = request.data
 
-        # Cria um novo objeto Imovel com os dados da solicitação
         imovel = Imovel.objects.create(
             owner=user_id,
             nome=data.get('nome'),
@@ -843,37 +802,31 @@ class CreateImovel(APIView):
             descricao=data.get('descricao'),
             selo=data.get('selo')
         )
-
-        # Retorna uma resposta de sucesso
+        logger.info(f"Property created successfully.")
         return JsonResponse({'message': 'Imovel created successfully.'})
     
-#Create a new room for a property
 class CreateRoom(APIView):
     def post(self, request):
         token_result = check_token(request)
         if 'error' in token_result:
-            # Retorna uma resposta de erro se o token não for válido ou estiver expirado
             return JsonResponse({'error': token_result['error']}, status=401)
 
-        # Extrai o ID do usuário e a função (role) do resultado retornado pela função check_token 
         user_info = token_result['success']
         user_id = user_info.get('id')
         user_role = user_info.get('role')
 
-        # Obtém os dados do corpo da solicitação
         data = request.data
 
-        # Verifica se o imóvel existe
         try:
             imovel = Imovel.objects.get(id=data.get('imovel_id'))
         except Imovel.DoesNotExist:
+            logger.error(f"Imovel not found.")
             return JsonResponse({'error': 'Imovel not found.'}, status=404)
 
-        # Verifica se o imóvel pertence ao usuário
         if imovel.owner != user_id:
+            logger.error(f"Unauthorized access. You do not own this property.")
             return JsonResponse({'error': 'Unauthorized access. You do not own this property.'}, status=403)
 
-        # Cria um novo objeto Quarto com os dados da solicitação
         room = Quarto.objects.create(
             imovel=imovel,
             despesas_incluidas=data.get('despesas_incluidas'),
@@ -886,35 +839,31 @@ class CreateRoom(APIView):
             observacoes=data.get('observacoes')
         )
 
-        # Retorna uma resposta de sucesso
+        logger.info(f"Room created successfully.")
         return JsonResponse({'message': 'Room created successfully.'})
 
 class UpdateImovel(APIView):
     def post(self, request, imovel_id):
         token_result = check_token(request)
         if 'error' in token_result:
-            # Retorna uma resposta de erro se o token não for válido ou estiver expirado
             return JsonResponse({'error': token_result['error']}, status=401)
 
-        # Extrai o ID do usuário e a função (role) do resultado retornado pela função check_token 
         user_info = token_result['success']
         user_id = user_info.get('id')
         user_role = user_info.get('role')
 
-        # Obtém os dados do corpo da solicitação
         data = request.data
 
-        # Verifica se o imóvel existe
         try:
             imovel = Imovel.objects.get(id=imovel_id)
         except Imovel.DoesNotExist:
+            logger.error(f"Imovel not found.")
             return JsonResponse({'error': 'Imovel not found.'}, status=404)
 
-        # Verifica se o imóvel pertence ao usuário
         if imovel.owner != user_id:
+            logger.error(f"Unauthorized access. You do not own this property.")
             return JsonResponse({'error': 'Unauthorized access. You do not own this property.'}, status=403)
 
-        # Atualiza as informações do imóvel com os dados da solicitação
         imovel.nome = data.get('nome', imovel.nome)
         imovel.morada = data.get('morada', imovel.morada)
         imovel.tipologia = data.get('tipologia', imovel.tipologia)
@@ -930,38 +879,33 @@ class UpdateImovel(APIView):
         imovel.descricao = data.get('descricao', imovel.descricao)
         imovel.selo = data.get('selo', imovel.selo)
 
-        # Salva o objeto no banco de dados
         imovel.save()
 
-        # Retorna uma resposta de sucesso
+        logger.info(f"Imovel updated successfully.")
         return JsonResponse({'message': 'Imovel updated successfully.'})
     
 class UpdateRoom(APIView):
     def post(self, request, quarto_id):
         token_result = check_token(request)
         if 'error' in token_result:
-            # Retorna uma resposta de erro se o token não for válido ou estiver expirado
             return JsonResponse({'error': token_result['error']}, status=401)
 
-        # Extrai o ID do usuário e a função (role) do resultado retornado pela função check_token 
         user_info = token_result['success']
         user_id = user_info.get('id')
         user_role = user_info.get('role')
 
-        # Obtém os dados do corpo da solicitação
         data = request.data
 
-        # Verifica se o quarto existe
         try:
             room = Quarto.objects.get(id=quarto_id)
         except Quarto.DoesNotExist:
+            logger.error(f"Room not found.")
             return JsonResponse({'error': 'Room not found.'}, status=404)
 
-        # Verifica se o imóvel pertence ao usuário
         if room.imovel.owner != user_id:
+            logger.error(f"Unauthorized access. You do not own this property.")
             return JsonResponse({'error': 'Unauthorized access. You do not own this property.'}, status=403)
 
-        # Atualiza as informações do quarto com os dados da solicitação
         room.despesas_incluidas = data.get('despesas_incluidas', room.despesas_incluidas)
         room.wc_privado = data.get('wc_privado', room.wc_privado)
         room.preco_mes = data.get('preco_mes', room.preco_mes)
@@ -971,100 +915,88 @@ class UpdateRoom(APIView):
         room.disponivel = data.get('disponivel', room.disponivel)
         room.observacoes = data.get('observacoes', room.observacoes)
 
-        # Salva o objeto no banco de dados
         room.save()
 
-        # Retorna uma resposta de sucesso
+        logger.info(f"Room updated successfully.")
         return JsonResponse({'message': 'Room updated successfully.'})
     
 class DeleteImovel(APIView):
     def delete(self, request, imovel_id):
         token_result = check_token(request)
         if 'error' in token_result:
-            # Retorna uma resposta de erro se o token não for válido ou estiver expirado
             return JsonResponse({'error': token_result['error']}, status=401)
 
-        # Extrai o ID do usuário e a função (role) do resultado retornado pela função check_token 
         user_info = token_result['success']
         user_id = user_info.get('id')
         user_role = user_info.get('role')
 
-        # Verifica se o imóvel existe
         try:
             imovel = Imovel.objects.get(id=imovel_id)
         except Imovel.DoesNotExist:
+            logger.error(f"Imovel not found.")
             return JsonResponse({'error': 'Imovel not found.'}, status=404)
 
-        # Verifica se o imóvel pertence ao usuário
         if imovel.owner != user_id:
+            logger.error(f"Unauthorized access. You do not own this property.")
             return JsonResponse({'error': 'Unauthorized access. You do not own this property.'}, status=403)
 
-        # Deleta o imóvel do banco de dados, tambeém deleta os quartos associados
         imovel.delete()
 
-        # Retorna uma resposta de sucesso
+        logger.info(f"Imovel deleted successfully.")
         return JsonResponse({'message': 'Imovel deleted successfully.'})
     
 class DeleteRoom(APIView):
     def delete(self, request, quarto_id):
         token_result = check_token(request)
         if 'error' in token_result:
-            # Retorna uma resposta de erro se o token não for válido ou estiver expirado
             return JsonResponse({'error': token_result['error']}, status=401)
 
-        # Extrai o ID do usuário e a função (role) do resultado retornado pela função check_token 
         user_info = token_result['success']
         user_id = user_info.get('id')
         user_role = user_info.get('role')
 
-        # Verifica se o quarto existe
         try:
             room = Quarto.objects.get(id=quarto_id)
         except Quarto.DoesNotExist:
+            logger.error(f"Room not found.")
             return JsonResponse({'error': 'Room not found.'}, status=404)
 
-        # Verifica se o imóvel pertence ao usuário
         if room.imovel.owner != user_id:
+            logger.error(f"Unauthorized access. You do not own this property.")
             return JsonResponse({'error': 'Unauthorized access. You do not own this property.'}, status=403)
 
-        # Deleta o quarto do banco de dados
         room.delete()
 
-        # Retorna uma resposta de sucesso
+        logger.info(f"Room deleted successfully.")
         return JsonResponse({'message': 'Room deleted successfully.'})
     
 
-    #update a disponibilidade of a room
 class UpdateRoomAvailability(APIView):
     def post(self, request, quarto_id):
         token_result = check_token(request)
         if 'error' in token_result:
-            # Retorna uma resposta de erro se o token não for válido ou estiver expirado
             return JsonResponse({'error': token_result['error']}, status=401)
 
-        # Extrai o ID do usuário e a função (role) do resultado retornado pela função check_token 
         user_info = token_result['success']
         user_id = user_info.get('id')
         user_role = user_info.get('role')
 
-        # Obtém os dados do corpo da solicitação
         data = request.data
 
         # Verifica se o quarto existe
         try:
             room = Quarto.objects.get(id=quarto_id)
         except Quarto.DoesNotExist:
+            logger.error(f"Room not found.")
             return JsonResponse({'error': 'Room not found.'}, status=404)
 
-        # Verifica se o imóvel pertence ao usuário
         if room.imovel.owner != user_id:
             return JsonResponse({'error': 'Unauthorized access. You do not own this property.'}, status=403)
 
-        # Atualiza a disponibilidade do quarto com os dados da solicitação
         room.disponivel = data.get('disponivel', room.disponivel)
 
-        # Salva o objeto no banco de dados
         room.save()
 
-        # Retorna uma resposta de sucesso
+        logger.info(f"Room availability updated successfully.")
         return JsonResponse({'message': 'Room availability updated successfully.'})
+

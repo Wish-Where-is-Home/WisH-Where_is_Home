@@ -74,13 +74,16 @@ function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,z
                             onChange={(event, newValue) => onSliderChange(newValue, group.ids)}
                             valueLabelFormat={valueLabelFormat}
                         />
-                        <div className="average-line" style={{ position: 'absolute', top: 0, left: `${averageMetrics.averages[group.name]}%`, width: '2px', height: '2rem', backgroundColor: 'red', zIndex: 1 }}></div>
-                    </Box>
+                        {averageMetrics && (
+                        <div className="average-line" style={{ position: 'absolute', top: 0, left: `${averageMetrics.averages[group.ids[0]]*100}%`, width: '2px', height: '2rem', backgroundColor: 'red', zIndex: 1 }}></div>
+                        )}
+                        </Box>
                 </div>
             </div>
         ));
     };
     
+
     
 
    
@@ -175,6 +178,12 @@ function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,z
                         </button>
                     ) }
                     </div>
+                        <div style={{width:"100%",padding:"2rem 0",height: '2rem',display: "flex", flexDirection: "row",alignItems:"center",justifyContent:"center"}}>
+                            <div style={{display:"flex", flexDirection:"row"}}>
+                                <div className='average-line2'></div>
+                                <p style={{marginLeft:"1rem",fontSize:"0.8rem"}}>média das métricas de todos os utilizadores da plataforma.</p>
+                            </div>
+                        </div>
                 </div>
             </div>
         </div>

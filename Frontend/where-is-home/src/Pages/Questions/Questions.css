@@ -35,6 +35,16 @@
 }
 
 
+.average-line2 {
+  width: 5px; 
+  height: 2rem;
+  background-color: rgb(176, 35, 35); 
+  border-radius: 2rem;
+  content: ''; 
+  z-index: 1;
+}
+
+
 .tab-buttons {
   margin-top: 2rem;
   display: flex;

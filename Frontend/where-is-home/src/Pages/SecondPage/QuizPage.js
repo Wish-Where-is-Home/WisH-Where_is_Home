@@ -13,6 +13,8 @@ import Box from '@mui/material/Box';
 import { useAuth } from '../../AuthContext/AuthContext';
 import ModalW from '../../Components/ModalW/ModalW.js';
 import 'proj4leaflet';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
 
 function QuizPage({ darkMode, zoneData,scores,updateScores}) {
@@ -35,6 +37,16 @@ function QuizPage({ darkMode, zoneData,scores,updateScores}) {
   const [modalVisibleGradient, setModalVisibleGradient] = useState(false);
   const [averageMetrics,setAverageMetrics] = useState(false);
 
+
+  const [mostrarInfo, setMostrarInfo] = useState(false);
+
+  const handleInfoHover = () => {
+    setMostrarInfo(true);
+  };
+
+  const handleInfoLeave = () => {
+    setMostrarInfo(false);
+  };
 
   const [slidersValues, setSlidersValues] = useState([
     { id: 0, value: 0 },  
@@ -804,7 +816,9 @@ const handleKeepMetrics = async () => {
                         }}
                         onChange={(event, value) => handleSliderChange(0, value)}
                       />
+                      {averageMetrics && (
                     <div className="average-line" style={{ left: `${averageMetrics.averages['theme_commerce']}%` }}></div>
+                      )}
                     </Box>
                   </div>
                   <div className="min-max-text">
@@ -848,7 +862,9 @@ const handleKeepMetrics = async () => {
                         onChange={(event, value) => handleSliderChange(1, value)}
 
                       />
+                      {averageMetrics && (
                       <div className="average-line" style={{ left: `${averageMetrics.averages['theme_social_leisure']}%` }}></div>
+                      )}
                     </Box>
                   </div>
                   <div className="min-max-text">
@@ -890,7 +906,9 @@ const handleKeepMetrics = async () => {
                         onChange={(event, value) => handleSliderChange(2, value)}
 
                       />
+                      {averageMetrics && (
                     <div className="average-line" style={{ left: `${averageMetrics.averages['theme_health']}%` }}></div>
+                      )}
                     </Box>
                   </div>
                   <div className="min-max-text">
@@ -932,8 +950,10 @@ const handleKeepMetrics = async () => {
                         onChange={(event, value) => handleSliderChange(3, value)}
 
                       />
+                      {averageMetrics && (
                        <div className="average-line" style={{ left: `${averageMetrics.averages['theme_nature_sports']}%` }}></div>
-                    </Box>
+                      )}
+                       </Box>
                   </div>
                   <div className="min-max-text">
                     <span>{t('nothing')}</span>
@@ -974,8 +994,10 @@ const handleKeepMetrics = async () => {
                         onChange={(event, value) => handleSliderChange(4, value)}
 
                       />
+                      {averageMetrics && (
                       <div className="average-line" style={{ left: `${averageMetrics.averages['theme_service']}%` }}></div>
-                    </Box>
+                      )}
+                      </Box>
                   </div>
                   <div className="min-max-text">
                     <span>{t('nothing')}</span>
@@ -1016,8 +1038,10 @@ const handleKeepMetrics = async () => {
                         onChange={(event, value) => handleSliderChange(5, value)}
 
                       />
+                      {averageMetrics && (
                       <div className="average-line" style={{ left: `${averageMetrics.averages['theme_education']}%` }}></div>
-                    </Box>
+                      )}
+                      </Box>
                   </div>
                   <div className="min-max-text">
                     <span>{t('nothing')}</span>
@@ -1026,10 +1050,15 @@ const handleKeepMetrics = async () => {
                 </div>
               </div>
             </div>
-            <div className="button-container">
+            <div className="button-container" style={{ position: 'relative' }}>
               <button className="button-small-round" onClick={handleSearchClick}>
                 <span className="button-icon">{t('next')}</span>
               </button>
+              <div style={{marginLeft:"5rem",height: '2rem',display: "flex", flexDirection: "row"}}>
+                  
+                  <div className='average-line'></div>
+                    <p style={{marginLeft:"1rem",fontSize:"0.8rem"}}>média das métricas de todos os utilizadores da plataforma.</p>
+                </div>
             </div>
           </div>
         </div>

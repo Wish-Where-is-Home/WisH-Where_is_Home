@@ -94,6 +94,7 @@ function ModalProperty({ darkMode, propertyData, propertyRooms, closeModal }) {
                 <div className="modal-room-container">
                     {propertyRooms.map(room => (
                         <div key={room.id} className="modal-room-card">
+                            <div style={{display:"flex",flexDirection:"column",padding:"15px"}}></div>
                             <div style={{display:"flex",flexDirection:"column",padding:"15px"}}>
                                 <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
                                         <p style={{ marginRight: '0.5rem' }}><strong>Id:</strong></p>

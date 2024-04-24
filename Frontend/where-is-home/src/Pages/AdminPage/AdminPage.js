@@ -5,6 +5,7 @@ import { faFilter } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from "react-i18next";
 import { faEye } from '@fortawesome/free-solid-svg-icons';
 import ModalProperty from '../../Components/ModalProperty/ModalProperty';
+import ModalAdminRooms from '../../Components/ModalAdminRooms/ModalAdminRooms';
 
 function AdminPage({ darkMode }) {
     const { t } = useTranslation("common");
@@ -19,6 +20,8 @@ function AdminPage({ darkMode }) {
     const [propertyRooms, setPropertyRooms] = useState({});
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedProperty, setSelectedProperty] = useState(null);
+    const [isModalRoom,setIsModalRoom] = useState(false);
+    const [selectedRoom,setSelectedRoom] = useState(null);
 
     const handleTabClick = (tab) => {
         setSelectedTab(tab);
@@ -101,6 +104,17 @@ function AdminPage({ darkMode }) {
         setSelectedProperty(null);
     };
 
+
+    const openModalRoom = (room) => {
+        setSelectedRoom(room);
+        setIsModalRoom(true);
+    };
+
+    const closeModalRoom = () => {
+        setIsModalRoom(false);
+        setSelectedRoom(null);
+    };
+
     const displayProperties = () => {
         let propertiesToDisplay = properties;
         
@@ -160,7 +174,7 @@ function AdminPage({ darkMode }) {
                             <div><p>{room.property_info.property_name}</p></div>
                             <div><p>{room.property_info.property_address}</p></div>
                             <div className="button-container">
-                                <button className="button-small-round" onClick={() => openModal(room.property_info.property_id)}>
+                                <button className="button-small-round" onClick={() => openModalRoom(room)}>
                                     <FontAwesomeIcon icon={faEye} />
                                 </button>
                             </div>
@@ -229,6 +243,15 @@ function AdminPage({ darkMode }) {
                     closeModal={closeModal}
                 />
             )}
+
+            {isModalRoom && selectedRoom && (
+                <ModalAdminRooms
+                    darkMode={darkMode}
+                    roomData={selectedRoom}
+                    closeModalRoom={closeModalRoom}
+                />
+            )}
+
         </div>
     );
 }

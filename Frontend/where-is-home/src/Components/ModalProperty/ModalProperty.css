@@ -12,14 +12,15 @@
 }
 
 .modal-content {
+    margin-top: 5rem;
     background-color:var(--background-color);
     padding: 20px;
     padding-top: 0;
     border-radius: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); 
     width: 70%;
-    min-height: 60vh;
-    max-height: 60vh;
+    min-height: 80vh;
+    max-height: 80vh;
     overflow-y: auto;
     position: relative;
     z-index: 1;
@@ -134,7 +135,7 @@
 .quartos-buttons-modal2{
     background-color: red;
     border: 2px solid var(--background-color);
-    margin-left: 1rem;
+    margin-left: 3rem;
     border-radius: 2rem;
 }
 
@@ -142,7 +143,6 @@
 .quartos-buttons-modal3{
     background-color: rgb(38, 176, 38);
     border: 2px solid var(--background-color);
-    margin-left: 1rem;
     border-radius: 2rem;
 }
 

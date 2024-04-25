@@ -1,13 +1,36 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './ModalProperty.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes,faInfoCircle,faCheck  } from '@fortawesome/free-solid-svg-icons';
 import { format } from 'date-fns';
+import axios from 'axios';
 
 function ModalProperty({ darkMode, propertyData, propertyRooms, closeModal }) {
 
-    console.log(propertyData);
-    console.log(propertyRooms);
+    const [commentModalAcceptOpen, setCommentModalAcceptOpen] = useState(false);
+    const [comment, setComment] = useState('');
+    const [confirmDenieModalOpen, setConfirmDenieModalOpen] = useState(false);
+    const [roomId,setRoomId] = useState(null);
+
+
+    const openCommentModal = (roomid) => {
+        setCommentModalAcceptOpen(true);
+        setRoomId(roomid)
+    };
+
+    const closeCommentModal = () => {
+        setCommentModalAcceptOpen(false);
+    };
+
+    const openConfirmDenieModal = (roomid) => {
+        setConfirmDenieModalOpen(true);
+        setRoomId(roomid)
+    };
+
+    const closeConfirmDenieModal = () => {
+        setConfirmDenieModalOpen(false);
+    };
+
 
     let formattedDate = '';
     if (propertyData.updated_at) {
@@ -21,6 +44,45 @@ function ModalProperty({ darkMode, propertyData, propertyRooms, closeModal }) {
 
     const formatBooleanValue = (value) => {
         return value ? 'Sim' : 'Não';
+    };
+
+    const handleAcceptComment = () => {
+        console.log('Comment accepted:', comment);
+        
+        const token = localStorage.getItem('token');
+    
+        axios.post(`http://mednat.ieeta.pt:9009/admin/update/room/status/${roomId}/`, { status: 'denied', comment: comment }, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(response => {
+            console.log('Comment accepted successfully');
+            closeCommentModal(); 
+        })
+        .catch(error => {
+            console.error('Error accepting comment:', error);
+        });
+    };
+    
+    const handleConfirmDeny = () => {
+        console.log('Room denied');
+        closeConfirmDenieModal();
+    
+        const token = localStorage.getItem('token');
+       
+        axios.post(`http://mednat.ieeta.pt:9009/admin/update/room/status/${roomId}/`, { status: 'accepted' }, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(response => {
+            console.log('Room denied successfully');
+            closeConfirmDenieModal(); 
+        })
+        .catch(error => {
+            console.error('Error denying room:', error);
+        });
     };
 
     return (
@@ -130,11 +192,11 @@ function ModalProperty({ darkMode, propertyData, propertyRooms, closeModal }) {
                             </div>
                             <div>
                                 {room.estado === 'denied' ? (
-                                        <button className='quartos-buttons-modal3'>
+                                        <button className='quartos-buttons-modal3' onClick={() => openConfirmDenieModal(room.id)}>
                                             <FontAwesomeIcon className='icon-close-modal' icon={faCheck} />
                                         </button>
                                     ) : (
-                                        <button className='quartos-buttons-modal2'>
+                                        <button className='quartos-buttons-modal2' onClick={() => openCommentModal(room.id)}>
                                             <FontAwesomeIcon className='icon-close-modal' icon={faTimes} />
                                         </button>
                                     )}
@@ -144,6 +206,36 @@ function ModalProperty({ darkMode, propertyData, propertyRooms, closeModal }) {
                 </div>
                </div>
             </div>
+            {commentModalAcceptOpen && (
+                <div className="comment-overlay">
+                    <div className="comment-modal">
+                        <p><strong>Write your comment here:</strong></p>
+                        <textarea
+                            rows="4"
+                            cols="50"
+                            value={comment}
+                            onChange={(e) => setComment(e.target.value)}
+                            placeholder="Type your comment here..."
+                            style={{ marginBottom: "10px", width: "100%" }}
+                        />
+                        <div style={{ display: "flex", justifyContent: "space-between", marginTop: "1rem" }}>
+                            <button className="acceptButtonmodal" onClick={closeCommentModal} >No</button>
+                            <button className="NoButtonmodal" onClick={handleAcceptComment}>Deny</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {confirmDenieModalOpen && (
+                <div className="confirm-overlay">
+                    <div className="confirm-modal">
+                        <p>Are you sure you want to confirm this room?</p>
+                        <div style={{ display: "flex", justifyContent: "space-between", marginTop: "1rem" }}>
+                            <button className="acceptButtonmodal" onClick={handleConfirmDeny}>Yes</button>
+                            <button className="NoButtonmodal" onClick={closeConfirmDenieModal}>No</button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

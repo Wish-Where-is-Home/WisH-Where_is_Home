@@ -59,7 +59,6 @@ function ModalAdminRooms({darkMode,roomData,closeModalRoom}) {
     const handleConfirmDeny = () => {
         console.log('Room denied');
         closeConfirmDenieModal();
-        openCommentModal(); 
     };
 
     return (

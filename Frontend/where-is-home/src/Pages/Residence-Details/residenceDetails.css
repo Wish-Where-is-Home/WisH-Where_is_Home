@@ -1,0 +1,299 @@
+.residenceDetails {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+  height: 100vh;
+}
+
+.residenceWrapper {
+  width: 100%;
+  max-width: 1024px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+}
+
+.bookNow {
+  position: absolute;
+  top: 10px;
+  right: 0;
+  border: none;
+  padding: 10px 20px;
+  background-color: #0071c2;
+  color: white;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.residenceTitle {
+  font-size: 24px;
+  padding-top: 10%;
+  font-weight: 500;
+}
+
+.residenceAddress {
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.residencePriceHighlight {
+  color: #008009;
+  font-weight: 500;
+}
+
+.residenceImages {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.residenceImgWrapper {
+  width: 33%;
+}
+
+.residenceImg {
+  width: 100%;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+.residenceDetails2 {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+/* Accordion base styling */
+.accordion {
+  background-color: #333 !important;
+  /* Adjust for dark mode as needed */
+  box-shadow: none !important;
+  border-radius: 5px;
+
+
+}
+
+.light-mode .accordion {
+  background-color: #f0f0f0 !important;
+}
+
+.accordionSummary {
+  background-color: #f0f0f0 !important;
+  border: 1px solid #f0f0f0 !important;
+  border-radius: 10px !important;
+}
+
+.light-mode .accordionSummary {
+  background-color: rgba(202, 240, 241, 0.47) !important;
+  border: 1px solid #0dddda !important;
+  border-radius: 10px;
+}
+
+.accordionSummary .MuiAccordionSummary-expandIconWrapper.Mui-expanded {
+  transform: rotate(180deg) !important;
+}
+
+.accordionSummaryContent {
+  margin-left: 8px !important;
+}
+
+.accordionDetails {
+  background-color: #f0f0f0 !important;
+  padding: 16px !important;
+  border-radius: 10px !important;
+}
+
+/* Circular progress bar styles */
+.circularProgressContainer {
+  position: relative;
+}
+
+.circularProgressLabel {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.5rem;
+  color: black;
+}
+
+
+
+.residenceDetailsTexts {
+  flex: 3;
+}
+
+.residenceDesc {
+  font-size: 14px;
+  margin-top: 20px;
+  text-align-last: left;
+}
+
+.roomList {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 0 15px;
+}
+
+.roomListItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #ccc;
+  padding: 10px 0;
+}
+
+.roomImageContainer {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.roomListImage {
+  width: 80px;
+  height: auto;
+  border-radius: 4px;
+  margin-right: 15px;
+}
+
+.roomInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.roomName {
+  font-size: 1em;
+  flex-shrink: 0;
+}
+
+.roomDetails {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.roomDetail {
+  margin: 5px 0;
+  color: #9d9a9a;
+}
+
+.light-mode .roomDetail {
+  color: #555;
+}
+
+.roomPrice {
+  flex-shrink: 0;
+  font-size: 1.2em;
+  color: #0071c2;
+  font-weight: bold;
+  padding-left: 15px;
+}
+
+.roomListItem.unavailable .roomPrice {
+  color: #b3b3b3;
+  font-style: italic;
+}
+
+
+
+.residenceDetailsPrice {
+  flex: 1;
+  background-color: whitesmoke;
+  border: 3px solid #0dddda;
+  color: black;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  border-radius: 20px;
+}
+
+.light-mode .residenceDetailsPrice {
+  background-color: rgba(202, 240, 241, 0.47);
+}
+
+.residenceDetailsPrice>h1 {
+  font-size: 18px;
+  color: #555;
+}
+
+.residenceDetailsPrice>span {
+  font-size: 14px;
+}
+
+.residenceDetailsPrice>h2 {
+  font-weight: 300;
+}
+
+.residenceDetailsPrice>button {
+  border: none;
+  padding: 10px 20px;
+  background-color: #0dddda;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+.ownerDetails {
+  transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  display: block;
+}
+
+.ownerDetails.visible {
+  max-height: 500px;
+  opacity: 1;
+}
+
+.slider {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.613);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+}
+
+.sliderWrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sliderImg {
+  width: 80%;
+  height: 80vh;
+}
+
+.close {
+  position: absolute;
+  top: 15%;
+  right: 1%;
+  font-size: 30px;
+  color: lightgray;
+  cursor: pointer;
+}
+
+.arrow {
+  margin: 20px;
+  font-size: 50px;
+  color: lightgray;
+  cursor: pointer;
+}

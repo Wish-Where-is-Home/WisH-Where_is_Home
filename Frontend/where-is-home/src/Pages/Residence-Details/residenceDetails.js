@@ -32,7 +32,33 @@ const ResidenceDetails = ({ darkMode }) => {
     setExpanded(isExpanded ? panel : false);
   };
 
+  
+//   <script type='text/javascript'>
+// var ws_wsid = 'g73c0420989bc43f79d00fa60cd4df386';
+// var ws_address = 'C. Madrid, 126, 28903 Getafe, Madrid, Espanha';
+// var ws_format = 'wide';
+// var ws_width = '690';
+// var ws_height = '525';
+// </script><style type='text/css'>#ws-walkscore-tile{position:relative;text-align:left}#ws-walkscore-tile *{float:none;}</style><div id='ws-walkscore-tile'></div><script type='text/javascript' src='http://www.walkscore.com/tile/show-walkscore-tile.php'></script>
 
+// curl "https://api.mapbox.com/directions/v5/mapbox/cycling/-122.42,37.78;-77.03,38.91?access_token=pk.eyJ1IjoiY3Jpc3RpYW5vbmljb2xhdSIsImEiOiJjbHZmZnFoaXUwN2R4MmlxbTdsdGlreDEyIn0.-vhnpIfDMVyW04ekPBhQlg"
+// cycling / driving / walking
+
+// curl "https://api.mapbox.com/geocoding/v5/mapbox.places/-8.820237304110279,41.70055911994133.json?access_token=pk.eyJ1IjoiY3Jpc3RpYW5vbmljb2xhdSIsImEiOiJjbHZmZnFoaXUwN2R4MmlxbTdsdGlreDEyIn0.-vhnpIfDMVyW04ekPBhQlg"
+// primeiro longitude e depois latitude (-8....)
+
+  const options = {
+    method: 'GET',
+    headers: {
+      accept: 'application/json',
+      Authorization: 'Bearer rmASuj9Y6LDlFu8i9kVBDlQNlKs7Zadb4l2QJXAhht756P8vDXOWK5smuV55p5vzeprQnizMWffMYcQnHMGdRQZ3oBGZPVMQwaM2icUCScsROp84sLTc47cUMG4qZnYx'
+    }
+  };
+  
+  fetch(`https://api.yelp.com/v3/businesses/search?latitude=${lat}&longitude=${long}&radius=40000&sort_by=best_match&limit=20`, options)
+    .then(response => response.json())
+    .then(response => console.log(response))
+    .catch(err => console.error(err));
 
   useEffect(() => {
     const fetchData = async () => {

@@ -7,12 +7,31 @@ import {
   faCircleXmark,
   faLocationDot,
 } from "@fortawesome/free-solid-svg-icons";
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import Typography from '@mui/material/Typography';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
+import WalkIcon from '@mui/icons-material/DirectionsWalk';
+import TransitIcon from '@mui/icons-material/DirectionsTransit';
+import BikeIcon from '@mui/icons-material/DirectionsBike';
+
 
 const ResidenceDetails = ({ darkMode }) => {
   const [slideNumber, setSlideNumber] = useState(0);
   const [open, setOpen] = useState(false);
   const [propertyDetails, setPropertyDetails] = useState(null);
   const [showOwnerDetails, setShowOwnerDetails] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+
+
+
+  const handleChange = (panel) => (event, isExpanded) => {
+    setExpanded(isExpanded ? panel : false);
+  };
+
 
 
   useEffect(() => {
@@ -43,6 +62,43 @@ const ResidenceDetails = ({ darkMode }) => {
     fetchData();
   }, []);
 
+  const useAnimatedScore = (isVisible, score, duration = 999) => {
+    const [value, setValue] = useState(0);
+
+    useEffect(() => {
+      let start;
+      let frame;
+
+      const step = (timestamp) => {
+        if (!start) start = timestamp;
+        const progress = timestamp - start;
+        const currentValue = Math.min(score * (progress / duration), score);
+        setValue(currentValue);
+        if (progress < duration) {
+          frame = requestAnimationFrame(step);
+        }
+      };
+
+      if (isVisible) {
+        frame = requestAnimationFrame(step);
+      } else {
+        setValue(0);
+      }
+
+      return () => {
+        cancelAnimationFrame(frame);
+      };
+    }, [isVisible, score, duration]);
+
+    return value;
+  };
+
+
+
+
+  const walkScore = useAnimatedScore(expanded === 'panel1', 74);
+  const transitScore = useAnimatedScore(expanded === 'panel1', 65);
+  const bikeScore = useAnimatedScore(expanded === 'panel1', 90);
 
 
   const photos = [{
@@ -89,7 +145,15 @@ const ResidenceDetails = ({ darkMode }) => {
 
   const toggleOwnerDetails = () => {
     setShowOwnerDetails(!showOwnerDetails);
+
+    // Check if we are showing the details
+    if (!showOwnerDetails) {
+      setTimeout(() => {
+        document.querySelector('.ownerDetails').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 300); // Adjust timeout to match or be slightly longer than the beginning of your CSS transition
+    }
   };
+
 
 
   return (
@@ -141,12 +205,117 @@ const ResidenceDetails = ({ darkMode }) => {
             ))}
           </div>
           <div className="residenceDetails2">
+            <Accordion
+              square
+              expanded={expanded === 'panel1'}
+              onChange={handleChange('panel1')}
+              className="accordion"
+            >
+
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1d-content"
+                id="panel1d-header"
+                className="accordionSummary"
+              >
+                <Typography className="accordionSummaryContent">Score Details</Typography>
+              </AccordionSummary>
+              <AccordionDetails className="accordionDetails">
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', width: '100%' }}>
+                  {/* Walk Score */}
+                  <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '0 2px' }}>
+
+                    <WalkIcon sx={{ fontSize: '2rem' }} />
+                    <Typography variant="caption">Walk Score</Typography>
+                    <Box position="relative" display="inline-flex">
+                      <CircularProgress variant="determinate" value={walkScore} size={80} thickness={4} />
+                      <Box
+                        top={0}
+                        left={0}
+                        bottom={0}
+                        right={0}
+                        position="absolute"
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center"
+                      >
+                        <Typography variant="subtitle1" component="div" color="textPrimary">
+                          {Math.round(walkScore)}
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </Box>
+
+                  {/* Transit Score */}
+                  <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '0 2px' }}>
+
+                    <TransitIcon sx={{ fontSize: '2rem' }} />
+                    <Typography variant="caption">Transit Score</Typography>
+                    <Box position="relative" display="inline-flex">
+                      <CircularProgress variant="determinate" value={transitScore} size={80} color="secondary" thickness={4} />
+                      <Box
+                        top={0}
+                        left={0}
+                        bottom={0}
+                        right={0}
+                        position="absolute"
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center"
+                      >
+                        <Typography variant="subtitle1" component="div" color="textPrimary">
+                          {Math.round(transitScore)}
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </Box>
+
+                  {/* Bike Score */}
+                  <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '0 2px' }}>
+
+                    <BikeIcon sx={{ fontSize: '2rem' }} />
+                    <Typography variant="caption">Bike Score</Typography>
+                    <Box position="relative" display="inline-flex">
+                      <CircularProgress variant="determinate" value={bikeScore} size={80} color="secondary" thickness={4} />
+                      <Box
+                        top={0}
+                        left={0}
+                        bottom={0}
+                        right={0}
+                        position="absolute"
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center"
+                      >
+                        <Typography variant="subtitle1" component="div" color="textPrimary">
+                          {Math.round(bikeScore)}
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </Box>
+                </Box>
+              </AccordionDetails>
+
+
+            </Accordion>
             <div className="residenceDetailsTexts">
               <p className="residenceDesc">
                 {propertyDetails.property.descricao}
-
+                <br />
+                <br />
+                Detalhes da propriedade:
+                <ul>
+                  <li>Área: {propertyDetails.property.area} m²</li>
+                  <li>WCs: {propertyDetails.property.wcs}</li>
+                  <li>Cozinha {propertyDetails.property.cozinha ? "totalmente equipada" : "por equipar"}</li>
+                  <li>Internet {propertyDetails.property.internet ? "incluída" : "não incluída"}</li>
+                  <li>Despesas {propertyDetails.property.despesas ? "incluídas" : "não incluídas"}</li>
+                </ul>
               </p>
+
             </div>
+
+
             <div className="residenceDetailsPrice">
               <h2>Aproveite esta oportunidade!</h2>
               <span>
@@ -157,17 +326,37 @@ const ResidenceDetails = ({ darkMode }) => {
                 <b>{priceDisplay}</b> por Mês
               </h2>
               <button onClick={toggleOwnerDetails}>Reserve or Book Now!</button>
-              {showOwnerDetails && propertyDetails.owner_info && (
-                <div className="ownerDetails">
-                  <h3>Contact the Owner:</h3>
-                  <p>Name: {propertyDetails.owner_info.nome}</p>
-                  <p>Email: {propertyDetails.owner_info.email}</p>
-                  <p>Phone: {propertyDetails.owner_info.telemovel}</p>
-                </div>
-              )}
+              <div className={`ownerDetails ${showOwnerDetails ? 'visible' : ''}`}>
+                <h3>Contact the Owner:</h3>
+                <p>Name: {propertyDetails.owner_info.nome}</p>
+                <p>Email: {propertyDetails.owner_info.email}</p>
+                <p>Phone: {propertyDetails.owner_info.telemovel}</p>
+              </div>
             </div>
           </div>
         </div>
+        <div className="roomList">
+          {propertyDetails && propertyDetails.quartos.map((room, index) => (
+            <div key={index} className={`roomListItem ${!room.disponivel ? 'unavailable' : ''}`}>
+              <div className="roomImageContainer">
+                <img src={room.image || photos[0].src} alt="Room" className="roomListImage" />
+                <h3 className="roomName">{room.tipologia}</h3>
+              </div>
+              <div className="roomDetails">
+                <p className="roomDetail">{room.area} m²</p>
+                <p className="roomDetail">{room.despesas_incluidas}</p>
+                <p className="roomDetail">{room.observacoes}</p>
+                <p className="roomDetail">{room.wc_privado ? "Private bathroom" : "No private bathroom"}</p>
+              </div>
+
+              <div className="roomPrice">
+                {room.disponivel ? `${room.preco_mes}€ per month` : "Indisponível"}
+              </div>
+            </div>
+          ))}
+        </div>
+
+
       </div>
     </div>
   );

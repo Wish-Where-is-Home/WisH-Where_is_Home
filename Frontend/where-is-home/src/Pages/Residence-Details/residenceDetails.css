@@ -68,6 +68,61 @@
     gap: 20px;
     margin-top: 20px;
   }
+
+  /* Accordion base styling */
+.accordion {
+  background-color: #333 !important; /* Adjust for dark mode as needed */
+  box-shadow: none !important;
+  border-radius: 5px;
+
+
+}
+
+.light-mode .accordion {
+  background-color: #f0f0f0 !important;
+}
+
+.accordionSummary {
+  background-color: #f0f0f0 !important;
+  border: 1px solid #f0f0f0 !important;
+  border-radius: 10px;
+}
+
+.light-mode .accordionSummary {
+  background-color: rgba(202, 240, 241, 0.47) !important;
+  border: 1px solid #0dddda !important;
+  border-radius: 10px;
+}
+
+.accordionSummary .MuiAccordionSummary-expandIconWrapper.Mui-expanded {
+  transform: rotate(180deg) !important;
+}
+
+.accordionSummaryContent {
+  margin-left: 8px !important;
+}
+
+.accordionDetails {
+  background-color: #f0f0f0 !important;
+  padding: 16px !important;
+  border-top: 1px solid rgba(0, 0, 0, 0.125) !important;
+}
+
+/* Circular progress bar styles */
+.circularProgressContainer {
+  position: relative;
+}
+
+.circularProgressLabel {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.5rem;
+  color: black;
+}
+
+
   
   .residenceDetailsTexts {
     flex: 3;
@@ -78,6 +133,76 @@
     margin-top: 20px;
     text-align-last: left;
   }
+
+  .roomList {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 0 15px;
+  }
+  
+  .roomListItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* This ensures space between image, details, and price */
+    border-bottom: 1px solid #ccc;
+    padding: 10px 0;
+}
+
+.roomImageContainer {
+    display: flex;
+    align-items: center;
+    flex: 1;
+}
+
+.roomListImage {
+    width: 80px; /* Adjust width as needed */
+    height: auto;
+    border-radius: 4px;
+    margin-right: 15px;
+}
+  
+  .roomInfo {
+    flex: 1; /* Take remaining space */
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .roomName {
+    font-size: 1em; /* Adjust size as needed */
+    flex-shrink: 0;
+}
+
+.roomDetails {
+    flex: 2; /* Adjust as needed to allocate space */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.roomDetail {
+    margin: 5px 0;
+    color: #9d9a9a;
+}
+
+.light-mode .roomDetail {
+    color: #555;
+}
+
+.roomPrice {
+    flex-shrink: 0;
+    font-size: 1.2em;
+    color: #0071c2;
+    font-weight: bold;
+    padding-left: 15px; /* Add some space between details and price */
+}
+
+.roomListItem.unavailable .roomPrice {
+    color: #b3b3b3;
+    font-style: italic;
+}
+  
+  
   
   .residenceDetailsPrice {
     flex: 1;
@@ -117,6 +242,22 @@
     cursor: pointer;
     border-radius: 10px;
   }
+
+  .ownerDetails {
+    transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+    overflow: hidden;
+    max-height: 0; /* Initially hidden */
+    opacity: 0; /* Start fully transparent */
+    display: block; /* Ensure it's always in a block format even when hidden */
+  }
+  
+  .ownerDetails.visible {
+    max-height: 500px; /* Adjust based on content size */
+    opacity: 1;
+  }
+  
+  
+
   
   .slider {
     position: fixed;

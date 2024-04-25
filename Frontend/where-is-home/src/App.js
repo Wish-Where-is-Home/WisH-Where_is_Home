@@ -9,6 +9,8 @@ import AboutUs from './Pages/AboutUs/AboutUs';
 import MetricsPage from './Pages/MetricsPage/MetricsPage';
 import QuizPage from './Pages/SecondPage/QuizPage';
 import ResidenceDetails from './Pages/Residence-Details/residenceDetails';
+import { useAuth } from './AuthContext/AuthContext';
+import ProfilePage from './Pages/ProfilePage/ProfilePage';
 
 
 
@@ -22,6 +24,7 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [zoneData, setZoneData] = useState(null);
   const [scores, setScores] = useState(null);
+  const { isAuthenticated,userInfo} = useAuth();
 
 
   const updateScores = (newScores) => {
@@ -92,6 +95,11 @@ function App() {
     document.documentElement.classList.toggle('dark-mode', !darkMode);
   };
 
+
+  function updateuserpreferences(){
+    
+  }
+
   return (
     <div className={`App ${darkMode ? 'dark-mode' : 'light-mode'}`}>
       <Loader visible={loading} />
@@ -103,6 +111,7 @@ function App() {
           <Route exact path="/login" element={<Login_register  darkMode={darkMode} firebaseConfig={firebaseConfig} />} />
           <Route exact path="/quiz" element={<QuizPage darkMode={darkMode} zoneData={zoneData} scores={scores} updateScores={updateScores} />} />
           <Route exact path="/metricspage" element={<MetricsPage  darkMode={darkMode} zoneData={zoneData} scores={scores} updateScores={updateScores} />} />
+          <Route exact path="/profilepage" element={<ProfilePage darkMode={darkMode} zoneData={zoneData} scores={scores} updateScores={updateScores} />} />
           <Route exact path="/residenceDetails" element={<ResidenceDetails darkMode={darkMode} />} />
         </Routes>
       </Router>

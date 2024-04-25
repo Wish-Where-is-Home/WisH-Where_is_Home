@@ -43,8 +43,13 @@
     "next":"Next",
     "pquizpage":"What are you looking for?",
     "back":"Back",
-
-
+    "name": "Name",
+    "address": "Address",
+    "phone": "Phone",
+    "email": "Email",
+    "save": "Save",
+    "preferences": "Preferences",
+    "profile": "Profile",
     "Bakery": "Bakery",
     "FoodCourts":"Food Courts",
     "Supermarket":"Supermarket",
@@ -70,8 +75,15 @@
     "Schools":"Schools",
     "Libracies":"Libracies",
     "Kindergartens":"Kindergartens",
-    "Universities":"Universities"
-    
-
+    "Universities":"Universities",
+    "edit": "Edit",
+    "confirmModal": "Are you sure you want to save the changes?",
+    "confirmResetModal": "Are you sure you want to reset the changes?",
+    "cancel": "Cancel",
+    "reset": "Reset",
+    "zoomOut":"zoom out",
+    "guardar":"Save",
+    "logout":"Logout",
+    "sellpropertie":"Sell Properties"
 
 }

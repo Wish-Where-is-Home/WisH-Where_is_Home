@@ -40,8 +40,14 @@
     "very_Important": "Muito Importante",
     "next": "Próximo",
     "social_leisure": "Lazer Social",
+    "profile": "Perfil",
+    "name": "Nome",
+    "address": "Morada",
+    "phone": "Telemóvel",
+    "email": "Email",
+    "save": "Guardar",
+    "preferences": "Preferências",
     "back":"Atrás",
-
     "Bakery": "Padaria",
     "FoodCourts": "Áreas de alimentação",
     "Supermarket": "Supermercado",
@@ -67,5 +73,14 @@
     "Schools": "Escolas",
     "Libraries": "Bibliotecas",
     "Kindergartens": "Jardins de infância",
-    "Universities": "Universidades"
+    "Universities": "Universidades",
+    "edit": "Editar",
+    "confirmModal": "Tem a certeza que deseja guardar as alterações?",
+    "cancel": "Cancelar",
+    "confirmResetModal": "Tem a certeza que deseja redefinir as preferências?",
+    "reset": "Redefinir",
+    "zoomOut":"Reduzir o zoom",
+    "guardar":"Guardar",
+    "logout":"Sair",
+    "sellpropertie":"Vender Propriedades"
 }

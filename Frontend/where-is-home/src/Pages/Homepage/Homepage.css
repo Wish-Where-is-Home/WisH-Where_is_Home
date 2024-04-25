@@ -4,8 +4,9 @@
 }
 
 
+
 .home-section{
-    height: 100vh;
+    height: 100vh !important;
     width: 100%;
     display: flex;
     background-color: var(--background-color);
@@ -37,34 +38,64 @@
     object-fit: cover;
 }
 
-.hometitle {
-    position: absolute;
-    left: 50%;
-    bottom: 4%;
-    transform: translate(-50%,0);
-    margin: 0; 
+.hometitletext {
+    left: 50%  !important;
+    bottom: 4%  !important;
+    transform: translate(-50%,0) !important; 
     font-weight: 600;
     width: 100%;
     font-size: 1rem;
     letter-spacing: 0.3rem;
-    color: var(--hometitle);
+    color: var(--hometitle) !important;
     font-style: italic;
 
 }
 
-.hometitle2 {
-  position: absolute;
-  left: 50%;
-  top: 13%;
-  transform: translate(-50%,0);
-  margin: 0; 
-  font-weight: 600;
-  width: 100%;
-  font-size: 1rem;
-  letter-spacing: 0.3rem;
-  color: var(--hometitle);
-  font-style: italic;
+  .hometitle2 {
+    position: fixed;
+    top: 12%;
+    font-weight: 600;
+    width: 100%;
+    color: var(--hometitle) !important;
+    font-style: italic;
+    text-align: center;
+    display: flex;
+    z-index: 1001;
+  }
+
+  .hometitle2text{
+    font-style: italic;
+    color: var(--hometitle) !important;
+    font-size: 1rem;
+    letter-spacing: 0.3rem;
+    font-weight: 600;
+    margin: 0 auto;
+  }
+
+  .hometitledown{
+    top: 92% !important;
+    text-align: center; 
+    position:fixed !important;
+    width: 100%;
+    color: var(--hometitle) !important;
+    display: flex;
+    align-items: center;
+    width: 100%;
 }
+
+
+.hometitletext2{
+
+  font-style: italic;
+    color: var(--hometitle) !important;
+    font-size: 1rem;
+    letter-spacing: 0.3rem;
+    font-weight: 600;
+    margin: auto;
+    z-index: 10001;
+
+}
+
 
 
 .home-container .left{
@@ -180,7 +211,7 @@
   }
 
 
-.btn-shine {
+.btn-shine{
     background: linear-gradient(to right,var(--hometitle) 0, white 10%, var(--hometitle) 20%);
     background-position: 0;
     -webkit-background-clip: text;

@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../AuthContext/AuthContext';
 
 
-
+console.log("Token:", localStorage.getItem('token'));
 
 function Homepage( {darkMode}) {
     const [selectedDistrict, setSelectedDistrict] = useState('Portugal');
@@ -118,14 +118,16 @@ return (
                                 videobackground} type="video/mp4" />
                         </video>
         </div>
-
-        <h2 className='hometitle2 btn-shine'>
-               {t('QuoteHome')}!
-        </h2>
-
-        <h2 className='hometitle btn-shine'>
-               {t('QuoteHome2')}!
-        </h2>
+        <div className='hometitle2'>
+            <h2 className='hometitle2text btn-shine'>
+                {t('QuoteHome')}!
+            </h2>
+        </div>
+        <div className='hometitledown'>
+            <h2 className='hometitletext2 btn-shine'>
+                {t('QuoteHome2')}!
+            </h2>
+        </div>
 
         
 

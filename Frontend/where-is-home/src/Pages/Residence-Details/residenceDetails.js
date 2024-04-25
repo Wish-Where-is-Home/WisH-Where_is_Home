@@ -62,7 +62,7 @@ const ResidenceDetails = ({ darkMode }) => {
     fetchData();
   }, []);
 
-  const useAnimatedScore = (isVisible, score, duration = 999) => {
+  const useAnimatedScore = (isVisible, score, duration = 800) => {
     const [value, setValue] = useState(0);
 
     useEffect(() => {
@@ -146,11 +146,10 @@ const ResidenceDetails = ({ darkMode }) => {
   const toggleOwnerDetails = () => {
     setShowOwnerDetails(!showOwnerDetails);
 
-    // Check if we are showing the details
     if (!showOwnerDetails) {
       setTimeout(() => {
         document.querySelector('.ownerDetails').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      }, 300); // Adjust timeout to match or be slightly longer than the beginning of your CSS transition
+      }, 300); 
     }
   };
 

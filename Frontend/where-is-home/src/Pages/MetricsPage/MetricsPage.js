@@ -30,10 +30,39 @@ function MetricsPage({darkMode,zoneData,scores,updateScores}) {
     const [slidersValues,setSlidersValues] = useState(null);
     const [sliderValuesCruz,setSliderValuesCruz] = useState(null);
     const [modalVisibleGradient, setModalVisibleGradient] = useState(false);
+    const [averageMetrics,setAverageMetrics] = useState(false);
 
     const navigate = useNavigate();
     const mapRef = useRef(null);
     const geoJsonRef = useRef(null);
+
+
+  useEffect(() =>{
+    const fetchAverageMetrics = async () => {
+      try {
+      
+        const responseAverage = await fetch('http://mednat.ieeta.pt:9009/preferences/average/', {
+          method: 'GET',
+        });
+       
+        if (responseAverage.ok) {
+          const dataAverage = await responseAverage.json();
+          setAverageMetrics(dataAverage);
+          console.log(dataAverage);
+  
+          
+        
+        } else {
+          throw new Error('Failed to fetch average preferences');
+        }
+      } catch (error) {
+        console.error('Error fetching average preferences:', error);
+      }
+    };
+
+    fetchAverageMetrics();
+
+  },[])
 
 
 const handleModalButtonClick = () => {
@@ -152,13 +181,13 @@ const zone = IdType;
       let color;
   
       if (index === 0) {
-          color = red; // Invertendo a ordem: primeiro é vermelho
+          color = red; 
       } else if (index === totalColors - 1) {
-          color = green; // Invertendo a ordem: último é verde
+          color = green; 
       } else {
           const percent = index / (totalColors - 1);
           if (percent < 0.5) {
-              // Interpolando entre amarelo e laranja
+            
               const ratio = percent / 0.5;
               color = [
                   yellow[0] + (orange[0] - yellow[0]) * ratio,
@@ -166,7 +195,7 @@ const zone = IdType;
                   yellow[2] + (orange[2] - yellow[2]) * ratio
               ];
           } else {
-              // Interpolando entre verde e amarelo
+          
               const ratio = (percent - 0.4) / 0.5;
               color = [
                   green[0] + (yellow[0] - green[0]) * ratio,
@@ -176,9 +205,10 @@ const zone = IdType;
           }
       }
   
-      // Retornando a cor resultante como uma string rgb
       return `rgb(${Math.round(color[0])}, ${Math.round(color[1])}, ${Math.round(color[2])})`;
   };
+
+  
   
   
   const geoJSONStyle = (feature) => {
@@ -389,7 +419,7 @@ const zone = IdType;
                     </MapContainer>
               )}
             {(slidersValues !== null && sliderValuesCruz !== null) && (
-            <Metrics isOpen={isMetricsOpen} toggleSidebar={toggleMetrics} darkMode={darkMode} zone={zone} zoneData={zoneData} slidersValues={slidersValues} sliderValuesCruz={sliderValuesCruz} updateScores={updateScores} setSliderValuesCruz={setSliderValuesCruz} handleGoBackPage={handleGoBackPage}/>
+            <Metrics isOpen={isMetricsOpen} toggleSidebar={toggleMetrics} darkMode={darkMode} zone={zone} zoneData={zoneData} slidersValues={slidersValues} sliderValuesCruz={sliderValuesCruz} updateScores={updateScores} setSliderValuesCruz={setSliderValuesCruz} handleGoBackPage={handleGoBackPage} averageMetrics={averageMetrics}/>
           )}
         </div>
     );

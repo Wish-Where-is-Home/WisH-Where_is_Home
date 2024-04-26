@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import { useAuth } from '../../AuthContext/AuthContext';
 
 
-function Metrics({ darkMode, isOpen, toggleSidebar, zone, zoneData, slidersValues, sliderValuesCruz, updateScores, setSliderValuesCruz,handleGoBackPage }) {
+function Metrics({ darkMode, isOpen, toggleSidebar, zone, zoneData, slidersValues, sliderValuesCruz, updateScores, setSliderValuesCruz,handleGoBackPage,averageMetrics }) {
 
     const { t } = useTranslation("common");
     const { isAuthenticated} = useAuth();
@@ -258,7 +258,7 @@ function Metrics({ darkMode, isOpen, toggleSidebar, zone, zoneData, slidersValue
                                     const sliderConfig = sliderConfigs.find((config) => config.Id === id);
                                     return (
                                         <div key={id} className="slider-item">
-                                            <div className="slider-container2">
+                                            <div className="slider-container2" style={{position: 'relative' }}>
                                                 <Slider
                                                     min={0}
                                                     max={1}
@@ -270,6 +270,9 @@ function Metrics({ darkMode, isOpen, toggleSidebar, zone, zoneData, slidersValue
                                                     valueLabelFormat={valueLabelFormat}
                                                     aria-label={group.name}
                                                 />
+                                                {averageMetrics && (
+                                                <div className="average-line" style={{ position: 'absolute', top: 0, left: `calc(${averageMetrics.averages[group.ids[0]]*100}% + 50px)`, width: '2px', height: '2rem', backgroundColor: 'red', zIndex: -1,marginTop:"0.5rem" }}></div>
+                                                )}
                                             </div>
                                         </div>
                                     );
@@ -288,6 +291,12 @@ function Metrics({ darkMode, isOpen, toggleSidebar, zone, zoneData, slidersValue
                         </button>
                     ) }
                 </div>
+                <div style={{width:"100%",padding:"2rem 0",height: '2rem',display: "flex", flexDirection: "row",alignItems:"center",justifyContent:"center"}}>
+                            <div style={{display:"flex", flexDirection:"row"}}>
+                                <div className='average-line2'></div>
+                                <p style={{marginLeft:"1rem",fontSize:"0.8rem"}}>{t('textoaverage')}</p>
+                            </div>
+                        </div>
             </div>
         </div>
     );

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './OwnerPropDetails.css';
 
 function OwnerPropDetails({ property, onRoomsClick }) {
   const [expanded, setExpanded] = useState(false);

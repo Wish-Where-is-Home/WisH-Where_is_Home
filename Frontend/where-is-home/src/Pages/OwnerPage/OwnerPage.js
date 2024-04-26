@@ -1,20 +1,23 @@
 import React, { useState } from 'react';
 import './OwnerPage.css';
-import PropertyDetails from '../../Components/OwnerPropDetails/OwnerPropDetails'; // Adjust the path as needed
+import PropertyDetails from '../../Components/OwnerPropDetails/OwnerPropDetails'; 
 
 function OwnerPage({ darkMode }) {
     const [selectedTab, setSelectedTab] = useState('accepted');
-    const [showForm, setShowForm] = useState(false); // State to control form visibility
+
+    const [showForm, setShowForm] = useState(false); 
+
     const handleTabClick = (tab) => {
         setSelectedTab(tab);
     };
+
     const handleAddPropertyClick = () => {
-        setShowForm(true); // Show the form when "Add Property" button is clicked
+        setShowForm(!showForm); // Toggle the showForm state
     };
+
     const handleSubmit = (event) => {
         event.preventDefault();
     
-        // Retrieve form data from event.target
         const formData = new FormData(event.target);
     
         const propertyName = formData.get('propertyName'); // Extracts the property name from the form data
@@ -38,6 +41,7 @@ function OwnerPage({ darkMode }) {
     const acceptedProperties = [
         { 
             id: 1, 
+            photo: 'https://www.betar.pt/cms/wp-content/uploads/2022/04/AmoreirasResidence-01.jpg',
             name: 'Property 1',
             area: 100, 
             preco_mes: 800, 
@@ -48,6 +52,7 @@ function OwnerPage({ darkMode }) {
         },
         { 
             id: 2, 
+            photo: 'https://www.betar.pt/cms/wp-content/uploads/2022/04/AmoreirasResidence-01.jpg',
             name: 'Property 2',
             area: 120, 
             preco_mes: 900, 
@@ -58,6 +63,7 @@ function OwnerPage({ darkMode }) {
         },
         { 
             id: 7, 
+            photo: 'https://www.betar.pt/cms/wp-content/uploads/2022/04/AmoreirasResidence-01.jpg',
             name: 'Property 7',
             area: 120, 
             preco_mes: 900, 
@@ -66,13 +72,14 @@ function OwnerPage({ darkMode }) {
             tipologia: 'T2', 
             despesas_incluidas: 'Água' 
         },
-        // Add more properties as needed
+        
     ];
     
 
     const onHoldProperties = [
         { 
             id: 3, 
+            photo: 'https://www.betar.pt/cms/wp-content/uploads/2022/04/AmoreirasResidence-01.jpg',
             name: 'Property 3', 
             area: 80, 
             preco_mes: 700, 
@@ -83,6 +90,7 @@ function OwnerPage({ darkMode }) {
         },
         { 
             id: 4, 
+            photo: 'https://www.betar.pt/cms/wp-content/uploads/2022/04/AmoreirasResidence-01.jpg',
             name: 'Property 4', 
             area: 100, 
             preco_mes: 900, 
@@ -91,12 +99,12 @@ function OwnerPage({ darkMode }) {
             tipologia: 'T2', 
             despesas_incluidas: 'Água e Eletricidade' 
         },
-        // Add more on hold properties as needed
     ];
     
     const deniedProperties = [
         { 
             id: 5, 
+            photo: 'https://www.betar.pt/cms/wp-content/uploads/2022/04/AmoreirasResidence-01.jpg',
             name: 'Property 5', 
             area: 120, 
             preco_mes: 850, 
@@ -107,6 +115,7 @@ function OwnerPage({ darkMode }) {
         },
         { 
             id: 6, 
+            photo: 'https://www.betar.pt/cms/wp-content/uploads/2022/04/AmoreirasResidence-01.jpg',
             name: 'Property 6', 
             area: 90, 
             preco_mes: 750, 
@@ -115,8 +124,20 @@ function OwnerPage({ darkMode }) {
             tipologia: 'T1', 
             despesas_incluidas: 'Nenhuma' 
         },
-        // Add more denied properties as needed
     ];
+
+    const getPropertiesByTab = () => {
+        switch (selectedTab) {
+            case 'accepted':
+                return acceptedProperties;
+            case 'onHold':
+                return onHoldProperties;
+            case 'denied':
+                return deniedProperties;
+            default:
+                return [];
+        }
+    };
     
 
     return (
@@ -146,18 +167,9 @@ function OwnerPage({ darkMode }) {
                     </div>
                 </div>
                 <div className='o-show-properties'>
-                    <div>
-                    {acceptedProperties.map(property => (
-                    <PropertyDetails key={property.id} property={property} onRoomsClick={handleRoomsClick} />
+                    {getPropertiesByTab().map(property => (
+                        <PropertyDetails key={property.id} property={property} onRoomsClick={handleRoomsClick} />
                     ))}
-                    {onHoldProperties.map(property => (
-                    <PropertyDetails key={property.id} property={property} onRoomsClick={handleRoomsClick} />
-                    ))}
-                    {deniedProperties.map(property => (
-                    <PropertyDetails key={property.id} property={property} onRoomsClick={handleRoomsClick} />
-                    ))}
-
-                    </div>
                 </div>
             </div>
             <div className="right-panel">

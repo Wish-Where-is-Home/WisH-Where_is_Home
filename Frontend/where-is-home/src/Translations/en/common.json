@@ -84,6 +84,13 @@
     "zoomOut":"zoom out",
     "guardar":"Save",
     "logout":"Logout",
-    "sellpropertie":"Sell Properties"
-
+    "sellpropertie":"Sell Properties",
+    "close":"Close",
+    "modalp":"Do you want to keep the saved metrics?",
+    "yes":"Yes",
+    "good":"Good",
+    "bad":"Bad",
+    "better":"Better",
+    "worse":"Worse",
+    "textoaverage":"Average of the metrics of all platform users."
 }

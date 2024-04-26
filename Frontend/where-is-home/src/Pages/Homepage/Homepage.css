@@ -11,6 +11,7 @@
     display: flex;
     background-color: var(--background-color);
     font-family:'Space Mono Bold 700', sans-serif ;
+    overflow-y: hidden;
 }
 
 

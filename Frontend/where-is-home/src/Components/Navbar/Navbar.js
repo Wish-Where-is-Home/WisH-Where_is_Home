@@ -14,8 +14,7 @@ function Navbar({ darkMode, toggleDarkMode }) {
 
     const { t } = useTranslation("common");
 
-    const { isAuthenticated,logoutUser} = useAuth();
-
+    const { isAuthenticated,logoutUser,userInfo} = useAuth();
 
 
     const [menuOpen, setMenuOpen] = useState(false);

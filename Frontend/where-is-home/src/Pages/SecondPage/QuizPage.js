@@ -11,7 +11,10 @@ import { useNavigate } from 'react-router-dom';
 import Slider from '@mui/material/Slider';
 import Box from '@mui/material/Box';
 import { useAuth } from '../../AuthContext/AuthContext';
+import ModalW from '../../Components/ModalW/ModalW.js';
 import 'proj4leaflet';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
 
 function QuizPage({ darkMode, zoneData,scores,updateScores}) {
@@ -28,7 +31,22 @@ function QuizPage({ darkMode, zoneData,scores,updateScores}) {
   const [showQuestions, setShowQuestions] = useState(false);
   const navigate = useNavigate();
   const [hoveredDistrictId, setHoveredDistrictId] = useState(null);
+  const [camefromback,setCameFromBack]=useState(false);
+  const [OpenPreferencesModal,setOpenPreferencesModal] = useState(true);
+  const [metricsSaved, setMetricsSaved] = useState(false);
+  const [modalVisibleGradient, setModalVisibleGradient] = useState(false);
+  const [averageMetrics,setAverageMetrics] = useState(false);
 
+
+  const [mostrarInfo, setMostrarInfo] = useState(false);
+
+  const handleInfoHover = () => {
+    setMostrarInfo(true);
+  };
+
+  const handleInfoLeave = () => {
+    setMostrarInfo(false);
+  };
 
   const [slidersValues, setSlidersValues] = useState([
     { id: 0, value: 0 },  
@@ -44,6 +62,67 @@ const portugalBounds = [
   [34, -12],
   [45, -6]
 ];
+
+const handleModalButtonClick = () => {
+  setModalVisibleGradient(!modalVisibleGradient);
+};
+
+useEffect(() => {
+  const fetchUserMetrics = async () => {
+    try {
+      
+      const token = localStorage.getItem('token');
+      if (token) {
+        const response = await fetch('http://mednat.ieeta.pt:9009/users/preferences/', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+      
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        const metricsSaved = Object.values(data).some(value => value !== null && value !== "0.0000");
+        setMetricsSaved(metricsSaved);
+
+      } else {
+        throw new Error('Failed to fetch user metrics');
+      }
+      }
+    } catch (error) {
+      console.error('Error fetching user metrics:', error);
+    }
+  };
+
+  const fetchAverageMetrics = async () => {
+    try {
+    
+      const responseAverage = await fetch('http://mednat.ieeta.pt:9009/preferences/average/', {
+        method: 'GET',
+      });
+     
+      if (responseAverage.ok) {
+        const dataAverage = await responseAverage.json();
+        setAverageMetrics(dataAverage);
+        console.log(dataAverage);
+
+        
+      
+      } else {
+        throw new Error('Failed to fetch average preferences');
+      }
+    } catch (error) {
+      console.error('Error fetching average preferences:', error);
+    }
+  };
+
+
+
+  fetchAverageMetrics();
+  fetchUserMetrics();
+}, []);
 
 
   const mapRef = useRef(null);
@@ -69,6 +148,10 @@ const portugalBounds = [
 
       if(location.state.zone){
         setIdType(location.state.zone);
+      }
+
+      if (location.state.camefromback){
+        setCameFromBack(location.state.camefromback);
       }
 
     }
@@ -577,8 +660,112 @@ const handleOpenModalMap = () => {
   setOpenModalMap(true);
 };
 
+
+
 const handleCloseModal = () => {
-  setOpenModalMap(false);
+  setOpenPreferencesModal(false);
+  setCameFromBack(false);
+};
+
+const handleKeepMetrics = async () => {
+
+  const locationMappings = {
+    1: 'sports_center',
+    2: 'commerce',
+    3: 'bakery',
+    4: 'food_court',
+    5: 'nightlife',
+    6: 'camping',
+    7: 'health_services',
+    8: 'hotel',
+    9: 'supermarket',
+    10: 'culture',
+    11: 'school',
+    12: 'library',
+    13: 'parks',
+    14: 'services',
+    15: 'kindergarten',
+    16: 'university',
+    17: 'entertainment',
+    18: 'pharmacy',
+    19: 'swimming_pool',
+    20: 'bank',
+    21: 'post_office',
+    22: 'hospital',
+    23: 'clinic',
+    24: 'veterinary',
+    25: 'beach_river',
+    26: 'industrial_zone',
+    27: 'bicycle_path',
+    28: 'walking_routes',
+    29: 'car_park'
+  };
+
+  try {
+    const token = localStorage.getItem('token');
+    const response = await fetch('http://mednat.ieeta.pt:9009/users/preferences/', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    if (response.ok) {
+      const backendData = await response.json();
+        const nature_sportsValue = parseFloat(backendData['theme_nature_sports']) || 0;
+        const commerceValue =  parseFloat(backendData['theme_commerce']) || 0;
+        const educationValue =  parseFloat(backendData['theme_education']) || 0;
+        const healthValue =  parseFloat(backendData['theme_health']) || 0;
+        const serviceValue =  parseFloat(backendData['theme_service']) || 0;
+        const social_leisureValue =  parseFloat(backendData['theme_social_leisure']) || 0;
+
+        delete backendData['theme_nature_sports'];
+        delete backendData['theme_commerce'];
+        delete backendData['theme_education'];
+        delete backendData['theme_health'];
+        delete backendData['theme_service'];
+        delete backendData['theme_social_leisure'];
+       
+        const updatedSlidersValues = slidersValues.map(slider => {
+          switch (slider.id) {
+            case 3:
+              return { ...slider, value: nature_sportsValue };
+            case 0:
+              return { ...slider, value: commerceValue };
+            case 5:
+              return { ...slider, value: educationValue };
+            case 2:
+              return { ...slider, value: healthValue };
+            case 4:
+              return { ...slider, value: serviceValue };
+            case 1:
+              return { ...slider, value: social_leisureValue };
+            default:
+              return slider;
+          }
+        });
+
+
+        Object.entries(locationMappings).forEach(([id, key]) => {
+          const value = parseFloat(backendData[key]) || 0;
+          if (value !== 0) {
+            setSliderValuesCruz(prevState => ({
+              ...prevState,
+              [id]: value
+            }));
+          }
+        });
+
+        
+        setSlidersValues(updatedSlidersValues);
+        setOpenPreferencesModal(false);
+     
+    } else {
+      console.error('Failed to fetch preferences data');
+    }
+  } catch (error) {
+    console.error('Error fetching preferences data:', error);
+  }
 };
 
 
@@ -629,7 +816,9 @@ const handleCloseModal = () => {
                         }}
                         onChange={(event, value) => handleSliderChange(0, value)}
                       />
-
+                      {averageMetrics && (
+                    <div className="average-line" style={{ left: `${averageMetrics.averages['theme_commerce']}%` }}></div>
+                      )}
                     </Box>
                   </div>
                   <div className="min-max-text">
@@ -673,7 +862,9 @@ const handleCloseModal = () => {
                         onChange={(event, value) => handleSliderChange(1, value)}
 
                       />
-
+                      {averageMetrics && (
+                      <div className="average-line" style={{ left: `${averageMetrics.averages['theme_social_leisure']}%` }}></div>
+                      )}
                     </Box>
                   </div>
                   <div className="min-max-text">
@@ -715,7 +906,9 @@ const handleCloseModal = () => {
                         onChange={(event, value) => handleSliderChange(2, value)}
 
                       />
-
+                      {averageMetrics && (
+                    <div className="average-line" style={{ left: `${averageMetrics.averages['theme_health']}%` }}></div>
+                      )}
                     </Box>
                   </div>
                   <div className="min-max-text">
@@ -757,8 +950,10 @@ const handleCloseModal = () => {
                         onChange={(event, value) => handleSliderChange(3, value)}
 
                       />
-
-                    </Box>
+                      {averageMetrics && (
+                       <div className="average-line" style={{ left: `${averageMetrics.averages['theme_nature_sports']}%` }}></div>
+                      )}
+                       </Box>
                   </div>
                   <div className="min-max-text">
                     <span>{t('nothing')}</span>
@@ -799,8 +994,10 @@ const handleCloseModal = () => {
                         onChange={(event, value) => handleSliderChange(4, value)}
 
                       />
-
-                    </Box>
+                      {averageMetrics && (
+                      <div className="average-line" style={{ left: `${averageMetrics.averages['theme_service']}%` }}></div>
+                      )}
+                      </Box>
                   </div>
                   <div className="min-max-text">
                     <span>{t('nothing')}</span>
@@ -841,8 +1038,10 @@ const handleCloseModal = () => {
                         onChange={(event, value) => handleSliderChange(5, value)}
 
                       />
-
-                    </Box>
+                      {averageMetrics && (
+                      <div className="average-line" style={{ left: `${averageMetrics.averages['theme_education']}%` }}></div>
+                      )}
+                      </Box>
                   </div>
                   <div className="min-max-text">
                     <span>{t('nothing')}</span>
@@ -851,15 +1050,20 @@ const handleCloseModal = () => {
                 </div>
               </div>
             </div>
-            <div className="button-container">
+            <div className="button-container" style={{ position: 'relative' }}>
               <button className="button-small-round" onClick={handleSearchClick}>
                 <span className="button-icon">{t('next')}</span>
               </button>
+              <div style={{marginLeft:"5rem",height: '2rem',display: "flex", flexDirection: "row"}}>
+                  
+                  <div className='average-line'></div>
+                    <p style={{marginLeft:"1rem",fontSize:"0.8rem"}}>{t('textoaverage')}</p>
+                </div>
             </div>
           </div>
         </div>
       ) : (
-        <Questions slidersValues={slidersValues} darkMode={darkMode} handlePreviousClick={handlePreviousClick}  gotoThirdPage={gotothirdpage} zoneData={zoneData} IdType={IdType} updateScores={updateScores} sliderValuesCruz={sliderValuesCruz} setSliderValuesCruz={setSliderValuesCruz}  sliderGroupings={sliderGroupings}  handleSavePreferences={ handleSavePreferences} metricsMapping={metricsMapping}/>
+        <Questions slidersValues={slidersValues} darkMode={darkMode} handlePreviousClick={handlePreviousClick}  gotoThirdPage={gotothirdpage} zoneData={zoneData} IdType={IdType} updateScores={updateScores} sliderValuesCruz={sliderValuesCruz} setSliderValuesCruz={setSliderValuesCruz}  sliderGroupings={sliderGroupings}  handleSavePreferences={ handleSavePreferences} metricsMapping={metricsMapping} averageMetrics={averageMetrics}/>
       )
       }
 
@@ -879,19 +1083,31 @@ const handleCloseModal = () => {
 
             />
 
+          
+
             {geojsonData && <GeoJSON ref={geoJsonRef} data={geojsonData} style={geoJSONStyle} onEachFeature={onEachFeature} />}
               <Button variant="contained" style={{ position: 'absolute', top: '10px', right: '20px', zIndex: "1000", backgroundColor: "var(--background-color)", color: "var(--blacktowhite)" }} onClick={goBackPoligon}>
               {t('zoomOut')}
               </Button>
 
-              <Button variant="contained" style={{ position: 'absolute', bottom: '120px', right: '20px', zIndex: "1000", backgroundColor: "var(--background-color)", color: "var(--blacktowhite)", borderRadius:"20rem" }} onClick={handleOpenModalMap}>
+              <Button variant="contained" style={{ position: 'absolute', bottom: '120px', right: '20px', zIndex: "1000", backgroundColor: "var(--background-color)", color: "var(--blacktowhite)", borderRadius:"20rem" }}  onClick={handleModalButtonClick}>
               ?
               </Button>
+
+            {modalVisibleGradient && <div className="gradient-modal">
+              <p>{t('better')}</p>
+              <div className="gradient-vertical"></div>
+              <p>{t('worse')}</p>
+              </div>
+              }
              
 
           </MapContainer>
         )}
       </div>
+      {!camefromback && isAuthenticated &&  metricsSaved && OpenPreferencesModal && (
+        <ModalW handleCloseModal={handleCloseModal} handleKeepMetrics={handleKeepMetrics}/>
+      )}
     </div >
   );
 }

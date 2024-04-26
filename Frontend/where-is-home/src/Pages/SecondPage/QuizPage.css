@@ -1,5 +1,5 @@
 .SearchPage {
-  height: 100vh;
+  min-height: 100vh;
   width: 100%;
   display: grid;
   flex-direction: column;
@@ -21,6 +21,8 @@
   display: flex;
   flex-direction: column;
   max-width: 100%;
+  min-height: 90vh;
+  overflow-y: auto !important;
 
 }
 
@@ -29,6 +31,45 @@
 }
 
 
+.gradient-modal {
+  position: absolute; 
+  top: calc(65% - 2rem); 
+  left: calc(95% - 2.5rem);
+  width: 4rem;
+  height: 12rem;
+  background-color: var(--background-color);
+  z-index: 9999;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+}
+
+
+.tool {
+  position: relative; 
+}
+
+.average-line {
+  position: absolute;
+  top: 0;
+  width: 5px; 
+  height: 2rem;
+  background-color: rgb(176, 35, 35); 
+  border-radius: 2rem;
+  content: ''; 
+  z-index: -1;
+}
+
+.gradient-vertical {
+  width: 1rem;
+  height: 100%;
+  border-radius: 2rem;
+  background-image: linear-gradient(to top, red, orange, yellow, lightgreen, green);
+  position: relative;
+ 
+}
 
   
   .search-filters {

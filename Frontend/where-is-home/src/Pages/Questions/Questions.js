@@ -7,7 +7,7 @@ import Box from '@mui/material/Box';
 import { useAuth } from '../../AuthContext/AuthContext';
 
 
-function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,zoneData, IdType,updateScores,sliderValuesCruz,setSliderValuesCruz,sliderGroupings, handleSavePreferences,metricsMapping}) {
+function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,zoneData, IdType,updateScores,sliderValuesCruz,setSliderValuesCruz,sliderGroupings, handleSavePreferences,metricsMapping,averageMetrics}) {
     const { isAuthenticated} = useAuth();
     const zone = IdType;
 
@@ -62,7 +62,7 @@ function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,z
             <div key={`slider-${activeTab}-${index}`} className="slider-container" style={{ marginTop: index === 0 ? '30px' : '0' }}>
                 <label className="label">{group.name}</label>
                 <div className='slider-lefties'>
-                    <Box sx={{ width: 300, marginRight: "50px" }}>
+                    <Box sx={{ width: 300, marginRight: "50px", position: 'relative' }}>
                         <Slider
                             aria-label={group.name}
                             value={sliderValuesCruz[group.ids[0]]}
@@ -74,12 +74,16 @@ function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,z
                             onChange={(event, newValue) => onSliderChange(newValue, group.ids)}
                             valueLabelFormat={valueLabelFormat}
                         />
-                    </Box>
+                        {averageMetrics && (
+                        <div className="average-line" style={{ position: 'absolute', top: 0, left: `${averageMetrics.averages[group.ids[0]]*100}%`, width: '2px', height: '2rem', backgroundColor: 'red', zIndex: 1 }}></div>
+                        )}
+                        </Box>
                 </div>
             </div>
         ));
     };
     
+
     
 
    
@@ -174,6 +178,12 @@ function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,z
                         </button>
                     ) }
                     </div>
+                        <div style={{width:"100%",padding:"2rem 0",height: '2rem',display: "flex", flexDirection: "row",alignItems:"center",justifyContent:"center"}}>
+                            <div style={{display:"flex", flexDirection:"row"}}>
+                                <div className='average-line2'></div>
+                                <p style={{marginLeft:"1rem",fontSize:"0.8rem"}}>{t('textoaverage')}</p>
+                            </div>
+                        </div>
                 </div>
             </div>
         </div>

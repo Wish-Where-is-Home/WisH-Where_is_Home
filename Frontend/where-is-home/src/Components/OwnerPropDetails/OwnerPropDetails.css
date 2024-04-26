@@ -33,7 +33,7 @@
   }
   
   .property-details button:hover {
-    background-color: grey; /* Darker background color on hover */
+    background-color: grey; 
   }
   
   .property-details .detailed-info {

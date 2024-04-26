@@ -50,7 +50,7 @@ body,html{
 }
 
 .tab:not(.selected):hover {
-  background-color: #d3d3d3; /* Change color on hover if not selected */
+  background-color: #d3d3d3; 
 }
 
 .o-show-properties {
@@ -58,8 +58,8 @@ body,html{
   padding: 0 30px 30px 30px;
   display: flex;
   flex-direction: column;
-  overflow-y: auto; /* Add scrollbar for vertical overflow */
-  height: 80vh; /* Adjust height */
+  overflow-y: auto; 
+  height: 80vh; 
 }
 
 
@@ -80,6 +80,8 @@ body,html{
 }
 .property-form input,
 .property-form select {
+  display: flex;
+  flex-direction: column;
   margin-bottom: 10px;
   padding: 5px;
   width: 100%;
@@ -87,18 +89,18 @@ body,html{
 }
 
 .add-property-button {
-  background-color: #d3d3d3; /* Button background color */
-  color: black; /* Button text color */
-  border: none; /* Remove button border */
-  padding: 10px 20px; /* Button padding */
-  border-radius: 5px; /* Button border radius */
-  cursor: pointer; /* Change cursor to pointer on hover */
-  transition: background-color 0.3s ease; /* Smooth transition for background color change */
+  background-color: #d3d3d3; 
+  color: black; 
+  border: none; 
+  padding: 10px 20px;
+  border-radius: 5px; 
+  cursor: pointer; 
+  transition: background-color 0.3s ease; 
   font-size: 1.5rem;
 }
 
 .add-property-button:hover {
-  background-color: grey; /* Darker background color on hover */
+  background-color: grey; 
 }
 
 
@@ -110,17 +112,81 @@ body,html{
 }
 .dark-mode .left-panel {
   background-color: #373434;
-  color: white; /* Adjust text color for better readability */
+  color: white; 
 }
 .dark-mode .tab.selected {
   background-color: grey;
 }
-
 .dark-mode .tab:not(.selected):hover {
-  background-color: rgb(93, 93, 93); /* Change color on hover if not selected */
+  background-color: rgb(93, 93, 93); 
 }
+.dark-mode form {
+  color: var(--blacktowhite); 
+  padding: 20px;
+  border-radius: 5px;
+}
+.dark-mode form input[type="text"],
+.dark-mode form input[type="number"],
+.dark-mode form select {
+  background-color: var(--background-color2); 
+  color: var(--blacktowhite); 
+  border: 1px solid var(--blacktowhite); 
+  padding: 8px; 
+  margin-bottom: 10px; 
+  width: 150px; 
+}
+.dark-mode form select {
+  width: 100%; 
+}
+.dark-mode form button[type="submit"] {
+  background-color: var(--background-color2); 
+  color: var(--blacktowhite); 
+  border: 1px solid var(--blacktowhite); 
+  padding: 10px 20px; 
+  border-radius: 5px;
+  cursor: pointer; 
+  transition: background-color 0.3s ease; 
+  font-size: 1rem; 
+}
+.dark-mode form button[type="submit"]:hover {
+  background-color: grey; 
+}
+
+
+
+
 .light-mode {
   --background-color2: whitesmoke;
   --blacktowhite: black;
   --hometitle: black;
+}
+.light-mode form {
+  color: black; 
+  padding: 20px;
+  border-radius: 5px;
+}
+.light-mode form input[type="text"],
+.light-mode form input[type="number"],
+.light-mode form select {
+  background-color: #f5f5f5; 
+  color: black; 
+  border: 1px solid black; 
+  padding: 8px; 
+  margin-bottom: 10px; 
+}
+.light-mode form select {
+  width: 100%; 
+}
+.light-mode form button[type="submit"] {
+  background-color: #f5f5f5; 
+  color: black; 
+  border: 1px solid black; 
+  padding: 10px 20px; 
+  border-radius: 5px; 
+  cursor: pointer; 
+  transition: background-color 0.3s ease; 
+  font-size: 1rem; 
+}
+.light-mode form button[type="submit"]:hover {
+  background-color: lightgrey; 
 }

@@ -12,7 +12,7 @@ function OwnerPage({ darkMode }) {
     };
 
     const handleAddPropertyClick = () => {
-        setShowForm(!showForm); // Toggle the showForm state
+        setShowForm(!showForm); 
     };
 
     const handleSubmit = (event) => {
@@ -20,13 +20,13 @@ function OwnerPage({ darkMode }) {
     
         const formData = new FormData(event.target);
     
-        const propertyName = formData.get('propertyName'); // Extracts the property name from the form data
-        const area = parseFloat(formData.get('area')); // Extracts the area and converts it to a floating-point number
-        const pricePerMonth = parseFloat(formData.get('pricePerMonth')); // Extracts the price per month and converts it to a floating-point number
-        const hasPrivateBathroom = formData.get('hasPrivateBathroom') === 'true'; // Extracts the value of hasPrivateBathroom and converts it to a boolean
-        const isAvailable = formData.get('isAvailable') === 'true'; // Extracts the value of isAvailable and converts it to a boolean
-        const typology = formData.get('typology'); // Extracts the typology from the form data
-        const includedExpenses = formData.get('includedExpenses'); // Extracts the included expenses from the form data
+        const propertyName = formData.get('propertyName'); 
+        const area = parseFloat(formData.get('area')); 
+        const pricePerMonth = parseFloat(formData.get('pricePerMonth')); 
+        const hasPrivateBathroom = formData.get('hasPrivateBathroom') === 'true'; 
+        const isAvailable = formData.get('isAvailable') === 'true'; 
+        const typology = formData.get('typology'); 
+        const includedExpenses = formData.get('includedExpenses'); 
 
         if (!propertyName || isNaN(area) || isNaN(pricePerMonth)) {
             console.error('Invalid form data');

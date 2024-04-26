@@ -89,6 +89,7 @@ function Navbar({ darkMode, toggleDarkMode }) {
                                             <ul className="menu-dropdown">
                                                 <li><a href="/profilepage">{t('profile')}</a></li>
                                                 <li><a href="/profilepage">{t('sellpropertie')}</a></li>
+                                                {userInfo.role === 'admin' && <li className='admin-menu'><a href="/admin">Admin</a></li>}
                                                 <li><a onClick={handleLogout}>{t('logout')}</a></li>
                                             </ul>
                                         )}
@@ -117,6 +118,9 @@ function Navbar({ darkMode, toggleDarkMode }) {
                         <ul>
                             <li><a href="/aboutus">{t('aboutus')}</a></li>
                             <li><LanguageSelector style={{margin:0}}/></li>
+                            <li><a href="/profilepage">{t('profile')}</a></li>
+                            <li><a href="/profilepage">{t('sellpropertie')}</a></li>
+                            {userInfo.role === 'admin' && <li className='admin-menu'><a href="/admin">Admin</a></li>}
                             <li className="theme-toggle-container">
                                         <FontAwesomeIcon icon={faSun} className="sun-icon" />
                                         <FontAwesomeIcon icon={faMoon} className="moon-icon" />

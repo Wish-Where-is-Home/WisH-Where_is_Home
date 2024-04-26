@@ -7,7 +7,7 @@ const ModalW = ({ handleCloseModal, handleKeepMetrics}) => {
 
   return (
     <div className="modal-background">
-      <div className="modal-content">
+      <div className="modal-content3">
         <p>{t('modalp')}</p>
         <div className="button-container">
             <button className="button-small-round"  onClick={handleKeepMetrics}>

@@ -193,16 +193,17 @@ function ModalProperty({ darkMode, propertyData, propertyRooms, closeModal }) {
                                 </div>
                                
                             </div>
-                            <div>
+                            <div style={{display:"flex",flexDirection:"column"}}>
+                                <p><strong>State: </strong> {room.estado}</p>
                                 {room.estado === 'denied' ? (
-                                     <div style={{display:"flex",flexDirection:"column",alignItems:"center",width:"100%"}}>
+                                     <div style={{display:"flex",flexDirection:"column",alignItems:"center",width:"100%",marginTop:"3rem"}}>
                                         <button className='quartos-buttons-modal3' onClick={() => openConfirmDenieModal(room.id)}>
                                             <FontAwesomeIcon className='icon-close-modal' icon={faCheck} />
                                         </button>
                                         <p>Accept</p>
                                     </div>
                                     ) : (
-                                        <div style={{display:"flex",flexDirection:"column",alignItems:"center",width:"100%"}}>
+                                        <div style={{display:"flex",flexDirection:"column",alignItems:"center",width:"100%",marginTop:"3rem"}}>
                                         <button className='quartos-buttons-modal2' onClick={() => openCommentModal(room.id)}>
                                             <FontAwesomeIcon className='icon-close-modal' icon={faTimes} />
                                         </button>

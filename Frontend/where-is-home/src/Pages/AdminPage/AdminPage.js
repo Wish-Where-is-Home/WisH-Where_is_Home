@@ -6,9 +6,12 @@ import { useTranslation } from "react-i18next";
 import { faEye } from '@fortawesome/free-solid-svg-icons';
 import ModalProperty from '../../Components/ModalProperty/ModalProperty';
 import ModalAdminRooms from '../../Components/ModalAdminRooms/ModalAdminRooms';
+import { useAuth } from '../../AuthContext/AuthContext';
 
 function AdminPage({ darkMode }) {
     const { t } = useTranslation("common");
+    const { isAuthenticated,userInfo} = useAuth();
+    
     const [selectedTab, setSelectedTab] = useState('toConfirm');
     const [properties, setProperties] = useState([]);
     const [approvedProperties, setApprovedProperties] = useState([]);
@@ -23,11 +26,28 @@ function AdminPage({ darkMode }) {
     const [isModalRoom,setIsModalRoom] = useState(false);
     const [selectedRoom,setSelectedRoom] = useState(null);
 
+
     const handleTabClick = (tab) => {
         setSelectedTab(tab);
     };
 
+
+    
     useEffect(() => {
+        if (!isAuthenticated) {
+            window.location.href = '/';
+        }
+        if ((userInfo) && (userInfo.role !== 'admin')) {
+            window.location.href = '/'
+        }
+    }, [isAuthenticated, userInfo]);
+
+
+
+
+
+    useEffect(() => {
+        
         const fetchProperties = async () => {
             try {
                 const response1 = await fetch('http://mednat.ieeta.pt:9009/properties/aproved/');
@@ -60,7 +80,6 @@ function AdminPage({ darkMode }) {
                     throw new Error('Failed to fetch pending rooms');
                 }
                 const data = await response.json();
-                console.log("rooms",data);
                 setPendingRooms(data.pending_rooms || []);
             } catch (error) {
                 console.error('Error fetching pending rooms:', error);
@@ -75,6 +94,8 @@ function AdminPage({ darkMode }) {
                 }
                 const data = await response.json();
                 setAllRooms(data.rooms || []);
+                console.log(data);
+
             } catch (error) {
                 console.error('Error fetching all rooms:', error);
             }

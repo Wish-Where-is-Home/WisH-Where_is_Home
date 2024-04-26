@@ -1,0 +1,135 @@
+body,html{
+    height: 100%;
+}
+
+.owner-section {
+    display: flex;
+    flex-direction: row;
+    padding: 20px;
+    width: 100%;
+    margin-top: 50px;
+    font-family: 'Space Mono Bold 700', sans-serif;
+    background-color: var(--background-color);
+}
+
+.properties-container-owner {
+    display: flex;
+    flex-direction: row;
+    padding: 30px;
+    width: 70%;
+    margin-top: 20px;;
+}
+
+.left-panel {
+    width: 200px;
+    height: 250px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 5px;
+}
+
+.left-panel h2 {
+    margin-bottom: 10px;
+    color: var(--hometitle);
+    font-size: 24px; 
+}
+
+.tabs {
+    margin-top: 20px;
+}
+
+.tab {
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.tab.selected {
+    background-color: lightgrey;
+}
+
+.tab:not(.selected):hover {
+    background-color: #d3d3d3; /* Change color on hover if not selected */
+}
+
+.o-show-properties {
+    width: 400px;
+    padding: 0 30px 30px 30px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto; /* Add scrollbar for vertical overflow */
+    height: 80vh; /* Adjust height */
+}
+
+
+.property-details {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid black; /* Adjust border */
+}
+
+.right-panel {
+    width: 50%;
+    padding: 20px;
+    margin: 20px;
+}
+
+.property-form {
+    margin: 20px;
+}
+
+.property-form h2 {
+    
+    margin-bottom: 10px;
+    color: var(--hometitle);
+    font-size: 24px; 
+}
+.property-form input,
+.property-form select {
+    margin-bottom: 10px;
+    padding: 5px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.add-property-button {
+    background-color: #d3d3d3; /* Button background color */
+    color: black; /* Button text color */
+    border: none; /* Remove button border */
+    padding: 10px 20px; /* Button padding */
+    border-radius: 5px; /* Button border radius */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    transition: background-color 0.3s ease; /* Smooth transition for background color change */
+    font-size: 1.5rem;
+  }
+  
+  .add-property-button:hover {
+    background-color: grey; /* Darker background color on hover */
+  }
+  
+
+
+.dark-mode {
+    --background-color2: #373434;
+    --blacktowhite: white;
+    --hometitle: #0dddda;
+}
+.dark-mode .left-panel {
+    background-color: #373434;
+    color: white; /* Adjust text color for better readability */
+}
+.dark-mode .tab.selected {
+    background-color: grey;
+}
+
+.dark-mode .tab:not(.selected):hover {
+    background-color: rgb(93, 93, 93); /* Change color on hover if not selected */
+}
+.light-mode {
+    --background-color2: whitesmoke;
+    --blacktowhite: black;
+    --hometitle: black;
+}

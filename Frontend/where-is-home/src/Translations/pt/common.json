@@ -74,8 +74,11 @@
     "Libraries": "Bibliotecas",
     "Kindergartens": "Jardins de infância",
     "Universities": "Universidades",
-
-
+    "edit": "Editar",
+    "confirmModal": "Tem a certeza que deseja guardar as alterações?",
+    "cancel": "Cancelar",
+    "confirmResetModal": "Tem a certeza que deseja redefinir as preferências?",
+    "reset": "Redefinir",
     "zoomOut":"Reduzir o zoom",
     "guardar":"Guardar",
     "logout":"Sair",

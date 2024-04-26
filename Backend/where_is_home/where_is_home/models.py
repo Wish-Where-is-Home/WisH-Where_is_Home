@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.gis.db import models 
 import uuid
 
 class User(models.Model):
@@ -57,3 +58,43 @@ class UserPreference(models.Model):
 
     class Meta:
         db_table = 'users_preferences'
+
+class Imovel(models.Model):
+    owner = models.CharField(max_length=30)
+    nome = models.CharField(max_length=100)
+    morada = models.TextField()
+    tipologia = models.CharField(max_length=50, blank=True, null=True)
+    area = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    geom = models.PointField(srid=4326, blank=True, null=True)
+    piso = models.IntegerField(blank=True, null=True)
+    elevador = models.BooleanField(default=False)
+    wcs = models.IntegerField(blank=True, null=True)
+    estacionamento_garagem = models.BooleanField(default=False)
+    equipado = models.BooleanField(default=False)
+    cozinha = models.BooleanField(default=False)
+    wifi = models.BooleanField(default=False)
+    descricao = models.TextField(blank=True, null=True)
+    selo = models.CharField(max_length=50, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'imovel'
+
+
+class Quarto(models.Model):
+    imovel = models.ForeignKey('Imovel', on_delete=models.CASCADE)
+    despesas_incluidas = models.TextField(blank=True)
+    wc_privado = models.BooleanField(default=False)
+    preco_mes = models.DecimalField(max_digits=10, decimal_places=2)
+    area = models.DecimalField(max_digits=10, decimal_places=2)
+    tipologia = models.TextField(blank=True)
+    estado = models.CharField(max_length=50, blank=True, null=True, default="on hold") # on hold, aproved, rejected -> alterar no servidor models e views
+    disponivel = models.BooleanField(default=True)
+    observacoes = models.TextField(blank=True)
+    coments_by_admin = models.TextField(blank=True, null=True)  # Adicionando o novo campo
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'quartos'

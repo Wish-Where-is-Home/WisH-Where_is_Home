@@ -11,6 +11,7 @@
     "@fortawesome/free-regular-svg-icons": "^6.5.1",
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
+    "@mui/icons-material": "^5.15.15",
     "@mui/material": "^5.15.15",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -32,6 +33,7 @@
     "proj4leaflet": "^1.0.2",
     "rc-slider": "^10.5.0",
     "react": "^18.2.0",
+    "react-bootstrap": "^2.10.2",
     "react-dom": "^18.2.0",
     "react-feather": "^2.0.10",
     "react-i18next": "^14.1.0",
@@ -69,5 +71,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "typescript": "^4.9.5"
   }
 }

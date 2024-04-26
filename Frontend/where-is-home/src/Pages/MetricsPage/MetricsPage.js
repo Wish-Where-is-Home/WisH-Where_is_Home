@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../AuthContext/AuthContext';
 import L from 'leaflet';
 import Button from '@mui/material/Button';
+import { use } from 'i18next';
 
 
 function MetricsPage({darkMode,zoneData,scores,updateScores}) {
@@ -33,6 +34,8 @@ function MetricsPage({darkMode,zoneData,scores,updateScores}) {
     const navigate = useNavigate();
     const mapRef = useRef(null);
     const geoJsonRef = useRef(null);
+    const [properties, setProperties] = useState([]);
+
 
 
   useEffect(() => {
@@ -304,6 +307,9 @@ const zone = IdType;
     }
   }, [geojsonData,geoJSONStyle]);
 
+
+
+
   
   
     const goBackPoligon = () => {
@@ -344,11 +350,99 @@ const zone = IdType;
         navigate('/quiz', {state: {selectedDistrict,districtId,IdType,scores,slidersValues,sliderValuesCruz} })
     }
 
+
+    
+
+    const fetchRooms = (properties) => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+          navigate('/login');
+      } else {
+          // Verifica se as propriedades aprovadas estão disponíveis
+          if (properties.length > 0) {
+              Promise.all(properties.map(property => {
+                  return fetch(`http://mednat.ieeta.pt:9009/properties/${property.id}/`, {
+                      method: 'GET',
+                      headers: {
+                          'Authorization': `Bearer ${token}`
+                      }
+                  })
+                  .then(response => {
+                      if (!response.ok) {
+                          throw new Error('Falha ao obter dados da propriedade');
+                      }
+                      return response.json();
+                  })
+                  .then(data => {
+                      const precos = data.quartos.map(quarto => parseFloat(quarto.preco_mes));
+                      const menorPreco = Math.min(...precos);
+                      const maiorPreco = Math.max(...precos);
+                      const intervaloPreco = `${menorPreco}-${maiorPreco}`;
+  
+                      // Atualiza o objeto property com o intervalo de preços
+                      property.intervaloPreco = intervaloPreco;
+                      return property;
+                  });
+              }))
+              .then(updatedProperties => {
+                  // Atualiza o estado com os properties atualizados
+                  setProperties(updatedProperties);
+
+              })
+              .catch(error => {
+                  console.error(error);
+              });
+          }
+      }
+  };
+
+  
+  useEffect(() => {
+    console.log("ENTREI NO FETCH PROPERTIES")
+    const token = localStorage.getItem('token');
+    if (!token) {
+        navigate('/login');
+    } else {
+
+    
+
+    fetch('http://mednat.ieeta.pt:9009/properties/aproved/', {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Falha ao obter dados do usuário');
+        }
+        
+        return response.json();
+    })
+    .then(data => {
+        console.log("OLHA ELA: ", data.properties);
+        setProperties(data.properties);
+        fetchRooms(data.properties);
+        
+    })
+    .catch(error => {
+        console.error(error);
+    });
+            
+        
+      };
+  }, []);
+
+  
+
+
+
+
       
 
     return (
         <div className="metrics-page-container">
-             <Properties  darkMode={darkMode} isOpen={isPropertiesOpen} toggleSidebar={toggleProperties} />
+             <Properties  darkMode={darkMode} isOpen={isPropertiesOpen} toggleSidebar={toggleProperties} properties={properties} />
             
              {mapCenter[0] !== null && mapCenter[1] !== null && (
                 <MapContainer  ref={mapRef}  style={{ height: "100%", width: "100%" }} 

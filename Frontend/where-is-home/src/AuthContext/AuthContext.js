@@ -9,17 +9,15 @@ export const AuthProvider = ({ children }) => {
   const [authToken, setAuthToken] = useState(localStorage.getItem('token'));
   const [userInfo, setUserInfo] = useState(null);
   
-
-
   const isAuthenticated = !!authToken;
 
   const fetchUserInfo = useCallback(async (token) => {
     try {
         const decodedToken = jwt_decode(token);
         
-        const { email, name, id } = decodedToken;
+        const { email, name, id,role } = decodedToken;
 
-        setUserInfo({ email, name, id });
+        setUserInfo({ email, name, id,role });
     } catch (error) {
         console.error('Error decoding token:', error);
     }

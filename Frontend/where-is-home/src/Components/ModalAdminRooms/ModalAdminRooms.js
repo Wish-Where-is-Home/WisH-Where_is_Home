@@ -3,6 +3,7 @@ import './ModalAdminRooms.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes,faCheck  } from '@fortawesome/free-solid-svg-icons';
 import { format } from 'date-fns';
+import axios from 'axios';
 
 
 function ModalAdminRooms({darkMode,roomData,closeModalRoom}) {
@@ -10,17 +11,20 @@ function ModalAdminRooms({darkMode,roomData,closeModalRoom}) {
     const [commentModalAcceptOpen, setCommentModalAcceptOpen] = useState(false);
     const [comment, setComment] = useState('');
     const [confirmDenieModalOpen, setConfirmDenieModalOpen] = useState(false);
+    const [roomId,setRoomId] = useState(null);
 
-    const openCommentModal = () => {
+    const openCommentModal = (roomid) => {
         setCommentModalAcceptOpen(true);
+        setRoomId(roomid)
     };
 
     const closeCommentModal = () => {
         setCommentModalAcceptOpen(false);
     };
 
-    const openConfirmDenieModal = () => {
+    const openConfirmDenieModal = (roomid) => {
         setConfirmDenieModalOpen(true);
+        setRoomId(roomid)
     };
 
     const closeConfirmDenieModal = () => {
@@ -53,12 +57,41 @@ function ModalAdminRooms({darkMode,roomData,closeModalRoom}) {
 
     const handleAcceptComment = () => {
         console.log('Comment accepted:', comment);
-        closeCommentModal();
+        
+        const token = localStorage.getItem('token');
+    
+        axios.post(`http://mednat.ieeta.pt:9009/admin/update/room/status/${roomId}/`, { status: 'denied', comment: comment }, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(response => {
+            console.log('Comment accepted successfully');
+            closeCommentModal(); 
+        })
+        .catch(error => {
+            console.error('Error accepting comment:', error);
+        });
     };
-
+    
     const handleConfirmDeny = () => {
         console.log('Room denied');
         closeConfirmDenieModal();
+    
+        const token = localStorage.getItem('token');
+       
+        axios.post(`http://mednat.ieeta.pt:9009/admin/update/room/status/${roomId}/`, { status: 'accepted' }, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(response => {
+            console.log('Room denied successfully');
+            closeConfirmDenieModal(); 
+        })
+        .catch(error => {
+            console.error('Error denying room:', error);
+        });
     };
 
     return (
@@ -176,10 +209,10 @@ function ModalAdminRooms({darkMode,roomData,closeModalRoom}) {
                     </div>
                </div>
                 <div style={{width:"100%",display:"flex",alignItems:"center",justifyContent:"center"}}>
-                    <button className='quartos-buttons-modal3' onClick={openConfirmDenieModal}>
+                    <button className='quartos-buttons-modal3' style={{marginRight:"3rem"}} onClick={() => openConfirmDenieModal(roomData.room_info.room_id)}>
                         <FontAwesomeIcon className='icon-close-modal' icon={faCheck} />
                     </button>
-                    <button className='quartos-buttons-modal2' onClick={openCommentModal}>
+                    <button className='quartos-buttons-modal2' style={{marginLeft:"3rem"}} onClick={() => openCommentModal(roomData.room_info.room_id)}>
                         <FontAwesomeIcon className='icon-close-modal' icon={faTimes} />
                     </button>
                 </div>
@@ -197,8 +230,8 @@ function ModalAdminRooms({darkMode,roomData,closeModalRoom}) {
                             style={{ marginBottom: "10px", width: "100%" }}
                         />
                         <div style={{ display: "flex", justifyContent: "space-between", marginTop: "1rem" }}>
-                            <button className="acceptButtonmodal" onClick={handleAcceptComment}>No</button>
-                            <button className="NoButtonmodal" onClick={closeCommentModal}>Deny</button>
+                            <button className="acceptButtonmodal" onClick={handleAcceptComment}>Deny</button>
+                            <button className="NoButtonmodal" onClick={closeCommentModal}>No</button>
                         </div>
                     </div>
                 </div>

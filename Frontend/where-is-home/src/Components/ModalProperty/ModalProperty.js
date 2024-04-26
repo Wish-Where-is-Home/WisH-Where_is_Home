@@ -94,6 +94,9 @@ function ModalProperty({ darkMode, propertyData, propertyRooms, closeModal }) {
                         <FontAwesomeIcon className='icon-close-modal' icon={faTimes} />
                     </button>
                </div>
+               <div className='bedroomspending'>
+
+                </div>
                <div className='modal-p-descricao'>
                 <p>{propertyData.descricao}</p>
                </div>
@@ -192,13 +195,19 @@ function ModalProperty({ darkMode, propertyData, propertyRooms, closeModal }) {
                             </div>
                             <div>
                                 {room.estado === 'denied' ? (
+                                     <div style={{display:"flex",flexDirection:"column",alignItems:"center",width:"100%"}}>
                                         <button className='quartos-buttons-modal3' onClick={() => openConfirmDenieModal(room.id)}>
                                             <FontAwesomeIcon className='icon-close-modal' icon={faCheck} />
                                         </button>
+                                        <p>Accept</p>
+                                    </div>
                                     ) : (
+                                        <div style={{display:"flex",flexDirection:"column",alignItems:"center",width:"100%"}}>
                                         <button className='quartos-buttons-modal2' onClick={() => openCommentModal(room.id)}>
                                             <FontAwesomeIcon className='icon-close-modal' icon={faTimes} />
                                         </button>
+                                        <p>Deny</p>
+                                        </div>
                                     )}
                             </div>
                         </div>

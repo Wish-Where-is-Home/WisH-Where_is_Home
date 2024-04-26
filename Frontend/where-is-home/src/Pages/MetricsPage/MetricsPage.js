@@ -11,6 +11,10 @@ import { useAuth } from '../../AuthContext/AuthContext';
 import L from 'leaflet';
 import Button from '@mui/material/Button';
 import { use } from 'i18next';
+import markerIcon from 'leaflet/dist/images/marker-icon.png';
+import markerIconRetina from 'leaflet/dist/images/marker-icon-2x.png';
+import markerShadow from 'leaflet/dist/images/marker-shadow.png';
+import { icon } from 'leaflet';
 
 
 function MetricsPage({darkMode,zoneData,scores,updateScores}) {
@@ -395,7 +399,6 @@ const zone = IdType;
       if (!token) {
           navigate('/login');
       } else {
-          // Verifica se as propriedades aprovadas estão disponíveis
           if (properties.length > 0) {
               Promise.all(properties.map(property => {
                   return fetch(`http://mednat.ieeta.pt:9009/properties/${property.id}/`, {
@@ -416,13 +419,13 @@ const zone = IdType;
                       const maiorPreco = Math.max(...precos);
                       const intervaloPreco = `${menorPreco}-${maiorPreco}`;
   
-                      // Atualiza o objeto property com o intervalo de preços
+                     
                       property.intervaloPreco = intervaloPreco;
                       return property;
                   });
               }))
               .then(updatedProperties => {
-                  // Atualiza o estado com os properties atualizados
+                 
                   setProperties(updatedProperties);
 
               })
@@ -457,11 +460,21 @@ const zone = IdType;
         return response.json();
     })
     .then(data => {
-        console.log("OLHA ELA: ", data.properties);
-        setProperties(data.properties);
-        fetchRooms(data.properties);
-        
-    })
+      console.log("OLHA ELA: ", data.properties);
+      setProperties(data.properties);
+      fetchRooms(data.properties);
+     
+      data.properties.forEach(property => {
+          const [lng, lat] = property.geom; 
+          const customIcon = icon({
+            iconUrl: markerIcon,
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34] 
+        });
+        L.marker([lng, lat], { icon: customIcon }).addTo(mapRef.current); 
+      });
+  })
     .catch(error => {
         console.error(error);
     });
@@ -470,12 +483,6 @@ const zone = IdType;
       };
   }, []);
 
-  
-
-
-
-
-      
 
     return (
         <div className="metrics-page-container">

@@ -21,11 +21,8 @@ function Sidebar({darkMode, isOpen, toggleSidebar, properties }) {
 
     const toggleSidebarInternal = () => {
         toggleSidebar();
-
     };
 
-
- 
     const {t} = useTranslation("common");
 
     return (

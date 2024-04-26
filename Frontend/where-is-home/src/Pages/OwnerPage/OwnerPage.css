@@ -132,8 +132,7 @@ body,html{
   color: var(--blacktowhite); 
   border: 1px solid var(--blacktowhite); 
   padding: 8px; 
-  margin-bottom: 10px; 
-  width: 150px; 
+  margin-bottom: 10px;  
 }
 .dark-mode form select {
   width: 100%; 

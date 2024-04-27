@@ -23,6 +23,7 @@ const ResidenceDetails = ({ darkMode }) => {
   const [slideNumber, setSlideNumber] = useState(0);
   const [open, setOpen] = useState(false);
   const [propertyDetails, setPropertyDetails] = useState(null);
+  //const [yelpData, setYelpData] = useState(null);
   const [showOwnerDetails, setShowOwnerDetails] = useState(false);
   const [expanded, setExpanded] = useState(false);
 
@@ -45,48 +46,52 @@ const ResidenceDetails = ({ darkMode }) => {
 // cycling / driving / walking
 
 // curl "https://api.mapbox.com/geocoding/v5/mapbox.places/-8.820237304110279,41.70055911994133.json?access_token=pk.eyJ1IjoiY3Jpc3RpYW5vbmljb2xhdSIsImEiOiJjbHZmZnFoaXUwN2R4MmlxbTdsdGlreDEyIn0.-vhnpIfDMVyW04ekPBhQlg"
-// primeiro longitude e depois latitude (-8....)
+// primeiro longitude e depois latitude (-8...., 41....)
 
-  // const options = {
-  //   method: 'GET',
-  //   headers: {
-  //     accept: 'application/json',
-  //     Authorization: 'Bearer rmASuj9Y6LDlFu8i9kVBDlQNlKs7Zadb4l2QJXAhht756P8vDXOWK5smuV55p5vzeprQnizMWffMYcQnHMGdRQZ3oBGZPVMQwaM2icUCScsROp84sLTc47cUMG4qZnYx'
-  //   }
-  // };
-  
-  // fetch(`https://api.yelp.com/v3/businesses/search?latitude=${lat}&longitude=${long}&radius=40000&sort_by=best_match&limit=20`, options)
-  //   .then(response => response.json())
-  //   .then(response => console.log(response))
-  //   .catch(err => console.error(err));
+   
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const imovelId = "20";
-  //     const url = `http://mednat.ieeta.pt:9009/properties/${imovelId}/`;
+   useEffect(() => {
+     const fetchData = async () => {
+       const imovelId = "20";
+       const url = `http://mednat.ieeta.pt:9009/properties/${imovelId}/`;
+      try {
+         const response = await fetch(url, {
+           method: 'GET',
+           headers: {
+             'Content-Type': 'application/json'
+           }
+         });
+        if (!response.ok) {
+           throw new Error('Network response was not ok');
+         }
+        const data = await response.json();
+         console.log(data);
+         setPropertyDetails(data);
+         //getYelpData(data.property.geom[0], data.property.geom[1]);
+       } catch (error) {
+         console.error('There was a problem with your fetch operation:', error);
+       }
+     };
+    fetchData();
+   }, []);
 
-  //     try {
-  //       const response = await fetch(url, {
-  //         method: 'GET',
-  //         headers: {
-  //           'Content-Type': 'application/json'
-  //         }
-  //       });
-
-  //       if (!response.ok) {
-  //         throw new Error('Network response was not ok');
-  //       }
-
-  //       const data = await response.json();
-  //       console.log(data);
-  //       setPropertyDetails(data);
-  //     } catch (error) {
-  //       console.error('There was a problem with your fetch operation:', error);
+  //  const getYelpData = (lat, long) => {
+  //   const options = {
+  //     method: 'GET',
+  //     headers: {
+  //       accept: 'application/json',
+  //       Authorization: 'Bearer rmASuj9Y6LDlFu8i9kVBDlQNlKs7Zadb4l2QJXAhht756P8vDXOWK5smuV55p5vzeprQnizMWffMYcQnHMGdRQZ3oBGZPVMQwaM2icUCScsROp84sLTc47cUMG4qZnYx'
   //     }
   //   };
-
-  //   fetchData();
-  // }, []);
+  
+  //   fetch(`https://api.yelp.com/v3/businesses/search?latitude=${lat}&longitude=${long}&radius=40000&sort_by=best_match&limit=20`, options)
+  //     .then(response => response.json())
+  //     .then(data => {
+  //       console.log(data);
+  //       setYelpData(data); 
+  //     })
+  //     .catch(err => console.error(err));
+  // };
 
   const useAnimatedScore = (isVisible, score, duration = 800) => {
     const [value, setValue] = useState(0);

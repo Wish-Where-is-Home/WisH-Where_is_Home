@@ -396,16 +396,12 @@ const zone = IdType;
 
     const fetchRooms = (properties) => {
       const token = localStorage.getItem('token');
-      if (!token) {
-          navigate('/login');
-      } else {
+     
           if (properties.length > 0) {
               Promise.all(properties.map(property => {
                   return fetch(`http://mednat.ieeta.pt:9009/properties/${property.id}/`, {
                       method: 'GET',
-                      headers: {
-                          'Authorization': `Bearer ${token}`
-                      }
+                      
                   })
                   .then(response => {
                       if (!response.ok) {
@@ -433,55 +429,62 @@ const zone = IdType;
                   console.error(error);
               });
           }
-      }
+      
   };
 
   
   useEffect(() => {
-    console.log("ENTREI NO FETCH PROPERTIES")
     const token = localStorage.getItem('token');
-    if (!token) {
-        navigate('/login');
-    } else {
-
     
-
-    fetch('http://mednat.ieeta.pt:9009/properties/aproved/', {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Falha ao obter dados do usuário');
-        }
-        
-        return response.json();
-    })
-    .then(data => {
-      console.log("OLHA ELA: ", data.properties);
-      setProperties(data.properties);
-      fetchRooms(data.properties);
-     
-      data.properties.forEach(property => {
-          const [lng, lat] = property.geom; 
-          const customIcon = icon({
-            iconUrl: markerIcon,
-            iconSize: [25, 41],
-            iconAnchor: [12, 41],
-            popupAnchor: [1, -34] 
-        });
-        L.marker([lng, lat], { icon: customIcon }).addTo(mapRef.current); 
-      });
-  })
-    .catch(error => {
-        console.error(error);
-    });
+        fetch('http://mednat.ieeta.pt:9009/properties/aproved/', {
+            method: 'GET',
             
-        
-      };
-  }, []);
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch data');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (geojsonData && geojsonData.bbox && geojsonData.bbox.length === 4) {
+                const [minLng, minLat, maxLng, maxLat] = geojsonData.bbox;
+                const filteredProperties = data.properties.filter(property => {
+                    const [lat, lng] = property.geom;
+                          console.log(lng);
+                          console.log(minLng);
+                          console.log(maxLng);
+                    return lng >= minLng && lng <= maxLng &&
+                           lat >= minLat && lat <= maxLat;
+                });
+                setProperties(filteredProperties);
+                fetchRooms(filteredProperties);
+
+                mapRef.current.eachLayer(layer => {
+                  if (layer instanceof L.Marker) {
+                      mapRef.current.removeLayer(layer);
+                  }
+              });
+                filteredProperties.forEach(property => {
+                    const [lat, lng] = property.geom;
+                    const customIcon = icon({
+                        iconUrl: markerIcon,
+                        iconSize: [25, 41],
+                        iconAnchor: [12, 41],
+                        popupAnchor: [1, -34]
+                    });
+                    L.marker([lat, lng], { icon: customIcon }).addTo(mapRef.current);
+                });
+            } else {
+                console.error("GeojsonData or its bbox is not available or not properly defined");
+            }
+        })
+        .catch(error => {
+            console.error("Error fetching data:", error);
+        });
+    
+}, [geojsonData]);
+
 
 
     return (

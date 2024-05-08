@@ -30,6 +30,7 @@
     border-radius: 5px; 
     cursor: pointer; 
     transition: background-color 0.3s ease; 
+    font-size: 15px;
   }
   
   .property-details button:hover {
@@ -43,5 +44,35 @@
   
   .property-details .detailed-info p {
     margin: 5px 0;
+  }
+
+  .property-details .room-dropdown {
+    margin-top: 10px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    padding: 10px;
+  }
+  
+  .property-details .room-dropdown h4 {
+    margin-top: 0;
+  }
+  
+  .property-details .room-dropdown ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .property-details .room-dropdown li {
+    margin-bottom: 5px;
+  }
+  
+  .dark-mode .property-details button {
+    background-color: grey ; 
+    color: white; 
+  }
+  
+  .dark-mode .property-details button:hover {
+    background-color: var(--background-color); 
   }
   

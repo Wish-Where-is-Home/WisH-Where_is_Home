@@ -1,9 +1,65 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './OwnerPage.css';
 import PropertyDetails from '../../Components/OwnerPropDetails/OwnerPropDetails'; 
 
 function OwnerPage({ darkMode }) {
     const [selectedTab, setSelectedTab] = useState('accepted');
+    const [properties, setProperties] = useState([]);
+    const [rooms, setRooms] = useState([]);
+
+
+    useEffect(() => { 
+        fetchProperties(selectedTab);
+    }, [selectedTab]);
+
+    const fetchProperties = (tab) => {
+        const endpointMap = {
+            accepted: 'http://mednat.ieeta.pt:9009/properties/aproved/',
+            onHold: 'http://mednat.ieeta.pt:9009/properties/on_hold/',
+            denied: 'http://mednat.ieeta.pt:9009/properties/denied/'
+        };
+        const endpoint = endpointMap[tab];
+    
+        fetch(endpoint)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to fetch properties');
+                }
+                return response.json();
+            })
+            .then(data => {
+                setProperties(data);
+                // After fetching properties, fetch corresponding rooms
+                fetchRooms(data);
+            })
+            .catch(error => {
+                console.error('Error fetching properties:', error);
+            });
+    };
+    
+    const fetchRooms = (properties) => {
+        const propertyIds = properties.map(property => property.id);
+        fetch('http://mednat.ieeta.pt:9009/rooms/', {
+            method: 'POST', // Assuming you need to send property IDs in the request body
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ propertyIds })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch rooms');
+            }
+            return response.json();
+        })
+        .then(data => {
+            setRooms(data);
+        })
+        .catch(error => {
+            console.error('Error fetching rooms:', error);
+        });
+    };
+    
 
     const [showForm, setShowForm] = useState(false); 
 
@@ -36,6 +92,9 @@ function OwnerPage({ darkMode }) {
 
     const handleRoomsClick = (propertyId) => {
         console.log(`Rooms clicked for property ${propertyId}`);
+        // Filter rooms based on the clicked property ID
+        const roomsForProperty = rooms.filter(room => room.propertyId === propertyId);
+    
       };
 
     const acceptedProperties = [
@@ -167,7 +226,7 @@ function OwnerPage({ darkMode }) {
                     </div>
                 </div>
                 <div className='o-show-properties'>
-                    {getPropertiesByTab().map(property => (
+                    {properties.map(property => (
                         <PropertyDetails key={property.id} property={property} onRoomsClick={handleRoomsClick} />
                     ))}
                 </div>

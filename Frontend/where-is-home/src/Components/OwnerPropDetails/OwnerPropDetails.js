@@ -3,9 +3,13 @@ import './OwnerPropDetails.css';
 
 function OwnerPropDetails({ property, onRoomsClick }) {
   const [expanded, setExpanded] = useState(false);
+  const [showRooms, setShowRooms] = useState(false);
 
   const handleToggleExpand = () => {
     setExpanded(!expanded);
+  };
+  const toggleRooms = () => {
+    setShowRooms(!showRooms);
   };
 
   return (
@@ -15,7 +19,7 @@ function OwnerPropDetails({ property, onRoomsClick }) {
         <img src={property.photo} alt="Property Photo" />
         <h3>{property.name}</h3>
         <button onClick={handleToggleExpand}>{expanded ? 'Less' : 'More'}</button>
-        <button onClick={() => onRoomsClick(property.id)}>Rooms</button>
+        <button onClick={toggleRooms}>Rooms</button>
       </div>
       
       {/* Detailed Section (hidden if not expanded) */}
@@ -28,6 +32,17 @@ function OwnerPropDetails({ property, onRoomsClick }) {
           <p>Typology: {property.tipologia}</p>
           <p>Included Expenses: {property.despesas_incluidas}</p>
           {/* Include other details here */}
+        </div>
+      )}
+      {showRooms && (
+        <div className="room-dropdown">
+          <h4>Rooms</h4>
+          <ul>
+            {/* Map through rooms and render them */}
+            {property.rooms.map(room => (
+              <li key={room.id}>{room.name}</li>
+            ))}
+          </ul>
         </div>
       )}
     </div>

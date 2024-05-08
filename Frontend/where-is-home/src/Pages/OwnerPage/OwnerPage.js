@@ -15,8 +15,8 @@ function OwnerPage({ darkMode }) {
     const fetchProperties = (tab) => {
         const endpointMap = {
             accepted: 'http://mednat.ieeta.pt:9009/properties/aproved/',
-            onHold: 'http://mednat.ieeta.pt:9009/properties/on_hold/',
-            denied: 'http://mednat.ieeta.pt:9009/properties/denied/'
+            onHold: 'http://mednat.ieeta.pt:9009/properties/denied_on_hold/',
+            denied: 'http://mednat.ieeta.pt:9009/properties/denied_on_hold/'
         };
         const endpoint = endpointMap[tab];
     
@@ -28,14 +28,20 @@ function OwnerPage({ darkMode }) {
                 return response.json();
             })
             .then(data => {
-                setProperties(data);
+                // Filter properties based on their state
+                let filteredProperties = data;
+                if (tab === 'on_hold' || tab === 'denied') {
+                    filteredProperties = data.filter(property => property.state === tab);
+                }
+                setProperties(filteredProperties);
                 // After fetching properties, fetch corresponding rooms
-                fetchRooms(data);
+                fetchRooms(filteredProperties);
             })
             .catch(error => {
                 console.error('Error fetching properties:', error);
             });
     };
+    
     
     const fetchRooms = (properties) => {
         const propertyIds = properties.map(property => property.id);

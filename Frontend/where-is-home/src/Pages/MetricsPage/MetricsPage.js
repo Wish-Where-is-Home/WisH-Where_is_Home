@@ -257,13 +257,10 @@ const zone = IdType;
       };
   };
 
-
-    
     
   
     useEffect(() => {
 
-      console.log(sliderValuesCruz)
 
       const fetchGeojsonData = async () => {
         try {
@@ -432,58 +429,90 @@ const zone = IdType;
       
   };
 
-  
-  useEffect(() => {
+  function findSubsectionForProperty(property, subSections) {
+    const [lat, lng] = property.geom; 
+   
+    for (const subSection of subSections.features) {
+        const [minLng, minLat, maxLng, maxLat] = subSection.bbox; // Obtém os limites do bbox da subseção
+       
+       
+        if (lng >= minLng && lng <= maxLng && lat >= minLat && lat <= maxLat) {
+            return subSection; 
+        }
+    }
+
+    return null; 
+}
+
+useEffect(() => {
     const token = localStorage.getItem('token');
     
-        fetch('http://mednat.ieeta.pt:9009/properties/aproved/', {
-            method: 'GET',
-            
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Failed to fetch data');
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (geojsonData && geojsonData.bbox && geojsonData.bbox.length === 4) {
-                const [minLng, minLat, maxLng, maxLat] = geojsonData.bbox;
-                const filteredProperties = data.properties.filter(property => {
-                    const [lat, lng] = property.geom;
-                          console.log(lng);
-                          console.log(minLng);
-                          console.log(maxLng);
-                    return lng >= minLng && lng <= maxLng &&
-                           lat >= minLat && lat <= maxLat;
-                });
-                setProperties(filteredProperties);
-                fetchRooms(filteredProperties);
+    fetch('http://mednat.ieeta.pt:9009/properties/aproved/', {
+        method: 'GET',
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to fetch data');
+        }
+        return response.json();
+    })
+    .then(data => {
+      console.log(scores);
+      console.log(geojsonData);
+        if (geojsonData && geojsonData.bbox && geojsonData.bbox.length === 4) {
+            const [minLng, minLat, maxLng, maxLat] = geojsonData.bbox;
+            const filteredProperties = data.properties.filter(property => {
+                const [lat, lng] = property.geom;
+                return lng >= minLng && lng <= maxLng &&
+                       lat >= minLat && lat <= maxLat;
+            });
 
-                mapRef.current.eachLayer(layer => {
-                  if (layer instanceof L.Marker) {
-                      mapRef.current.removeLayer(layer);
-                  }
-              });
-                filteredProperties.forEach(property => {
-                    const [lat, lng] = property.geom;
-                    const customIcon = icon({
-                        iconUrl: markerIcon,
-                        iconSize: [25, 41],
-                        iconAnchor: [12, 41],
-                        popupAnchor: [1, -34]
-                    });
-                    L.marker([lat, lng], { icon: customIcon }).addTo(mapRef.current);
+           
+            const propertiesWithScores = filteredProperties.map(property => {
+                const subSection = findSubsectionForProperty(property, geojsonData); 
+               
+                const sectionId = subSection ? subSection.id.split('.')[1] : null;
+                
+               
+                const score =scores[sectionId] || 0;
+                console.log(sectionId);
+
+               
+                return { property, score };
+            });
+
+            const sortedProperties = propertiesWithScores.sort((a, b) => b.score - a.score);
+
+            console.log(sortedProperties);
+
+            setProperties(sortedProperties.map(item => item.property)); 
+            fetchRooms(sortedProperties.map(item => item.property)); 
+
+            mapRef.current.eachLayer(layer => {
+                if (layer instanceof L.Marker) {
+                    mapRef.current.removeLayer(layer);
+                }
+            });
+
+            sortedProperties.forEach(item => {
+                const [lat, lng] = item.property.geom;
+                const customIcon = icon({
+                    iconUrl: markerIcon,
+                    iconSize: [25, 41],
+                    iconAnchor: [12, 41],
+                    popupAnchor: [1, -34]
                 });
-            } else {
-                console.error("GeojsonData or its bbox is not available or not properly defined");
-            }
-        })
-        .catch(error => {
-            console.error("Error fetching data:", error);
-        });
-    
-}, [geojsonData]);
+                L.marker([lat, lng], { icon: customIcon }).addTo(mapRef.current);
+            });
+        } else {
+            console.error("GeojsonData or its bbox is not available or not properly defined");
+        }
+    })
+    .catch(error => {
+        console.error("Error fetching data:", error);
+    });
+}, [geojsonData,scores]);
+
 
 
 

@@ -514,8 +514,6 @@ useEffect(() => {
 }, [geojsonData,scores]);
 
 
-
-
     return (
         <div className="metrics-page-container">
              <Properties  darkMode={darkMode} isOpen={isPropertiesOpen} toggleSidebar={toggleProperties} properties={properties} />

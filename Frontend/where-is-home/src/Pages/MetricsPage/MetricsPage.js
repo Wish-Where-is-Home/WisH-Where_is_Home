@@ -444,6 +444,57 @@ const zone = IdType;
     return null; 
 }
 
+// marker.bindPopup(`<b>${item.property.nome}</b>`).openPopup();
+const addMarkers = (sortedProperties) => {
+  const revertBackground = () => {
+    const allImovelElements = document.querySelectorAll('.imovel');
+    allImovelElements.forEach(element => {
+      element.style.backgroundColor = 'var(--background-color3)';
+    });
+  };
+  
+  // Configurar um intervalo para chamar a função revertBackground a cada segundo (1000 milissegundos)
+  
+
+  sortedProperties.forEach(item => {
+    const [lng, lat] = item.property.geom; 
+    const customIcon = icon({
+      iconUrl: markerIcon,
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34] 
+    });
+    const marker = L.marker([lng, lat], { icon: customIcon }).addTo(mapRef.current); 
+
+    marker.on('mouseover', function (e) {
+      const tooltip = L.tooltip({ direction: 'center', class: 'custom-tooltip' }).setContent(item.property.nome);
+      this.bindTooltip(tooltip).openTooltip();
+    });
+    
+    
+    
+    marker.on('click', function () {
+      console.log("CLIQUEI: ", item.property.id);
+      const clickedPropertyId = item.property.id;
+
+      const sidebarItem = document.getElementById(`property-${clickedPropertyId}`);
+      if (sidebarItem) {
+        console.log("ENTREI NO SCROLL")
+        sidebarItem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+
+      const imovelElement = document.getElementById(`imovel-${clickedPropertyId}`);
+      if (imovelElement) {
+        imovelElement.style.backgroundColor = 'var(--background-color4)';
+        // Add event listener to revert background color
+        setTimeout(revertBackground, 1500);
+      }
+
+    });
+  });
+};
+
+
 useEffect(() => {
     const token = localStorage.getItem('token');
     
@@ -494,16 +545,10 @@ useEffect(() => {
                 }
             });
 
-            sortedProperties.forEach(item => {
-                const [lat, lng] = item.property.geom;
-                const customIcon = icon({
-                    iconUrl: markerIcon,
-                    iconSize: [25, 41],
-                    iconAnchor: [12, 41],
-                    popupAnchor: [1, -34]
-                });
-                L.marker([lat, lng], { icon: customIcon }).addTo(mapRef.current);
-            });
+            addMarkers(sortedProperties);
+
+            
+            
         } else {
             console.error("GeojsonData or its bbox is not available or not properly defined");
         }

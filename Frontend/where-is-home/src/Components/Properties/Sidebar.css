@@ -19,7 +19,7 @@
   top: 50%; 
   left: -30px; 
   padding: 10px;
-  background-color: var(--background-color2);
+  background-color: var(--background-color-dark);
   color: rgba(13, 221, 218, 1);
   border: none;
   cursor: pointer;
@@ -55,15 +55,13 @@
   padding-right: 10px;
 }
 
-.PropText{
-  color: rgba(13, 221, 218, 1);
-}
+
 
 .first-text {
   font-size: 24px;
   font-weight: 800;
   margin-left: 20px;
-  color: white
+  
 }
 
 .box {
@@ -91,7 +89,7 @@
   text-align: center;
 }
 
-.box .qty-elem {
+.qty-elem {
   display: flex;
   position: relative;
   text-align: center;
@@ -99,17 +97,16 @@
   width: 12%;
 }
 
-.box .bed-icon {
+.bed-icon {
   height: 17px;
   left: 0;
   position: absolute;
   top: 0;
   width: 21px;
-  color: white;
+  
 }
 
 .text-wrapper {
-  color: white;
   font-family: "Lato", Helvetica;
   font-size: 16px;
   font-weight: 700;
@@ -128,8 +125,7 @@
   width: 12%;
 }
 
-.box .text-wrapper-2 {
-  color: white;
+.text-wrapper-2 {
   font-family: "Lato", Helvetica;
   font-size: 16px;
   font-weight: 700;
@@ -148,7 +144,6 @@
   position: absolute;
   top: 0;
   width: 18px;
-  color: white;
 }
 
 .qty-elem-2 {
@@ -160,7 +155,6 @@
 }
 
 .text-wrapper-3 {
-  color: white;
   font-family: "Lato", Helvetica;
   font-size: 16px;
   font-weight: 700;
@@ -179,7 +173,6 @@
   position: absolute;
   top: 0;
   width: 23px;
-  color: white;
 }
 
 .qty-elem-3 {
@@ -191,7 +184,6 @@
 }
 
 .text-wrapper-4 {
-  color: white;
   font-family: "Lato", Helvetica;
   font-size: 16px;
   font-weight: 700;
@@ -204,8 +196,8 @@
   width: 64px;
 }
 
-.box .text-wrapper-5 {
-  color: white;
+.text-wrapper-5 {
+
   font-family: "Lato", Helvetica;
   font-size: 19px;
   font-weight: 700;
@@ -246,8 +238,7 @@
   text-align: left;
 }
 
-.box .text-wrapper-7 {
-  color: white;
+.text-wrapper-7 {
   font-family: "Lato", Helvetica;
   font-size: 24px;
   font-weight: 700;
@@ -267,11 +258,15 @@
 .imovel{
   flex: 1;
   position: relative;
-  background-color: #2c2c2c;
+  background-color: var(--background-color3);
   top: 0;
   width: calc(100% - 200px);
   
 }
+
+
+
+
 
 .photos{
   width: 160px; 

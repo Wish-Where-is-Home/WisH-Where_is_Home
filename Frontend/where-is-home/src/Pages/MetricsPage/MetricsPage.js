@@ -536,6 +536,50 @@ useEffect(() => {
                         <Button variant="contained" style={{ position: 'absolute', top: '10px', right: zoomButtonPosition,zIndex: "400",  backgroundColor: "var(--background-color)",color:"var(--blacktowhite)"}} onClick={goBackPoligon}>
                           {t('zoomOut')}
                         </Button>
+                        <Button
+    variant="contained"
+    style={{
+      position: 'absolute',
+      top: '60px',
+      right: zoomButtonPosition,
+      zIndex: "400",
+      backgroundColor: "var(--background-color)",
+      color: "var(--blacktowhite)"
+    }}
+    
+  >
+    Button 2
+  </Button>
+  
+  <Button
+    variant="contained"
+    style={{
+      position: 'absolute',
+      top: '110px',
+      right: zoomButtonPosition,
+      zIndex: "400",
+      backgroundColor: "var(--background-color)",
+      color: "var(--blacktowhite)"
+    }}
+  
+  >
+    Button 3
+  </Button>
+  
+  <Button
+    variant="contained"
+    style={{
+      position: 'absolute',
+      top: '160px',
+      right: zoomButtonPosition,
+      zIndex: "400",
+      backgroundColor: "var(--background-color)",
+      color: "var(--blacktowhite)"
+    }}
+
+  >
+    Button 4
+  </Button>
                         <Button variant="contained" style={{ position: 'absolute', bottom: '120px', right: '20px', zIndex: "1000", backgroundColor: "var(--background-color)", color: "var(--blacktowhite)", borderRadius:"20rem" }}  onClick={handleModalButtonClick}>
                           ?
                           </Button>

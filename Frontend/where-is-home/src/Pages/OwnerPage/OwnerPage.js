@@ -40,30 +40,15 @@ function OwnerPage({ darkMode }) {
                 return response.json();
             })
             .then(data => {
-                if (Array.isArray(data)) {
-                    let filteredProperties = [];
-                    switch (tab) {
-                        case 'accepted':
-                            filteredProperties = data.filter(property => property.state === 'accepted');
-                            break;
-                        case 'on_hold':
-                            filteredProperties = data.filter(property => property.state === 'on_hold');
-                            break;
-                        case 'denied':
-                            filteredProperties = data.filter(property => property.state === 'denied');
-                            break;
-                        default:
-                            filteredProperties = data;
-                            break;
-                    }
-                    // Set filtered properties to state
-                    setProperties(filteredProperties);
-                    fetchRooms(data);
-                } else {
-                    console.error('Invalid data format:', data);
+                let filteredProperties = data;
+                if (tab === 'on_hold' || tab === 'denied') {
+                    filteredProperties = data[`${tab}_rooms_properties`];
+                } else if (tab === 'accepted') {
+                    filteredProperties = data.properties || data;
                 }
+                setProperties(filteredProperties);
+                fetchRooms(filteredProperties);
             })
-            
             .catch(error => {
                 console.error('Error fetching properties:', error);
             });
@@ -72,12 +57,16 @@ function OwnerPage({ darkMode }) {
     
     const fetchRooms = (properties) => {
         const propertyIds = properties.map(property => property.id);
-        fetch('http://mednat.ieeta.pt:9009/rooms/', {
-            method: 'POST', // Assuming you need to send property IDs in the request body
+
+        const token = localStorage.getItem('token');
+    
+
+        fetch('http://mednat.ieeta.pt:9009/owner/denied_on_hold/rooms/', {
+            method: 'GET', // Assuming you need to send property IDs in the request body
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify({ propertyIds })
         })
         .then(response => {
             if (!response.ok) {

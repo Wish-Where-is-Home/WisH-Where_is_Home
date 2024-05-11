@@ -56,6 +56,11 @@ function MetricsPage({darkMode,zoneData,scores,updateScores}) {
 
     const [CycleIconColor, setCycleIconColor] = useState('white');
 
+    const [showFootGeoJSON, setShowFootGeoJSON] = useState(false);
+    const [FootGeoJSONData, setFootGeoJSONData] = useState(null);
+    const [FootLayer, setFootLayer] = useState(null);
+    const [FootIconColor, setFootIconColor] = useState('white');
+
 
 
   useEffect(() =>{
@@ -575,6 +580,7 @@ useEffect(() => {
 
 const busGeoJSONUrl = 'http://mednat.ieeta.pt:9009/geoserver/wish/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=wish%3Aaveiro_bus&srsname=EPSG:4326&outputFormat=application%2Fjson';
 const cycleGeoJSONUrl = 'http://mednat.ieeta.pt:9009/geoserver/wish/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=wish%3Acycleway&srsname=EPSG:4326&outputFormat=application%2Fjson';
+const FootGeoJSONUrl = 'http://mednat.ieeta.pt:9009/geoserver/wish/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=wish%3Afootway&srsname=EPSG:4326&outputFormat=application%2Fjson';
 
 const loadBusGeoJSON = async () => {
   try {
@@ -683,6 +689,61 @@ const handleCycleButtonClick = async () => {
 };
 
 
+const loadFootGeoJSON = async () => {
+  try {
+    const response = await fetch(FootGeoJSONUrl);
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching foot GeoJSON:', error);
+    return null;
+  }
+};
+
+
+useEffect(() => {
+  const addFootGeoJSONToMap = async () => {
+    if (!mapRef.current) return;
+
+    if (showFootGeoJSON) {
+      const data = await loadFootGeoJSON();
+      if (data) {
+        const newFootLayer = L.geoJSON(data, {
+          style: { color: '#C71585' },
+        });
+        newFootLayer.addTo(mapRef.current);
+        setFootLayer(newFootLayer); 
+        setFootIconColor('#C71585');
+        setFootGeoJSONData(data);
+      }
+    } else {
+      if (FootGeoJSONData && FootLayer) {
+        mapRef.current.removeLayer(FootLayer); 
+        setFootLayer(null); 
+        setFootGeoJSONData(null);
+        setFootIconColor('white');
+      }
+    }
+  };
+
+  addFootGeoJSONToMap();
+
+  return () => {
+    if (FootLayer && mapRef.current) {
+      mapRef.current.removeLayer(FootLayer); 
+      setFootLayer(null); 
+    }
+  };
+}, [showFootGeoJSON]);
+
+const handleFootButtonClick = async () => {
+  setShowFootGeoJSON(!showFootGeoJSON); 
+};
+
+
+
     return (
         <div className="metrics-page-container">
              <Properties  darkMode={darkMode} isOpen={isPropertiesOpen} toggleSidebar={toggleProperties} properties={properties} />
@@ -768,9 +829,9 @@ const handleCycleButtonClick = async () => {
                               backgroundColor: "var(--background-color)",
                               color: "var(--blacktowhite)"
                             }}
-                            
+                            onClick={handleFootButtonClick}
                           >
-                            <FontAwesomeIcon icon={faWalking} />
+                            <FontAwesomeIcon icon={faWalking} style={{ color: FootIconColor, fontSize:"20px" }} />
                           </Button>
                         </>
                       )}

@@ -15,7 +15,7 @@ function OwnerPage({ darkMode }) {
     const fetchProperties = (tab) => {
         const endpointMap = {
             accepted: 'http://mednat.ieeta.pt:9009/properties/aproved/',
-            onHold: 'http://mednat.ieeta.pt:9009/owner/denied_on_hold/properties/',
+            on_hold: 'http://mednat.ieeta.pt:9009/owner/denied_on_hold/properties/',
             denied: 'http://mednat.ieeta.pt:9009/owner/denied_on_hold/properties/'
         };
         const endpoint = endpointMap[tab];
@@ -40,16 +40,30 @@ function OwnerPage({ darkMode }) {
                 return response.json();
             })
             .then(data => {
-                console.log(data);
-                let filteredProperties = data;
-                if (tab === 'onHold' || tab === 'denied') {
-                    filteredProperties = data.filter(property => property.state === tab);
+                if (Array.isArray(data)) {
+                    let filteredProperties = [];
+                    switch (tab) {
+                        case 'accepted':
+                            filteredProperties = data.filter(property => property.state === 'accepted');
+                            break;
+                        case 'on_hold':
+                            filteredProperties = data.filter(property => property.state === 'on_hold');
+                            break;
+                        case 'denied':
+                            filteredProperties = data.filter(property => property.state === 'denied');
+                            break;
+                        default:
+                            filteredProperties = data;
+                            break;
+                    }
+                    // Set filtered properties to state
+                    setProperties(filteredProperties);
+                    fetchRooms(data);
+                } else {
+                    console.error('Invalid data format:', data);
                 }
-                
-                const propertiesData = data.properties || data;
-                setProperties(propertiesData);
-                fetchRooms(propertiesData);
             })
+            
             .catch(error => {
                 console.error('Error fetching properties:', error);
             });
@@ -115,107 +129,6 @@ function OwnerPage({ darkMode }) {
         const roomsForProperty = rooms.filter(room => room.propertyId === propertyId);
     
       };
-
-    const acceptedProperties = [
-        { 
-            id: 1, 
-            photo: 'https://www.betar.pt/cms/wp-content/uploads/2022/04/AmoreirasResidence-01.jpg',
-            name: 'Property 1',
-            area: 100, 
-            preco_mes: 800, 
-            wc_privado: true, 
-            disponivel: true, 
-            tipologia: 'T1', 
-            despesas_incluidas: 'Água e Eletricidade' 
-        },
-        { 
-            id: 2, 
-            photo: 'https://www.betar.pt/cms/wp-content/uploads/2022/04/AmoreirasResidence-01.jpg',
-            name: 'Property 2',
-            area: 120, 
-            preco_mes: 900, 
-            wc_privado: false, 
-            disponivel: false, 
-            tipologia: 'T2', 
-            despesas_incluidas: 'Água' 
-        },
-        { 
-            id: 7, 
-            photo: 'https://www.betar.pt/cms/wp-content/uploads/2022/04/AmoreirasResidence-01.jpg',
-            name: 'Property 7',
-            area: 120, 
-            preco_mes: 900, 
-            wc_privado: false, 
-            disponivel: false, 
-            tipologia: 'T2', 
-            despesas_incluidas: 'Água' 
-        },
-        
-    ];
-    
-
-    const onHoldProperties = [
-        { 
-            id: 3, 
-            photo: 'https://www.betar.pt/cms/wp-content/uploads/2022/04/AmoreirasResidence-01.jpg',
-            name: 'Property 3', 
-            area: 80, 
-            preco_mes: 700, 
-            wc_privado: false, 
-            disponivel: true, 
-            tipologia: 'T1', 
-            despesas_incluidas: 'Água' 
-        },
-        { 
-            id: 4, 
-            photo: 'https://www.betar.pt/cms/wp-content/uploads/2022/04/AmoreirasResidence-01.jpg',
-            name: 'Property 4', 
-            area: 100, 
-            preco_mes: 900, 
-            wc_privado: true, 
-            disponivel: false, 
-            tipologia: 'T2', 
-            despesas_incluidas: 'Água e Eletricidade' 
-        },
-    ];
-    
-    const deniedProperties = [
-        { 
-            id: 5, 
-            photo: 'https://www.betar.pt/cms/wp-content/uploads/2022/04/AmoreirasResidence-01.jpg',
-            name: 'Property 5', 
-            area: 120, 
-            preco_mes: 850, 
-            wc_privado: true, 
-            disponivel: false, 
-            tipologia: 'T3', 
-            despesas_incluidas: 'Nenhuma' 
-        },
-        { 
-            id: 6, 
-            photo: 'https://www.betar.pt/cms/wp-content/uploads/2022/04/AmoreirasResidence-01.jpg',
-            name: 'Property 6', 
-            area: 90, 
-            preco_mes: 750, 
-            wc_privado: false, 
-            disponivel: false, 
-            tipologia: 'T1', 
-            despesas_incluidas: 'Nenhuma' 
-        },
-    ];
-
-    const getPropertiesByTab = () => {
-        switch (selectedTab) {
-            case 'accepted':
-                return acceptedProperties;
-            case 'onHold':
-                return onHoldProperties;
-            case 'denied':
-                return deniedProperties;
-            default:
-                return [];
-        }
-    };
     
 
     return (
@@ -232,7 +145,7 @@ function OwnerPage({ darkMode }) {
                         </div>
                         <div
                             className={`tab ${selectedTab === 'onHold' ? 'selected' : ''}`}
-                            onClick={() => handleTabClick('onHold')}
+                            onClick={() => handleTabClick('on_hold')}
                         >
                             On Hold
                         </div>

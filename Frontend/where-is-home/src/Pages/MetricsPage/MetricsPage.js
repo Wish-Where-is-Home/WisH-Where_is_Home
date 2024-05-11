@@ -15,6 +15,9 @@ import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerIconRetina from 'leaflet/dist/images/marker-icon-2x.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 import { icon } from 'leaflet';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
+import { faBus, faBicycle, faWalking } from '@fortawesome/free-solid-svg-icons';
 
 
 function MetricsPage({darkMode,zoneData,scores,updateScores}) {
@@ -41,6 +44,17 @@ function MetricsPage({darkMode,zoneData,scores,updateScores}) {
     const mapRef = useRef(null);
     const geoJsonRef = useRef(null);
     const [properties, setProperties] = useState([]);
+    const [showAdditionalButtons, setShowAdditionalButtons] = useState(false);
+    const [showBusGeoJSON, setShowBusGeoJSON] = useState(false);
+    const [busGeoJSONData, setBusGeoJSONData] = useState(null);
+    const [busLayer, setBusLayer] = useState(null);
+
+    const [busIconColor, setBusIconColor] = useState('white');
+    const [showCycleGeoJSON, setShowCycleGeoJSON] = useState(false);
+    const [CycleGeoJSONData, setCycleGeoJSONData] = useState(null);
+    const [CycleLayer, setCycleLayer] = useState(null);
+
+    const [CycleIconColor, setCycleIconColor] = useState('white');
 
 
 
@@ -55,7 +69,6 @@ function MetricsPage({darkMode,zoneData,scores,updateScores}) {
         if (responseAverage.ok) {
           const dataAverage = await responseAverage.json();
           setAverageMetrics(dataAverage);
-          console.log(dataAverage);
   
           
         
@@ -433,7 +446,7 @@ const zone = IdType;
     const [lat, lng] = property.geom; 
    
     for (const subSection of subSections.features) {
-        const [minLng, minLat, maxLng, maxLat] = subSection.bbox; // Obtém os limites do bbox da subseção
+        const [minLng, minLat, maxLng, maxLat] = subSection.bbox;
        
        
         if (lng >= minLng && lng <= maxLng && lat >= minLat && lat <= maxLat) {
@@ -444,7 +457,7 @@ const zone = IdType;
     return null; 
 }
 
-// marker.bindPopup(`<b>${item.property.nome}</b>`).openPopup();
+
 const addMarkers = (sortedProperties) => {
   const revertBackground = () => {
     const allImovelElements = document.querySelectorAll('.imovel');
@@ -453,7 +466,7 @@ const addMarkers = (sortedProperties) => {
     });
   };
   
-  // Configurar um intervalo para chamar a função revertBackground a cada segundo (1000 milissegundos)
+
   
 
   sortedProperties.forEach(item => {
@@ -508,8 +521,6 @@ useEffect(() => {
         return response.json();
     })
     .then(data => {
-      console.log(scores);
-      console.log(geojsonData);
         if (geojsonData && geojsonData.bbox && geojsonData.bbox.length === 4) {
             const [minLng, minLat, maxLng, maxLat] = geojsonData.bbox;
             const filteredProperties = data.properties.filter(property => {
@@ -526,7 +537,7 @@ useEffect(() => {
                 
                
                 const score =scores[sectionId] || 0;
-                console.log(sectionId);
+                
 
                
                 return { property, score };
@@ -534,7 +545,7 @@ useEffect(() => {
 
             const sortedProperties = propertiesWithScores.sort((a, b) => b.score - a.score);
 
-            console.log(sortedProperties);
+            
 
             setProperties(sortedProperties.map(item => item.property)); 
             fetchRooms(sortedProperties.map(item => item.property)); 
@@ -559,6 +570,119 @@ useEffect(() => {
 }, [geojsonData,scores]);
 
 
+
+
+
+const busGeoJSONUrl = 'http://mednat.ieeta.pt:9009/geoserver/wish/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=wish%3Aaveiro_bus&srsname=EPSG:4326&outputFormat=application%2Fjson';
+const cycleGeoJSONUrl = 'http://mednat.ieeta.pt:9009/geoserver/wish/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=wish%3Acycleway&srsname=EPSG:4326&outputFormat=application%2Fjson';
+
+const loadBusGeoJSON = async () => {
+  try {
+    const response = await fetch(busGeoJSONUrl);
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching bus GeoJSON:', error);
+    return null;
+  }
+};
+
+
+useEffect(() => {
+  const addBusGeoJSONToMap = async () => {
+    if (!mapRef.current) return;
+
+    if (showBusGeoJSON) {
+      const data = await loadBusGeoJSON();
+      if (data) {
+        const newBusLayer = L.geoJSON(data, {
+          style: { color: 'red' },
+        });
+        newBusLayer.addTo(mapRef.current);
+        setBusLayer(newBusLayer); 
+        setBusIconColor('red');
+        setBusGeoJSONData(data);
+      }
+    } else {
+      if (busGeoJSONData && busLayer) {
+        mapRef.current.removeLayer(busLayer); 
+        setBusLayer(null); 
+        setBusGeoJSONData(null);
+        setBusIconColor('white');
+      }
+    }
+  };
+
+  addBusGeoJSONToMap();
+
+  return () => {
+    if (busLayer && mapRef.current) {
+      mapRef.current.removeLayer(busLayer); 
+      setBusLayer(null); 
+    }
+  };
+}, [showBusGeoJSON]);
+
+const handleBusButtonClick = async () => {
+  setShowBusGeoJSON(!showBusGeoJSON); 
+};
+
+const loadCycleGeoJSON = async () => {
+  try {
+    const response = await fetch(cycleGeoJSONUrl);
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching cycleway GeoJSON:', error);
+    return null;
+  }
+};
+
+
+useEffect(() => {
+  const addCycleGeoJSONToMap = async () => {
+    if (!mapRef.current) return;
+
+    if (showCycleGeoJSON) {
+      const data = await loadCycleGeoJSON();
+      if (data) {
+        const newCycleLayer = L.geoJSON(data, {
+          style: { color: '#4682B4' },
+        });
+        newCycleLayer.addTo(mapRef.current);
+        setCycleLayer(newCycleLayer); 
+        setCycleIconColor('#4682B4');
+        setCycleGeoJSONData(data);
+      }
+    } else {
+      if (CycleGeoJSONData && CycleLayer) {
+        mapRef.current.removeLayer(CycleLayer); 
+        setCycleLayer(null); 
+        setCycleGeoJSONData(null);
+        setCycleIconColor('white');
+      }
+    }
+  };
+
+  addCycleGeoJSONToMap();
+
+  return () => {
+    if (CycleLayer && mapRef.current) {
+      mapRef.current.removeLayer(CycleLayer); 
+      setCycleLayer(null); 
+    }
+  };
+}, [showCycleGeoJSON]);
+
+const handleCycleButtonClick = async () => {
+  setShowCycleGeoJSON(!showCycleGeoJSON); 
+};
+
+
     return (
         <div className="metrics-page-container">
              <Properties  darkMode={darkMode} isOpen={isPropertiesOpen} toggleSidebar={toggleProperties} properties={properties} />
@@ -581,50 +705,75 @@ useEffect(() => {
                         <Button variant="contained" style={{ position: 'absolute', top: '10px', right: zoomButtonPosition,zIndex: "400",  backgroundColor: "var(--background-color)",color:"var(--blacktowhite)"}} onClick={goBackPoligon}>
                           {t('zoomOut')}
                         </Button>
-                        <Button
-    variant="contained"
-    style={{
-      position: 'absolute',
-      top: '60px',
-      right: zoomButtonPosition,
-      zIndex: "400",
-      backgroundColor: "var(--background-color)",
-      color: "var(--blacktowhite)"
-    }}
-    
-  >
-    Button 2
-  </Button>
-  
-  <Button
-    variant="contained"
-    style={{
-      position: 'absolute',
-      top: '110px',
-      right: zoomButtonPosition,
-      zIndex: "400",
-      backgroundColor: "var(--background-color)",
-      color: "var(--blacktowhite)"
-    }}
-  
-  >
-    Button 3
-  </Button>
-  
-  <Button
-    variant="contained"
-    style={{
-      position: 'absolute',
-      top: '160px',
-      right: zoomButtonPosition,
-      zIndex: "400",
-      backgroundColor: "var(--background-color)",
-      color: "var(--blacktowhite)"
-    }}
 
-  >
-    Button 4
-  </Button>
+                        <Button
+                        variant="contained"
+                        style={{
+                          position: 'absolute',
+                          top: '60px',
+                          right: zoomButtonPosition,
+                          zIndex: "400",
+                          marginRight:"15px",
+                          backgroundColor: "var(--background-color)",
+                          color: "var(--blacktowhite)"
+                        }}
+                        onClick={() => setShowAdditionalButtons(!showAdditionalButtons)}
+                      >
+                        <FontAwesomeIcon icon={faAngleDown} />
+                      </Button>
+                      
+                     
+                      {showAdditionalButtons && (
+                        <>
+                          <Button
+                            variant="contained"
+                            style={{
+                              position: 'absolute',
+                              top: '110px',
+                              right: zoomButtonPosition,
+                              zIndex: "400",
+                              marginRight:"15px",
+                              backgroundColor: "var(--background-color)",
+                              color: "var(--blacktowhite)"
+                            }}
+                            onClick={handleBusButtonClick}
+                          >
+                           <FontAwesomeIcon icon={faBus} style={{ color: busIconColor, fontSize:"20px" }}/>
+                          </Button>
+                          
+                          <Button
+                            variant="contained"
+                            style={{
+                              position: 'absolute',
+                              top: '160px',
+                              right: zoomButtonPosition,
+                              zIndex: "400",
+                              marginRight:"15px",
+                              backgroundColor: "var(--background-color)",
+                              color: "var(--blacktowhite)"
+                            }}
+                            onClick={handleCycleButtonClick}
+                          >
+                            <FontAwesomeIcon icon={faBicycle} style={{ color: CycleIconColor, fontSize:"20px" }} />
+                          </Button>
+                          
+                          <Button
+                            variant="contained"
+                            style={{
+                              position: 'absolute',
+                              top: '210px',
+                              right: zoomButtonPosition,
+                              zIndex: "400",
+                              marginRight:"15px",
+                              backgroundColor: "var(--background-color)",
+                              color: "var(--blacktowhite)"
+                            }}
+                            
+                          >
+                            <FontAwesomeIcon icon={faWalking} />
+                          </Button>
+                        </>
+                      )}
                         <Button variant="contained" style={{ position: 'absolute', bottom: '120px', right: '20px', zIndex: "1000", backgroundColor: "var(--background-color)", color: "var(--blacktowhite)", borderRadius:"20rem" }}  onClick={handleModalButtonClick}>
                           ?
                           </Button>

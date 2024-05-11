@@ -18,12 +18,20 @@
   --navbar-border-light:hsl(179, 54%, 31%);
   --navbar-border-dark:#0dddda;
 
+  --background-color-imovel-dark:#2c2c2c;
+  --background-color-imovel-light:rgb(223, 223, 223);
+
+  --background-color-imovel-click-dark:#4e4e4e;
+  --background-color-imovel-click-light:rgb(172, 169, 169);
+
 }
 
 
 
 .light-mode{
   --background-color2: var(--background-color-light);
+  --background-color3: var(--background-color-imovel-light);
+  --background-color4: var(--background-color-imovel-click-light);
   --blacktowhite:var(--blacktowhite-light) ;
   --text-shadow: var(--text-shadow-light);
   --hometitle:var(--hometitle-light);
@@ -34,6 +42,8 @@
 
 .dark-mode{
   --background-color2: var(--background-color-dark);
+  --background-color3: var(--background-color-imovel-dark);
+  --background-color4: var(--background-color-imovel-click-dark);
   --blacktowhite:var(--blacktowhite-dark) ;
   --text-shadow: var(--text-shadow-dark);
   --hometitle:var(--hometitle-dark);

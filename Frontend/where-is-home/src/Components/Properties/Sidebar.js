@@ -34,10 +34,10 @@ function Sidebar({darkMode, isOpen, toggleSidebar, properties }) {
             <div className='sidebar-content'>
                 {properties.map((box,index) => (
 
-                    <div className="box-container" key={index}> 
+                    <div className="box-container" key={index} id={`property-${box.id}`}> 
                         <div className="first-text">{index+1}º</div>
                         <div className="box">
-                            <div className="imovel">
+                            <div className="imovel" id={`imovel-${box.id}`}>
                                 <div className="overlap-group">
                                     <div className="quantidades">
                                         <div className="container-elem-quanti">

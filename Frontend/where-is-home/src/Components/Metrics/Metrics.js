@@ -252,8 +252,8 @@ function Metrics({ darkMode, isOpen, toggleSidebar, zone, zoneData, slidersValue
                 <div className="metrics-container">
                 {selectedGenre && (
                     sliderGroupings[tabs[activeTab]].map((group, groupIndex) => (
-                            <div key={groupIndex}>
-                                <h2 style={{marginLeft:"4rem"}}>{group.name}</h2>
+                            <div key={groupIndex} className='metrics-pref'>
+                                <h2>{group.name}</h2>
                                 {group.ids.map((id) => {
                                     const sliderConfig = sliderConfigs.find((config) => config.Id === id);
                                     return (
@@ -291,7 +291,7 @@ function Metrics({ darkMode, isOpen, toggleSidebar, zone, zoneData, slidersValue
                         </button>
                     ) }
                 </div>
-                <div style={{width:"100%",padding:"2rem 0",height: '2rem',display: "flex", flexDirection: "row",alignItems:"center",justifyContent:"center"}}>
+                <div style={{width:"100%",height: '2rem',display: "flex", flexDirection: "row",alignItems:"center",justifyContent:"center"}}>
                             <div style={{display:"flex", flexDirection:"row"}}>
                                 <div className='average-line2'></div>
                                 <p style={{marginLeft:"1rem",fontSize:"0.8rem"}}>{t('textoaverage')}</p>

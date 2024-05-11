@@ -15,12 +15,24 @@ function OwnerPage({ darkMode }) {
     const fetchProperties = (tab) => {
         const endpointMap = {
             accepted: 'http://mednat.ieeta.pt:9009/properties/aproved/',
-            onHold: 'http://mednat.ieeta.pt:9009/properties/denied_on_hold/',
-            denied: 'http://mednat.ieeta.pt:9009/properties/denied_on_hold/'
+            onHold: 'http://mednat.ieeta.pt:9009/owner/denied_on_hold/properties/',
+            denied: 'http://mednat.ieeta.pt:9009/owner/denied_on_hold/properties/'
         };
         const endpoint = endpointMap[tab];
     
-        fetch(endpoint)
+        const token = localStorage.getItem('token');
+    
+        const headers = {
+            'Content-Type': 'application/json'
+        };
+    
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+    
+        fetch(endpoint, {
+            headers: headers 
+        })
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Failed to fetch properties');
@@ -28,14 +40,15 @@ function OwnerPage({ darkMode }) {
                 return response.json();
             })
             .then(data => {
-                // Filter properties based on their state
+                console.log(data);
                 let filteredProperties = data;
-                if (tab === 'on_hold' || tab === 'denied') {
+                if (tab === 'onHold' || tab === 'denied') {
                     filteredProperties = data.filter(property => property.state === tab);
                 }
-                setProperties(filteredProperties);
-                // After fetching properties, fetch corresponding rooms
-                fetchRooms(filteredProperties);
+                
+                const propertiesData = data.properties || data;
+                setProperties(propertiesData);
+                fetchRooms(propertiesData);
             })
             .catch(error => {
                 console.error('Error fetching properties:', error);
@@ -232,7 +245,7 @@ function OwnerPage({ darkMode }) {
                     </div>
                 </div>
                 <div className='o-show-properties'>
-                    {properties.map(property => (
+                    {properties.length > 0 && properties.map(property => (
                         <PropertyDetails key={property.id} property={property} onRoomsClick={handleRoomsClick} />
                     ))}
                 </div>

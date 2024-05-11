@@ -17,13 +17,16 @@ import Box from '@mui/material/Box';
 import WalkIcon from '@mui/icons-material/DirectionsWalk';
 import TransitIcon from '@mui/icons-material/DirectionsTransit';
 import BikeIcon from '@mui/icons-material/DirectionsBike';
+import WalkScoreWidget from './WalkScoreWidget';
 
 
 const ResidenceDetails = ({ darkMode }) => {
   const [slideNumber, setSlideNumber] = useState(0);
   const [open, setOpen] = useState(false);
   const [propertyDetails, setPropertyDetails] = useState(null);
-  //const [yelpData, setYelpData] = useState(null);
+  const [yelpData, setYelpData] = useState(null);
+  const [locationDetails, setLocationDetails] = useState(null);
+  const [walkScoreDetails, setWalkScoreDetails] = useState(null);
   const [showOwnerDetails, setShowOwnerDetails] = useState(false);
   const [expanded, setExpanded] = useState(false);
 
@@ -33,65 +36,151 @@ const ResidenceDetails = ({ darkMode }) => {
     setExpanded(isExpanded ? panel : false);
   };
 
-  
-//   <script type='text/javascript'>
-// var ws_wsid = 'g73c0420989bc43f79d00fa60cd4df386';
-// var ws_address = 'C. Madrid, 126, 28903 Getafe, Madrid, Espanha';
-// var ws_format = 'wide';
-// var ws_width = '690';
-// var ws_height = '525';
-// </script><style type='text/css'>#ws-walkscore-tile{position:relative;text-align:left}#ws-walkscore-tile *{float:none;}</style><div id='ws-walkscore-tile'></div><script type='text/javascript' src='http://www.walkscore.com/tile/show-walkscore-tile.php'></script>
 
-// curl "https://api.mapbox.com/directions/v5/mapbox/cycling/-122.42,37.78;-77.03,38.91?access_token=pk.eyJ1IjoiY3Jpc3RpYW5vbmljb2xhdSIsImEiOiJjbHZmZnFoaXUwN2R4MmlxbTdsdGlreDEyIn0.-vhnpIfDMVyW04ekPBhQlg"
-// cycling / driving / walking
+  //   <script type='text/javascript'>
+  // var ws_wsid = 'g73c0420989bc43f79d00fa60cd4df386';
+  // var ws_address = 'C. Madrid, 126, 28903 Getafe, Madrid, Espanha';
+  // var ws_format = 'wide';
+  // var ws_width = '690';
+  // var ws_height = '525';
+  // </script><style type='text/css'>#ws-walkscore-tile{position:relative;text-align:left}#ws-walkscore-tile *{float:none;}</style><div id='ws-walkscore-tile'></div><script type='text/javascript' src='http://www.walkscore.com/tile/show-walkscore-tile.php'></script>
 
-// curl "https://api.mapbox.com/geocoding/v5/mapbox.places/-8.820237304110279,41.70055911994133.json?access_token=pk.eyJ1IjoiY3Jpc3RpYW5vbmljb2xhdSIsImEiOiJjbHZmZnFoaXUwN2R4MmlxbTdsdGlreDEyIn0.-vhnpIfDMVyW04ekPBhQlg"
-// primeiro longitude e depois latitude (-8...., 41....)
+  // curl "https://api.mapbox.com/directions/v5/mapbox/cycling/-122.42,37.78;-77.03,38.91?access_token=pk.eyJ1IjoiY3Jpc3RpYW5vbmljb2xhdSIsImEiOiJjbHZmZnFoaXUwN2R4MmlxbTdsdGlreDEyIn0.-vhnpIfDMVyW04ekPBhQlg"
+  // cycling / driving / walking
 
-   
+  // curl "https://api.mapbox.com/geocoding/v5/mapbox.places/-8.820237304110279,41.70055911994133.json?access_token=pk.eyJ1IjoiY3Jpc3RpYW5vbmljb2xhdSIsImEiOiJjbHZmZnFoaXUwN2R4MmlxbTdsdGlreDEyIn0.-vhnpIfDMVyW04ekPBhQlg"
+  // primeiro longitude e depois latitude (-8...., 41....)
 
-   useEffect(() => {
-     const fetchData = async () => {
-       const imovelId = "20";
-       const url = `http://mednat.ieeta.pt:9009/properties/${imovelId}/`;
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const imovelId = "20";
+      const url = `http://mednat.ieeta.pt:9009/properties/${imovelId}/`;
       try {
-         const response = await fetch(url, {
-           method: 'GET',
-           headers: {
-             'Content-Type': 'application/json'
-           }
-         });
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
         if (!response.ok) {
-           throw new Error('Network response was not ok');
-         }
+          throw new Error('Network response was not ok');
+        }
         const data = await response.json();
-         console.log(data);
-         setPropertyDetails(data);
-         //getYelpData(data.property.geom[0], data.property.geom[1]);
-       } catch (error) {
-         console.error('There was a problem with your fetch operation:', error);
-       }
-     };
+        console.log(data);
+        setPropertyDetails(data);
+        getYelpData(data.property.geom[0], data.property.geom[1]);
+        fetchLocationData(data.property.geom[0], data.property.geom[1]);
+      } catch (error) {
+        console.error('There was a problem with your fetch operation:', error);
+      }
+    };
     fetchData();
-   }, []);
+  }, []);
 
-  //  const getYelpData = (lat, long) => {
-  //   const options = {
-  //     method: 'GET',
-  //     headers: {
-  //       accept: 'application/json',
-  //       Authorization: 'Bearer rmASuj9Y6LDlFu8i9kVBDlQNlKs7Zadb4l2QJXAhht756P8vDXOWK5smuV55p5vzeprQnizMWffMYcQnHMGdRQZ3oBGZPVMQwaM2icUCScsROp84sLTc47cUMG4qZnYx'
-  //     }
-  //   };
-  
-  //   fetch(`https://api.yelp.com/v3/businesses/search?latitude=${lat}&longitude=${long}&radius=40000&sort_by=best_match&limit=20`, options)
-  //     .then(response => response.json())
-  //     .then(data => {
-  //       console.log(data);
-  //       setYelpData(data); 
-  //     })
-  //     .catch(err => console.error(err));
-  // };
+  const getYelpData = (lat, long) => {
+    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+    const targetUrl = `https://api.yelp.com/v3/businesses/search?latitude=${lat}&longitude=${long}&radius=40000&sort_by=best_match&limit=50`;
+    const options = {
+      method: 'GET',
+      headers: {
+        accept: 'application/json',
+        Authorization: 'Bearer rmASuj9Y6LDlFu8i9kVBDlQNlKs7Zadb4l2QJXAhht756P8vDXOWK5smuV55p5vzeprQnizMWffMYcQnHMGdRQZ3oBGZPVMQwaM2icUCScsROp84sLTc47cUMG4qZnYx'
+      }
+    };
+
+    fetch(proxyUrl + targetUrl, options)
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        setYelpData(data); // Store Yelp data for other uses if needed
+        const averages = calculateCategoryAverages(data);
+        console.log("Category Averages: ", averages);
+        // Optionally set this data to state as well, depending on your application's architecture
+      })
+      .catch(err => console.error(err));
+  };
+
+  // Function to calculate category averages
+  function calculateCategoryAverages(data) {
+    const categorySums = {};
+    const categoryCounts = {};
+
+    data.businesses.forEach(business => {
+      business.categories.forEach(category => {
+        if (categorySums[category.title]) {
+          categorySums[category.title] += business.rating;
+          categoryCounts[category.title] += 1;
+        } else {
+          categorySums[category.title] = business.rating;
+          categoryCounts[category.title] = 1;
+        }
+      });
+    });
+
+    const categoryAverages = {};
+    for (const category in categorySums) {
+      categoryAverages[category] = categorySums[category] / categoryCounts[category];
+    }
+
+    return categoryAverages;
+  }
+
+  const fetchLocationData = async (latitude, longitude) => {
+    const accessToken = "pk.eyJ1IjoiY3Jpc3RpYW5vbmljb2xhdSIsImEiOiJjbHZmZnFoaXUwN2R4MmlxbTdsdGlreDEyIn0.-vhnpIfDMVyW04ekPBhQlg";
+    const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?access_token=${accessToken}`;
+
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error('Failed to fetch location data');
+      }
+      const locationData = await response.json();
+      const features = locationData.features;
+
+      // Assuming the specific structure of your data doesn't change:
+      const address = features.find(feature => feature.place_type.includes('address'))?.text || 'No address available';
+      const region = features.find(feature => feature.place_type.includes('region'))?.text || 'No region available';
+      const country = features.find(feature => feature.place_type.includes('country'))?.text || 'No country available';
+
+      // Combine them into a single string
+      const combinedLocationDetails = `${address}, ${region}, ${country}`;
+      console.log("Combined Location Details:", combinedLocationDetails); // Log the combined location details to the console
+      setLocationDetails(combinedLocationDetails); // Store or handle the combined location details as needed
+      fetchWalkScore(latitude, longitude, combinedLocationDetails);
+    } catch (error) {
+      console.error('Error fetching location data:', error);
+    }
+  };
+
+  const fetchWalkScore = async (latitude, longitude, address) => {
+    const wsApiKey = 'g73c0420989bc43f79d00fa60cd4df386'; // Your actual Walk Score API key
+    const formattedAddress = encodeURIComponent(address);
+    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+    const targetUrl = `https://api.walkscore.com/score?format=json&address=${formattedAddress}&lat=${latitude}&lon=${longitude}&transit=1&bike=1&wsapikey=${wsApiKey}`;
+    const url = proxyUrl + targetUrl;
+
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error('Failed to fetch Walk Score data');
+      }
+      const walkScoreData = await response.json();
+      console.log("Walk Score Data:", walkScoreData);
+      setWalkScoreDetails({
+        ...walkScoreData,
+        address: address // Store the actual address for use in the widget
+      });
+    } catch (error) {
+      console.error('Error fetching Walk Score data:', error);
+    }
+  };
+
+
+
+
+
 
   const useAnimatedScore = (isVisible, score, duration = 800) => {
     const [value, setValue] = useState(0);
@@ -180,7 +269,7 @@ const ResidenceDetails = ({ darkMode }) => {
     if (!showOwnerDetails) {
       setTimeout(() => {
         document.querySelector('.ownerDetails').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      }, 300); 
+      }, 300);
     }
   };
 
@@ -328,6 +417,12 @@ const ResidenceDetails = ({ darkMode }) => {
 
 
             </Accordion>
+            {walkScoreDetails && (
+              <WalkScoreWidget
+                apiKey="g73c0420989bc43f79d00fa60cd4df386"
+                address={walkScoreDetails?.address}
+              />
+            )}
             <div className="residenceDetailsTexts">
               <p className="residenceDesc">
                 {propertyDetails.property.descricao}

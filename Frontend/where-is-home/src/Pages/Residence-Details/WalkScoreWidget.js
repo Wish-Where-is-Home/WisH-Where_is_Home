@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-const WalkScoreWidget = ({ apiKey, address, width = '690', height = '525', format = 'wide' }) => {
+const WalkScoreWidget = ({ apiKey, address, width = '300', height = '421', format = 'wide' }) => {
   useEffect(() => {
     // Inject the required styles
     const style = document.createElement('style');

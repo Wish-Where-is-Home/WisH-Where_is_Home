@@ -69,47 +69,35 @@
   margin-top: 20px;
 }
 
-/* Accordion base styling */
-.accordion {
-  background-color: #333 !important;
-  /* Adjust for dark mode as needed */
-  box-shadow: none !important;
-  border-radius: 5px;
-
-
-}
-
-.light-mode .accordion {
-  background-color: #f0f0f0 !important;
-}
-
-.accordionSummary {
-  background-color: #f0f0f0 !important;
-  border: 1px solid #f0f0f0 !important;
-  border-radius: 10px !important;
-}
-
-.light-mode .accordionSummary {
-  background-color: rgba(202, 240, 241, 0.47) !important;
-  border: 1px solid #0dddda !important;
+/* Base styling for the walk details container */
+.walkDetails {
+  background-color: #333; /* Dark background by default */
+  padding: 16px;
   border-radius: 10px;
+  margin-top: 20px; /* Adjust spacing as needed */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.accordionSummary .MuiAccordionSummary-expandIconWrapper.Mui-expanded {
-  transform: rotate(180deg) !important;
+.light-mode .walkDetails {
+  background-color: #f0f0f0; /* Light background for light mode */
 }
 
-.accordionSummaryContent {
-  margin-left: 8px !important;
+/* Adjust text colors and other styles for dark/light mode */
+.residenceDetails.dark-mode .walkDetails Typography,
+.residenceDetails.dark-mode .walkDetails .MuiTypography-caption,
+.residenceDetails.dark-mode .walkDetails .MuiTypography-subtitle1 {
+  color: white; /* Ensuring good readability in dark mode */
 }
 
-.accordionDetails {
-  background-color: #f0f0f0 !important;
-  padding: 16px !important;
-  border-radius: 10px !important;
+.residenceDetails.light-mode .walkDetails Typography,
+.residenceDetails.light-mode .walkDetails .MuiTypography-caption,
+.residenceDetails.light-mode .walkDetails .MuiTypography-subtitle1 {
+  color: black; /* Suitable for light backgrounds */
 }
 
-/* Circular progress bar styles */
+/* Circular progress bar customization for theme compatibility */
 .circularProgressContainer {
   position: relative;
 }
@@ -120,7 +108,20 @@
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: 0.5rem;
-  color: black;
+  color: inherit; /* Inherits from parent for automatic theme adaptation */
+}
+
+/* Additional styles for room list and details to handle dark/light modes */
+.roomListItem.unavailable {
+  opacity: 0.5; /* Making unavailable rooms less prominent */
+}
+
+.light-mode .roomDetail, .light-mode .roomPrice {
+  color: #555; /* Darker text in light mode for better contrast */
+}
+
+.dark-mode .roomDetail, .dark-mode .roomPrice {
+  color: #ddd; /* Lighter text in dark mode for better visibility */
 }
 
 

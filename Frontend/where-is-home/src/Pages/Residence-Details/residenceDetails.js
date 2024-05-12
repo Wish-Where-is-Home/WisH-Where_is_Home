@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './residenceDetails.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -18,6 +18,7 @@ import WalkIcon from '@mui/icons-material/DirectionsWalk';
 import TransitIcon from '@mui/icons-material/DirectionsTransit';
 import BikeIcon from '@mui/icons-material/DirectionsBike';
 import WalkScoreWidget from './WalkScoreWidget';
+import TravelTimeCalculator from './TravelTimeCalculator';
 
 
 const ResidenceDetails = ({ darkMode }) => {
@@ -155,7 +156,7 @@ const ResidenceDetails = ({ darkMode }) => {
   };
 
   const fetchWalkScore = async (latitude, longitude, address) => {
-    const wsApiKey = 'g73c0420989bc43f79d00fa60cd4df386'; // Your actual Walk Score API key
+    const wsApiKey = 'g73c0420989bc43f79d00fa60cd4df387';
     const formattedAddress = encodeURIComponent(address);
     const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
     const targetUrl = `https://api.walkscore.com/score?format=json&address=${formattedAddress}&lat=${latitude}&lon=${longitude}&transit=1&bike=1&wsapikey=${wsApiKey}`;
@@ -168,10 +169,7 @@ const ResidenceDetails = ({ darkMode }) => {
       }
       const walkScoreData = await response.json();
       console.log("Walk Score Data:", walkScoreData);
-      setWalkScoreDetails({
-        ...walkScoreData,
-        address: address // Store the actual address for use in the widget
-      });
+      setWalkScoreDetails(walkScoreData);
     } catch (error) {
       console.error('Error fetching Walk Score data:', error);
     }
@@ -182,12 +180,12 @@ const ResidenceDetails = ({ darkMode }) => {
 
 
 
-  const useAnimatedScore = (isVisible, score, duration = 800) => {
+  const useAnimatedScore = (score, duration = 800) => {
     const [value, setValue] = useState(0);
+    const requestRef = useRef();  // holds the reference to the animation frame
 
     useEffect(() => {
       let start;
-      let frame;
 
       const step = (timestamp) => {
         if (!start) start = timestamp;
@@ -195,20 +193,16 @@ const ResidenceDetails = ({ darkMode }) => {
         const currentValue = Math.min(score * (progress / duration), score);
         setValue(currentValue);
         if (progress < duration) {
-          frame = requestAnimationFrame(step);
+          requestRef.current = requestAnimationFrame(step);
         }
       };
 
-      if (isVisible) {
-        frame = requestAnimationFrame(step);
-      } else {
-        setValue(0);
-      }
+      requestRef.current = requestAnimationFrame(step);
 
       return () => {
-        cancelAnimationFrame(frame);
+        cancelAnimationFrame(requestRef.current);
       };
-    }, [isVisible, score, duration]);
+    }, [score, duration]);
 
     return value;
   };
@@ -216,9 +210,9 @@ const ResidenceDetails = ({ darkMode }) => {
 
 
 
-  const walkScore = useAnimatedScore(expanded === 'panel1', 74);
-  const transitScore = useAnimatedScore(expanded === 'panel1', 65);
-  const bikeScore = useAnimatedScore(expanded === 'panel1', 90);
+
+
+  const walkScore = useAnimatedScore(walkScoreDetails?.walkscore || 74);
 
 
   const photos = [{
@@ -324,13 +318,39 @@ const ResidenceDetails = ({ darkMode }) => {
             ))}
           </div>
           <div className="residenceDetails2">
-            
-            {walkScoreDetails && (
-              <WalkScoreWidget
+            <div className="walkDetails">
+              {walkScoreDetails && (
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', width: '100%' }}>
+                  {/* Walk Score */}
+                  <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '0 2px' }}>
+                    <WalkIcon sx={{ fontSize: '2rem' }} />
+                    <Typography variant="caption">Walk Score</Typography>
+                    <Box position="relative" display="inline-flex">
+                      <CircularProgress variant="determinate" value={walkScore} size={80} thickness={4} />
+                      <Box
+                        top={0}
+                        left={0}
+                        bottom={0}
+                        right={0}
+                        position="absolute"
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center"
+                      >
+                        <Typography variant="subtitle1" component="div" color="textPrimary">
+                          {Math.round(walkScore)}
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </Box>
+                </Box>
+              )}
+              <TravelTimeCalculator propertyLat={propertyDetails.property.geom[0]} propertyLng={propertyDetails.property.geom[1]} />
+              {/* <WalkScoreWidget
                 apiKey="g73c0420989bc43f79d00fa60cd4df386"
-                address={walkScoreDetails?.address}
-              />
-            )}
+                address={propertyDetails.property.morada}
+              /> */}
+            </div>
             <div className="residenceDetailsTexts">
               <p className="residenceDesc">
                 {propertyDetails.property.descricao}

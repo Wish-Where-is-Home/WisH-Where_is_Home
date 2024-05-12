@@ -4,8 +4,10 @@ const WalkScoreWidget = ({ apiKey, address, width = '300', height = '421', forma
   useEffect(() => {
     // Inject the required styles
     const style = document.createElement('style');
-    style.textContent = `#ws-walkscore-tile { position: relative; text-align: left; }
-                         #ws-walkscore-tile * { float: none; }`;
+    style.textContent = `
+    #ws-walkscore-tile { position: relative; text-align: left; background-color: #fff; color: #333; }
+    #ws-walkscore-tile * { float: none; }
+  `;
     document.head.appendChild(style);
 
     // Define the necessary variables for the Walk Score script

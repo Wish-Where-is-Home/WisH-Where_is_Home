@@ -10,8 +10,8 @@ function OwnerPage({ darkMode }) {
     const [selectedPhotos, setSelectedPhotos] = useState([]);
     const [showRoomForm, setShowRoomForm] = useState(false); 
     const [selectedRoomPhotos, setSelectedRoomPhotos] = useState([]);
-    const [numRooms, setNumRooms] = useState(1); // Number of rooms to add
-    const [currentRoom, setCurrentRoom] = useState(1); // Current room being filled out
+    const [numRooms, setNumRooms] = useState(1); 
+    const [propertyFormValid, setPropertyFormValid] = useState(false); 
 
 
     useEffect(() => { 
@@ -136,20 +136,26 @@ function OwnerPage({ darkMode }) {
         }
     
         const propertyName = formData.get('propertyName'); 
-        const area = parseFloat(formData.get('area')); 
-        const pricePerMonth = parseFloat(formData.get('pricePerMonth')); 
-        const hasPrivateBathroom = formData.get('hasPrivateBathroom') === 'true'; 
-        const isAvailable = formData.get('isAvailable') === 'true'; 
-        const typology = formData.get('typology'); 
-        const includedExpenses = formData.get('includedExpenses'); 
+        const area = parseFloat(formData.get('propertyArea')); 
+        const pricePerMonth = parseFloat(formData.get('propertyPrice')); 
+        const hasPrivateBathroom = formData.get('propertyPrivateBathroom') === 'true'; 
+        const isAvailable = formData.get('propertyAvailability') === 'true'; 
+        const typology = formData.get('propertyTypology'); 
+        const includedExpenses = formData.get('propertyIncludedExpenses'); 
         const submittedNumRooms = formData.get('numRooms');
         if (submittedNumRooms) {
             setNumRooms(parseInt(submittedNumRooms)); // Convert to integer
         }
 
-        if (!propertyName || isNaN(area) || isNaN(pricePerMonth)) {
+        // Check if all required fields are filled
+        const isValid = !!(propertyName && !isNaN(area) && !isNaN(pricePerMonth) && typology && includedExpenses);
+        setPropertyFormValid(isValid);
+        
+        if (!isValid) {
             console.error('Invalid form data');
             return;
+        } else{
+            handleAddRoomsClick();
         }
     };
 
@@ -302,7 +308,7 @@ function OwnerPage({ darkMode }) {
                                 </div>
                             </div>
                                                         
-                            <button className="submitProperty" type="submit" onClick={handleAddRoomsClick}>Add Rooms</button>
+                            <button className="submitProperty" type="submit" >Add Rooms</button>
                         </form>
 
                     </div>

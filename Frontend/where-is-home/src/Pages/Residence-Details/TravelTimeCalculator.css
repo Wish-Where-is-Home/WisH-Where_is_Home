@@ -1,0 +1,77 @@
+.travel-time-calculator {
+    font-family: Arial, sans-serif;
+    width: 100%;
+    max-width: 363px;
+    background-color: white;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-radius: 5px;
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column; /* Ensures all content is stacked vertically */
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column; /* Stacks the input and icons vertically */
+    align-items: stretch; /* Stretches the child elements to full width */
+}
+
+.destination-input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.mode-icons {
+    display: flex;
+    justify-content: center; /* Align icons at the center */
+    margin-top: 10px;
+}
+
+.mode-icon {
+    width: 30px;
+    height: 30px;
+    background-color: #f0f0f0;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 15px; /* Provide equal spacing on both sides */
+}
+
+.mode-icon.active {
+    background-color: #0071c2;
+    color: white;
+}
+
+
+.calculate-button {
+    width: 100%;
+    background-color: #0071c2;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.results {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.travel-time {
+    font-size: 18px;
+    color: #0071c2;
+    font-weight: bold;
+}
+
+.distance-label {
+    font-size: 14px;
+    color: #666;
+}

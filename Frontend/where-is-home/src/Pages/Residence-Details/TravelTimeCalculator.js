@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCar, faWalking, faBicycle } from '@fortawesome/free-solid-svg-icons';
+import './TravelTimeCalculator.css';
 
 const TravelTimeCalculator = ({ propertyLat, propertyLng }) => {
     const [destinationAddress, setDestinationAddress] = useState('');
@@ -45,23 +48,32 @@ const TravelTimeCalculator = ({ propertyLat, propertyLng }) => {
     };
 
     return (
-        <div>
-            <input
-                type="text"
-                value={destinationAddress}
-                onChange={(e) => setDestinationAddress(e.target.value)}
-                placeholder="Enter destination address"
-            />
-            <select onChange={(e) => setTravelMode(e.target.value)}>
-                <option value="driving">Driving</option>
-                <option value="walking">Walking</option>
-                <option value="cycling">Cycling</option>
-            </select>
-            <button onClick={fetchTravelDetails}>Calculate Travel Time</button>
+        <div className="travel-time-calculator">
+            <div className="input-group">
+                <input
+                    type="text"
+                    value={destinationAddress}
+                    onChange={(e) => setDestinationAddress(e.target.value)}
+                    placeholder="Enter destination address"
+                    className="destination-input"
+                />
+                <div className="mode-icons">
+                    <button className={`mode-icon ${travelMode === 'driving' ? 'active' : ''}`} onClick={() => setTravelMode('driving')}>
+                        <FontAwesomeIcon icon={faCar} />
+                    </button>
+                    <button className={`mode-icon ${travelMode === 'walking' ? 'active' : ''}`} onClick={() => setTravelMode('walking')}>
+                        <FontAwesomeIcon icon={faWalking} />
+                    </button>
+                    <button className={`mode-icon ${travelMode === 'cycling' ? 'active' : ''}`} onClick={() => setTravelMode('cycling')}>
+                        <FontAwesomeIcon icon={faBicycle} />
+                    </button>
+                </div>
+            </div>
+            <button className="calculate-button" onClick={fetchTravelDetails}>Calculate</button>
             {travelDetails.time && (
-                <div>
-                    <p>Travel Time: {Math.round(travelDetails.time)} minutes</p>
-                    <p>Distance: {travelDetails.distance.toFixed(2)} km</p>
+                <div className="results">
+                    <p className="travel-time">{Math.round(travelDetails.time)} min ({travelDetails.distance.toFixed(1)} km)</p>
+                    <p className="distance-label">Distance to institution</p>
                 </div>
             )}
         </div>

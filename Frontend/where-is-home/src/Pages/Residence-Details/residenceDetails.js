@@ -7,19 +7,10 @@ import {
   faCircleXmark,
   faLocationDot,
 } from "@fortawesome/free-solid-svg-icons";
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import Typography from '@mui/material/Typography';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import CircularProgress from '@mui/material/CircularProgress';
-import Box from '@mui/material/Box';
-import WalkIcon from '@mui/icons-material/DirectionsWalk';
-import TransitIcon from '@mui/icons-material/DirectionsTransit';
-import BikeIcon from '@mui/icons-material/DirectionsBike';
 import WalkScoreWidget from './WalkScoreWidget';
 import TravelTimeCalculator from './TravelTimeCalculator';
-
+import categoryMapping from './categoryMapping';
+import CategoryRatings from './CategoryRatings';
 
 const ResidenceDetails = ({ darkMode }) => {
   const [slideNumber, setSlideNumber] = useState(0);
@@ -29,30 +20,7 @@ const ResidenceDetails = ({ darkMode }) => {
   const [locationDetails, setLocationDetails] = useState(null);
   const [walkScoreDetails, setWalkScoreDetails] = useState(null);
   const [showOwnerDetails, setShowOwnerDetails] = useState(false);
-  const [expanded, setExpanded] = useState(false);
-
-
-
-  const handleChange = (panel) => (event, isExpanded) => {
-    setExpanded(isExpanded ? panel : false);
-  };
-
-
-  //   <script type='text/javascript'>
-  // var ws_wsid = 'g73c0420989bc43f79d00fa60cd4df386';
-  // var ws_address = 'C. Madrid, 126, 28903 Getafe, Madrid, Espanha';
-  // var ws_format = 'wide';
-  // var ws_width = '690';
-  // var ws_height = '525';
-  // </script><style type='text/css'>#ws-walkscore-tile{position:relative;text-align:left}#ws-walkscore-tile *{float:none;}</style><div id='ws-walkscore-tile'></div><script type='text/javascript' src='http://www.walkscore.com/tile/show-walkscore-tile.php'></script>
-
-  // curl "https://api.mapbox.com/directions/v5/mapbox/cycling/-122.42,37.78;-77.03,38.91?access_token=pk.eyJ1IjoiY3Jpc3RpYW5vbmljb2xhdSIsImEiOiJjbHZmZnFoaXUwN2R4MmlxbTdsdGlreDEyIn0.-vhnpIfDMVyW04ekPBhQlg"
-  // cycling / driving / walking
-
-  // curl "https://api.mapbox.com/geocoding/v5/mapbox.places/-8.820237304110279,41.70055911994133.json?access_token=pk.eyJ1IjoiY3Jpc3RpYW5vbmljb2xhdSIsImEiOiJjbHZmZnFoaXUwN2R4MmlxbTdsdGlreDEyIn0.-vhnpIfDMVyW04ekPBhQlg"
-  // primeiro longitude e depois latitude (-8...., 41....)
-
-
+  const [categoryAverages, setCategoryAverages] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
@@ -73,6 +41,7 @@ const ResidenceDetails = ({ darkMode }) => {
         setPropertyDetails(data);
         getYelpData(data.property.geom[0], data.property.geom[1]);
         fetchLocationData(data.property.geom[0], data.property.geom[1]);
+        YelpCategories();
       } catch (error) {
         console.error('There was a problem with your fetch operation:', error);
       }
@@ -80,53 +49,81 @@ const ResidenceDetails = ({ darkMode }) => {
     fetchData();
   }, []);
 
+  const YelpCategories = () => {
+    useEffect(() => {
+      const options = {
+        method: 'GET',
+        headers: {
+          accept: 'application/json',
+          Authorization: 'Bearer rmASuj9Y6LDlFu8i9kVBDlQNlKs7Zadb4l2QJXAhht756P8vDXOWK5smuV55p5vzeprQnizMWffMYcQnHMGdRQZ3oBGZPVMQwaM2icUCScsROp84sLTc47cUMG4qZnYx'
+        }
+      };
+
+      const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+      const targetUrl = 'https://api.yelp.com/v3/categories?locale=pt_PT';
+
+      fetch(proxyUrl + targetUrl, options)
+        .then(response => response.json())
+        .then(response => console.log(response))
+        .catch(err => console.error(err));
+    }, []);
+  };
+
   const getYelpData = (lat, long) => {
     const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
     const targetUrl = `https://api.yelp.com/v3/businesses/search?latitude=${lat}&longitude=${long}&radius=40000&sort_by=best_match&limit=50`;
     const options = {
-      method: 'GET',
-      headers: {
-        accept: 'application/json',
-        Authorization: 'Bearer rmASuj9Y6LDlFu8i9kVBDlQNlKs7Zadb4l2QJXAhht756P8vDXOWK5smuV55p5vzeprQnizMWffMYcQnHMGdRQZ3oBGZPVMQwaM2icUCScsROp84sLTc47cUMG4qZnYx'
-      }
+        method: 'GET',
+        headers: {
+            accept: 'application/json',
+            Authorization: 'Bearer rmASuj9Y6LDlFu8i9kVBDlQNlKs7Zadb4l2QJXAhht756P8vDXOWK5smuV55p5vzeprQnizMWffMYcQnHMGdRQZ3oBGZPVMQwaM2icUCScsROp84sLTc47cUMG4qZnYx'
+        }
     };
 
     fetch(proxyUrl + targetUrl, options)
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-        setYelpData(data); // Store Yelp data for other uses if needed
-        const averages = calculateCategoryAverages(data);
-        console.log("Category Averages: ", averages);
-        // Optionally set this data to state as well, depending on your application's architecture
-      })
-      .catch(err => console.error(err));
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            setYelpData(data); // Store Yelp data for other uses if needed
+            const averages = calculateCategoryAverages(data);
+            console.log("Category Averages: ", averages);
+            setCategoryAverages(averages);
+            // Optionally set this data to state as well, depending on your application's architecture
+        })
+        .catch(err => console.error(err));
   };
 
-  // Function to calculate category averages
   function calculateCategoryAverages(data) {
     const categorySums = {};
     const categoryCounts = {};
+    const categoryReviewCounts = {};
 
     data.businesses.forEach(business => {
-      business.categories.forEach(category => {
-        if (categorySums[category.title]) {
-          categorySums[category.title] += business.rating;
-          categoryCounts[category.title] += 1;
-        } else {
-          categorySums[category.title] = business.rating;
-          categoryCounts[category.title] = 1;
-        }
-      });
+        business.categories.forEach(category => {
+            const broadCategory = categoryMapping[category.alias] || category.alias;
+
+            if (categorySums[broadCategory]) {
+                categorySums[broadCategory] += business.rating;
+                categoryCounts[broadCategory] += 1;
+                categoryReviewCounts[broadCategory] += business.review_count;
+            } else {
+                categorySums[broadCategory] = business.rating;
+                categoryCounts[broadCategory] = 1;
+                categoryReviewCounts[broadCategory] = business.review_count;
+            }
+        });
     });
 
     const categoryAverages = {};
     for (const category in categorySums) {
-      categoryAverages[category] = categorySums[category] / categoryCounts[category];
+        categoryAverages[category] = {
+            averageRating: categorySums[category] / categoryCounts[category],
+            totalReviewCount: categoryReviewCounts[category]
+        };
     }
 
     return categoryAverages;
-  }
+}
 
   const fetchLocationData = async (latitude, longitude) => {
     const accessToken = "pk.eyJ1IjoiY3Jpc3RpYW5vbmljb2xhdSIsImEiOiJjbHZmZnFoaXUwN2R4MmlxbTdsdGlreDEyIn0.-vhnpIfDMVyW04ekPBhQlg";
@@ -174,46 +171,6 @@ const ResidenceDetails = ({ darkMode }) => {
       console.error('Error fetching Walk Score data:', error);
     }
   };
-
-
-
-
-
-
-  const useAnimatedScore = (score, duration = 800) => {
-    const [value, setValue] = useState(0);
-    const requestRef = useRef();  // holds the reference to the animation frame
-
-    useEffect(() => {
-      let start;
-
-      const step = (timestamp) => {
-        if (!start) start = timestamp;
-        const progress = timestamp - start;
-        const currentValue = Math.min(score * (progress / duration), score);
-        setValue(currentValue);
-        if (progress < duration) {
-          requestRef.current = requestAnimationFrame(step);
-        }
-      };
-
-      requestRef.current = requestAnimationFrame(step);
-
-      return () => {
-        cancelAnimationFrame(requestRef.current);
-      };
-    }, [score, duration]);
-
-    return value;
-  };
-
-
-
-
-
-
-  const walkScore = useAnimatedScore(walkScoreDetails?.walkscore || 74);
-
 
   const photos = [{
     src: "https://cf.bstatic.com/xdata/images/hotel/max1280x900/261707778.jpg?k=56ba0babbcbbfeb3d3e911728831dcbc390ed2cb16c51d88159f82bf751d04c6&o=&hp=1",
@@ -267,8 +224,6 @@ const ResidenceDetails = ({ darkMode }) => {
     }
   };
 
-
-
   return (
     <div className={`residenceDetails ${darkMode ? 'dark-mode' : 'light-mode'}`}>
       <div className="residenceContainer">
@@ -319,37 +274,15 @@ const ResidenceDetails = ({ darkMode }) => {
           </div>
           <div className="residenceDetails2">
             <div className="walkDetails">
-              {walkScoreDetails && (
-                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', width: '100%' }}>
-                  {/* Walk Score */}
-                  <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '0 2px' }}>
-                    <WalkIcon sx={{ fontSize: '2rem' }} />
-                    <Typography variant="caption">Walk Score</Typography>
-                    <Box position="relative" display="inline-flex">
-                      <CircularProgress variant="determinate" value={walkScore} size={80} thickness={4} />
-                      <Box
-                        top={0}
-                        left={0}
-                        bottom={0}
-                        right={0}
-                        position="absolute"
-                        display="flex"
-                        alignItems="center"
-                        justifyContent="center"
-                      >
-                        <Typography variant="subtitle1" component="div" color="textPrimary">
-                          {Math.round(walkScore)}
-                        </Typography>
-                      </Box>
-                    </Box>
-                  </Box>
-                </Box>
-              )}
+              
               <TravelTimeCalculator propertyLat={propertyDetails.property.geom[0]} propertyLng={propertyDetails.property.geom[1]} />
-              {/* <WalkScoreWidget
+              <WalkScoreWidget
                 apiKey="g73c0420989bc43f79d00fa60cd4df386"
                 address={propertyDetails.property.morada}
-              /> */}
+                width="300"
+                height="421"
+                backgroundColor="#FFFFFF"
+              />
             </div>
             <div className="residenceDetailsTexts">
               <p className="residenceDesc">
@@ -365,15 +298,17 @@ const ResidenceDetails = ({ darkMode }) => {
                   <li>Despesas {propertyDetails.property.despesas ? "incluídas" : "não incluídas"}</li>
                 </ul>
               </p>
-
+              <div className='ratings'>
+            <CategoryRatings categoryAverages={categoryAverages} />
+            </div>
             </div>
 
+            
 
             <div className="residenceDetailsPrice">
               <h2>Aproveite esta oportunidade!</h2>
               <span>
                 {propertyDetails.property.estacionamento_garagem ? "Estacionamento na garagem disponível." : "Estacionamento não incluído."}
-
               </span>
               <h2>
                 <b>{priceDisplay}</b> por Mês
@@ -408,8 +343,6 @@ const ResidenceDetails = ({ darkMode }) => {
             </div>
           ))}
         </div>
-
-
       </div>
     </div>
   );

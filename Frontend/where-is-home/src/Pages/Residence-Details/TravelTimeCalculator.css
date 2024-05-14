@@ -6,15 +6,15 @@
     padding: 10px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     border-radius: 5px;
-    margin-top: 40px;
+    margin-bottom: 40px;
     display: flex;
-    flex-direction: column; /* Ensures all content is stacked vertically */
+    flex-direction: column; 
 }
 
 .input-group {
     display: flex;
-    flex-direction: column; /* Stacks the input and icons vertically */
-    align-items: stretch; /* Stretches the child elements to full width */
+    flex-direction: column; 
+    align-items: stretch; 
 }
 
 .destination-input {
@@ -26,7 +26,7 @@
 
 .mode-icons {
     display: flex;
-    justify-content: center; /* Align icons at the center */
+    justify-content: center;
     margin-top: 10px;
 }
 
@@ -40,7 +40,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 15px; /* Provide equal spacing on both sides */
+    margin: 0 15px; 
 }
 
 .mode-icon.active {

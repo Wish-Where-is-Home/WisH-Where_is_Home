@@ -31,7 +31,7 @@ function Sidebar({darkMode, isOpen, toggleSidebar, properties }) {
                 {isOpen ? <ChevronRight size={24} /> : <ChevronLeft size={24} />} 
             </div>
             <h1 className='PropText'>{t('Properties')}</h1>
-            <div className='sidebar-content'>
+            <div className='sidebar-content-right'>
                 {properties.map((box,index) => (
 
                     <div className="box-container" key={index} id={`property-${box.id}`}> 

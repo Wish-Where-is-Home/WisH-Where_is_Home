@@ -24,11 +24,12 @@ function OwnerPage({ darkMode }) {
 
     useEffect(() => { 
         fetchProperties(selectedTab);
+        fetchRooms();
     }, [selectedTab]);
 
     const fetchProperties = (tab) => {
         const endpointMap = {
-            accepted: 'http://mednat.ieeta.pt:9009/owner/aproved/properties/',
+            accepted: 'http://mednat.ieeta.pt:9009/owner/approved/properties/',
             on_hold: 'http://mednat.ieeta.pt:9009/owner/denied_on_hold/properties/',
             denied: 'http://mednat.ieeta.pt:9009/owner/denied_on_hold/properties/'
         };
@@ -67,57 +68,39 @@ function OwnerPage({ darkMode }) {
                 console.error('Error fetching properties:', error);
             });
     };
-    
-    
-    const fetchRooms = (properties) => {
-        const propertyIds = properties.map(property => property.id);
+    const [allRooms, setAllRooms] = useState([]);
+    const fetchRooms = () => {
         const token = localStorage.getItem('token');
-        
-        // Fetch rooms for approved properties
-        fetch('http://mednat.ieeta.pt:9009/owner/approved/rooms/', {
-            method: 'POST', 
+    
+        // Fetch all rooms from both approved and denied/on hold properties
+        const fetchApprovedRooms = fetch('http://mednat.ieeta.pt:9009/owner/approved/rooms/', {
+            method: 'GET', 
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({ propertyIds })
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Failed to fetch approved rooms');
             }
-            return response.json();
-        })
-        .then(approvedRooms => {
-            fetch('http://mednat.ieeta.pt:9009/owner/denied_on_hold/rooms/', {
-                method: 'POST', 
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({ propertyIds })
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Failed to fetch denied/on hold rooms');
-                }
-                return response.json();
-            })
-            .then(deniedRooms => {
-                // Combine both sets of rooms
-                const allRooms = [...approvedRooms, ...deniedRooms];
-                setRooms(allRooms);
+        });
+    
+        const fetchDeniedOnHoldRooms = fetch('http://mednat.ieeta.pt:9009/owner/denied_on_hold/rooms/', {
+            method: 'GET', 
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        });
+    
+        Promise.all([fetchApprovedRooms, fetchDeniedOnHoldRooms])
+            .then(responses => Promise.all(responses.map(response => response.json())))
+            .then(data => {
+                // Combine rooms from both endpoints
+                const allRoomsData = [...data[0].rooms, ...data[1].denied_rooms, ...data[1].onHold_rooms];
+                setAllRooms(allRoomsData);
             })
             .catch(error => {
-                console.error('Error fetching denied/on hold rooms:', error);
+                console.error('Error fetching rooms:', error);
             });
-        })
-        .catch(error => {
-            console.error('Error fetching approved rooms:', error);
-        });
     };
     
-
 
     const handleTabClick = (tab) => {
         setSelectedTab(tab);
@@ -198,7 +181,7 @@ function OwnerPage({ darkMode }) {
         }
 
         const propertyData = {
-            id: null, // Assuming the database generates the ID
+            id: null, 
             owner: null,// ownerId, // Use the ID of the currently logged-in user
             nome: propertyName,
             morada: address, 
@@ -221,12 +204,11 @@ function OwnerPage({ darkMode }) {
         };
 
         try {
-            // Send property data to the database
             const response = await fetch('http://mednat.ieeta.pt:9009/owner/create/property/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}` // Assuming you have the token available
+                    'Authorization': `Bearer ${token}` 
                 },
                 body: JSON.stringify(propertyData)
             });
@@ -248,7 +230,6 @@ function OwnerPage({ darkMode }) {
         setSelectedPhotos(selected);
     };
 
-
     /// ADD ROOMS FORM ///
     const handleNumRoomsChange = (event) => {
         setNumRooms(parseInt(event.target.value)); // Parse value as integer and update numRooms
@@ -268,13 +249,11 @@ function OwnerPage({ darkMode }) {
             const disponivel = formData.get(`disponivel${i}`) === 'true';
             const roomPhotos = selectedRoomPhotos[i] || []; // Selected photos for this room
     
-            // Check if room area is valid
             if (isNaN(roomArea) || roomArea <= 0) {
                 console.error(`Invalid room area for Room ${i + 1}`);
                 return;
             }
     
-            // Push room data to the array
             roomDataArray.push({
                 area: roomArea,
                 despesas_incluidas: despesasIncluidas,
@@ -307,12 +286,8 @@ function OwnerPage({ darkMode }) {
                 throw new Error('Failed to create rooms');
             }
 
-            // Handle success
-            // For example, show a success message or redirect to another page
         } catch (error) {
             console.error('Error creating rooms:', error);
-            // Handle error
-            // For example, display an error message to the user
         }
     };
     
@@ -328,8 +303,7 @@ function OwnerPage({ darkMode }) {
         updatedSelectedRoomPhotos[roomIndex] = selected;
         setSelectedRoomPhotos(updatedSelectedRoomPhotos);
     };
-    
-
+      
     
     
 
@@ -361,7 +335,7 @@ function OwnerPage({ darkMode }) {
                 </div>
                 <div className='o-show-properties'>
                     {properties.length > 0 && properties.map(property => (
-                        <PropertyDetails key={property.id} property={property}/>
+                        <PropertyDetails key={property.id} property={property} allRooms={allRooms}/>
                     ))}
                 </div>
             </div>
@@ -382,58 +356,71 @@ function OwnerPage({ darkMode }) {
                         <label htmlFor="propertyName">Name:</label>
                         <input type="text" id="propertyName" name="propertyName" required />
                         
+                        <div>
+                            <label htmlFor="propertyAddress">Address:</label>
+                            <input type="text" id="propertyAddress" name="propertyAddress" required />
+                        </div>
+
                         <div className="input-group">
-                            <div className="input-group1">
+                            <div>
                                 <label htmlFor="propertyArea">Area (m²):</label>
                                 <input type="number" id="propertyArea" name="propertyArea" required />
                             </div>
                                                         
-                            <div className="input-group2">
+                            <div>
                                 <label htmlFor="propertyFloor">Floor:</label>
-                                <input type="text" id="propertyFloor" name="propertyFloor" required />
+                                <input type="number" id="propertyFloor" name="propertyFloor" required />
                             </div>    
-                        </div>                  
+                        </div>  
 
-                        <label htmlFor="propertyTypology">Typology:</label>
-                        <input type="text" id="propertyTypology" name="propertyTypology" required />
-                        
                         <div>
-                            <label htmlFor="numRooms">Number of Rooms:</label>
-                            <input type="number" id="numRooms" name="numRooms" min="1" required onChange={handleNumRoomsChange} />
+                            <label htmlFor="propertyTypology">Typology:</label>
+                            <input type="text" id="propertyTypology" name="propertyTypology" required />
                         </div>
 
-                        <label htmlFor="propertyWcs">Number of Bathrooms:</label>
-                        <input type="number" id="propertyWcs" min="1" required />
-                        
-                        <label htmlFor="propertyDescription">Description:</label>
-                        <textarea id="propertyDescription" name="propertyDescription" required />
+                        <div className="input-group">
+                            <div>
+                                <label htmlFor="numRooms">Number of Rooms:</label>
+                                <input type="number" id="numRooms" name="numRooms" min="1" required onChange={handleNumRoomsChange} />
+                            </div>
 
-                        <label htmlFor="propertyAddress">Address:</label>
-                        <textarea id="propertyAddress" name="propertyAddress" required />
-                        
-                        <div className="checkbox-group">
-                            <label htmlFor="propertyElevator">Elevator:</label>
-                            <input type="checkbox" id="propertyElevator" name="propertyElevator" />
+                            <div>
+                                <label htmlFor="propertyWcs">Number of Bathrooms:</label>
+                                <input type="number" id="propertyWcs" min="1" required />
+                            </div>
                         </div>
 
-                        <div className="checkbox-group">
-                            <label htmlFor="propertyParking">Parking:</label>
-                            <input type="checkbox" id="propertyParking" name="propertyParking" />
+                        <div>
+                            <label htmlFor="propertyDescription">Description:</label>
+                            <input type="text" id="propertyDescription" name="propertyDescription" required />
                         </div>
 
-                        <div className="checkbox-group">
-                            <label htmlFor="propertyEquipped">Equipped:</label>
-                            <input type="checkbox" id="propertyEquipped" name="propertyEquipped" />
-                        </div>
 
                         <div className="checkbox-group">
-                            <label htmlFor="propertyKitchen">Kitchen:</label>
-                            <input type="checkbox" id="propertyKitchen" name="propertyKitchen" />
-                        </div>
+                            <div>
+                                <label htmlFor="propertyElevator">Elevator:</label>
+                                <input type="checkbox" id="propertyElevator" name="propertyElevator" />
+                            </div>
 
-                        <div className="checkbox-group">
-                            <label htmlFor="propertyWifi">WiFi:</label>
-                            <input type="checkbox" id="propertyWifi" name="propertyWifi" />
+                            <div>
+                                <label htmlFor="propertyParking">Parking:</label>
+                                <input type="checkbox" id="propertyParking" name="propertyParking" />
+                            </div>
+
+                            <div>
+                                <label htmlFor="propertyEquipped">Equipped:</label>
+                                <input type="checkbox" id="propertyEquipped" name="propertyEquipped" />
+                            </div>
+
+                            <div>
+                                <label htmlFor="propertyKitchen">Kitchen:</label>
+                                <input type="checkbox" id="propertyKitchen" name="propertyKitchen" />
+                            </div>
+
+                            <div>
+                                <label htmlFor="propertyWifi">WiFi:</label>
+                                <input type="checkbox" id="propertyWifi" name="propertyWifi" />
+                            </div>
                         </div>
 
                         <div>
@@ -461,31 +448,35 @@ function OwnerPage({ darkMode }) {
                     <h2>Add Rooms</h2>
                     <form onSubmit={handleRoomsSubmit} encType="multipart/form-data">
                         {[...Array(numRooms)].map((_, index) => (
-                            <div key={index}>
-                                <h3>Room {index + 1}</h3>
+                            <div key={index} className='room-input-container'>
+                                <h3>Room {index + 1}:</h3>
                                 <div className="input-rooms">
-                                    <label htmlFor={`roomArea${index}`}>Room Area (m²):</label>
-                                    <input type="number" id={`roomArea${index}`} name={`roomArea${index}`} required />
-                                
-                                    <label htmlFor={`roomPrice${index}`}>Room Price per Month (€):</label>
-                                    <input type="number" id={`roomPrice${index}`} name={`roomPrice${index}`} required />
-                                
-                                    <label htmlFor={`despesasIncluidas${index}`}>Included Expenses:</label>
-                                    <input type="text" id={`despesasIncluidas${index}`} name={`despesasIncluidas${index}`} required />
-
+                                    <div className="input-rooms-nums">
+                                        <div>
+                                            <label htmlFor={`roomArea${index}`}>Room Area (m²):</label>
+                                            <input type="number" id={`roomArea${index}`} name={`roomArea${index}`} required />
+                                        </div>
+                                        <div>
+                                            <label htmlFor={`roomPrice${index}`}>Room Price per Month (€):</label>
+                                            <input type="number" id={`roomPrice${index}`} name={`roomPrice${index}`} required />
+                                        </div>
+                                    </div>
+                                    <div className='included-expenses'>
+                                        <label htmlFor={`despesasIncluidas${index}`}>Included Expenses:</label>
+                                        <input type="text" id={`despesasIncluidas${index}`} name={`despesasIncluidas${index}`} required />
+                                    </div>
                                     
-                                        <label htmlFor={`wcPrivado${index}`}>Private Bathroom:</label>
-                                        <select id={`wcPrivado${index}`} name={`wcPrivado${index}`} required>
-                                            <option value="true">Yes</option>
-                                            <option value="false">No</option>
-                                        </select>      
+                                    <div className='input-rooms-checkbox'>
+                                        <div className='input-rooms-checkbox-col'>
+                                            <label htmlFor={`wcPrivado${index}`}>Private Bathroom:</label>
+                                            <input type="checkbox" id={`wcPrivado${index}`} name={`wcPrivado${index}`} required></input>
+                                        </div>
                                     
-                                        <label htmlFor={`disponivel${index}`}>Available:</label>
-                                        <select id={`disponivel${index}`} name={`disponivel${index}`} required>
-                                            <option value="true">Yes</option>
-                                            <option value="false">No</option>
-                                        </select>      
-                                    
+                                        <div className='input-rooms-checkbox-col'>
+                                            <label htmlFor={`disponivel${index}`}>Available:</label>
+                                            <input type="checkbox" id={`disponivel${index}`} name={`disponivel${index}`} required></input>
+                                        </div>   
+                                    </div>
                                 </div>                  
 
                                 <div>

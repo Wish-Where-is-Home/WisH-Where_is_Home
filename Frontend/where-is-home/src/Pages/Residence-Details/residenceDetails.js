@@ -18,7 +18,6 @@ const ResidenceDetails = ({ darkMode }) => {
   const [propertyDetails, setPropertyDetails] = useState(null);
   const [yelpData, setYelpData] = useState(null);
   const [locationDetails, setLocationDetails] = useState(null);
-  const [walkScoreDetails, setWalkScoreDetails] = useState(null);
   const [showOwnerDetails, setShowOwnerDetails] = useState(false);
   const [categoryAverages, setCategoryAverages] = useState({});
 
@@ -146,31 +145,13 @@ const ResidenceDetails = ({ darkMode }) => {
       const combinedLocationDetails = `${address}, ${region}, ${country}`;
       console.log("Combined Location Details:", combinedLocationDetails); // Log the combined location details to the console
       setLocationDetails(combinedLocationDetails); // Store or handle the combined location details as needed
-      fetchWalkScore(latitude, longitude, combinedLocationDetails);
+      //fetchWalkScore(latitude, longitude, combinedLocationDetails);
     } catch (error) {
       console.error('Error fetching location data:', error);
     }
   };
 
-  const fetchWalkScore = async (latitude, longitude, address) => {
-    const wsApiKey = 'g73c0420989bc43f79d00fa60cd4df387';
-    const formattedAddress = encodeURIComponent(address);
-    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-    const targetUrl = `https://api.walkscore.com/score?format=json&address=${formattedAddress}&lat=${latitude}&lon=${longitude}&transit=1&bike=1&wsapikey=${wsApiKey}`;
-    const url = proxyUrl + targetUrl;
-
-    try {
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error('Failed to fetch Walk Score data');
-      }
-      const walkScoreData = await response.json();
-      console.log("Walk Score Data:", walkScoreData);
-      setWalkScoreDetails(walkScoreData);
-    } catch (error) {
-      console.error('Error fetching Walk Score data:', error);
-    }
-  };
+  
 
   const photos = [{
     src: "https://cf.bstatic.com/xdata/images/hotel/max1280x900/261707778.jpg?k=56ba0babbcbbfeb3d3e911728831dcbc390ed2cb16c51d88159f82bf751d04c6&o=&hp=1",

@@ -1,16 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCar, faWalking, faBicycle } from '@fortawesome/free-solid-svg-icons';
+import mapboxgl from 'mapbox-gl';
 import './TravelTimeCalculator.css';
+
+mapboxgl.accessToken = 'pk.eyJ1IjoiY3Jpc3RpYW5vbmljb2xhdSIsImEiOiJjbHZmZnFoaXUwN2R4MmlxbTdsdGlreDEyIn0.-vhnpIfDMVyW04ekPBhQlg';
 
 const TravelTimeCalculator = ({ propertyLat, propertyLng }) => {
     const [destinationAddress, setDestinationAddress] = useState('');
     const [travelMode, setTravelMode] = useState('driving'); // default to driving
     const [travelDetails, setTravelDetails] = useState({ time: null, distance: null });
+    const [coordinates, setCoordinates] = useState(null);
+    const mapContainer = useRef(null);
+    const map = useRef(null);
 
     const fetchCoordinates = async (address) => {
-        const accessToken = "pk.eyJ1IjoiY3Jpc3RpYW5vbmljb2xhdSIsImEiOiJjbHZmZnFoaXUwN2R4MmlxbTdsdGlreDEyIn0.-vhnpIfDMVyW04ekPBhQlg";
-        const geocodeUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(address)}.json?access_token=${accessToken}`;
+        const geocodeUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(address)}.json?access_token=${mapboxgl.accessToken}`;
         try {
             const response = await fetch(geocodeUrl);
             const data = await response.json();
@@ -24,15 +29,13 @@ const TravelTimeCalculator = ({ propertyLat, propertyLng }) => {
         }
     };
 
-    const fetchTravelDetails = async () => {
-        const coordinates = await fetchCoordinates(destinationAddress);
+    const fetchTravelDetails = async (mode) => {
         if (!coordinates) {
             console.error('No coordinates found for the given address.');
             return;
         }
         const [destinationLng, destinationLat] = coordinates;
-        const accessToken = "pk.eyJ1IjoiY3Jpc3RpYW5vbmljb2xhdSIsImEiOiJjbHZmZnFoaXUwN2R4MmlxbTdsdGlreDEyIn0.-vhnpIfDMVyW04ekPBhQlg";
-        const url = `https://api.mapbox.com/directions/v5/mapbox/${travelMode}/${propertyLng},${propertyLat};${destinationLng},${destinationLat}?access_token=${accessToken}&overview=full`;
+        const url = `https://api.mapbox.com/directions/v5/mapbox/${mode}/${propertyLng},${propertyLat};${destinationLng},${destinationLat}?access_token=${mapboxgl.accessToken}&overview=full&geometries=geojson`;
 
         try {
             const response = await fetch(url);
@@ -42,10 +45,71 @@ const TravelTimeCalculator = ({ propertyLat, propertyLng }) => {
                 time: route.duration / 60, // convert seconds to minutes
                 distance: route.distance / 1000 // convert meters to kilometers
             });
+
+            // Update the map with the new route
+            if (map.current) {
+                map.current.getSource('route').setData(route.geometry);
+                map.current.flyTo({
+                    center: [(propertyLng + destinationLng) / 2, (propertyLat + destinationLat) / 2],
+                    zoom: 12
+                });
+            }
         } catch (error) {
             console.error('Failed to fetch travel details:', error);
         }
     };
+
+    const handleCalculateClick = async () => {
+        const coords = await fetchCoordinates(destinationAddress);
+        if (coords) {
+            setCoordinates(coords);
+            fetchTravelDetails(travelMode);
+        }
+    };
+
+    useEffect(() => {
+        if (coordinates) {
+            fetchTravelDetails(travelMode);
+        }
+    }, [travelMode, coordinates]);
+
+    useEffect(() => {
+        if (map.current) return; // Initialize map only once
+        map.current = new mapboxgl.Map({
+            container: mapContainer.current,
+            style: 'mapbox://styles/mapbox/streets-v11',
+            center: [propertyLng, propertyLat],
+            zoom: 12
+        });
+
+        map.current.on('load', () => {
+            map.current.addSource('route', {
+                type: 'geojson',
+                data: {
+                    type: 'Feature',
+                    properties: {},
+                    geometry: {
+                        type: 'LineString',
+                        coordinates: []
+                    }
+                }
+            });
+
+            map.current.addLayer({
+                id: 'route',
+                type: 'line',
+                source: 'route',
+                layout: {
+                    'line-join': 'round',
+                    'line-cap': 'round'
+                },
+                paint: {
+                    'line-color': '#888',
+                    'line-width': 6
+                }
+            });
+        });
+    }, []);
 
     return (
         <div className="travel-time-calculator">
@@ -69,13 +133,14 @@ const TravelTimeCalculator = ({ propertyLat, propertyLng }) => {
                     </button>
                 </div>
             </div>
-            <button className="calculate-button" onClick={fetchTravelDetails}>Calculate</button>
+            <button className="calculate-button" onClick={handleCalculateClick}>Calculate</button>
             {travelDetails.time && (
                 <div className="results">
                     <p className="travel-time">{Math.round(travelDetails.time)} min ({travelDetails.distance.toFixed(1)} km)</p>
                     <p className="distance-label">Distance to institution</p>
                 </div>
             )}
+            <div ref={mapContainer} className="map-container" />
         </div>
     );
 };

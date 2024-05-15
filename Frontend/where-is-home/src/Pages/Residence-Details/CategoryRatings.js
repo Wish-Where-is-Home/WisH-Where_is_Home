@@ -1,20 +1,23 @@
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faStar as fasStar, faStarHalfAlt as fasStarHalfAlt, faStar as farStar } from '@fortawesome/free-solid-svg-icons';
 import './CategoryRatings.css';
 
 const CategoryRatings = ({ categoryAverages }) => {
   const renderStars = (rating) => {
-    const fullStars = Math.floor(rating);
-    const halfStar = rating - fullStars >= 0.5 ? 1 : 0;
+    const roundedRating = Math.round(rating * 2) / 2; // Round to nearest half
+    const fullStars = Math.floor(roundedRating);
+    const halfStar = roundedRating - fullStars === 0.5 ? 1 : 0;
     const emptyStars = 5 - fullStars - halfStar;
 
     return (
       <>
         {Array(fullStars).fill().map((_, index) => (
-          <span key={index} className="star full">&#9733;</span>
+          <FontAwesomeIcon key={`full-${index}`} icon={fasStar} className="star full" />
         ))}
-        {halfStar ? <span className="star half">&#9733;</span> : null}
+        {halfStar ? <FontAwesomeIcon icon={fasStarHalfAlt} className="star half" /> : null}
         {Array(emptyStars).fill().map((_, index) => (
-          <span key={index} className="star empty">&#9733;</span>
+          <FontAwesomeIcon key={`empty-${index}`} icon={farStar} className="star empty" />
         ))}
       </>
     );
@@ -36,6 +39,5 @@ const CategoryRatings = ({ categoryAverages }) => {
     </div>
   );
 };
-  
 
 export default CategoryRatings;

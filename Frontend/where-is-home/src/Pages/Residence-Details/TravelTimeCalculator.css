@@ -48,7 +48,6 @@
     color: white;
 }
 
-
 .calculate-button {
     width: 100%;
     background-color: #0071c2;
@@ -74,4 +73,10 @@
 .distance-label {
     font-size: 14px;
     color: #666;
+}
+
+.map-container {
+    width: 100%;
+    border-radius: 5px;
+    overflow: hidden;
 }

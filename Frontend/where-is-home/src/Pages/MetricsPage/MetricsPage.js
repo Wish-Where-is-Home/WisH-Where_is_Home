@@ -580,7 +580,7 @@ useEffect(() => {
 
 const busGeoJSONUrl = 'http://mednat.ieeta.pt:9009/geoserver/wish/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=wish%3Aaveiro_bus&srsname=EPSG:4326&outputFormat=application%2Fjson';
 const cycleGeoJSONUrl = 'http://mednat.ieeta.pt:9009/geoserver/wish/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=wish%3Acycleway&srsname=EPSG:4326&outputFormat=application%2Fjson';
-const FootGeoJSONUrl = 'http://mednat.ieeta.pt:9009/geoserver/wish/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=wish%3Afootway&srsname=EPSG:4326&outputFormat=application%2Fjson';
+const FootGeoJSONUrl = 'http://mednat.ieeta.pt:9009/geoserver/wish/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=wish%3Afootwayaveiro&&outputFormat=application%2Fjson';
 
 const loadBusGeoJSON = async () => {
   try {

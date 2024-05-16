@@ -1,18 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './residenceDetails.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCircleArrowLeft,
-  faCircleArrowRight,
-  faCircleXmark,
-  faLocationDot,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCircleArrowLeft, faCircleArrowRight, faCircleXmark, faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import WalkScoreWidget from './WalkScoreWidget';
 import TravelTimeCalculator from './TravelTimeCalculator';
 import categoryMapping from './categoryMapping';
 import CategoryRatings from './CategoryRatings';
+import { useTranslation } from 'react-i18next';
 
 const ResidenceDetails = ({ darkMode }) => {
+  const { t } = useTranslation("common");
   const [slideNumber, setSlideNumber] = useState(0);
   const [open, setOpen] = useState(false);
   const [propertyDetails, setPropertyDetails] = useState(null);
@@ -72,24 +69,24 @@ const ResidenceDetails = ({ darkMode }) => {
     const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
     const targetUrl = `https://api.yelp.com/v3/businesses/search?latitude=${lat}&longitude=${long}&radius=40000&sort_by=best_match&limit=50`;
     const options = {
-        method: 'GET',
-        headers: {
-            accept: 'application/json',
-            Authorization: 'Bearer rmASuj9Y6LDlFu8i9kVBDlQNlKs7Zadb4l2QJXAhht756P8vDXOWK5smuV55p5vzeprQnizMWffMYcQnHMGdRQZ3oBGZPVMQwaM2icUCScsROp84sLTc47cUMG4qZnYx'
-        }
+      method: 'GET',
+      headers: {
+        accept: 'application/json',
+        Authorization: 'Bearer rmASuj9Y6LDlFu8i9kVBDlQNlKs7Zadb4l2QJXAhht756P8vDXOWK5smuV55p5vzeprQnizMWffMYcQnHMGdRQZ3oBGZPVMQwaM2icUCScsROp84sLTc47cUMG4qZnYx'
+      }
     };
 
     fetch(proxyUrl + targetUrl, options)
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-            setYelpData(data); // Store Yelp data for other uses if needed
-            const averages = calculateCategoryAverages(data);
-            console.log("Category Averages: ", averages);
-            setCategoryAverages(averages);
-            // Optionally set this data to state as well, depending on your application's architecture
-        })
-        .catch(err => console.error(err));
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        setYelpData(data); // Store Yelp data for other uses if needed
+        const averages = calculateCategoryAverages(data);
+        console.log("Category Averages: ", averages);
+        setCategoryAverages(averages);
+        // Optionally set this data to state as well, depending on your application's architecture
+      })
+      .catch(err => console.error(err));
   };
 
   function calculateCategoryAverages(data) {
@@ -98,31 +95,31 @@ const ResidenceDetails = ({ darkMode }) => {
     const categoryReviewCounts = {};
 
     data.businesses.forEach(business => {
-        business.categories.forEach(category => {
-            const broadCategory = categoryMapping[category.alias] || category.alias;
+      business.categories.forEach(category => {
+        const broadCategory = categoryMapping[category.alias] || category.alias;
 
-            if (categorySums[broadCategory]) {
-                categorySums[broadCategory] += business.rating;
-                categoryCounts[broadCategory] += 1;
-                categoryReviewCounts[broadCategory] += business.review_count;
-            } else {
-                categorySums[broadCategory] = business.rating;
-                categoryCounts[broadCategory] = 1;
-                categoryReviewCounts[broadCategory] = business.review_count;
-            }
-        });
+        if (categorySums[broadCategory]) {
+          categorySums[broadCategory] += business.rating;
+          categoryCounts[broadCategory] += 1;
+          categoryReviewCounts[broadCategory] += business.review_count;
+        } else {
+          categorySums[broadCategory] = business.rating;
+          categoryCounts[broadCategory] = 1;
+          categoryReviewCounts[broadCategory] = business.review_count;
+        }
+      });
     });
 
     const categoryAverages = {};
     for (const category in categorySums) {
-        categoryAverages[category] = {
-            averageRating: categorySums[category] / categoryCounts[category],
-            totalReviewCount: categoryReviewCounts[category]
-        };
+      categoryAverages[category] = {
+        averageRating: categorySums[category] / categoryCounts[category],
+        totalReviewCount: categoryReviewCounts[category]
+      };
     }
 
     return categoryAverages;
-}
+  }
 
   const fetchLocationData = async (latitude, longitude) => {
     const accessToken = "pk.eyJ1IjoiY3Jpc3RpYW5vbmljb2xhdSIsImEiOiJjbHZmZnFoaXUwN2R4MmlxbTdsdGlreDEyIn0.-vhnpIfDMVyW04ekPBhQlg";
@@ -150,8 +147,6 @@ const ResidenceDetails = ({ darkMode }) => {
       console.error('Error fetching location data:', error);
     }
   };
-
-  
 
   const photos = [{
     src: "https://cf.bstatic.com/xdata/images/hotel/max1280x900/261707778.jpg?k=56ba0babbcbbfeb3d3e911728831dcbc390ed2cb16c51d88159f82bf751d04c6&o=&hp=1",
@@ -188,12 +183,12 @@ const ResidenceDetails = ({ darkMode }) => {
     setSlideNumber(newSlideNumber);
   };
 
-  if (!propertyDetails) return <div>Loading...</div>;
+  if (!propertyDetails) return <div>{t('loading')}</div>;
 
   const prices = propertyDetails.quartos.map(room => parseFloat(room.preco_mes));
   const minPrice = Math.min(...prices);
   const maxPrice = Math.max(...prices);
-  const priceDisplay = minPrice === maxPrice ? `${minPrice}€` : `Entre ${minPrice}€ a ${maxPrice}€`;
+  const priceDisplay = minPrice === maxPrice ? `${minPrice}€` : `${t('between')} ${minPrice}€ ${t('and')} ${maxPrice}€`;
 
   const toggleOwnerDetails = () => {
     setShowOwnerDetails(!showOwnerDetails);
@@ -232,14 +227,14 @@ const ResidenceDetails = ({ darkMode }) => {
         )}
         <div className="residenceWrapper">
           <h1 className="residenceTitle">
-            {propertyDetails.property.nome}, piso {propertyDetails.property.piso}
+            {propertyDetails.property.nome}, {t('floor')} {propertyDetails.property.piso}
           </h1>
           <div className="residenceAddress">
             <FontAwesomeIcon icon={faLocationDot} />
             <span>{propertyDetails.property.morada}</span>
           </div>
           <span className="residencePriceHighlight">
-            {propertyDetails.property.tipologia} {propertyDetails.property.equipado ? "totalmente equipado." : "por equipar."}
+            {propertyDetails.property.tipologia} {propertyDetails.property.equipado ? t('fully_equipped') : t('not_equipped')}
           </span>
           <div className="residenceImages">
             {photos.map((photos, i) => (
@@ -270,36 +265,34 @@ const ResidenceDetails = ({ darkMode }) => {
                 {propertyDetails.property.descricao}
                 <br />
                 <br />
-                Detalhes da propriedade:
+                {t('property_details')}:
                 <ul>
-                  <li>Área: {propertyDetails.property.area} m²</li>
-                  <li>WCs: {propertyDetails.property.wcs}</li>
-                  <li>Cozinha {propertyDetails.property.cozinha ? "totalmente equipada" : "por equipar"}</li>
-                  <li>Internet {propertyDetails.property.internet ? "incluída" : "não incluída"}</li>
-                  <li>Despesas {propertyDetails.property.despesas ? "incluídas" : "não incluídas"}</li>
+                  <li>{t('area')}: {propertyDetails.property.area} m²</li>
+                  <li>{t('wcs')}: {propertyDetails.property.wcs}</li>
+                  <li>{t('kitchen')} {propertyDetails.property.cozinha ? t('fully_equipped') : t('not_equipped')}</li>
+                  <li>{t('internet')} {propertyDetails.property.internet ? t('included') : t('not_included')}</li>
+                  <li>{t('expenses')} {propertyDetails.property.despesas ? t('included') : t('not_included')}</li>
                 </ul>
               </p>
               <div className='ratings'>
-            <CategoryRatings categoryAverages={categoryAverages} />
+                <CategoryRatings categoryAverages={categoryAverages} />
+              </div>
             </div>
-            </div>
-
-            
 
             <div className="residenceDetailsPrice">
-              <h2>Aproveite esta oportunidade!</h2>
+              <h2>{t('take_advantage_of_this_opportunity')}</h2>
               <span>
-                {propertyDetails.property.estacionamento_garagem ? "Estacionamento na garagem disponível." : "Estacionamento não incluído."}
+                {propertyDetails.property.estacionamento_garagem ? t('garage_parking_available') : t('parking_not_included')}
               </span>
               <h2>
-                <b>{priceDisplay}</b> por Mês
+                <b>{priceDisplay}</b> {t('per_month')}
               </h2>
-              <button onClick={toggleOwnerDetails}>Reserve or Book Now!</button>
+              <button onClick={toggleOwnerDetails}>{t('reserve_or_book_now')}</button>
               <div className={`ownerDetails ${showOwnerDetails ? 'visible' : ''}`}>
-                <h3>Contact the Owner:</h3>
-                <p>Name: {propertyDetails.owner_info.nome}</p>
-                <p>Email: {propertyDetails.owner_info.email}</p>
-                <p>Phone: {propertyDetails.owner_info.telemovel}</p>
+                <h3>{t('contact_the_owner')}:</h3>
+                <p>{t('name')}: {propertyDetails.owner_info.nome}</p>
+                <p>{t('email')}: {propertyDetails.owner_info.email}</p>
+                <p>{t('phone')}: {propertyDetails.owner_info.telemovel}</p>
               </div>
             </div>
           </div>
@@ -315,11 +308,11 @@ const ResidenceDetails = ({ darkMode }) => {
                 <p className="roomDetail">{room.area} m²</p>
                 <p className="roomDetail">{room.despesas_incluidas}</p>
                 <p className="roomDetail">{room.observacoes}</p>
-                <p className="roomDetail">{room.wc_privado ? "Private bathroom" : "No private bathroom"}</p>
+                <p className="roomDetail">{room.wc_privado ? t('private_bathroom') : t('no_private_bathroom')}</p>
               </div>
 
               <div className="roomPrice">
-                {room.disponivel ? `${room.preco_mes}€ per month` : "Indisponível"}
+                {room.disponivel ? `${room.preco_mes}€ ${t('per_month')}` : t('not_available')}
               </div>
             </div>
           ))}

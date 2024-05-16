@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCar, faWalking, faBicycle } from '@fortawesome/free-solid-svg-icons';
+import { useTranslation } from 'react-i18next';
 import mapboxgl from 'mapbox-gl';
 import './TravelTimeCalculator.css';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiY3Jpc3RpYW5vbmljb2xhdSIsImEiOiJjbHZmZnFoaXUwN2R4MmlxbTdsdGlreDEyIn0.-vhnpIfDMVyW04ekPBhQlg';
 
 const TravelTimeCalculator = ({ propertyLat, propertyLng }) => {
+    const { t } = useTranslation("common");
     const [destinationAddress, setDestinationAddress] = useState('');
     const [travelMode, setTravelMode] = useState('driving'); // default to driving
     const [travelDetails, setTravelDetails] = useState({ time: null, distance: null });
@@ -118,7 +120,7 @@ const TravelTimeCalculator = ({ propertyLat, propertyLng }) => {
                     type="text"
                     value={destinationAddress}
                     onChange={(e) => setDestinationAddress(e.target.value)}
-                    placeholder="Enter destination address"
+                    placeholder={t('enter_destination')}
                     className="destination-input"
                 />
                 <div className="mode-icons">
@@ -133,11 +135,11 @@ const TravelTimeCalculator = ({ propertyLat, propertyLng }) => {
                     </button>
                 </div>
             </div>
-            <button className="calculate-button" onClick={handleCalculateClick}>Calculate</button>
+            <button className="calculate-button" onClick={handleCalculateClick}>{t('calculate')}</button>
             {travelDetails.time && (
                 <div className="results">
                     <p className="travel-time">{Math.round(travelDetails.time)} min ({travelDetails.distance.toFixed(1)} km)</p>
-                    <p className="distance-label">Distance to institution</p>
+                    <p className="distance-label">{t('distance_to_institution')}</p>
                 </div>
             )}
             <div ref={mapContainer} className="map-container" />

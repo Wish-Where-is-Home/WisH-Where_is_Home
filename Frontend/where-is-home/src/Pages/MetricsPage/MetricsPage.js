@@ -49,17 +49,17 @@ function MetricsPage({darkMode,zoneData,scores,updateScores}) {
     const [busGeoJSONData, setBusGeoJSONData] = useState(null);
     const [busLayer, setBusLayer] = useState(null);
 
-    const [busIconColor, setBusIconColor] = useState('white');
+    const [busIconColor, setBusIconColor] = useState(!darkMode ? 'black' : 'white');
     const [showCycleGeoJSON, setShowCycleGeoJSON] = useState(false);
     const [CycleGeoJSONData, setCycleGeoJSONData] = useState(null);
     const [CycleLayer, setCycleLayer] = useState(null);
 
-    const [CycleIconColor, setCycleIconColor] = useState('white');
+    const [CycleIconColor, setCycleIconColor] = useState(!darkMode ? 'black' : 'white');
 
     const [showFootGeoJSON, setShowFootGeoJSON] = useState(false);
     const [FootGeoJSONData, setFootGeoJSONData] = useState(null);
     const [FootLayer, setFootLayer] = useState(null);
-    const [FootIconColor, setFootIconColor] = useState('white');
+    const [FootIconColor, setFootIconColor] = useState(!darkMode ? 'black' : 'white');
 
 
 
@@ -581,7 +581,7 @@ useEffect(() => {
 
 
 const busGeoJSONUrl = 'http://mednat.ieeta.pt:9009/geoserver/wish/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=wish%3Aaveiro_bus&srsname=EPSG:4326&outputFormat=application%2Fjson';
-const cycleGeoJSONUrl = 'http://mednat.ieeta.pt:9009/geoserver/wish/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=wish%3Acycleway&srsname=EPSG:4326&outputFormat=application%2Fjson';
+const cycleGeoJSONUrl = 'http://mednat.ieeta.pt:9009/geoserver/wish/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=wish%3Acyclewayaveiro&outputFormat=application%2Fjson';
 const FootGeoJSONUrl = 'http://mednat.ieeta.pt:9009/geoserver/wish/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=wish%3Afootwayaveiro&&outputFormat=application%2Fjson';
 
 const loadBusGeoJSON = async () => {
@@ -618,7 +618,7 @@ useEffect(() => {
         mapRef.current.removeLayer(busLayer); 
         setBusLayer(null); 
         setBusGeoJSONData(null);
-        setBusIconColor('white');
+        setBusIconColor(!darkMode ? 'black' : 'white');
       }
     }
   };
@@ -671,7 +671,7 @@ useEffect(() => {
         mapRef.current.removeLayer(CycleLayer); 
         setCycleLayer(null); 
         setCycleGeoJSONData(null);
-        setCycleIconColor('white');
+        setCycleIconColor(!darkMode ? 'black' : 'white');
       }
     }
   };
@@ -725,7 +725,7 @@ useEffect(() => {
         mapRef.current.removeLayer(FootLayer); 
         setFootLayer(null); 
         setFootGeoJSONData(null);
-        setFootIconColor('white');
+        setFootIconColor(!darkMode ? 'black' : 'white');
       }
     }
   };
@@ -780,6 +780,7 @@ const handleFootButtonClick = async () => {
                           backgroundColor: "var(--background-color)",
                           color: "var(--blacktowhite)"
                         }}
+                        className='button-map3'
                         onClick={() => setShowAdditionalButtons(!showAdditionalButtons)}
                       >
                         <FontAwesomeIcon icon={faAngleDown} />
@@ -797,7 +798,7 @@ const handleFootButtonClick = async () => {
                               zIndex: "400",
                               marginRight:"15px",
                               backgroundColor: "var(--background-color)",
-                              color: "var(--blacktowhite)"
+                             
                             }}
                             onClick={handleBusButtonClick}
                           >
@@ -813,8 +814,10 @@ const handleFootButtonClick = async () => {
                               zIndex: "400",
                               marginRight:"15px",
                               backgroundColor: "var(--background-color)",
-                              color: "var(--blacktowhite)"
+                             
+                              
                             }}
+                            className='button-map3'
                             onClick={handleCycleButtonClick}
                           >
                             <FontAwesomeIcon icon={faBicycle} style={{ color: CycleIconColor, fontSize:"20px" }} />
@@ -829,8 +832,10 @@ const handleFootButtonClick = async () => {
                               zIndex: "400",
                               marginRight:"15px",
                               backgroundColor: "var(--background-color)",
-                              color: "var(--blacktowhite)"
+                    
                             }}
+
+                            className='button-map3'
                             onClick={handleFootButtonClick}
                           >
                             <FontAwesomeIcon icon={faWalking} style={{ color: FootIconColor, fontSize:"20px" }} />

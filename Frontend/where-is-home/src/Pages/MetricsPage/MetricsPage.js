@@ -529,9 +529,11 @@ useEffect(() => {
         if (geojsonData && geojsonData.bbox && geojsonData.bbox.length === 4) {
             const [minLng, minLat, maxLng, maxLat] = geojsonData.bbox;
             const filteredProperties = data.properties.filter(property => {
+              if (property.geom) {
                 const [lat, lng] = property.geom;
                 return lng >= minLng && lng <= maxLng &&
                        lat >= minLat && lat <= maxLat;
+              }
             });
 
            

@@ -36,6 +36,11 @@
   height: 88%;
 }
 
+.sidebar-content-right {
+  overflow-y: auto;
+  max-height: calc(100% - 70px); 
+}
+
 
 .sidebar-link {
   color: #fff;

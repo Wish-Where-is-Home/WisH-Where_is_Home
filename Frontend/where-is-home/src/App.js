@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Navbar from './Components/Navbar/Navbar';
 import Homepage from './Pages/Homepage/Homepage';
 import Loader from './Components/Loader/Loader';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; 
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
 import Login_register from './Pages/Login-register/Login_register';
 import AboutUs from './Pages/AboutUs/AboutUs';
@@ -16,8 +16,10 @@ import AdminPage from './Pages/AdminPage/AdminPage';
 
 
 import { initializeApp } from "firebase/app";
-
 import { getAnalytics } from "firebase/analytics";
+import { storage, db } from './firebaseConfig';
+import { getStorage } from "firebase/storage";
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 
 
 function App() {
@@ -25,40 +27,144 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [zoneData, setZoneData] = useState(null);
   const [scores, setScores] = useState(null);
-  const { isAuthenticated,userInfo} = useAuth();
+  const { isAuthenticated, userInfo } = useAuth();
 
 
   const updateScores = (newScores) => {
     setScores(newScores);
     console.log(scores);
-};
+  };
 
 
   const firebaseConfig = {
 
     apiKey: "AIzaSyDGcTX2Ry6N0IUgPDRxiu0iJZanmfi41Dw",
-  
+
     authDomain: "wish-9b245.firebaseapp.com",
-  
+
     projectId: "wish-9b245",
-  
+
     storageBucket: "wish-9b245.appspot.com",
-  
+
     messagingSenderId: "364387023023",
-  
+
     appId: "1:364387023023:web:bf11ec82e5c252c44cfc5a",
-  
+
     measurementId: "G-CZ6JHQCLWR"
-  
+
   };
 
   const app = initializeApp(firebaseConfig);
 
   const analytics = getAnalytics(app);
-  
-  
 
-  
+  const storage = getStorage(app);
+
+
+
+
+  async function handleSubmitImagesImoveis(photos, imovel_Id) {
+    const collectionRef = doc(db, "imoveis", imovel_Id);
+    if (!photos || photos.length === 0) return;
+
+    const docSnap = await getDoc(collectionRef);
+      if (!docSnap.exists()) {
+        await setDoc(collectionRef, {});
+      }
+
+
+    const uploadTasks = Array.from(photos).map((photo, index) =>{
+
+      const storageRef = ref(storage, `images/${photo.name}`);
+      const uploadTask = uploadMultipleFiles(storageRef, photos);
+      return new Promise((resolve, reject) => {
+        uploadTask.on(
+          'state_changed',
+          (snapshot) => {
+            
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log('Upload is ' + progress + '% done');
+          },
+          (error) => {
+            
+            reject(error);
+          },
+          () => {
+            
+            getDownloadURL(uploadTask.snapshot.ref).then( async(downloadURL) => {
+              await updateDoc(collectionRef, {
+                imageurl: downloadURL,
+              });
+              console.log('File available at', downloadURL);
+              resolve(downloadURL);
+            });
+          }
+        );
+      });
+      
+    });
+
+    try {
+      const downloadURLs = await Promise.all(uploadTasks);
+      console.log('All files uploaded', downloadURLs);
+      return downloadURLs;
+    } catch (error) {
+      console.error('Error uploading files:', error);
+    }
+  };
+
+
+  async function handleSubmitImagesBedrooms(photos, bedroom_Id,imovel_Id) {
+    const collectionRef = doc(db, "quartos", bedroom_Id);
+    if (!photos || photos.length === 0) return;
+
+    const docSnap = await getDoc(collectionRef);
+      if (!docSnap.exists()) {
+        await setDoc(collectionRef, { imovel_id: imovel_Id });
+      }
+
+    const uploadTasks = Array.from(photos).map((photo, index) =>{
+
+      const storageRef = ref(storage, `images/${photo.name}`);
+      const uploadTask = uploadMultipleFiles(storageRef, photos);
+      return new Promise((resolve, reject) => {
+        uploadTask.on(
+          'state_changed',
+          (snapshot) => {
+            
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log('Upload is ' + progress + '% done');
+          },
+          (error) => {
+            
+            reject(error);
+          },
+          () => {
+            
+            getDownloadURL(uploadTask.snapshot.ref).then( async(downloadURL) => {
+              await updateDoc(collectionRef, {
+                imageurl: downloadURL,
+                imovel_id:imovel_Id,
+              });
+              console.log('File available at', downloadURL);
+              resolve(downloadURL);
+            });
+          }
+        );
+      });
+    });
+    
+    try {
+      const downloadURLs = await Promise.all(uploadTasks);
+      console.log('All files uploaded', downloadURLs);
+      return downloadURLs;
+    } catch (error) {
+      console.error('Error uploading files:', error);
+    }
+
+  };
+
+
 
   useEffect(() => {
     const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -97,21 +203,21 @@ function App() {
   };
 
 
-  function updateuserpreferences(){
-    
+  function updateuserpreferences() {
+
   }
 
   return (
     <div className={`App ${darkMode ? 'dark-mode' : 'light-mode'}`}>
       <Loader visible={loading} />
-      <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode}/>
+      <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
       <Router>
         <Routes>
           <Route exact path="/" element={<Homepage darkMode={darkMode} />} />
-          <Route exact path="/aboutus" element={<AboutUs darkMode={darkMode}/>}/>
-          <Route exact path="/login" element={<Login_register  darkMode={darkMode} firebaseConfig={firebaseConfig} />} />
+          <Route exact path="/aboutus" element={<AboutUs darkMode={darkMode} />} />
+          <Route exact path="/login" element={<Login_register darkMode={darkMode} firebaseConfig={firebaseConfig} />} />
           <Route exact path="/quiz" element={<QuizPage darkMode={darkMode} zoneData={zoneData} scores={scores} updateScores={updateScores} />} />
-          <Route exact path="/metricspage" element={<MetricsPage  darkMode={darkMode} zoneData={zoneData} scores={scores} updateScores={updateScores} />} />
+          <Route exact path="/metricspage" element={<MetricsPage darkMode={darkMode} zoneData={zoneData} scores={scores} updateScores={updateScores} />} />
           <Route exact path="/profilepage" element={<ProfilePage darkMode={darkMode} zoneData={zoneData} scores={scores} updateScores={updateScores} />} />
           <Route exact path="/admin" element={<AdminPage darkMode={darkMode} />} />
           <Route exact path="/residenceDetails" element={<ResidenceDetails darkMode={darkMode} />} />

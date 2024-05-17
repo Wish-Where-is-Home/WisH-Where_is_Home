@@ -67,6 +67,12 @@
   margin-top: 20px;
 }
 
+.source-text{
+  margin-top: 2%;
+  font-size: 12px;
+  color: #9d9a9a;
+}
+
 .walkDetails {
   background-color: #333;
   padding: 16px;

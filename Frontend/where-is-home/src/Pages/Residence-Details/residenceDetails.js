@@ -268,7 +268,9 @@ const ResidenceDetails = ({ darkMode }) => {
                 height="421"
                 backgroundColor="#FFFFFF"
               />
+              <div className="source-text">Source: Walkscore API</div>
             </div>
+            
             <div className="residenceDetailsTexts">
               <p className="residenceDesc">
                 {propertyDetails.property.descricao}

@@ -12,7 +12,7 @@ import ResidenceDetails from './Pages/Residence-Details/residenceDetails';
 import { useAuth } from './AuthContext/AuthContext';
 import ProfilePage from './Pages/ProfilePage/ProfilePage';
 import AdminPage from './Pages/AdminPage/AdminPage';
-
+import OwnerPage from './Pages/OwnerPage/OwnerPage';
 
 
 import { initializeApp } from "firebase/app";
@@ -115,6 +115,7 @@ function App() {
           <Route exact path="/profilepage" element={<ProfilePage darkMode={darkMode} zoneData={zoneData} scores={scores} updateScores={updateScores} />} />
           <Route exact path="/admin" element={<AdminPage darkMode={darkMode} />} />
           <Route exact path="/residenceDetails" element={<ResidenceDetails darkMode={darkMode} />} />
+          <Route exact path="/ownerpage" element={<OwnerPage darkMode={darkMode} />} />
         </Routes>
       </Router>
     </div>

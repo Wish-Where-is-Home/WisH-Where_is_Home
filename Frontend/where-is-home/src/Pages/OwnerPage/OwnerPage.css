@@ -25,7 +25,7 @@ body,html{
   height: 250px;
   padding: 20px;
   background-color: white;
-  border-radius: 5px;
+  border-radius: 8px;
 }
 
 .left-panel h2 {
@@ -112,7 +112,7 @@ body,html{
   margin: 0 auto;
 }
 .how-many-rooms {
-  width: calc(100% - 68px); 
+  width: calc(100% - 70px); 
   margin: 0 auto;
 }
 .input-group {
@@ -121,23 +121,19 @@ body,html{
   justify-content: space-around;
 } 
 
-.select-group {
-  display: flex;
-  flex-direction: row;
+.checkbox-group {
+  display:flex;
+  flex-wrap: wrap;
   justify-content: space-around;
-} 
-
-.select-group > div {
   margin-bottom: 10px;
 }
 
-.select-group label {
-  width: 200px; 
-  display: inline-block;
-}
-
-.select-group select {
-  width: calc(100% - 200px); 
+.checkbox-group input[type="checkbox"] {
+  height: 20px;
+  border: 2px solid #ccc;
+  border-radius: 3px;
+  cursor: pointer;
+  accent-color: var(--hometitle);
 }
 
 input[type='file'] {
@@ -211,6 +207,10 @@ input[type='file'] {
   font-size: 24px; 
 }
 
+.room-input-container{
+  margin-bottom: 50px;
+}
+
 .input-rooms {
   display: flex;
   flex-direction: column;
@@ -220,11 +220,42 @@ input[type='file'] {
   box-sizing: border-box;
   margin-bottom:10px;
 }
-.input-rooms select {
-  width: calc(100% - 200px) !important; 
-  text-align: center;
+.input-rooms-nums{
+  display: flex;
+  flex-direction: row;
+  width: calc(100% - 70px);
+  margin-bottom: 10px;
 }
 
+.included-expenses{
+  display: flex;
+  flex-direction: column;
+  width: 430px;
+  margin-right: 20px;
+  margin-bottom: 10px;
+}
+.input-rooms-checkbox{
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+.input-rooms-checkbox input[type="checkbox"] {
+  height: 20px;
+  width: 20px;
+  border: 2px solid #ccc;
+  border-radius: 3px;
+  cursor: pointer;
+  accent-color: var(--hometitle);
+
+}
+
+.input-rooms-checkbox-col{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+}
 
 
 
@@ -280,6 +311,18 @@ input[type='file'] {
 .dark-mode form button[type="submit"]:hover {
   background-color: grey; 
 }
+.dark-mode .photoInput {
+  background-color: var(--background-color-dark); /* Dark mode background color */
+  color: var(--text-color-dark); /* Dark mode text color */
+  border-color: var(--border-color-dark); /* Dark mode border color */
+}
+.dark-mode .add-property-button{
+  background-color: grey;
+}
+
+.dark-mode .add-property-button:hover{
+  background-color: rgb(156, 156, 156); 
+}
 
 
 
@@ -319,3 +362,4 @@ input[type='file'] {
 .light-mode form button[type="submit"]:hover {
   background-color: lightgrey; 
 }
+

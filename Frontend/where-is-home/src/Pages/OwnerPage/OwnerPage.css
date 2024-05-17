@@ -25,7 +25,7 @@ body,html{
   height: 250px;
   padding: 20px;
   background-color: white;
-  border-radius: 5px;
+  border-radius: 8px;
 }
 
 .left-panel h2 {
@@ -316,6 +316,14 @@ input[type='file'] {
   color: var(--text-color-dark); /* Dark mode text color */
   border-color: var(--border-color-dark); /* Dark mode border color */
 }
+.dark-mode .add-property-button{
+  background-color: grey;
+}
+
+.dark-mode .add-property-button:hover{
+  background-color: rgb(156, 156, 156); 
+}
+
 
 
 
@@ -354,3 +362,4 @@ input[type='file'] {
 .light-mode form button[type="submit"]:hover {
   background-color: lightgrey; 
 }
+

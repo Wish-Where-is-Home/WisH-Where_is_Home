@@ -41,15 +41,14 @@ function OwnerPropDetails({ property, allRooms }) {
             )}
             {showRooms  && (
                 <div className="room-dropdown">
-                    <h4>Rooms</h4>
-                    <ul>
-                        {propertyRooms.map(room => (
+                    <ul className='room-contain'>
+                        {propertyRooms.map((room,index) => (
                             <li key={room.id}>
-                                <p>Room ID: {room.id}</p>
-                                <p>Included Expenses: {room.despesas_incluidas}</p>
-                                <p>Private Bathroom: {room.wc_privado ? 'Yes' : 'No'}</p>
-                                <p>Available: {room.disponivel ? 'Yes' : 'No'}</p>
-                                <p>Observations: {room.observacoes}</p>
+                                <p><span>Room {index + 1}:</span> </p>
+                                <p><span>Included Expenses:</span> {room.despesas_incluidas}</p>
+                                <p><span>Private Bathroom:</span> {room.wc_privado ? 'Yes' : 'No'}</p>
+                                <p><span>Available:</span> {room.disponivel ? 'Yes' : 'No'}</p>
+                                <p><span>Observations:</span> {room.observacoes}</p>
                             </li>
                         ))}
                     </ul>

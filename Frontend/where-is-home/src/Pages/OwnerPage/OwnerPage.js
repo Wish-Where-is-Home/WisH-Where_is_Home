@@ -217,6 +217,12 @@ function OwnerPage({ darkMode }) {
                 throw new Error('Failed to create property');
             }
             handleAddRoomsClick();
+
+            const responseData = await response.json();
+            console.log(responseData);
+            const propertyId = responseData.id;
+            return propertyId;
+
         } catch (error) {
             console.error('Error creating property:', error);
         }
@@ -236,6 +242,7 @@ function OwnerPage({ darkMode }) {
     };
     const handleRoomsSubmit = async (event) => {
         event.preventDefault();
+        const propertyId = await handleSubmit(event);
     
         const formData = new FormData(event.target);
     
@@ -255,6 +262,7 @@ function OwnerPage({ darkMode }) {
             }
     
             roomDataArray.push({
+                imovel_id: propertyId,
                 area: roomArea,
                 despesas_incluidas: despesasIncluidas,
                 wc_privado: wcPrivado,
@@ -271,25 +279,26 @@ function OwnerPage({ darkMode }) {
             return;
         }
 
-        try {
-            // Send room data to the database
-            const response = await fetch('http://mednat.ieeta.pt:9009/owner/create/room/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}` 
-                },
-                body: JSON.stringify(roomDataArray)
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to create rooms');
+        for (const roomData of roomDataArray) {
+            try {
+                const response = await fetch('http://mednat.ieeta.pt:9009/owner/create/room/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(roomData)
+                });
+    
+                if (!response.ok) {
+                    throw new Error('Failed to create room');
+                }
+            } catch (error) {
+                console.error('Error creating room:', error);
             }
-
-        } catch (error) {
-            console.error('Error creating rooms:', error);
         }
     };
+    
     
     const handleRoomPhotoChange = (event, roomIndex) => {
         const files = event.target.files;
@@ -298,7 +307,6 @@ function OwnerPage({ darkMode }) {
             selected.push(URL.createObjectURL(files[i]));
         }
     
-        // Update the selected room photos array in state
         const updatedSelectedRoomPhotos = [...selectedRoomPhotos];
         updatedSelectedRoomPhotos[roomIndex] = selected;
         setSelectedRoomPhotos(updatedSelectedRoomPhotos);
@@ -469,12 +477,12 @@ function OwnerPage({ darkMode }) {
                                     <div className='input-rooms-checkbox'>
                                         <div className='input-rooms-checkbox-col'>
                                             <label htmlFor={`wcPrivado${index}`}>Private Bathroom:</label>
-                                            <input type="checkbox" id={`wcPrivado${index}`} name={`wcPrivado${index}`} required></input>
+                                            <input type="checkbox" id={`wcPrivado${index}`} name={`wcPrivado${index}`} ></input>
                                         </div>
                                     
                                         <div className='input-rooms-checkbox-col'>
                                             <label htmlFor={`disponivel${index}`}>Available:</label>
-                                            <input type="checkbox" id={`disponivel${index}`} name={`disponivel${index}`} required></input>
+                                            <input type="checkbox" id={`disponivel${index}`} name={`disponivel${index}`} ></input>
                                         </div>   
                                     </div>
                                 </div>                  

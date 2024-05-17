@@ -839,8 +839,8 @@ class CreateImovel(APIView):
             descricao=data.get('descricao'),
             selo=data.get('selo')
         )
-        logger.info(f"Property created successfully.")
-        return JsonResponse({'message': 'Imovel created successfully.'})
+        logger.info("Property created successfully with ID: %s", imovel.id)
+        return JsonResponse({'message': 'Imovel created successfully.', 'id': imovel.id})
     
 class CreateRoom(APIView):
     def post(self, request):

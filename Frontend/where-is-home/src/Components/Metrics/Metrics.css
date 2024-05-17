@@ -34,12 +34,12 @@
     top: 50%;
     right: -30px;
     padding: 10px;
-    background-color: var(--background-color-dark);
-    color: rgba(13, 221, 218, 1);
+    background-color: var(--background-color);
+    color: var(--toggle-button-color);
     border: none;
     cursor: pointer;
 }
-
+    
 
 .dark-mode {
     color: var(--text-color-dark);

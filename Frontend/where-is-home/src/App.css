@@ -24,6 +24,9 @@
   --background-color-imovel-click-dark:#4e4e4e;
   --background-color-imovel-click-light:rgb(172, 169, 169);
 
+
+  --toggle-button-color-light:rgba(13, 221, 218, 1);
+  --toggle-button-color-dark:black;
 }
 
 
@@ -37,6 +40,7 @@
   --hometitle:var(--hometitle-light);
   --logincontainer:var(--logincontainer-light);
   --navbar-border:var(--navbar-border-light);
+  --toggle-button-color:var(--toggle-button-color-dark);
 }
 
 
@@ -49,6 +53,7 @@
   --hometitle:var(--hometitle-dark);
   --logincontainer:var(--logincontainer-dark);
   --navbar-border:var(--navbar-border-dark);
+  --toggle-button-color:var(--toggle-button-color-light);
 }
 
 .App {

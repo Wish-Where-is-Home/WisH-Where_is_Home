@@ -188,7 +188,9 @@ const ResidenceDetails = ({ darkMode }) => {
   const prices = propertyDetails.quartos.map(room => parseFloat(room.preco_mes));
   const minPrice = Math.min(...prices);
   const maxPrice = Math.max(...prices);
-  const priceDisplay = minPrice === maxPrice ? `${minPrice}€` : `${t('between')} ${minPrice}€ ${t('and')} ${maxPrice}€`;
+  const priceDisplay = minPrice === maxPrice 
+  ? `<span class="price-display">${minPrice}€</span>` 
+  : `${t('between')} <span class="price-display">${minPrice}€</span> ${t('and')} <span class="price-display">${maxPrice}€</span>`;
 
   const toggleOwnerDetails = () => {
     setShowOwnerDetails(!showOwnerDetails);
@@ -292,7 +294,7 @@ const ResidenceDetails = ({ darkMode }) => {
                 {propertyDetails.property.estacionamento_garagem ? t('garage_parking_available') : t('parking_not_included')}
               </span>
               <h2>
-                <b>{priceDisplay}</b> {t('per_month')}
+              <span className='priceAll' dangerouslySetInnerHTML={{ __html: priceDisplay }} /> {t('per_month')}
               </h2>
               <button onClick={toggleOwnerDetails}>{t('reserve_or_book_now')}</button>
               <div className={`ownerDetails ${showOwnerDetails ? 'visible' : ''}`}>

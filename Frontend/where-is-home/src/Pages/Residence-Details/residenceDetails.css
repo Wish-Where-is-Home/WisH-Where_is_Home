@@ -183,6 +183,16 @@
   font-weight: 300;
 }
 
+.residenceDetailsPrice .priceAll {
+  font-weight: bold;
+}
+
+.residenceDetailsPrice .price-display {
+  font-size: 24px;
+  font-weight: bold; 
+  color: #0071c2;
+}
+
 .residenceDetailsPrice>button {
   border: none;
   padding: 10px 20px;

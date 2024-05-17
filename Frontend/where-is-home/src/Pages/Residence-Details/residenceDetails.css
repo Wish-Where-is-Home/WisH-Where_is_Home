@@ -1,30 +1,44 @@
-.residenceDetails {
+.layout-container {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  overflow-y: auto;
   height: 100vh;
+  overflow: hidden;
+}
+
+.media-column-container {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.data-column-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
 }
 
 .residenceWrapper {
-  width: 100%;
-  max-width: 1024px;
   display: flex;
   flex-direction: column;
   gap: 10px;
-  position: relative;
 }
 
-.bookNow {
-  position: absolute;
-  top: 10px;
-  right: 0;
-  border: none;
-  padding: 10px 20px;
-  background-color: #0071c2;
-  color: white;
-  font-weight: bold;
-  border-radius: 5px;
+.residenceImages {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.residenceImgWrapper {
+  width: 48%;
+  padding: 5px;
+}
+
+.residenceImgWrapper.main {
+  width: 100%;
+  padding: 5px;
+}
+
+.residenceImg {
+  width: 100%;
+  height: auto;
   cursor: pointer;
 }
 
@@ -46,22 +60,6 @@
   font-weight: 500;
 }
 
-.residenceImages {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
-
-.residenceImgWrapper {
-  width: 33%;
-}
-
-.residenceImg {
-  width: 100%;
-  object-fit: cover;
-  cursor: pointer;
-}
-
 .residenceDetails2 {
   display: flex;
   justify-content: space-between;
@@ -69,12 +67,10 @@
   margin-top: 20px;
 }
 
-/* Base styling for the walk details container */
 .walkDetails {
-  background-color: #333; /* Dark background by default */
+  background-color: #333;
   padding: 16px;
   border-radius: 10px;
-  margin-top: 20px; /* Adjust spacing as needed */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -82,50 +78,8 @@
 }
 
 .light-mode .walkDetails {
-  background-color: #f0f0f0; /* Light background for light mode */
+  background-color: #f0f0f0;
 }
-
-/* Adjust text colors and other styles for dark/light mode */
-.residenceDetails.dark-mode .walkDetails Typography,
-.residenceDetails.dark-mode .walkDetails .MuiTypography-caption,
-.residenceDetails.dark-mode .walkDetails .MuiTypography-subtitle1 {
-  color: white; /* Ensuring good readability in dark mode */
-}
-
-.residenceDetails.light-mode .walkDetails Typography,
-.residenceDetails.light-mode .walkDetails .MuiTypography-caption,
-.residenceDetails.light-mode .walkDetails .MuiTypography-subtitle1 {
-  color: black; /* Suitable for light backgrounds */
-}
-
-/* Circular progress bar customization for theme compatibility */
-.circularProgressContainer {
-  position: relative;
-}
-
-.circularProgressLabel {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 0.5rem;
-  color: inherit; /* Inherits from parent for automatic theme adaptation */
-}
-
-/* Additional styles for room list and details to handle dark/light modes */
-.roomListItem.unavailable {
-  opacity: 0.5; /* Making unavailable rooms less prominent */
-}
-
-.light-mode .roomDetail, .light-mode .roomPrice {
-  color: #555; /* Darker text in light mode for better contrast */
-}
-
-.dark-mode .roomDetail, .dark-mode .roomPrice {
-  color: #ddd; /* Lighter text in dark mode for better visibility */
-}
-
-
 
 .residenceDetailsTexts {
   flex: 3;
@@ -165,12 +119,6 @@
   margin-right: 15px;
 }
 
-.roomInfo {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
 .roomName {
   font-size: 1em;
   flex-shrink: 0;
@@ -204,8 +152,6 @@
   color: #b3b3b3;
   font-style: italic;
 }
-
-
 
 .residenceDetailsPrice {
   flex: 1;

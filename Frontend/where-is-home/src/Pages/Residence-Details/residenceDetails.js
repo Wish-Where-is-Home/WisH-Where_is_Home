@@ -201,30 +201,50 @@ const ResidenceDetails = ({ darkMode }) => {
   };
 
   return (
-    <div className={`residenceDetails ${darkMode ? 'dark-mode' : 'light-mode'}`}>
-      <div className="residenceContainer">
-        {open && (
-          <div className="slider">
-            <FontAwesomeIcon
-              icon={faCircleXmark}
-              className="close"
-              onClick={() => setOpen(false)}
-            />
-            <FontAwesomeIcon
-              icon={faCircleArrowLeft}
-              className="arrow"
-              onClick={() => handleMove("l")}
-            />
-            <div className="sliderWrapper">
-              <img src={photos[slideNumber].src} alt="" className="sliderImg" />
-            </div>
-            <FontAwesomeIcon
-              icon={faCircleArrowRight}
-              className="arrow"
-              onClick={() => handleMove("r")}
-            />
+    <div className={`layout-container ${darkMode ? 'dark-mode' : 'light-mode'}`}>
+
+      {open && (
+        <div className="slider">
+          <FontAwesomeIcon
+            icon={faCircleXmark}
+            className="close"
+            onClick={() => setOpen(false)}
+          />
+          <FontAwesomeIcon
+            icon={faCircleArrowLeft}
+            className="arrow"
+            onClick={() => handleMove("l")}
+          />
+          <div className="sliderWrapper">
+            <img src={photos[slideNumber].src} alt="" className="sliderImg" />
           </div>
-        )}
+          <FontAwesomeIcon
+            icon={faCircleArrowRight}
+            className="arrow"
+            onClick={() => handleMove("r")}
+          />
+        </div>
+      )}
+
+      <div className="media-column-container">
+        <div className="residenceImages">
+          {photos.map((photos, i) => (
+            <div
+              className={`residenceImgWrapper ${i === 0 ? 'main' : ''}`}
+              key={i}
+              onClick={() => handleOpen(i)}
+            >
+              <img
+                src={photos.src}
+                alt=""
+                className="residenceImg"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="data-column-container">
         <div className="residenceWrapper">
           <h1 className="residenceTitle">
             {propertyDetails.property.nome}, {t('floor')} {propertyDetails.property.piso}
@@ -236,21 +256,8 @@ const ResidenceDetails = ({ darkMode }) => {
           <span className="residencePriceHighlight">
             {propertyDetails.property.tipologia} {propertyDetails.property.equipado ? t('fully_equipped') : t('not_equipped')}
           </span>
-          <div className="residenceImages">
-            {photos.map((photos, i) => (
-              <div className="residenceImgWrapper" key={i}>
-                <img
-                  onClick={() => handleOpen(i)}
-                  src={photos.src}
-                  alt=""
-                  className="residenceImg"
-                />
-              </div>
-            ))}
-          </div>
           <div className="residenceDetails2">
             <div className="walkDetails">
-              
               <TravelTimeCalculator propertyLat={propertyDetails.property.geom[0]} propertyLng={propertyDetails.property.geom[1]} />
               <WalkScoreWidget
                 apiKey="g73c0420989bc43f79d00fa60cd4df386"

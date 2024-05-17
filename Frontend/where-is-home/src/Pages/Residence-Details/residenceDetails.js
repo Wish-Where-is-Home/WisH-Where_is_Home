@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import './residenceDetails.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleArrowLeft, faCircleArrowRight, faCircleXmark, faLocationDot } from "@fortawesome/free-solid-svg-icons";
@@ -188,9 +188,9 @@ const ResidenceDetails = ({ darkMode }) => {
   const prices = propertyDetails.quartos.map(room => parseFloat(room.preco_mes));
   const minPrice = Math.min(...prices);
   const maxPrice = Math.max(...prices);
-  const priceDisplay = minPrice === maxPrice 
-  ? `<span class="price-display">${minPrice}€</span>` 
-  : `${t('between')} <span class="price-display">${minPrice}€</span> ${t('and')} <span class="price-display">${maxPrice}€</span>`;
+  const priceDisplay = minPrice === maxPrice
+    ? `<span class="price-display">${minPrice}€</span>`
+    : `${t('between')} <span class="price-display">${minPrice}€</span> ${t('and')} <span class="price-display">${maxPrice}€</span>`;
 
   const toggleOwnerDetails = () => {
     setShowOwnerDetails(!showOwnerDetails);
@@ -202,9 +202,12 @@ const ResidenceDetails = ({ darkMode }) => {
     }
   };
 
+  const scrollToSection = (section) => {
+    document.getElementById(section).scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
     <div className={`layout-container ${darkMode ? 'dark-mode' : 'light-mode'}`}>
-
       {open && (
         <div className="slider">
           <FontAwesomeIcon
@@ -247,7 +250,7 @@ const ResidenceDetails = ({ darkMode }) => {
       </div>
 
       <div className="data-column-container">
-        <div className="residenceWrapper">
+        <div className="fixed-header">
           <h1 className="residenceTitle">
             {propertyDetails.property.nome}, {t('floor')} {propertyDetails.property.piso}
           </h1>
@@ -258,19 +261,17 @@ const ResidenceDetails = ({ darkMode }) => {
           <span className="residencePriceHighlight">
             {propertyDetails.property.tipologia} {propertyDetails.property.equipado ? t('fully_equipped') : t('not_equipped')}
           </span>
-          <div className="residenceDetails2">
-            <div className="walkDetails">
-              <TravelTimeCalculator propertyLat={propertyDetails.property.geom[0]} propertyLng={propertyDetails.property.geom[1]} />
-              <WalkScoreWidget
-                apiKey="g73c0420989bc43f79d00fa60cd4df386"
-                address={propertyDetails.property.morada}
-                width="300"
-                height="421"
-                backgroundColor="#FFFFFF"
-              />
-              <div className="source-text">Source: Walkscore API</div>
-            </div>
-            
+
+          <div className="navbar2">
+            <button onClick={() => scrollToSection('description')}>{t('description')}</button>
+            <button onClick={() => scrollToSection('rooms')}>{t('rooms')}</button>
+            <button onClick={() => scrollToSection('widgets')}>{t('widgets')}</button>
+          </div>
+        </div>
+
+        <div id="description" className="section">
+          <h2>{t('description')}</h2>
+          <div className="details-and-price">
             <div className="residenceDetailsTexts">
               <p className="residenceDesc">
                 {propertyDetails.property.descricao}
@@ -289,14 +290,13 @@ const ResidenceDetails = ({ darkMode }) => {
                 <CategoryRatings categoryAverages={categoryAverages} />
               </div>
             </div>
-
             <div className="residenceDetailsPrice">
               <h2>{t('take_advantage_of_this_opportunity')}</h2>
               <span>
                 {propertyDetails.property.estacionamento_garagem ? t('garage_parking_available') : t('parking_not_included')}
               </span>
               <h2>
-              <span className='priceAll' dangerouslySetInnerHTML={{ __html: priceDisplay }} /> {t('per_month')}
+                <span className='priceAll' dangerouslySetInnerHTML={{ __html: priceDisplay }} /> {t('per_month')}
               </h2>
               <button onClick={toggleOwnerDetails}>{t('reserve_or_book_now')}</button>
               <div className={`ownerDetails ${showOwnerDetails ? 'visible' : ''}`}>
@@ -308,25 +308,46 @@ const ResidenceDetails = ({ darkMode }) => {
             </div>
           </div>
         </div>
-        <div className="roomList">
-          {propertyDetails && propertyDetails.quartos.map((room, index) => (
-            <div key={index} className={`roomListItem ${!room.disponivel ? 'unavailable' : ''}`}>
-              <div className="roomImageContainer">
-                <img src={room.image || photos[0].src} alt="Room" className="roomListImage" />
-                <h3 className="roomName">{room.tipologia}</h3>
-              </div>
-              <div className="roomDetails">
-                <p className="roomDetail">{room.area} m²</p>
-                <p className="roomDetail">{room.despesas_incluidas}</p>
-                <p className="roomDetail">{room.observacoes}</p>
-                <p className="roomDetail">{room.wc_privado ? t('private_bathroom') : t('no_private_bathroom')}</p>
-              </div>
 
-              <div className="roomPrice">
-                {room.disponivel ? `${room.preco_mes}€ ${t('per_month')}` : t('not_available')}
+        <div id="rooms" className="section">
+          <h2>{t('rooms')}</h2>
+          <div className="roomList">
+            {propertyDetails && propertyDetails.quartos.map((room, index) => (
+              <div key={index} className={`roomListItem ${!room.disponivel ? 'unavailable' : ''}`}>
+                <div className="roomImageContainer">
+                  <img src={room.image || photos[0].src} alt="Room" className="roomListImage" />
+                  <h3 className="roomName">{room.tipologia}</h3>
+                </div>
+                <div className="roomDetails">
+                  <p className="roomDetail">{room.area} m²</p>
+                  <p className="roomDetail">{room.despesas_incluidas}</p>
+                  <p className="roomDetail">{room.observacoes}</p>
+                  <p className="roomDetail">{room.wc_privado ? t('private_bathroom') : t('no_private_bathroom')}</p>
+                </div>
+
+                <div className="roomPrice">
+                  {room.disponivel ? `${room.preco_mes}€ ${t('per_month')}` : t('not_available')}
+                </div>
               </div>
+            ))}
+          </div>
+        </div>
+
+        <div id="widgets" className="section">
+          <h2>{t('widgets')}</h2>
+          <div className="residenceDetails2">
+            <div className="walkDetails">
+              <TravelTimeCalculator propertyLat={propertyDetails.property.geom[0]} propertyLng={propertyDetails.property.geom[1]} />
+              <WalkScoreWidget
+                apiKey="g73c0420989bc43f79d00fa60cd4df386"
+                address={propertyDetails.property.morada}
+                width="300"
+                height="421"
+                backgroundColor="#FFFFFF"
+              />
+              <div className="source-text">Source: Walkscore API</div>
             </div>
-          ))}
+          </div>
         </div>
       </div>
     </div>

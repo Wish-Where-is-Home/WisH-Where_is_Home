@@ -118,5 +118,8 @@
     "not_available": "Not available",
     "enter_destination": "Enter destination address",
     "calculate": "Calculate",
-    "distance_to_institution": "Distance to institution"
+    "distance_to_institution": "Distance to institution",
+    "description": "Description",
+    "rooms": "Rooms",
+    "widgets": "Widgets"
 }

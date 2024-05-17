@@ -16,8 +16,8 @@ import AdminPage from './Pages/AdminPage/AdminPage';
 
 
 import { initializeApp } from "firebase/app";
+import { getFirestore, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { getAnalytics } from "firebase/analytics";
-import { storage, db } from './firebaseConfig';
 import { getStorage } from "firebase/storage";
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 
@@ -59,7 +59,7 @@ function App() {
   const analytics = getAnalytics(app);
 
   const storage = getStorage(app);
-
+  const db = getFirestore(app);
 
 
 
@@ -76,7 +76,7 @@ function App() {
     const uploadTasks = Array.from(photos).map((photo, index) =>{
 
       const storageRef = ref(storage, `images/${photo.name}`);
-      const uploadTask = uploadMultipleFiles(storageRef, photos);
+      const uploadTask = uploadBytesResumable(storageRef, photos);
       return new Promise((resolve, reject) => {
         uploadTask.on(
           'state_changed',
@@ -126,7 +126,7 @@ function App() {
     const uploadTasks = Array.from(photos).map((photo, index) =>{
 
       const storageRef = ref(storage, `images/${photo.name}`);
-      const uploadTask = uploadMultipleFiles(storageRef, photos);
+      const uploadTask = uploadBytesResumable(storageRef, photos);
       return new Promise((resolve, reject) => {
         uploadTask.on(
           'state_changed',

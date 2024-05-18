@@ -165,6 +165,38 @@ function App() {
   };
 
 
+  async function fetchImageURLsImoveis(imovel_Id) {
+    const collectionRef = doc(db, "imoveis", imovel_Id);
+    const docSnap = await getDoc(collectionRef);
+    
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      const imageUrls = data.imageurl; 
+  
+      return imageUrls;
+    } else {
+      console.log("No such document!");
+      return [];
+    }
+  }
+
+  async function fetchImageURLsBedrooms(bedroom_Id) {
+    const collectionRef = doc(db, "quartos", bedroom_Id);
+    const docSnap = await getDoc(collectionRef);
+  
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      const imageUrls = data.imageurl; 
+  
+      return imageUrls;
+    } else {
+      console.log("No such document!");
+      return [];
+    }
+  }
+  
+
+
 
   useEffect(() => {
     const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;

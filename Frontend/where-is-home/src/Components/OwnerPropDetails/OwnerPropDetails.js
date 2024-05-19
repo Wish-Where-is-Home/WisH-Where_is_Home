@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './OwnerPropDetails.css';
 
-function OwnerPropDetails({ property, allRooms }) {
+function OwnerPropDetails({ property, allRooms, token, onRoomAvailabilityChange, onDeleteProperty }) {
     const [expanded, setExpanded] = useState(false);
     const [showRooms, setShowRooms] = useState(false);
 
@@ -12,7 +12,51 @@ function OwnerPropDetails({ property, allRooms }) {
     const toggleRooms = () => {
         setShowRooms(!showRooms);
     };
+
+    const handleRoomAvailabilityChange = async (roomId, currentAvailability) => {
+        try {
+            const response = await fetch(`http://mednat.ieeta.pt:9009/owner/update/room/availability/${roomId}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ disponivel: !currentAvailability })
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to update room availability');
+            }
+
+            onRoomAvailabilityChange(roomId, !currentAvailability);
+        } catch (error) {
+            console.error('Error updating room availability:', error);
+        }
+    };
+
+    const handleDeleteProperty = async () => {
+        try {
+            const response = await fetch(`http://mednat.ieeta.pt:9009/owner/delete/property/${property.id}/`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to delete property');
+            }
+
+            onDeleteProperty(property.id);
+        } catch (error) {
+            console.error('Error deleting property:', error);
+        }
+    };
+
     const propertyRooms = allRooms.filter(room => room.property_id === property.id);
+
+    
     return (
         <div className="property-details">
             <div className="summary">
@@ -21,6 +65,7 @@ function OwnerPropDetails({ property, allRooms }) {
                 <h3>{property.nome}</h3>
                 <button onClick={handleToggleExpand}>{expanded ? 'Less' : 'More'}</button>
                 <button onClick={toggleRooms}>Rooms</button>
+                <button onClick={handleDeleteProperty}>Delete Property</button>
             </div>
             
             {expanded && (
@@ -47,7 +92,12 @@ function OwnerPropDetails({ property, allRooms }) {
                                 <p><span>Room {index + 1}:</span> </p>
                                 <p><span>Included Expenses:</span> {room.despesas_incluidas}</p>
                                 <p><span>Private Bathroom:</span> {room.wc_privado ? 'Yes' : 'No'}</p>
-                                <p><span>Available:</span> {room.disponivel ? 'Yes' : 'No'}</p>
+                                <p>
+                                    <span>Available:</span> {room.disponivel ? 'Yes' : 'No'}
+                                    <button onClick={() => handleRoomAvailabilityChange(room.id, room.disponivel)}>
+                                    {room.disponivel ? 'Unavailable' : 'Available'}
+                                    </button>
+                                </p>
                                 <p><span>Observations:</span> {room.observacoes}</p>
                             </li>
                         ))}

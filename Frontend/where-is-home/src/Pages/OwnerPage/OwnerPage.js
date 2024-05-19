@@ -13,6 +13,7 @@ function OwnerPage({ darkMode }) {
     const [selectedRoomPhotos, setSelectedRoomPhotos] = useState([]);
     const [numRooms, setNumRooms] = useState(1); 
     const [token, setToken] = useState('');
+    const [id_propriedade, set_id_propriedade] = useState(null);
 
     useEffect(() => {
         // Fetch token from local storage or wherever it is stored
@@ -204,6 +205,7 @@ function OwnerPage({ darkMode }) {
         };
 
         try {
+            set_id_propriedade(null);
             const response = await fetch('http://mednat.ieeta.pt:9009/owner/create/property/', {
                 method: 'POST',
                 headers: {
@@ -216,12 +218,14 @@ function OwnerPage({ darkMode }) {
             if (!response.ok) {
                 throw new Error('Failed to create property');
             }
-            handleAddRoomsClick();
+            
 
             const responseData = await response.json();
             console.log(responseData);
             const propertyId = responseData.id;
-            return propertyId;
+            set_id_propriedade(propertyId);
+            handleAddRoomsClick();
+
 
         } catch (error) {
             console.error('Error creating property:', error);
@@ -242,8 +246,8 @@ function OwnerPage({ darkMode }) {
     };
     const handleRoomsSubmit = async (event) => {
         event.preventDefault();
-        const propertyId = await handleSubmit(event);
-    
+        const propertyId = id_propriedade;
+       
         const formData = new FormData(event.target);
     
         const roomDataArray = [];
@@ -269,6 +273,7 @@ function OwnerPage({ darkMode }) {
                 disponivel: disponivel,
                 photos: roomPhotos
             });
+            console.log(roomDataArray);
         }
     
         const token = localStorage.getItem('token');
@@ -307,14 +312,20 @@ function OwnerPage({ darkMode }) {
             selected.push(URL.createObjectURL(files[i]));
         }
     
-        // Update the selected room photos array in state
         const updatedSelectedRoomPhotos = [...selectedRoomPhotos];
         updatedSelectedRoomPhotos[roomIndex] = selected;
         setSelectedRoomPhotos(updatedSelectedRoomPhotos);
     };
       
     
-    
+    const handleRoomAvailabilityChange = (roomId, newAvailability) => {
+        setAllRooms(prevRooms => prevRooms.map(room => room.id === roomId ? { ...room, disponivel: newAvailability } : room));
+    };
+
+    const handleDeleteProperty = (propertyId) => {
+        setProperties(prevProperties => prevProperties.filter(property => property.id !== propertyId));
+        setAllRooms(prevRooms => prevRooms.filter(room => room.property_id !== propertyId));
+    };
 
     return (
         <div className={`owner-section ${darkMode ? 'dark-mode' : 'light-mode'}`}>
@@ -344,7 +355,9 @@ function OwnerPage({ darkMode }) {
                 </div>
                 <div className='o-show-properties'>
                     {properties.length > 0 && properties.map(property => (
-                        <PropertyDetails key={property.id} property={property} allRooms={allRooms}/>
+                        <PropertyDetails key={property.id} property={property} allRooms={allRooms} token={token}
+                        onRoomAvailabilityChange={handleRoomAvailabilityChange}
+                        onDeleteProperty={handleDeleteProperty}/>
                     ))}
                 </div>
             </div>

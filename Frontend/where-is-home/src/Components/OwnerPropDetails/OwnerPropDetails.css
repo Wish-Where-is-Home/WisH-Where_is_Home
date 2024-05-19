@@ -49,6 +49,7 @@
   .property-details .room-dropdown {
     margin-top: 10px;
     background-color: var(--background-color2);
+    background-color: var(--background-color2);
     border-radius: 5px;
     padding: 10px;
   }
@@ -70,6 +71,13 @@
   }
   .property-details .room-dropdown li span {
     font-weight:600;
+    margin-bottom: 40px;
+    background-color: white;
+    padding: 10px;
+    border-radius: 8px;
+  }
+  .property-details .room-dropdown li span {
+    font-weight:600;
   }
   
   .dark-mode .property-details button {
@@ -79,6 +87,10 @@
   
   .dark-mode .property-details button:hover {
     background-color: var(--background-color); 
+  }
+  
+  .dark-mode .property-details .room-dropdown li {
+    background-color: var(--background-color);
   }
   
   .dark-mode .property-details .room-dropdown li {

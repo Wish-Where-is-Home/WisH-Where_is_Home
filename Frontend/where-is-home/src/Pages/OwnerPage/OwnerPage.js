@@ -186,12 +186,18 @@ function OwnerPage({ darkMode }) {
         const roomPhotos = [];
         const fullAddress = address + ', ' + zipCode;
         let geom = null;
-        const geocodeUrl = 'https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(fullAddress)}.json?access_token=${mapboxgl.accessToken}';
         try {
+            const geocodeUrl = "https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(fullAddress)}.json?access_token=${mapboxgl.accessToken}";
             const response = await fetch(geocodeUrl);
             const data = await response.json();
             console.log(data);
-            return null;
+
+            const { lat, lon } = geocodeData.results[0].geometry;
+
+            geom = {
+                type: "Point",
+                coordinates: [lon, lat] // GeoJSON format: [longitude, latitude]
+            };
         } catch (error) {
             console.error('Error geocoding address:', error);
             return;

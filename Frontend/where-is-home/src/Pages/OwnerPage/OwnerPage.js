@@ -192,7 +192,6 @@ function OwnerPage({ darkMode }) {
             const data = await response.json();
             console.log(data);
 
-            const { lat, lon } = geocodeData.results[0].geometry;
 
             geom = {
                 type: "Point",

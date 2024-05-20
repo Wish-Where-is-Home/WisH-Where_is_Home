@@ -185,7 +185,11 @@ function OwnerPage({ darkMode }) {
             const geocodeData = await geocodeResponse.json();
             if (geocodeData.status === 'OK' && geocodeData.results.length > 0) {
                 const [ lat, lng  ] = geocodeData.results[0].geometry.location;
-                geom = [ lat, lng ];
+                geom = 
+                {
+                    type: 'Point',
+                    coordinates: [lng, lat]
+                };
             } else {
                 throw new Error('Geocoding failed: No results found');
                 }

@@ -179,15 +179,16 @@ function OwnerPage({ darkMode }) {
         }
 
         let geom;
+        const apiKey = 'AIzaSyA6vipC2Bi0dFD0ZpB3nZb0gjCKuryCiJQ';  
         try {
-            const geocodeResponse = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`);
+            const geocodeResponse = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apiKey}`);
             const geocodeData = await geocodeResponse.json();
-            if (geocodeData.length > 0) {
-                const { lat, lon } = geocodeData[0];
-                geom = { lat, lon };
+            if (geocodeData.status === 'OK' && geocodeData.results.length > 0) {
+                const [ lat, lng  ] = geocodeData.results[0].geometry.location;
+                geom = [ lat, lng ];
             } else {
                 throw new Error('Geocoding failed: No results found');
-            }
+                }
         } catch (error) {
             console.error('Error geocoding address:', error);
             return;
@@ -195,7 +196,7 @@ function OwnerPage({ darkMode }) {
         
         const propertyData = {
             id: null, 
-            owner: null,// ownerId, // Use the ID of the currently logged-in user
+            owner: null, // Use the ID of the currently logged-in user
             nome: propertyName,
             morada: address, 
             tipologia: typology,

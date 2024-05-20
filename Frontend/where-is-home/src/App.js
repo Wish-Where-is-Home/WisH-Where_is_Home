@@ -8,7 +8,6 @@ import Login_register from './Pages/Login-register/Login_register';
 import AboutUs from './Pages/AboutUs/AboutUs';
 import MetricsPage from './Pages/MetricsPage/MetricsPage';
 import QuizPage from './Pages/SecondPage/QuizPage';
-import ResidenceDetails from './Pages/Residence-Details/residenceDetails';
 import { useAuth } from './AuthContext/AuthContext';
 import ProfilePage from './Pages/ProfilePage/ProfilePage';
 import AdminPage from './Pages/AdminPage/AdminPage';
@@ -92,8 +91,11 @@ function App() {
           () => {
             
             getDownloadURL(uploadTask.snapshot.ref).then( async(downloadURL) => {
+              const docSnapshot = await getDoc(collectionRef);
+              const data = docSnapshot.data();
+              const updatedImageURLs = [...(data.imageurl || []), downloadURL];
               await updateDoc(collectionRef, {
-                imageurl: downloadURL,
+                imageurl: updatedImageURLs,
               });
               console.log('File available at', downloadURL);
               resolve(downloadURL);

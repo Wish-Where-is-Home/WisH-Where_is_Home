@@ -1,11 +1,12 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar as fasStar, faStarHalfAlt as fasStarHalfAlt, faStar as farStar } from '@fortawesome/free-solid-svg-icons';
+import { faStar as fasStar, faStarHalfAlt as fasStarHalfAlt } from '@fortawesome/free-solid-svg-icons';
+import { faStar as farStar } from '@fortawesome/free-regular-svg-icons';
 import './CategoryRatings.css';
 
 const CategoryRatings = ({ categoryAverages }) => {
   const renderStars = (rating) => {
-    const roundedRating = Math.round(rating * 2) / 2; // Round to nearest half
+    const roundedRating = Math.round(rating * 2) / 2; 
     const fullStars = Math.floor(roundedRating);
     const halfStar = roundedRating - fullStars === 0.5 ? 1 : 0;
     const emptyStars = 5 - fullStars - halfStar;

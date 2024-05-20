@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import './OwnerPage.css';
 import PropertyDetails from '../../Components/OwnerPropDetails/OwnerPropDetails';
+import mapboxgl from 'mapbox-gl'; 
+
+mapboxgl.accessToken = 'pk.eyJ1IjoiY3Jpc3RpYW5vbmljb2xhdSIsImEiOiJjbHZmZnFoaXUwN2R4MmlxbTdsdGlreDEyIn0.-vhnpIfDMVyW04ekPBhQlg';
 
 function OwnerPage({ darkMode }) {
     const [properties, setProperties] = useState([]);
@@ -67,6 +70,7 @@ function OwnerPage({ darkMode }) {
                 console.error('Error fetching properties:', error);
             });
     };
+
     const [allRooms, setAllRooms] = useState([]);
     const fetchRooms = () => {
         const token = localStorage.getItem('token');
@@ -129,6 +133,7 @@ function OwnerPage({ darkMode }) {
         const area = parseFloat(formData.get('propertyArea'));
         const typology = formData.get('propertyTypology');
         const address = formData.get('propertyAddress'); 
+        const zipCode = formData.get('propertyZipCode');
         const floor = parseInt(formData.get('propertyFloor'));
         const hasElevator = formData.get('propertyElevator') === 'true';
         const numWcs = parseInt(formData.get('propertyWcs'));
@@ -140,6 +145,12 @@ function OwnerPage({ darkMode }) {
         const seal = formData.get('propertySeal');
         const createdAt = formData.get('propertyCreatedAt');
         const updatedAt = formData.get('propertyUpdatedAt');
+
+        // garante que o zip code esta correto
+        if (zipCode.length !== 8 && zipCode.split('-')[0].length !== 4 && zipCode.split('-')[1].length !== 2){
+            console.error('Invalid zip code');
+            return;
+        }
 
         const submittedNumRooms = formData.get('numRooms');
         if (submittedNumRooms) {
@@ -173,26 +184,14 @@ function OwnerPage({ darkMode }) {
         }
 
         const roomPhotos = [];
-        for (let i = 0; i < numRooms; i++) {
-            const roomPhoto = formData.getAll(`roomPhoto${i}`);
-            roomPhotos.push(roomPhoto);
-        }
-
-        let geom;
-        const apiKey = 'AIzaSyA6vipC2Bi0dFD0ZpB3nZb0gjCKuryCiJQ';  
+        const fullAddress = address + ', ' + zipCode;
+        let geom = null;
+        const geocodeUrl = 'https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(fullAddress)}.json?access_token=${mapboxgl.accessToken}';
         try {
-            const geocodeResponse = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apiKey}`);
-            const geocodeData = await geocodeResponse.json();
-            if (geocodeData.status === 'OK' && geocodeData.results.length > 0) {
-                const [ lat, lng  ] = geocodeData.results[0].geometry.location;
-                geom = 
-                {
-                    type: 'Point',
-                    coordinates: [lng, lat]
-                };
-            } else {
-                throw new Error('Geocoding failed: No results found');
-                }
+            const response = await fetch(geocodeUrl);
+            const data = await response.json();
+            console.log(data);
+            return null;
         } catch (error) {
             console.error('Error geocoding address:', error);
             return;
@@ -202,7 +201,7 @@ function OwnerPage({ darkMode }) {
             id: null, 
             owner: null, // Use the ID of the currently logged-in user
             nome: propertyName,
-            morada: address, 
+            morada: fullAddress, 
             tipologia: typology,
             area: area,
             geom: geom,
@@ -398,6 +397,11 @@ function OwnerPage({ darkMode }) {
                         <div>
                             <label htmlFor="propertyAddress">Address:</label>
                             <input type="text" id="propertyAddress" name="propertyAddress" required />
+                        </div>
+
+                        <div>
+                            <label htmlFor="propertyZipCode">Zip Code:</label>
+                            <input type="text" id="propertyZipCode" name="propertyZipCode" required />
                         </div>
 
                         <div className="input-group">

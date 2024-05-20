@@ -74,10 +74,26 @@ function ModalProperty({ darkMode, propertyData, propertyRooms, closeModal,fetch
         })
         .then(response => {
             console.log('Comment accepted successfully');
-            closeCommentModal(); 
+            closeCommentModal();
+            Toastify({
+                text: "Comment accepted successfully",
+                duration: 3000,
+                close: true,
+                gravity: "top",
+                position: "right",
+                backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)"
+            }).showToast();
         })
         .catch(error => {
             console.error('Error accepting comment:', error);
+            Toastify({
+                text: "Error accepting comment",
+                duration: 3000,
+                close: true,
+                gravity: "top",
+                position: "right",
+                backgroundColor: "linear-gradient(to right, #FF5F6D, #FFC371)"
+            }).showToast();
         });
     };
     
@@ -94,10 +110,26 @@ function ModalProperty({ darkMode, propertyData, propertyRooms, closeModal,fetch
         })
         .then(response => {
             console.log('Room denied successfully');
-            closeConfirmDenieModal(); 
+            closeConfirmDenieModal();
+            Toastify({
+                text: "Room denied successfully",
+                duration: 3000,
+                close: true,
+                gravity: "top",
+                position: "right",
+                backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)"
+            }).showToast();
         })
         .catch(error => {
             console.error('Error denying room:', error);
+            Toastify({
+                text: "Error denying room",
+                duration: 3000,
+                close: true,
+                gravity: "top",
+                position: "right",
+                backgroundColor: "linear-gradient(to right, #FF5F6D, #FFC371)"
+            }).showToast();
         });
     };
 

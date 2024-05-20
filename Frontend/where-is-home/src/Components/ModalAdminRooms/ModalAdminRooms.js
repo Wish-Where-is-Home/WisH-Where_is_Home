@@ -6,6 +6,8 @@ import { format } from 'date-fns';
 import axios from 'axios';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import Toastify from 'toastify-js'
+import "toastify-js/src/toastify.css"
 
 
 function ModalAdminRooms({darkMode,roomData,closeModalRoom,fetchImageURLsImoveis,fetchImageURLsBedrooms}) {
@@ -91,10 +93,26 @@ function ModalAdminRooms({darkMode,roomData,closeModalRoom,fetchImageURLsImoveis
         })
         .then(response => {
             console.log('Comment accepted successfully');
-            closeCommentModal(); 
+            closeCommentModal();
+            Toastify({
+                text: "Comment accepted successfully",
+                duration: 3000,
+                close: true,
+                gravity: "top",
+                position: "right",
+                backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)"
+            }).showToast();
         })
         .catch(error => {
             console.error('Error accepting comment:', error);
+            Toastify({
+                text: "Error accepting comment",
+                duration: 3000,
+                close: true,
+                gravity: "top",
+                position: "right",
+                backgroundColor: "linear-gradient(to right, #FF5F6D, #FFC371)"
+            }).showToast();
         });
     };
     
@@ -103,7 +121,7 @@ function ModalAdminRooms({darkMode,roomData,closeModalRoom,fetchImageURLsImoveis
         closeConfirmDenieModal();
     
         const token = localStorage.getItem('token');
-       
+        
         axios.post(`http://mednat.ieeta.pt:9009/admin/update/room/status/${roomId}/`, { status: 'accepted' }, {
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -111,10 +129,26 @@ function ModalAdminRooms({darkMode,roomData,closeModalRoom,fetchImageURLsImoveis
         })
         .then(response => {
             console.log('Room denied successfully');
-            closeConfirmDenieModal(); 
+            closeConfirmDenieModal();
+            Toastify({
+                text: "Room denied successfully",
+                duration: 3000,
+                close: true,
+                gravity: "top",
+                position: "right",
+                backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)"
+            }).showToast();
         })
         .catch(error => {
             console.error('Error denying room:', error);
+            Toastify({
+                text: "Error denying room",
+                duration: 3000,
+                close: true,
+                gravity: "top",
+                position: "right",
+                backgroundColor: "linear-gradient(to right, #FF5F6D, #FFC371)"
+            }).showToast();
         });
     };
 

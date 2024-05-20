@@ -30,12 +30,12 @@
   min-width: 120px;
 }
 
-.star {
+.star.full, .star.half, .star.empty {
   color: gold;
 }
 
 .star.empty {
-  color: lightgray;
+  color: gold;
 }
 
 .rating-count {

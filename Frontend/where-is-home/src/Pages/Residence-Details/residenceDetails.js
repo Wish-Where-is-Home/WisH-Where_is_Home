@@ -8,7 +8,7 @@ import categoryMapping from './categoryMapping';
 import CategoryRatings from './CategoryRatings';
 import { useTranslation } from 'react-i18next';
 
-const ResidenceDetails = ({ darkMode }) => {
+const ResidenceDetails = ({ darkMode, propertyId, onClose }) => {
   const { t } = useTranslation("common");
   const [slideNumber, setSlideNumber] = useState(0);
   const [open, setOpen] = useState(false);
@@ -19,9 +19,8 @@ const ResidenceDetails = ({ darkMode }) => {
   const [categoryAverages, setCategoryAverages] = useState({});
 
   useEffect(() => {
-    const fetchData = async () => {
-      const imovelId = "20";
-      const url = `http://mednat.ieeta.pt:9009/properties/${imovelId}/`;
+    const fetchPropertyDetails = async () => {
+      const url = `http://mednat.ieeta.pt:9009/properties/${propertyId}/`;
       try {
         const response = await fetch(url, {
           method: 'GET',
@@ -42,8 +41,8 @@ const ResidenceDetails = ({ darkMode }) => {
         console.error('There was a problem with your fetch operation:', error);
       }
     };
-    fetchData();
-  }, []);
+    fetchPropertyDetails();
+  }, [propertyId]);
 
   const YelpCategories = () => {
     useEffect(() => {
@@ -80,7 +79,7 @@ const ResidenceDetails = ({ darkMode }) => {
       .then(response => response.json())
       .then(data => {
         console.log(data);
-        setYelpData(data); 
+        setYelpData(data);
         const averages = calculateCategoryAverages(data);
         console.log("Category Averages: ", averages);
         setCategoryAverages(averages);
@@ -203,147 +202,165 @@ const ResidenceDetails = ({ darkMode }) => {
   };
 
   return (
-    <div className={`layout-container ${darkMode ? 'dark-mode' : 'light-mode'}`}>
-      {open && (
-        <div className="slider">
-          <FontAwesomeIcon
-            icon={faCircleXmark}
-            className="close"
-            onClick={() => setOpen(false)}
-          />
-          <FontAwesomeIcon
-            icon={faCircleArrowLeft}
-            className="arrow"
-            onClick={() => handleMove("l")}
-          />
-          <div className="sliderWrapper">
-            <img src={photos[slideNumber].src} alt="" className="sliderImg" />
-          </div>
-          <FontAwesomeIcon
-            icon={faCircleArrowRight}
-            className="arrow"
-            onClick={() => handleMove("r")}
-          />
+    <div className={`modal-overlay ${darkMode ? 'dark-mode' : 'light-mode'}`} onClick={onClose}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <div className="modal-header">
+          <h2>{propertyDetails.property.nome}</h2>
+          <button className="close-button" onClick={onClose}>
+            <FontAwesomeIcon icon={faCircleXmark} />
+          </button>
         </div>
-      )}
-
-      <div className="media-column-container">
-        <div className="residenceImages">
-          {photos.map((photos, i) => (
-            <div
-              className={`residenceImgWrapper ${i === 0 ? 'main' : ''}`}
-              key={i}
-              onClick={() => handleOpen(i)}
-            >
-              <img
-                src={photos.src}
-                alt=""
-                className="residenceImg"
+        <div className={`layout-container ${darkMode ? 'dark-mode' : 'light-mode'} ${open ? 'slider-open' : ''}`}>
+          {open && (
+            <div className="slider">
+              <FontAwesomeIcon
+                icon={faCircleXmark}
+                className="close"
+                onClick={() => setOpen(false)}
+              />
+              <FontAwesomeIcon
+                icon={faCircleArrowLeft}
+                className="arrow"
+                onClick={() => handleMove("l")}
+              />
+              <div className="sliderWrapper">
+                <img src={photos[slideNumber].src} alt="" className="sliderImg" />
+              </div>
+              <FontAwesomeIcon
+                icon={faCircleArrowRight}
+                className="arrow"
+                onClick={() => handleMove("r")}
               />
             </div>
-          ))}
-        </div>
-      </div>
+          )}
 
-      <div className="data-column-container">
-        <div className="fixed-header">
-          <h1 className="residenceTitle">
-            {propertyDetails.property.nome}, {t('floor')} {propertyDetails.property.piso}
-          </h1>
-          <div className="residenceAddress">
-            <FontAwesomeIcon icon={faLocationDot} />
-            <span>{propertyDetails.property.morada}</span>
-          </div>
-          <span className="residencePriceHighlight">
-            {propertyDetails.property.tipologia} {propertyDetails.property.equipado ? t('fully_equipped') : t('not_equipped')}
-          </span>
-
-          <div className="navbar2">
-            <button onClick={() => scrollToSection('description')}>{t('description')}</button>
-            <button onClick={() => scrollToSection('rooms')}>{t('rooms')}</button>
-            <button onClick={() => scrollToSection('widgets')}>{t('widgets')}</button>
-          </div>
-        </div>
-
-        <div id="description" className="section">
-          <h2>{t('description')}</h2>
-          <div className="details-and-price">
-            <div className="residenceDetailsTexts">
-              <p className="residenceDesc">
-                {propertyDetails.property.descricao}
-                <br />
-                <br />
-                {t('property_details')}:
-                <ul>
-                  <li>{t('area')}: {propertyDetails.property.area} m²</li>
-                  <li>{t('wcs')}: {propertyDetails.property.wcs}</li>
-                  <li>{t('kitchen')} {propertyDetails.property.cozinha ? t('fully_equipped') : t('not_equipped')}</li>
-                  <li>{t('internet')} {propertyDetails.property.internet ? t('included') : t('not_included')}</li>
-                  <li>{t('expenses')} {propertyDetails.property.despesas ? t('included') : t('not_included')}</li>
-                </ul>
-              </p>
-              <div className='ratings'>
-                <CategoryRatings categoryAverages={categoryAverages} />
-              </div>
-            </div>
-            <div className="residenceDetailsPrice">
-              <h2>{t('take_advantage_of_this_opportunity')}</h2>
-              <span>
-                {propertyDetails.property.estacionamento_garagem ? t('garage_parking_available') : t('parking_not_included')}
-              </span>
-              <h2>
-                <span className='priceAll' dangerouslySetInnerHTML={{ __html: priceDisplay }} /> {t('per_month')}
-              </h2>
-              <button onClick={toggleOwnerDetails}>{t('reserve_or_book_now')}</button>
-              <div className={`ownerDetails ${showOwnerDetails ? 'visible' : ''}`}>
-                <h3>{t('contact_the_owner')}:</h3>
-                <p>{t('name')}: {propertyDetails.owner_info.nome}</p>
-                <p>{t('email')}: {propertyDetails.owner_info.email}</p>
-                <p>{t('phone')}: {propertyDetails.owner_info.telemovel}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div id="rooms" className="section">
-          <h2>{t('rooms')}</h2>
-          <div className="roomList">
-            {propertyDetails && propertyDetails.quartos.map((room, index) => (
-              <div key={index} className={`roomListItem ${!room.disponivel ? 'unavailable' : ''}`}>
-                <div className="roomImageContainer">
-                  <img src={room.image || photos[0].src} alt="Room" className="roomListImage" />
-                  <h3 className="roomName">{room.tipologia}</h3>
-                </div>
-                <div className="roomDetails">
-                  <p className="roomDetail">{room.area} m²</p>
-                  <p className="roomDetail">{room.despesas_incluidas}</p>
-                  <p className="roomDetail">{room.observacoes}</p>
-                  <p className="roomDetail">{room.wc_privado ? t('private_bathroom') : t('no_private_bathroom')}</p>
-                </div>
-
-                <div className="roomPrice">
-                  {room.disponivel ? `${room.preco_mes}€ ${t('per_month')}` : t('not_available')}
+          {!open && (
+            <>
+              <div className="media-column-container">
+                <div className="residenceImages">
+                  {photos.map((photos, i) => (
+                    <div
+                      className={`residenceImgWrapper ${i === 0 ? 'main' : ''}`}
+                      key={i}
+                      onClick={() => handleOpen(i)}
+                    >
+                      <img
+                        src={photos.src}
+                        alt=""
+                        className="residenceImg"
+                      />
+                    </div>
+                  ))}
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
 
-        <div id="widgets" className="section">
-          <h2>{t('widgets')}</h2>
-          <div className="residenceDetails2">
-            <div className="walkDetails">
-              <TravelTimeCalculator propertyLat={propertyDetails.property.geom[0]} propertyLng={propertyDetails.property.geom[1]} />
-              <WalkScoreWidget
-                apiKey="g73c0420989bc43f79d00fa60cd4df386"
-                address={propertyDetails.property.morada}
-                width="300"
-                height="421"
-                backgroundColor="#FFFFFF"
-              />
-              <div className="source-text">Source: Walkscore API</div>
-            </div>
-          </div>
+              <div className="data-column-container">
+                <div className="fixed-header">
+                  <h1 className="residenceTitle">
+                    {propertyDetails.property.nome}, {t('floor')} {propertyDetails.property.piso}
+                  </h1>
+                  <div className="residenceAddress">
+                    <FontAwesomeIcon icon={faLocationDot} />
+                    <span>{propertyDetails.property.morada}</span>
+                  </div>
+                  <span className="residencePriceHighlight">
+                    {propertyDetails.property.tipologia} {propertyDetails.property.equipado ? t('fully_equipped') : t('not_equipped')}
+                  </span>
+
+                  <div className="navbar2">
+                    <button onClick={() => scrollToSection('description')}>{t('description')}</button>
+                    <button onClick={() => scrollToSection('rooms')}>{t('rooms')}</button>
+                    <button onClick={() => scrollToSection('widgets')}>{t('widgets')}</button>
+                  </div>
+                </div>
+
+                <div className="scrollable-content">
+                  <div id="description" className="section">
+                    <h2>{t('description')}</h2>
+                    <div className="details-and-price">
+                      <div className="residenceDetailsTexts">
+                        <p className="residenceDesc">
+                          {propertyDetails.property.descricao}
+                          <br />
+                          <br />
+                          {t('property_details')}:
+                          <ul>
+                            <li>{t('area')}: {propertyDetails.property.area} m²</li>
+                            <li>{t('wcs')}: {propertyDetails.property.wcs}</li>
+                            <li>{t('kitchen')} {propertyDetails.property.cozinha ? t('fully_equipped') : t('not_equipped')}</li>
+                            <li>{t('internet')} {propertyDetails.property.internet ? t('included') : t('not_included')}</li>
+                            <li>{t('expenses')} {propertyDetails.property.despesas ? t('included') : t('not_included')}</li>
+                          </ul>
+                        </p>
+                        <div className='ratings'>
+                          <CategoryRatings categoryAverages={categoryAverages} />
+                        </div>
+                      </div>
+                      <div className="residenceDetailsPrice">
+                        <h2>{t('take_advantage_of_this_opportunity')}</h2>
+                        <span>
+                          {propertyDetails.property.estacionamento_garagem ? t('garage_parking_available') : t('parking_not_included')}
+                        </span>
+                        <h2>
+                          <span className='priceAll' dangerouslySetInnerHTML={{ __html: priceDisplay }} /> {t('per_month')}
+                        </h2>
+                        <button onClick={toggleOwnerDetails}>{t('reserve_or_book_now')}</button>
+                        <div className={`ownerDetails ${showOwnerDetails ? 'visible' : ''}`}>
+                          <h3>{t('contact_the_owner')}:</h3>
+                          <p>{t('name')}: {propertyDetails.owner_info.nome}</p>
+                          <p>{t('email')}: {propertyDetails.owner_info.email}</p>
+                          <p>{t('phone')}: {propertyDetails.owner_info.telemovel}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div id="rooms" className="section">
+                    <h2>{t('rooms')}</h2>
+                    <div className="roomList">
+                      {propertyDetails && propertyDetails.quartos.map((room, index) => (
+                        <div key={index} className={`roomListItem ${!room.disponivel ? 'unavailable' : ''}`}>
+                          <div className="roomImageContainer">
+                            <img src={room.image || photos[0].src} alt="Room" className="roomListImage" />
+                            <h3 className="roomName">{room.tipologia}</h3>
+                          </div>
+                          <div className="roomDetails">
+                            <p className="roomDetail">{room.area} m²</p>
+                            <p className="roomDetail">{room.despesas_incluidas}</p>
+                            <p className="roomDetail">{room.observacoes}</p>
+                            <p className="roomDetail">{room.wc_privado ? t('private_bathroom') : t('no_private_bathroom')}</p>
+                          </div>
+
+                          <div className="roomPrice">
+                            {room.disponivel ? `${room.preco_mes}€ ${t('per_month')}` : t('not_available')}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div id="widgets" className="section">
+                    <h2>{t('widgets')}</h2>
+                    <div className="residenceDetails2">
+                      <div className="walkDetails">
+                        <TravelTimeCalculator propertyLat={propertyDetails.property.geom[0]} propertyLng={propertyDetails.property.geom[1]} />
+                        <div className='walkWidget'>
+                        <WalkScoreWidget
+                          apiKey="g73c0420989bc43f79d00fa60cd4df386"
+                          address={propertyDetails.property.morada}
+                          width="300"
+                          height="421"
+                          backgroundColor="#FFFFFF"
+                        />
+                        <div className="source-text">Source: Walkscore API</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>

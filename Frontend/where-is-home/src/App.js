@@ -8,7 +8,6 @@ import Login_register from './Pages/Login-register/Login_register';
 import AboutUs from './Pages/AboutUs/AboutUs';
 import MetricsPage from './Pages/MetricsPage/MetricsPage';
 import QuizPage from './Pages/SecondPage/QuizPage';
-import ResidenceDetails from './Pages/Residence-Details/residenceDetails';
 import { useAuth } from './AuthContext/AuthContext';
 import ProfilePage from './Pages/ProfilePage/ProfilePage';
 import AdminPage from './Pages/AdminPage/AdminPage';
@@ -252,7 +251,6 @@ function App() {
           <Route exact path="/metricspage" element={<MetricsPage darkMode={darkMode} zoneData={zoneData} scores={scores} updateScores={updateScores} />} />
           <Route exact path="/profilepage" element={<ProfilePage darkMode={darkMode} zoneData={zoneData} scores={scores} updateScores={updateScores} />} />
           <Route exact path="/admin" element={<AdminPage darkMode={darkMode} />} />
-          <Route exact path="/residenceDetails" element={<ResidenceDetails darkMode={darkMode} />} />
         </Routes>
       </Router>
     </div>

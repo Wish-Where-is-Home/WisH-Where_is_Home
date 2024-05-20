@@ -6,7 +6,7 @@ import './CategoryRatings.css';
 
 const CategoryRatings = ({ categoryAverages }) => {
   const renderStars = (rating) => {
-    const roundedRating = Math.round(rating * 2) / 2; // Round to nearest half
+    const roundedRating = Math.round(rating * 2) / 2; 
     const fullStars = Math.floor(roundedRating);
     const halfStar = roundedRating - fullStars === 0.5 ? 1 : 0;
     const emptyStars = 5 - fullStars - halfStar;

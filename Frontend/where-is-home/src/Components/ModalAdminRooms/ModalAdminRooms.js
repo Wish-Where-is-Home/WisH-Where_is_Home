@@ -1,17 +1,41 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './ModalAdminRooms.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes,faCheck  } from '@fortawesome/free-solid-svg-icons';
 import { format } from 'date-fns';
 import axios from 'axios';
+import { Carousel } from 'react-responsive-carousel';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
 
-function ModalAdminRooms({darkMode,roomData,closeModalRoom}) {
+function ModalAdminRooms({darkMode,roomData,closeModalRoom,fetchImageURLsImoveis,fetchImageURLsBedrooms}) {
 
     const [commentModalAcceptOpen, setCommentModalAcceptOpen] = useState(false);
     const [comment, setComment] = useState('');
     const [confirmDenieModalOpen, setConfirmDenieModalOpen] = useState(false);
     const [roomId,setRoomId] = useState(null);
+
+    
+    const [imageURLs, setImageURLs] = useState([]);
+
+  
+    useEffect(() => {
+        const fetchImages = async () => {
+            if (roomData && fetchImageURLsBedrooms) {
+                try {
+                    console.log(roomData);
+                    const urls = await fetchImageURLsBedrooms(roomData.room_info.room_id);
+                    setImageURLs(urls || []);
+                    console.log(urls);
+                } catch (error) {
+                    console.error('Error fetching images:', error);
+                }
+            }
+        };
+    
+        fetchImages();
+        console.log(imageURLs);
+    }, [roomData, fetchImageURLsBedrooms]);
 
     const openCommentModal = (roomid) => {
         setCommentModalAcceptOpen(true);
@@ -103,9 +127,16 @@ function ModalAdminRooms({darkMode,roomData,closeModalRoom}) {
                         <FontAwesomeIcon className='icon-close-modal' icon={faTimes} />
                     </button>
                </div>
-               <div className='bedroomspending'>
-
-               </div>
+               
+                {Array.isArray(imageURLs) && imageURLs.length > 0 ? (
+                    <div className='bedroomspending'>
+                        {imageURLs.map((url, index) => (
+                            <img key={index} src={url} alt={`Image ${index}`} />
+                        ))}
+                    </div>
+                ) : (
+                    <p>No images available</p>
+                )}
                <div className='modal-p-descricao' style={{display:"flex",flexDirection:"column"}}>
                 <h3>
                     Owner: {roomData.owner_info.owner_name}

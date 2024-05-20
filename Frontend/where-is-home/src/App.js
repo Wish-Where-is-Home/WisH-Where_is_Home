@@ -120,7 +120,8 @@ function App() {
 
     const docSnap = await getDoc(collectionRef);
       if (!docSnap.exists()) {
-        await setDoc(collectionRef, { imovel_id: imovel_Id });
+        const collectionRef2 = doc(db,"quartos",bedroom_Id);
+        await setDoc(collectionRef2);
       }
 
     const uploadTasks = Array.from(photos).map((photo, index) =>{
@@ -142,8 +143,13 @@ function App() {
           () => {
             
             getDownloadURL(uploadTask.snapshot.ref).then( async(downloadURL) => {
+              const docSnapshot = await getDoc(collectionRef);
+              const data = docSnapshot.data();
+              const updatedImageURLs = [...(data.imageurl || []), downloadURL];
+
+
               await updateDoc(collectionRef, {
-                imageurl: downloadURL,
+                imageurl: updatedImageURLs,
                 imovel_id:imovel_Id,
               });
               console.log('File available at', downloadURL);
@@ -166,31 +172,42 @@ function App() {
 
 
   async function fetchImageURLsImoveis(imovel_Id) {
-    const collectionRef = doc(db, "imoveis", imovel_Id);
-    const docSnap = await getDoc(collectionRef);
-    
+    try{
+      const imid = String(imovel_Id);
+      const collectionRef = doc(db, "imoveis", imid);
+      const docSnap = await getDoc(collectionRef);
+      
     if (docSnap.exists()) {
       const data = docSnap.data();
-      const imageUrls = data.imageurl; 
-  
+      const imageUrls = data.imageurl || []; 
       return imageUrls;
     } else {
       console.log("No such document!");
       return [];
     }
+  }catch(error){
+    console.error("Error fetching bedroom images:", error);
+    return [];
+  }
   }
 
   async function fetchImageURLsBedrooms(bedroom_Id) {
-    const collectionRef = doc(db, "quartos", bedroom_Id);
-    const docSnap = await getDoc(collectionRef);
-  
-    if (docSnap.exists()) {
-      const data = docSnap.data();
-      const imageUrls = data.imageurl; 
-  
-      return imageUrls;
-    } else {
-      console.log("No such document!");
+    try {
+      const bedroomIdString = String(bedroom_Id);
+      const collectionRef = doc(db, "quartos", bedroomIdString);
+      const docSnap = await getDoc(collectionRef);
+
+      
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        const imageUrls = data.imageurl || []; 
+        return imageUrls;
+      } else {
+        console.log("No such document!");
+        return [];
+      }
+    } catch (error) {
+      console.error("Error fetching bedroom images:", error);
       return [];
     }
   }
@@ -251,7 +268,7 @@ function App() {
           <Route exact path="/quiz" element={<QuizPage darkMode={darkMode} zoneData={zoneData} scores={scores} updateScores={updateScores} />} />
           <Route exact path="/metricspage" element={<MetricsPage darkMode={darkMode} zoneData={zoneData} scores={scores} updateScores={updateScores} />} />
           <Route exact path="/profilepage" element={<ProfilePage darkMode={darkMode} zoneData={zoneData} scores={scores} updateScores={updateScores} />} />
-          <Route exact path="/admin" element={<AdminPage darkMode={darkMode} />} />
+          <Route exact path="/admin" element={<AdminPage darkMode={darkMode} fetchImageURLsImoveis={fetchImageURLsImoveis} fetchImageURLsBedrooms={fetchImageURLsBedrooms} />} />
           <Route exact path="/residenceDetails" element={<ResidenceDetails darkMode={darkMode} />} />
         </Routes>
       </Router>

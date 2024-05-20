@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import './OwnerPage.css';
-import PropertyDetails from '../../Components/OwnerPropDetails/OwnerPropDetails'; 
-
+import PropertyDetails from '../../Components/OwnerPropDetails/OwnerPropDetails';
 
 function OwnerPage({ darkMode }) {
-    const [selectedTab, setSelectedTab] = useState('accepted');
     const [properties, setProperties] = useState([]);
-    const [rooms, setRooms] = useState([]);
+    const [selectedTab, setSelectedTab] = useState('accepted');
     const [showForm, setShowForm] = useState(false); 
     const [selectedPhotos, setSelectedPhotos] = useState([]);
     const [showRoomForm, setShowRoomForm] = useState(false); 
@@ -131,7 +129,6 @@ function OwnerPage({ darkMode }) {
         const area = parseFloat(formData.get('propertyArea'));
         const typology = formData.get('propertyTypology');
         const address = formData.get('propertyAddress'); 
-        const geom = formData.get('propertyGeom');
         const floor = parseInt(formData.get('propertyFloor'));
         const hasElevator = formData.get('propertyElevator') === 'true';
         const numWcs = parseInt(formData.get('propertyWcs'));
@@ -181,6 +178,21 @@ function OwnerPage({ darkMode }) {
             roomPhotos.push(roomPhoto);
         }
 
+        let geom;
+        try {
+            const geocodeResponse = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`);
+            const geocodeData = await geocodeResponse.json();
+            if (geocodeData.length > 0) {
+                const { lat, lon } = geocodeData[0];
+                geom = { lat, lon };
+            } else {
+                throw new Error('Geocoding failed: No results found');
+            }
+        } catch (error) {
+            console.error('Error geocoding address:', error);
+            return;
+        }
+        
         const propertyData = {
             id: null, 
             owner: null,// ownerId, // Use the ID of the currently logged-in user

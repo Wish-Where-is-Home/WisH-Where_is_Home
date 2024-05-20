@@ -4,7 +4,6 @@ import './OwnerPropDetails.css';
 function OwnerPropDetails({ property, allRooms, token, onRoomAvailabilityChange, onDeleteProperty }) {
     const [expanded, setExpanded] = useState(false);
     const [showRooms, setShowRooms] = useState(false);
-
     const handleToggleExpand = () => {
         setExpanded(!expanded);
     };

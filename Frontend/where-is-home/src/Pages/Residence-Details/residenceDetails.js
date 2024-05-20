@@ -80,11 +80,10 @@ const ResidenceDetails = ({ darkMode }) => {
       .then(response => response.json())
       .then(data => {
         console.log(data);
-        setYelpData(data); // Store Yelp data for other uses if needed
+        setYelpData(data); 
         const averages = calculateCategoryAverages(data);
         console.log("Category Averages: ", averages);
         setCategoryAverages(averages);
-        // Optionally set this data to state as well, depending on your application's architecture
       })
       .catch(err => console.error(err));
   };
@@ -133,16 +132,13 @@ const ResidenceDetails = ({ darkMode }) => {
       const locationData = await response.json();
       const features = locationData.features;
 
-      // Assuming the specific structure of your data doesn't change:
       const address = features.find(feature => feature.place_type.includes('address'))?.text || 'No address available';
       const region = features.find(feature => feature.place_type.includes('region'))?.text || 'No region available';
       const country = features.find(feature => feature.place_type.includes('country'))?.text || 'No country available';
 
-      // Combine them into a single string
       const combinedLocationDetails = `${address}, ${region}, ${country}`;
-      console.log("Combined Location Details:", combinedLocationDetails); // Log the combined location details to the console
-      setLocationDetails(combinedLocationDetails); // Store or handle the combined location details as needed
-      //fetchWalkScore(latitude, longitude, combinedLocationDetails);
+      console.log("Combined Location Details:", combinedLocationDetails);
+      setLocationDetails(combinedLocationDetails);
     } catch (error) {
       console.error('Error fetching location data:', error);
     }

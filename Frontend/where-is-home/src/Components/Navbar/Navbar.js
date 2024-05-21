@@ -88,7 +88,7 @@ function Navbar({ darkMode, toggleDarkMode }) {
                                         {showDropdown && (
                                             <ul className="menu-dropdown">
                                                 <li><a href="/profilepage">{t('profile')}</a></li>
-                                                <li><a href="/profilepage">{t('sellpropertie')}</a></li>
+                                                <li><a href="/ownerpage">{t('sellpropertie')}</a></li>
                                                 {userInfo.role === 'admin' && <li className='admin-menu'><a href="/admin">Admin</a></li>}
                                                 <li><a onClick={handleLogout}>{t('logout')}</a></li>
                                             </ul>

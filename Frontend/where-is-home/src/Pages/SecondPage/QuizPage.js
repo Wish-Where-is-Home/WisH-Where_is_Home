@@ -83,7 +83,7 @@ useEffect(() => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
+        console.log("My data", data);
         const metricsSaved = Object.values(data).some(value => value !== null && value !== "0.0000");
         setMetricsSaved(metricsSaved);
 

@@ -36,7 +36,8 @@ const ResidenceDetails = ({ darkMode, propertyId, onClose }) => {
         setPropertyDetails(data);
         getYelpData(data.property.geom[0], data.property.geom[1]);
         fetchLocationData(data.property.geom[0], data.property.geom[1]);
-        YelpCategories();
+        
+        
       } catch (error) {
         console.error('There was a problem with your fetch operation:', error);
       }
@@ -49,33 +50,34 @@ const ResidenceDetails = ({ darkMode, propertyId, onClose }) => {
       const options = {
         method: 'GET',
         headers: {
-          accept: 'application/json',
-          Authorization: 'Bearer rmASuj9Y6LDlFu8i9kVBDlQNlKs7Zadb4l2QJXAhht756P8vDXOWK5smuV55p5vzeprQnizMWffMYcQnHMGdRQZ3oBGZPVMQwaM2icUCScsROp84sLTc47cUMG4qZnYx'
+          accept: 'application/json'
         }
       };
-
-      const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-      const targetUrl = 'https://api.yelp.com/v3/categories?locale=pt_PT';
-
-      fetch(proxyUrl + targetUrl, options)
+  
+      const targetUrl = 'http://mednat.ieeta.pt:9009/api/yelp/categories/';
+      try {
+        fetch(targetUrl, options)
         .then(response => response.json())
         .then(response => console.log(response))
         .catch(err => console.error(err));
+        
+      } catch (error) {
+        console.log(error)
+      }
+      
     }, []);
   };
-
+  
   const getYelpData = (lat, long) => {
-    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-    const targetUrl = `https://api.yelp.com/v3/businesses/search?latitude=${lat}&longitude=${long}&radius=40000&sort_by=best_match&limit=50`;
+    const targetUrl = `http://mednat.ieeta.pt:9009/api/yelp/search/?latitude=${lat}&longitude=${long}`;
     const options = {
       method: 'GET',
       headers: {
-        accept: 'application/json',
-        Authorization: 'Bearer rmASuj9Y6LDlFu8i9kVBDlQNlKs7Zadb4l2QJXAhht756P8vDXOWK5smuV55p5vzeprQnizMWffMYcQnHMGdRQZ3oBGZPVMQwaM2icUCScsROp84sLTc47cUMG4qZnYx'
+        accept: 'application/json'
       }
     };
-
-    fetch(proxyUrl + targetUrl, options)
+  
+    fetch(targetUrl, options)
       .then(response => response.json())
       .then(data => {
         console.log(data);
@@ -86,7 +88,7 @@ const ResidenceDetails = ({ darkMode, propertyId, onClose }) => {
       })
       .catch(err => console.error(err));
   };
-
+  
   function calculateCategoryAverages(data) {
     const categorySums = {};
     const categoryCounts = {};

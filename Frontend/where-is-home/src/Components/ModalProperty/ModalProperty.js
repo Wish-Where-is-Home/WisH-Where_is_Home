@@ -1,17 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './ModalProperty.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes,faInfoCircle,faCheck  } from '@fortawesome/free-solid-svg-icons';
 import { format } from 'date-fns';
 import axios from 'axios';
+import { Carousel } from 'react-responsive-carousel';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
-function ModalProperty({ darkMode, propertyData, propertyRooms, closeModal }) {
+function ModalProperty({ darkMode, propertyData, propertyRooms, closeModal,fetchImageURLsImoveis,fetchImageURLsBedrooms }) {
 
     const [commentModalAcceptOpen, setCommentModalAcceptOpen] = useState(false);
     const [comment, setComment] = useState('');
     const [confirmDenieModalOpen, setConfirmDenieModalOpen] = useState(false);
     const [roomId,setRoomId] = useState(null);
+    const [imageURLs, setImageURLs] = useState([]);
+    const [bedroomImageURLs, setBedroomImageURLs] = useState([]);
 
+  useEffect(() => {
+    if (propertyData && fetchImageURLsImoveis) {
+      const fetchImages = async () => {
+        const urls = await fetchImageURLsImoveis(propertyData.id);
+        setImageURLs(urls);
+        console.log(urls);
+      };
+      fetchImages();
+    }
+  }, [propertyData, fetchImageURLsImoveis]);
+
+ 
 
     const openCommentModal = (roomid) => {
         setCommentModalAcceptOpen(true);
@@ -58,10 +74,26 @@ function ModalProperty({ darkMode, propertyData, propertyRooms, closeModal }) {
         })
         .then(response => {
             console.log('Comment accepted successfully');
-            closeCommentModal(); 
+            closeCommentModal();
+            Toastify({
+                text: "Comment accepted successfully",
+                duration: 3000,
+                close: true,
+                gravity: "top",
+                position: "right",
+                backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)"
+            }).showToast();
         })
         .catch(error => {
             console.error('Error accepting comment:', error);
+            Toastify({
+                text: "Error accepting comment",
+                duration: 3000,
+                close: true,
+                gravity: "top",
+                position: "right",
+                backgroundColor: "linear-gradient(to right, #FF5F6D, #FFC371)"
+            }).showToast();
         });
     };
     
@@ -78,10 +110,26 @@ function ModalProperty({ darkMode, propertyData, propertyRooms, closeModal }) {
         })
         .then(response => {
             console.log('Room denied successfully');
-            closeConfirmDenieModal(); 
+            closeConfirmDenieModal();
+            Toastify({
+                text: "Room denied successfully",
+                duration: 3000,
+                close: true,
+                gravity: "top",
+                position: "right",
+                backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)"
+            }).showToast();
         })
         .catch(error => {
             console.error('Error denying room:', error);
+            Toastify({
+                text: "Error denying room",
+                duration: 3000,
+                close: true,
+                gravity: "top",
+                position: "right",
+                backgroundColor: "linear-gradient(to right, #FF5F6D, #FFC371)"
+            }).showToast();
         });
     };
 
@@ -94,9 +142,15 @@ function ModalProperty({ darkMode, propertyData, propertyRooms, closeModal }) {
                         <FontAwesomeIcon className='icon-close-modal' icon={faTimes} />
                     </button>
                </div>
-               <div className='bedroomspending'>
-
-                </div>
+               {Array.isArray(imageURLs) && imageURLs.length > 0 ? (
+                    <div className='bedroomspending'>
+                        {imageURLs.map((url, index) => (
+                            <img key={index} src={url}  />
+                        ))}
+                    </div>
+                ) : (
+                    <p>No images available</p>
+                )}
                <div className='modal-p-descricao'>
                 <p>{propertyData.descricao}</p>
                </div>

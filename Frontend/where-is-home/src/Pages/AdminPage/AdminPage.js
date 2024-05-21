@@ -8,7 +8,7 @@ import ModalProperty from '../../Components/ModalProperty/ModalProperty';
 import ModalAdminRooms from '../../Components/ModalAdminRooms/ModalAdminRooms';
 import { useAuth } from '../../AuthContext/AuthContext';
 
-function AdminPage({ darkMode }) {
+function AdminPage({ darkMode,fetchImageURLsImoveis,fetchImageURLsBedrooms }) {
     const { t } = useTranslation("common");
     const { isAuthenticated,userInfo} = useAuth();
     
@@ -41,9 +41,6 @@ function AdminPage({ darkMode }) {
             window.location.href = '/'
         }
     }, [isAuthenticated, userInfo]);
-
-
-
 
 
     useEffect(() => {
@@ -262,6 +259,8 @@ function AdminPage({ darkMode }) {
                     propertyData={selectedProperty}
                     propertyRooms={selectedProperty.rooms}
                     closeModal={closeModal}
+                    fetchImageURLsImoveis={fetchImageURLsImoveis} 
+                    fetchImageURLsBedrooms={fetchImageURLsBedrooms} 
                 />
             )}
 
@@ -270,6 +269,8 @@ function AdminPage({ darkMode }) {
                     darkMode={darkMode}
                     roomData={selectedRoom}
                     closeModalRoom={closeModalRoom}
+                    fetchImageURLsImoveis={fetchImageURLsImoveis} 
+                    fetchImageURLsBedrooms={fetchImageURLsBedrooms} 
                 />
             )}
 

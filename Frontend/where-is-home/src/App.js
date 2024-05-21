@@ -2,13 +2,12 @@ import React, { useState, useEffect } from 'react';
 import Navbar from './Components/Navbar/Navbar';
 import Homepage from './Pages/Homepage/Homepage';
 import Loader from './Components/Loader/Loader';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; 
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
 import Login_register from './Pages/Login-register/Login_register';
 import AboutUs from './Pages/AboutUs/AboutUs';
 import MetricsPage from './Pages/MetricsPage/MetricsPage';
 import QuizPage from './Pages/SecondPage/QuizPage';
-import ResidenceDetails from './Pages/Residence-Details/residenceDetails';
 import { useAuth } from './AuthContext/AuthContext';
 import ProfilePage from './Pages/ProfilePage/ProfilePage';
 import AdminPage from './Pages/AdminPage/AdminPage';
@@ -20,46 +19,49 @@ import { getAnalytics } from "firebase/analytics";
 import { getStorage } from "firebase/storage";
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 
+
 function App() {
   const [darkMode, setDarkMode] = useState(false);
   const [loading, setLoading] = useState(true);
   const [zoneData, setZoneData] = useState(null);
   const [scores, setScores] = useState(null);
-  const { isAuthenticated,userInfo} = useAuth();
+  const { isAuthenticated, userInfo } = useAuth();
 
 
   const updateScores = (newScores) => {
     setScores(newScores);
     console.log(scores);
-};
+  };
 
 
   const firebaseConfig = {
 
     apiKey: "AIzaSyDGcTX2Ry6N0IUgPDRxiu0iJZanmfi41Dw",
-  
+
     authDomain: "wish-9b245.firebaseapp.com",
-  
+
     projectId: "wish-9b245",
-  
+
     storageBucket: "wish-9b245.appspot.com",
-  
+
     messagingSenderId: "364387023023",
-  
+
     appId: "1:364387023023:web:bf11ec82e5c252c44cfc5a",
-  
+
     measurementId: "G-CZ6JHQCLWR"
-  
+
   };
 
   const app = initializeApp(firebaseConfig);
 
   const analytics = getAnalytics(app);
 
+
   const storage = getStorage(app);
   const db = getFirestore(app);
-  
-  
+
+
+
   async function handleSubmitImagesImoveis(photos, imovel_Id) {
     const collectionRef = doc(db, "imoveis", imovel_Id);
     if (!photos || photos.length === 0) return;
@@ -121,7 +123,7 @@ function App() {
     const docSnap = await getDoc(collectionRef);
       if (!docSnap.exists()) {
         await setDoc(collectionRef, {});
-      }
+
 
     const uploadTasks = Array.from(photos).map((photo, index) =>{
 
@@ -168,7 +170,8 @@ function App() {
     }
 
   };
-  
+
+
 
   useEffect(() => {
     const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -207,23 +210,23 @@ function App() {
   };
 
 
-  function updateuserpreferences(){
-    
+  function updateuserpreferences() {
+
   }
 
   return (
     <div className={`App ${darkMode ? 'dark-mode' : 'light-mode'}`}>
       <Loader visible={loading} />
-      <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode}/>
+      <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
       <Router>
         <Routes>
           <Route exact path="/" element={<Homepage darkMode={darkMode} />} />
-          <Route exact path="/aboutus" element={<AboutUs darkMode={darkMode}/>}/>
-          <Route exact path="/login" element={<Login_register  darkMode={darkMode} firebaseConfig={firebaseConfig} />} />
+          <Route exact path="/aboutus" element={<AboutUs darkMode={darkMode} />} />
+          <Route exact path="/login" element={<Login_register darkMode={darkMode} firebaseConfig={firebaseConfig} />} />
           <Route exact path="/quiz" element={<QuizPage darkMode={darkMode} zoneData={zoneData} scores={scores} updateScores={updateScores} />} />
-          <Route exact path="/metricspage" element={<MetricsPage  darkMode={darkMode} zoneData={zoneData} scores={scores} updateScores={updateScores} />} />
+          <Route exact path="/metricspage" element={<MetricsPage darkMode={darkMode} zoneData={zoneData} scores={scores} updateScores={updateScores} />} />
           <Route exact path="/profilepage" element={<ProfilePage darkMode={darkMode} zoneData={zoneData} scores={scores} updateScores={updateScores} />} />
-          <Route exact path="/admin" element={<AdminPage darkMode={darkMode} />} />
+          <Route exact path="/admin" element={<AdminPage darkMode={darkMode} fetchImageURLsImoveis={fetchImageURLsImoveis} fetchImageURLsBedrooms={fetchImageURLsBedrooms} />} />
           <Route exact path="/residenceDetails" element={<ResidenceDetails darkMode={darkMode} />} />
           <Route exact path="/owner" element={<OwnerPage darkMode={darkMode}  handleSubmitImagesImoveis = {handleSubmitImagesImoveis} handleSubmitImagesBedrooms = {handleSubmitImagesBedrooms}  />} />
         </Routes>

@@ -25,7 +25,7 @@ function Homepage( {darkMode}) {
     const handleInfoMouseEnter = () => {
        
         const content = (
-            <div>
+            <div className='modalhh'>
                 <p>{t('infotext')}.</p>
             </div>
         );
@@ -169,8 +169,8 @@ return (
                                     onMouseLeave={handleInfoMouseLeave} 
                                     style={{ cursor: 'pointer',color:"white",alignSelf:'center'}} 
                                 />
-                    <div className={modalVisible ? "modal visible" : "modal"}>
-                                                <div className="modal-content">
+                    <div className={modalVisible ? "modalh visible" : "modalh"}>
+                                                <div className="modalh-content">
                                                     {modalContent}
                                                 </div>
                                             </div>

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import './Sidebar.css';
 
 import { ChevronLeft, ChevronRight } from 'react-feather';
-import data from './data.json'; // Importe os dados do JSON
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBed, faBathtub, faWarehouse,faSquareShareNodes, faSquareArrowUpRight, faSquareCaretDown, faMapLocation, faMapLocationDot } from '@fortawesome/free-solid-svg-icons';
@@ -16,7 +15,7 @@ import { use } from 'i18next';
 
 
 
-function Sidebar({darkMode, isOpen, toggleSidebar, properties }) {
+function Sidebar({ darkMode, isOpen, toggleSidebar, properties, openModal }) {
 
 
     const toggleSidebarInternal = () => {
@@ -25,16 +24,20 @@ function Sidebar({darkMode, isOpen, toggleSidebar, properties }) {
 
     const {t} = useTranslation("common");
 
+    const handlePropertyClick = (propertyId) => {
+        openModal(propertyId);
+    };
+
     return (
         <div className={`sidebar ${isOpen ? 'sidebar-open' : ''} ${darkMode ? 'dark-mode' : 'light-mode'}`}>
             <div className="sidebar-toggle"  onClick={toggleSidebarInternal}>
                 {isOpen ? <ChevronRight size={24} /> : <ChevronLeft size={24} />} 
             </div>
             <h1 className='PropText'>{t('Properties')}</h1>
-            <div className='sidebar-content'>
+            <div className='sidebar-content-right'>
                 {properties.map((box,index) => (
 
-                    <div className="box-container" key={index} id={`property-${box.id}`}> 
+                    <div className="box-container" key={index} id={`property-${box.id}`} onClick={() => handlePropertyClick(box.id)}>
                         <div className="first-text">{index+1}º</div>
                         <div className="box">
                             <div className="imovel" id={`imovel-${box.id}`}>

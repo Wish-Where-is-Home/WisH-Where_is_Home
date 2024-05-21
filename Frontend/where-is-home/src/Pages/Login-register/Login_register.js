@@ -6,6 +6,7 @@ import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import {useTranslation} from "react-i18next";
 import { useAuth } from '../../AuthContext/AuthContext';
 import { getAuth, createUserWithEmailAndPassword, updateProfile, sendPasswordResetEmail, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider } from "firebase/auth";
+import Toastify from 'toastify-js'
 
 const Login_register = ({ darkMode,firebaseConfig }) => {
     
@@ -27,6 +28,8 @@ const Login_register = ({ darkMode,firebaseConfig }) => {
     
     const { loginUser } = useAuth();
 
+    
+
 
     const handleLogin = (e) => {
         e.preventDefault(); 
@@ -36,33 +39,63 @@ const Login_register = ({ darkMode,firebaseConfig }) => {
         });
       };
 
-
-    const handleRegister = (e) => {
-        e.preventDefault(); 
+      const handleRegister = (e) => {
+        e.preventDefault();
         if (passwordRegister !== passwordConfirmRegister) {
-          console.error("Passwords do not match");
-          return;
+            console.error("Passwords do not match");
+            return;
         }
-    
+
         const auth = getAuth();
         createUserWithEmailAndPassword(auth, emailRegister, passwordRegister)
-          .then((userCredential) => {
-            const user = userCredential.user;
-            updateProfile(user, {
-              displayName: nameRegister
-            }).then(() => {
-              console.log("User registered with name:", nameRegister);
-              setIsLoginForm(true);
-            }).catch((error) => {
-              console.error("Error updating profile:", error.message);
+            .then((userCredential) => {
+                const user = userCredential.user;
+                updateProfile(user, {
+                    displayName: nameRegister
+                }).then(() => {
+                    console.log("User registered with name:", nameRegister);
+                    setIsLoginForm(true);
+
+                   
+                    Toastify({
+                        text: "Registration successful",
+                        duration: 3000,
+                        close: true,
+                        gravity: "top", 
+                        position: "right", 
+                        backgroundColor: "linear-gradient(to right, #4CAF50, #8BC34A)",
+                    }).showToast();
+
+                }).catch((error) => {
+                    console.error("Error updating profile:", error.message);
+
+                    
+                    Toastify({
+                        text: "Profile update failed: ",
+                        duration: 3000,
+                        close: true,
+                        gravity: "top", 
+                        position: "right", 
+                        backgroundColor: "linear-gradient(to right, #F44336, #F57C00)",
+                    }).showToast();
+                });
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                console.error("Registration error:", errorMessage);
+
+              
+                Toastify({
+                    text: "Registration failed: ",
+                    duration: 3000,
+                    close: true,
+                    gravity: "top",
+                    position: "right", 
+                    backgroundColor: "linear-gradient(to right, #F44336, #F57C00)",
+                }).showToast();
             });
-          })
-          .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            console.error("Registration error:", errorMessage);
-          });
-      };
+    };
 
 
       const handleGoogleLogin = async () => {
@@ -72,8 +105,7 @@ const Login_register = ({ darkMode,firebaseConfig }) => {
             const result = await signInWithPopup(auth, provider);
             const user = result.user;
             console.log("User signed in with Google:", user);
-    
-            // Create token
+
             const tokenResponse = await fetch('http://mednat.ieeta.pt:9009/loginusers/', {
                 method: 'POST',
                 headers: {
@@ -82,16 +114,40 @@ const Login_register = ({ darkMode,firebaseConfig }) => {
                 body: JSON.stringify({ email: user.email, name: user.displayName, id: user.uid }),
                 credentials: 'include'
             });
-    
+
+            Toastify({
+                text: "Google login successful",
+                duration: 3000,
+                close: true,
+                gravity: "top", 
+                position: "right", 
+                backgroundColor: "linear-gradient(to right, #4CAF50, #8BC34A)",
+            }).showToast();
+
             const tokenData = await tokenResponse.json();
-    
+
             localStorage.setItem('token', tokenData.token);
             localStorage.setItem('tokenExpiration', tokenData.exp);
-            window.location.href ="/"
+            window.location.href = "/";
+
+            
+            
+
         } catch (error) {
             console.error("Google login error:", error.message);
+
+            
+            Toastify({
+                text: "Google login failed: " + error.message,
+                duration: 3000,
+                close: true,
+                gravity: "top", 
+                position: "right", 
+                backgroundColor: "linear-gradient(to right, #F44336, #F57C00)",
+            }).showToast();
         }
     };
+
     
       const handleFacebookLogin = () => {
         const auth = getAuth();

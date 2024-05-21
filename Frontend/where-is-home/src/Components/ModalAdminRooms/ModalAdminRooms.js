@@ -1,17 +1,43 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './ModalAdminRooms.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes,faCheck  } from '@fortawesome/free-solid-svg-icons';
 import { format } from 'date-fns';
 import axios from 'axios';
+import { Carousel } from 'react-responsive-carousel';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import Toastify from 'toastify-js'
+import "toastify-js/src/toastify.css"
 
 
-function ModalAdminRooms({darkMode,roomData,closeModalRoom}) {
+function ModalAdminRooms({darkMode,roomData,closeModalRoom,fetchImageURLsImoveis,fetchImageURLsBedrooms}) {
 
     const [commentModalAcceptOpen, setCommentModalAcceptOpen] = useState(false);
     const [comment, setComment] = useState('');
     const [confirmDenieModalOpen, setConfirmDenieModalOpen] = useState(false);
     const [roomId,setRoomId] = useState(null);
+
+    
+    const [imageURLs, setImageURLs] = useState([]);
+
+  
+    useEffect(() => {
+        const fetchImages = async () => {
+            if (roomData && fetchImageURLsBedrooms) {
+                try {
+                    console.log(roomData);
+                    const urls = await fetchImageURLsBedrooms(roomData.room_info.room_id);
+                    setImageURLs(urls || []);
+                    console.log(urls);
+                } catch (error) {
+                    console.error('Error fetching images:', error);
+                }
+            }
+        };
+    
+        fetchImages();
+        console.log(imageURLs);
+    }, [roomData, fetchImageURLsBedrooms]);
 
     const openCommentModal = (roomid) => {
         setCommentModalAcceptOpen(true);
@@ -67,10 +93,26 @@ function ModalAdminRooms({darkMode,roomData,closeModalRoom}) {
         })
         .then(response => {
             console.log('Comment accepted successfully');
-            closeCommentModal(); 
+            closeCommentModal();
+            Toastify({
+                text: "Comment accepted successfully",
+                duration: 3000,
+                close: true,
+                gravity: "top",
+                position: "right",
+                backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)"
+            }).showToast();
         })
         .catch(error => {
             console.error('Error accepting comment:', error);
+            Toastify({
+                text: "Error accepting comment",
+                duration: 3000,
+                close: true,
+                gravity: "top",
+                position: "right",
+                backgroundColor: "linear-gradient(to right, #FF5F6D, #FFC371)"
+            }).showToast();
         });
     };
     
@@ -79,7 +121,7 @@ function ModalAdminRooms({darkMode,roomData,closeModalRoom}) {
         closeConfirmDenieModal();
     
         const token = localStorage.getItem('token');
-       
+        
         axios.post(`http://mednat.ieeta.pt:9009/admin/update/room/status/${roomId}/`, { status: 'accepted' }, {
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -87,10 +129,26 @@ function ModalAdminRooms({darkMode,roomData,closeModalRoom}) {
         })
         .then(response => {
             console.log('Room denied successfully');
-            closeConfirmDenieModal(); 
+            closeConfirmDenieModal();
+            Toastify({
+                text: "Room denied successfully",
+                duration: 3000,
+                close: true,
+                gravity: "top",
+                position: "right",
+                backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)"
+            }).showToast();
         })
         .catch(error => {
             console.error('Error denying room:', error);
+            Toastify({
+                text: "Error denying room",
+                duration: 3000,
+                close: true,
+                gravity: "top",
+                position: "right",
+                backgroundColor: "linear-gradient(to right, #FF5F6D, #FFC371)"
+            }).showToast();
         });
     };
 
@@ -103,9 +161,16 @@ function ModalAdminRooms({darkMode,roomData,closeModalRoom}) {
                         <FontAwesomeIcon className='icon-close-modal' icon={faTimes} />
                     </button>
                </div>
-               <div className='bedroomspending'>
-
-               </div>
+               
+                {Array.isArray(imageURLs) && imageURLs.length > 0 ? (
+                    <div className='bedroomspending'>
+                        {imageURLs.map((url, index) => (
+                            <img key={index} src={url} alt={`Image ${index}`} />
+                        ))}
+                    </div>
+                ) : (
+                    <p>No images available</p>
+                )}
                <div className='modal-p-descricao' style={{display:"flex",flexDirection:"column"}}>
                 <h3>
                     Owner: {roomData.owner_info.owner_name}

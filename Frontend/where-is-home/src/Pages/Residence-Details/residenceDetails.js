@@ -7,6 +7,7 @@ import TravelTimeCalculator from './TravelTimeCalculator';
 import categoryMapping from './categoryMapping';
 import CategoryRatings from './CategoryRatings';
 import { useTranslation } from 'react-i18next';
+import RoomDetails from './RoomDetails'; // Import the RoomDetails component
 
 const ResidenceDetails = ({ darkMode, propertyId, onClose }) => {
   const { t } = useTranslation("common");
@@ -17,6 +18,8 @@ const ResidenceDetails = ({ darkMode, propertyId, onClose }) => {
   const [locationDetails, setLocationDetails] = useState(null);
   const [showOwnerDetails, setShowOwnerDetails] = useState(false);
   const [categoryAverages, setCategoryAverages] = useState({});
+  const [selectedRoom, setSelectedRoom] = useState(null); // New state for selected room
+  const [roomPhotos, setRoomPhotos] = useState([]); // New state for room photos
 
   useEffect(() => {
     const fetchPropertyDetails = async () => {
@@ -203,6 +206,15 @@ const ResidenceDetails = ({ darkMode, propertyId, onClose }) => {
     document.getElementById(section).scrollIntoView({ behavior: 'smooth' });
   };
 
+  const handleRoomClick = (room, photos) => {
+    setSelectedRoom(room);
+    setRoomPhotos(photos);
+  };
+
+  const handleCloseRoomDetails = () => {
+    setSelectedRoom(null);
+  };
+
   return (
     <div className={`modal-overlay ${darkMode ? 'dark-mode' : 'light-mode'}`} onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -236,7 +248,7 @@ const ResidenceDetails = ({ darkMode, propertyId, onClose }) => {
             </div>
           )}
 
-          {!open && (
+          {!open && !selectedRoom && (
             <>
               <div className="media-column-container">
                 <div className="residenceImages">
@@ -323,16 +335,16 @@ const ResidenceDetails = ({ darkMode, propertyId, onClose }) => {
                     <h2>{t('rooms')}</h2>
                     <div className="roomList">
                       {propertyDetails && propertyDetails.quartos.map((room, index) => (
-                        <div key={index} className={`roomListItem ${!room.disponivel ? 'unavailable' : ''}`}>
+                        <div key={index} className={`roomListItem ${!room.disponivel ? 'unavailable' : ''}`} onClick={() => handleRoomClick(room, photos)}>
                           <div className="roomImageContainer">
                             <img src={room.image || photos[0].src} alt="Room" className="roomListImage" />
                             <h3 className="roomName">{room.tipologia}</h3>
                           </div>
-                          <div className="roomDetails">
-                            <p className="roomDetail">{room.area} m²</p>
-                            <p className="roomDetail">{room.despesas_incluidas}</p>
-                            <p className="roomDetail">{room.observacoes}</p>
-                            <p className="roomDetail">{room.wc_privado ? t('private_bathroom') : t('no_private_bathroom')}</p>
+                          <div className="roomDetails2">
+                            <p className="roomDetail">- {room.area} m²</p>
+                            <p className="roomDetail">- {room.despesas_incluidas}</p>
+                            <p className="roomDetail">- {room.observacoes}</p>
+                            <p className="roomDetail">- {room.wc_privado ? t('private_bathroom') : t('no_private_bathroom')}</p>
                           </div>
 
                           <div className="roomPrice">
@@ -366,6 +378,15 @@ const ResidenceDetails = ({ darkMode, propertyId, onClose }) => {
             </>
           )}
         </div>
+        {selectedRoom && (
+          <RoomDetails
+            darkMode={darkMode}
+            room={selectedRoom}
+            photos={roomPhotos}
+            onClose={handleCloseRoomDetails}
+            onBack={() => setSelectedRoom(null)} // Assuming onBack will just close the room details modal
+          />
+        )}
       </div>
     </div>
   );

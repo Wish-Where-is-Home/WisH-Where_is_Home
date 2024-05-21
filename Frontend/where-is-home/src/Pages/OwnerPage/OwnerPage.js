@@ -54,11 +54,12 @@ function OwnerPage({ darkMode , handleSubmitImagesImoveis, handleSubmitImagesBed
         return response.json();
       })
       .then((data) => {
+        console.log(data);
         let filteredProperties = data;
         if (tab === "on_hold" || tab === "denied") {
           filteredProperties = data[`${tab}_rooms_properties`];
         } else if (tab === "accepted") {
-          filteredProperties = data.properties || data;
+          filteredProperties = data['approved_rooms_properties']
         }
         setProperties(filteredProperties);
         fetchRooms(filteredProperties);

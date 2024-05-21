@@ -13,6 +13,7 @@ import ProfilePage from './Pages/ProfilePage/ProfilePage';
 import AdminPage from './Pages/AdminPage/AdminPage';
 import OwnerPage from './Pages/OwnerPage/OwnerPage';
 
+
 import { initializeApp } from "firebase/app";
 import { getFirestore, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { getAnalytics } from "firebase/analytics";
@@ -227,8 +228,8 @@ function App() {
           <Route exact path="/metricspage" element={<MetricsPage darkMode={darkMode} zoneData={zoneData} scores={scores} updateScores={updateScores} />} />
           <Route exact path="/profilepage" element={<ProfilePage darkMode={darkMode} zoneData={zoneData} scores={scores} updateScores={updateScores} />} />
           <Route exact path="/admin" element={<AdminPage darkMode={darkMode} fetchImageURLsImoveis={fetchImageURLsImoveis} fetchImageURLsBedrooms={fetchImageURLsBedrooms} />} />
-          <Route exact path="/residenceDetails" element={<ResidenceDetails darkMode={darkMode} />} />
           <Route exact path="/owner" element={<OwnerPage darkMode={darkMode}  handleSubmitImagesImoveis = {handleSubmitImagesImoveis} handleSubmitImagesBedrooms = {handleSubmitImagesBedrooms}  />} />
+
         </Routes>
       </Router>
     </div>

@@ -14,12 +14,11 @@ import ProfilePage from './Pages/ProfilePage/ProfilePage';
 import AdminPage from './Pages/AdminPage/AdminPage';
 import OwnerPage from './Pages/OwnerPage/OwnerPage';
 
-
-
 import { initializeApp } from "firebase/app";
-
+import { getFirestore, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { getAnalytics } from "firebase/analytics";
-
+import { getStorage } from "firebase/storage";
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
@@ -56,9 +55,119 @@ function App() {
   const app = initializeApp(firebaseConfig);
 
   const analytics = getAnalytics(app);
-  
-  
 
+  const storage = getStorage(app);
+  const db = getFirestore(app);
+  
+  
+  async function handleSubmitImagesImoveis(photos, imovel_Id) {
+    const collectionRef = doc(db, "imoveis", imovel_Id);
+    if (!photos || photos.length === 0) return;
+
+    const docSnap = await getDoc(collectionRef);
+      if (!docSnap.exists()) {
+        await setDoc(collectionRef, {});
+      }
+
+
+    const uploadTasks = Array.from(photos).map((photo, index) =>{
+
+      const storageRef = ref(storage, `images/${photo.name}`);
+      const uploadTask = uploadBytesResumable(storageRef, photos);
+      return new Promise((resolve, reject) => {
+        uploadTask.on(
+          'state_changed',
+          (snapshot) => {
+            
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log('Upload is ' + progress + '% done');
+          },
+          (error) => {
+            
+            reject(error);
+          },
+          () => {
+            
+            getDownloadURL(uploadTask.snapshot.ref).then( async(downloadURL) => {
+              const docSnapshot = await getDoc(collectionRef);
+              const data = docSnapshot.data();
+              const updatedImageURLs = [...(data.imageurl || []), downloadURL];
+              await updateDoc(collectionRef, {
+                imageurl: updatedImageURLs,
+              });
+              console.log('File available at', downloadURL);
+              resolve(downloadURL);
+            });
+          }
+        );
+      });
+      
+    });
+
+    try {
+      const downloadURLs = await Promise.all(uploadTasks);
+      console.log('All files uploaded', downloadURLs);
+      return downloadURLs;
+    } catch (error) {
+      console.error('Error uploading files:', error);
+    }
+  };
+
+
+  async function handleSubmitImagesBedrooms(photos, bedroom_Id,imovel_Id) {
+    const collectionRef = doc(db, "quartos", bedroom_Id);
+    if (!photos || photos.length === 0) return;
+
+    const docSnap = await getDoc(collectionRef);
+      if (!docSnap.exists()) {
+        await setDoc(collectionRef, {});
+      }
+
+    const uploadTasks = Array.from(photos).map((photo, index) =>{
+
+      const storageRef = ref(storage, `images/${photo.name}`);
+      const uploadTask = uploadBytesResumable(storageRef, photos);
+      return new Promise((resolve, reject) => {
+        uploadTask.on(
+          'state_changed',
+          (snapshot) => {
+            
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log('Upload is ' + progress + '% done');
+          },
+          (error) => {
+            
+            reject(error);
+          },
+          () => {
+            
+            getDownloadURL(uploadTask.snapshot.ref).then( async(downloadURL) => {
+              const docSnapshot = await getDoc(collectionRef);
+              const data = docSnapshot.data();
+              const updatedImageURLs = [...(data.imageurl || []), downloadURL];
+
+
+              await updateDoc(collectionRef, {
+                imageurl: updatedImageURLs,
+                imovel_id:imovel_Id,
+              });
+              console.log('File available at', downloadURL);
+              resolve(downloadURL);
+            });
+          }
+        );
+      });
+    });
+    
+    try {
+      const downloadURLs = await Promise.all(uploadTasks);
+      console.log('All files uploaded', downloadURLs);
+      return downloadURLs;
+    } catch (error) {
+      console.error('Error uploading files:', error);
+    }
+
+  };
   
 
   useEffect(() => {
@@ -116,7 +225,7 @@ function App() {
           <Route exact path="/profilepage" element={<ProfilePage darkMode={darkMode} zoneData={zoneData} scores={scores} updateScores={updateScores} />} />
           <Route exact path="/admin" element={<AdminPage darkMode={darkMode} />} />
           <Route exact path="/residenceDetails" element={<ResidenceDetails darkMode={darkMode} />} />
-          <Route exact path="/owner" element={<OwnerPage darkMode={darkMode} />} />
+          <Route exact path="/owner" element={<OwnerPage darkMode={darkMode}  handleSubmitImagesImoveis = {handleSubmitImagesImoveis} handleSubmitImagesBedrooms = {handleSubmitImagesBedrooms}  />} />
         </Routes>
       </Router>
     </div>

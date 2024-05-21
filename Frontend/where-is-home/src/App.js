@@ -123,8 +123,7 @@ function App() {
 
     const docSnap = await getDoc(collectionRef);
       if (!docSnap.exists()) {
-        const collectionRef2 = doc(db,"quartos",bedroom_Id);
-        await setDoc(collectionRef2);
+        await setDoc(collectionRef, {});
       }
 
     const uploadTasks = Array.from(photos).map((photo, index) =>{
@@ -185,7 +184,7 @@ function App() {
       const imageUrls = data.imageurl || []; 
       return imageUrls;
     } else {
-      console.log("No such document!");
+      console.log("No such document!"); 
       return [];
     }
   }catch(error){

@@ -348,12 +348,13 @@ function ProfilePage({ darkMode }) {
             
                 if (response.ok) {
                   const backendData = await response.json();
+                  
                     const nature_sportsValue = parseFloat(backendData['theme_nature_sports']) || 0;
                     const commerceValue =  parseFloat(backendData['theme_commerce']) || 0;
                     const educationValue =  parseFloat(backendData['theme_education']) || 0;
                     const healthValue =  parseFloat(backendData['theme_health']) || 0;
                     const serviceValue =  parseFloat(backendData['theme_service']) || 0;
-                    const social_leisureValue =  parseFloat(backendData['theme_social_leisure']) || 0;
+                    const social_leisureValue =  parseFloat(backendData['theme_social_leisure']) || 0;                  
             
                     delete backendData['theme_nature_sports'];
                     delete backendData['theme_commerce'];
@@ -461,7 +462,7 @@ function ProfilePage({ darkMode }) {
           theme_social_leisure: slidersValues[1].value,
           theme_health: slidersValues[2].value,
           theme_nature_sports: slidersValues[3].value,
-          theme_services: slidersValues[4].value,
+          theme_service: slidersValues[4].value,
           theme_education: slidersValues[5].value,
       
         };
@@ -551,7 +552,7 @@ function ProfilePage({ darkMode }) {
           theme_social_leisure: 0,
           theme_health: 0,
           theme_nature_sports: 0,
-          theme_services: 0,
+          theme_service: 0,
           theme_education: 0,
       
         };

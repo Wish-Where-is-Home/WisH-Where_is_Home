@@ -261,13 +261,15 @@ const ResidenceDetails = ({ darkMode, propertyId, onClose }) => {
                   <h1 className="residenceTitle">
                     {propertyDetails.property.nome}, {t('floor')} {propertyDetails.property.piso}
                   </h1>
-                  <div className="residenceAddress">
-                    <FontAwesomeIcon icon={faLocationDot} />
-                    <span>{propertyDetails.property.morada}</span>
+                  <div className="residenceInfo">
+                    <div className="residenceAddress">
+                      <FontAwesomeIcon icon={faLocationDot} />
+                      <span>{propertyDetails.property.morada}</span>
+                    </div>
+                    <span className="residencePriceHighlight">
+                      {propertyDetails.property.tipologia} {propertyDetails.property.equipado ? t('fully_equipped') : t('not_equipped')}
+                    </span>
                   </div>
-                  <span className="residencePriceHighlight">
-                    {propertyDetails.property.tipologia} {propertyDetails.property.equipado ? t('fully_equipped') : t('not_equipped')}
-                  </span>
 
                   <div className="navbar2">
                     <button onClick={() => scrollToSection('description')}>{t('description')}</button>

@@ -138,8 +138,8 @@ const TravelTimeCalculator = ({ propertyLat, propertyLng }) => {
             <button className="calculate-button" onClick={handleCalculateClick}>{t('calculate')}</button>
             {travelDetails.time && (
                 <div className="results">
+                    <p className="distance-label">{t('distance_to_institution')} :</p>
                     <p className="travel-time">{Math.round(travelDetails.time)} min ({travelDetails.distance.toFixed(1)} km)</p>
-                    <p className="distance-label">{t('distance_to_institution')}</p>
                 </div>
             )}
             <div ref={mapContainer} className="map-container" />

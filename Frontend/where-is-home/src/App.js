@@ -11,8 +11,7 @@ import QuizPage from './Pages/SecondPage/QuizPage';
 import { useAuth } from './AuthContext/AuthContext';
 import ProfilePage from './Pages/ProfilePage/ProfilePage';
 import AdminPage from './Pages/AdminPage/AdminPage';
-
-
+import OwnerPage from './Pages/OwnerPage/OwnerPage';
 
 
 import { initializeApp } from "firebase/app";
@@ -57,6 +56,7 @@ function App() {
   const app = initializeApp(firebaseConfig);
 
   const analytics = getAnalytics(app);
+
 
   const storage = getStorage(app);
   const db = getFirestore(app);
@@ -124,7 +124,7 @@ function App() {
     const docSnap = await getDoc(collectionRef);
       if (!docSnap.exists()) {
         await setDoc(collectionRef, {});
-      }
+
 
     const uploadTasks = Array.from(photos).map((photo, index) =>{
 
@@ -171,49 +171,6 @@ function App() {
     }
 
   };
-
-
-  async function fetchImageURLsImoveis(imovel_Id) {
-    try{
-      const imid = String(imovel_Id);
-      const collectionRef = doc(db, "imoveis", imid);
-      const docSnap = await getDoc(collectionRef);
-      
-    if (docSnap.exists()) {
-      const data = docSnap.data();
-      const imageUrls = data.imageurl || []; 
-      return imageUrls;
-    } else {
-      console.log("No such document!"); 
-      return [];
-    }
-  }catch(error){
-    console.error("Error fetching bedroom images:", error);
-    return [];
-  }
-  }
-
-  async function fetchImageURLsBedrooms(bedroom_Id) {
-    try {
-      const bedroomIdString = String(bedroom_Id);
-      const collectionRef = doc(db, "quartos", bedroomIdString);
-      const docSnap = await getDoc(collectionRef);
-
-      
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        const imageUrls = data.imageurl || []; 
-        return imageUrls;
-      } else {
-        console.log("No such document!");
-        return [];
-      }
-    } catch (error) {
-      console.error("Error fetching bedroom images:", error);
-      return [];
-    }
-  }
-  
 
 
 
@@ -271,6 +228,8 @@ function App() {
           <Route exact path="/metricspage" element={<MetricsPage darkMode={darkMode} zoneData={zoneData} scores={scores} updateScores={updateScores} />} />
           <Route exact path="/profilepage" element={<ProfilePage darkMode={darkMode} zoneData={zoneData} scores={scores} updateScores={updateScores} />} />
           <Route exact path="/admin" element={<AdminPage darkMode={darkMode} fetchImageURLsImoveis={fetchImageURLsImoveis} fetchImageURLsBedrooms={fetchImageURLsBedrooms} />} />
+          <Route exact path="/owner" element={<OwnerPage darkMode={darkMode}  handleSubmitImagesImoveis = {handleSubmitImagesImoveis} handleSubmitImagesBedrooms = {handleSubmitImagesBedrooms}  />} />
+
         </Routes>
       </Router>
     </div>

@@ -1,0 +1,98 @@
+.property-details {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: var(--background-color2); 
+  }
+  
+  .property-details img {
+    width: 120px; 
+    margin-bottom: 20px;
+    border-radius: 5px; 
+  }
+  
+  
+  .property-details h3 {
+    margin: 0;
+    margin-bottom: 20px;
+
+  }
+  
+  .property-details button {
+    background-color: #d3d3d3; 
+    color: black; 
+    border: none;
+    padding: 5px 10px; 
+    margin-left: 10px; 
+    border-radius: 5px; 
+    cursor: pointer; 
+    transition: background-color 0.3s ease; 
+    font-size: 15px;
+  }
+  
+  .property-details button:hover {
+    background-color: grey; 
+  }
+  
+  .property-details .detailed-info {
+    margin-top: 10px;
+    text-align: center;
+  }
+  
+  .property-details .detailed-info p {
+    margin: 5px 0;
+  }
+
+  .property-details .room-dropdown {
+    margin-top: 10px;
+    background-color: var(--background-color2);
+    background-color: var(--background-color2);
+    border-radius: 5px;
+    padding: 10px;
+  }
+  
+  .property-details .room-dropdown h4 {
+    margin-top: 0;
+  }
+  
+  .property-details .room-dropdown ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .property-details .room-dropdown li {
+    margin-bottom: 40px;
+    background-color: white;
+    padding: 10px;
+    border-radius: 8px;
+  }
+  .property-details .room-dropdown li span {
+    font-weight:600;
+    margin-bottom: 40px;
+    background-color: white;
+    padding: 10px;
+    border-radius: 8px;
+  }
+  .property-details .room-dropdown li span {
+    font-weight:600;
+  }
+  
+  .dark-mode .property-details button {
+    background-color: grey ; 
+    color: white; 
+  }
+  
+  .dark-mode .property-details button:hover {
+    background-color: var(--background-color); 
+  }
+  
+  .dark-mode .property-details .room-dropdown li {
+    background-color: var(--background-color);
+  }
+  
+  .dark-mode .property-details .room-dropdown li {
+    background-color: var(--background-color);
+  }

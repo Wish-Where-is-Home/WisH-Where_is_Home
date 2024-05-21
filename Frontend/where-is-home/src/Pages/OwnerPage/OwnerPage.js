@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./OwnerPage.css";
 import PropertyDetails from "../../Components/OwnerPropDetails/OwnerPropDetails";
+import Toastify from 'toastify-js'
+import "toastify-js/src/toastify.css"
 
 function OwnerPage({ darkMode , handleSubmitImagesImoveis, handleSubmitImagesBedrooms}) {
   const [properties, setProperties] = useState([]);
@@ -279,9 +281,24 @@ function OwnerPage({ darkMode , handleSubmitImagesImoveis, handleSubmitImagesBed
       const propertyId = responseData.id;
       set_id_propriedade(propertyId);
       handleSubmitImagesImoveis(propertyPhotos, String(propertyId));
+      
       handleAddRoomsClick();
+
+      Toastify({
+        text: "Property created successfully!",
+        duration: 3000, // 3 seconds
+        close: true,
+        backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+      }).showToast();
+
     } catch (error) {
       console.error("Error creating property:", error);
+      Toastify({
+        text: "Error creating property: " + error.message,
+        duration: 5000, // 5 seconds
+        close: true,
+        backgroundColor: "#ff4444",
+      }).showToast();
     }
   };
   const handlePhotoChange = (event) => {
@@ -367,8 +384,20 @@ function OwnerPage({ darkMode , handleSubmitImagesImoveis, handleSubmitImagesBed
         const responseData = await response.json();
 
         handleSubmitImagesBedrooms(roomData.photos, String(responseData.room_id) ,String(responseData.imovel_id));
+        Toastify({
+          text: "Room created successfully!",
+          duration: 3000,
+          close: true,
+          backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+        }).showToast();
       } catch (error) {
         console.error("Error creating room:", error);
+        Toastify({
+          text: "Error creating room.",
+          duration: 3000,
+          close: true,
+          backgroundColor: "#ff4444",
+        }).showToast();
       }
     }
   };

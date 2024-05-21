@@ -189,7 +189,7 @@ function ModalAdminRooms({darkMode,roomData,closeModalRoom,fetchImageURLsImoveis
                         </div>
                         
                </div>
-               <div className='modal-property-info-div'>
+               <div className='modal-property-info-div2'>
                     <div className='modal-p-left'>
                         <p style={{color:"#0dddda"}}><strong>Property:</strong></p>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
@@ -273,13 +273,17 @@ function ModalAdminRooms({darkMode,roomData,closeModalRoom,fetchImageURLsImoveis
                         </div>
                     </div>
                </div>
-                <div style={{width:"100%",display:"flex",alignItems:"center",justifyContent:"center"}}>
+                <div class="modal-admin-room-div-buttons" >
                     <button className='quartos-buttons-modal3' style={{marginRight:"3rem"}} onClick={() => openConfirmDenieModal(roomData.room_info.room_id)}>
                         <FontAwesomeIcon className='icon-close-modal' icon={faCheck} />
                     </button>
                     <button className='quartos-buttons-modal2' style={{marginLeft:"3rem"}} onClick={() => openCommentModal(roomData.room_info.room_id)}>
                         <FontAwesomeIcon className='icon-close-modal' icon={faTimes} />
                     </button>
+                </div>
+                <div className='modal-admin-room-div-buttons2'>
+                    <h4>Accept</h4>
+                    <h4>Deny</h4>
                 </div>
             </div>
             {commentModalAcceptOpen && (

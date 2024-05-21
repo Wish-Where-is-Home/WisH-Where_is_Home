@@ -6,6 +6,7 @@ import { format } from 'date-fns';
 import axios from 'axios';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import Toastify from 'toastify-js'
 
 function ModalProperty({ darkMode, propertyData, propertyRooms, closeModal,fetchImageURLsImoveis,fetchImageURLsBedrooms }) {
 

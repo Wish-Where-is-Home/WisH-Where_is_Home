@@ -571,7 +571,7 @@ const handleSavePreferences = () => {
     theme_social_leisure: slidersValues[1].value,
     theme_health: slidersValues[2].value,
     theme_nature_sports: slidersValues[3].value,
-    theme_services: slidersValues[4].value,
+    theme_service: slidersValues[4].value,
     theme_education: slidersValues[5].value,
 
   };
@@ -793,22 +793,22 @@ const handleKeepMetrics = async () => {
                         aria-label="Importance"
                         value={slidersValues[0].value}
                         valueLabelDisplay="auto"
-                        step={25}
+                        step={0.25}
                         id="commerce"
                         marks
                         min={0}
-                        max={100}
+                        max={1}
                         valueLabelFormat={(value) => {
                           switch (value) {
                             case 0:
                               return t('notimportant');
-                            case 25:
+                            case 0.25:
                               return t('slightly');
-                            case 50:
+                            case 0.5:
                               return t('moderate');
-                            case 75:
+                            case 0.75:
                               return t('important');
-                            case 100:
+                            case 1:
                               return t('very_Important');
                             default:
                               return '';
@@ -838,22 +838,22 @@ const handleKeepMetrics = async () => {
                         aria-label="Importance"
                         value={slidersValues[1].value}
                         valueLabelDisplay="auto"
-                        step={25}
+                        step={0.25}
                         id="social_leisure"
                         marks
                         min={0}
-                        max={100}
+                        max={1}
                         valueLabelFormat={(value) => {
                           switch (value) {
                             case 0:
                               return t('notimportant');
-                            case 25:
+                            case 0.25:
                               return t('slightly');
-                            case 50:
+                            case 0.5:
                               return t('moderate');
-                            case 75:
+                            case 0.75:
                               return t('important');
-                            case 100:
+                            case 1:
                               return t('very_Important');
                             default:
                               return '';
@@ -882,22 +882,22 @@ const handleKeepMetrics = async () => {
                         aria-label="Importance"
                         value={slidersValues[2].value}
                         valueLabelDisplay="auto"
-                        step={25}
+                        step={0.25}
                         id="health"
                         marks
                         min={0}
-                        max={100}
+                        max={1}
                         valueLabelFormat={(value) => {
                           switch (value) {
                             case 0:
                               return t('notimportant');
-                            case 25:
+                            case 0.25:
                               return t('slightly');
-                            case 50:
+                            case 0.5:
                               return t('moderate');
-                            case 75:
+                            case 0.75:
                               return t('important');
-                            case 100:
+                            case 1:
                               return t('very_Important');
                             default:
                               return '';
@@ -926,22 +926,22 @@ const handleKeepMetrics = async () => {
                         aria-label="Importance"
                         value={slidersValues[3].value}
                         valueLabelDisplay="auto"
-                        step={25}
+                        step={0.25}
                         id="nature_sports"
                         marks
                         min={0}
-                        max={100}
+                        max={1}
                         valueLabelFormat={(value) => {
                           switch (value) {
                             case 0:
                               return t('notimportant');
-                            case 25:
+                            case 0.25:
                               return t('slightly');
-                            case 50:
+                            case 0.5:
                               return t('moderate');
-                            case 75:
+                            case 0.75:
                               return t('important');
-                            case 100:
+                            case 1:
                               return t('very_Important');
                             default:
                               return '';
@@ -970,22 +970,22 @@ const handleKeepMetrics = async () => {
                         aria-label="Importance"
                         value={slidersValues[4].value}
                         valueLabelDisplay="auto"
-                        step={25}
+                        step={0.25}
                         id="service"
                         marks
                         min={0}
-                        max={100}
+                        max={1}
                         valueLabelFormat={(value) => {
                           switch (value) {
                             case 0:
                               return t('notimportant');
-                            case 25:
+                            case 0.25:
                               return t('slightly');
-                            case 50:
+                            case 0.5:
                               return t('moderate');
-                            case 75:
+                            case 0.75:
                               return t('important');
-                            case 100:
+                            case 1:
                               return t('very_Important');
                             default:
                               return '';
@@ -1014,22 +1014,22 @@ const handleKeepMetrics = async () => {
                         aria-label="Importance"
                         value={slidersValues[5].value}
                         valueLabelDisplay="auto"
-                        step={25}
+                        step={0.25}
                         id="education"
                         marks
                         min={0}
-                        max={100}
+                        max={1}
                         valueLabelFormat={(value) => {
                           switch (value) {
                             case 0:
                               return t('notimportant');
-                            case 25:
+                            case 0.25:
                               return t('slightly');
-                            case 50:
+                            case 0.5:
                               return t('moderate');
-                            case 75:
+                            case 0.75:
                               return t('important');
-                            case 100:
+                            case 1:
                               return t('very_Important');
                             default:
                               return '';

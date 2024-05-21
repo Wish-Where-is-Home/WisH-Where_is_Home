@@ -92,10 +92,10 @@ function ModalAdminRooms({darkMode,roomData,closeModalRoom,fetchImageURLsImoveis
             }
         })
         .then(response => {
-            console.log('Comment accepted successfully');
+            
             closeCommentModal();
             Toastify({
-                text: "Comment accepted successfully",
+                text: "Denied successfully",
                 duration: 3000,
                 close: true,
                 gravity: "top",
@@ -106,7 +106,7 @@ function ModalAdminRooms({darkMode,roomData,closeModalRoom,fetchImageURLsImoveis
         .catch(error => {
             console.error('Error accepting comment:', error);
             Toastify({
-                text: "Error accepting comment",
+                text: "Error denying",
                 duration: 3000,
                 close: true,
                 gravity: "top",
@@ -128,10 +128,9 @@ function ModalAdminRooms({darkMode,roomData,closeModalRoom,fetchImageURLsImoveis
             }
         })
         .then(response => {
-            console.log('Room denied successfully');
             closeConfirmDenieModal();
             Toastify({
-                text: "Room denied successfully",
+                text: "Confirmed successfully",
                 duration: 3000,
                 close: true,
                 gravity: "top",
@@ -142,7 +141,7 @@ function ModalAdminRooms({darkMode,roomData,closeModalRoom,fetchImageURLsImoveis
         .catch(error => {
             console.error('Error denying room:', error);
             Toastify({
-                text: "Error denying room",
+                text: "Error confirming room",
                 duration: 3000,
                 close: true,
                 gravity: "top",

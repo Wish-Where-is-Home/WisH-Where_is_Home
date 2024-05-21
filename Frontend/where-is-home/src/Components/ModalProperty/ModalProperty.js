@@ -77,7 +77,7 @@ function ModalProperty({ darkMode, propertyData, propertyRooms, closeModal,fetch
             console.log('Comment accepted successfully');
             closeCommentModal();
             Toastify({
-                text: "Comment accepted successfully",
+                text: "Room denied successfully",
                 duration: 3000,
                 close: true,
                 gravity: "top",
@@ -88,7 +88,7 @@ function ModalProperty({ darkMode, propertyData, propertyRooms, closeModal,fetch
         .catch(error => {
             console.error('Error accepting comment:', error);
             Toastify({
-                text: "Error accepting comment",
+                text: "Error denying home",
                 duration: 3000,
                 close: true,
                 gravity: "top",
@@ -113,7 +113,7 @@ function ModalProperty({ darkMode, propertyData, propertyRooms, closeModal,fetch
             console.log('Room denied successfully');
             closeConfirmDenieModal();
             Toastify({
-                text: "Room denied successfully",
+                text: "Room accepted successfully",
                 duration: 3000,
                 close: true,
                 gravity: "top",
@@ -124,7 +124,7 @@ function ModalProperty({ darkMode, propertyData, propertyRooms, closeModal,fetch
         .catch(error => {
             console.error('Error denying room:', error);
             Toastify({
-                text: "Error denying room",
+                text: "Error accepting room",
                 duration: 3000,
                 close: true,
                 gravity: "top",
@@ -284,8 +284,8 @@ function ModalProperty({ darkMode, propertyData, propertyRooms, closeModal,fetch
                             style={{ marginBottom: "10px", width: "100%" }}
                         />
                         <div style={{ display: "flex", justifyContent: "space-between", marginTop: "1rem" }}>
-                            <button className="acceptButtonmodal" onClick={closeCommentModal} >No</button>
-                            <button className="NoButtonmodal" onClick={handleAcceptComment}>Deny</button>
+                            <button className="acceptButtonmodal" onClick={handleAcceptComment} >Deny</button>
+                            <button className="NoButtonmodal"  onClick={closeCommentModal} >No</button>
                         </div>
                     </div>
                 </div>

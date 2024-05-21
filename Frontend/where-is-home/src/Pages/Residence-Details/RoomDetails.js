@@ -2,8 +2,12 @@ import React, { useState } from 'react';
 import './roomDetails.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleArrowLeft, faCircleArrowRight, faCircleXmark, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { useTranslation } from 'react-i18next';
+
 
 const RoomDetails = ({ darkMode, room, photos, onClose, onBack }) => {
+  const { t } = useTranslation("common");
+
   const [slideNumber, setSlideNumber] = useState(0);
   const [open, setOpen] = useState(false);
 
@@ -83,7 +87,7 @@ const RoomDetails = ({ darkMode, room, photos, onClose, onBack }) => {
                   <p>{room.area} m²</p>
                   <p>{room.despesas_incluidas}</p>
                   <p>{room.observacoes}</p>
-                  <p>{room.wc_privado ? 'Private bathroom' : 'No private bathroom'}</p>
+                  <p>{room.wc_privado ? t('private_bathroom') : t('no_private_bathroom')}</p>
                   <p>{room.disponivel ? `Available for ${room.preco_mes}€ per month` : 'Not available'}</p>
                 </div>
               </div>

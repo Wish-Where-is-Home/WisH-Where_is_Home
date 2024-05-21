@@ -164,7 +164,7 @@ function ModalAdminRooms({darkMode,roomData,closeModalRoom,fetchImageURLsImoveis
                 {Array.isArray(imageURLs) && imageURLs.length > 0 ? (
                     <div className='bedroomspending'>
                         {imageURLs.map((url, index) => (
-                            <img key={index} src={url} alt={`Image ${index}`} />
+                            <img key={index} src={url} alt={`Image ${index}`} className='bedroomspending-img' />
                         ))}
                     </div>
                 ) : (

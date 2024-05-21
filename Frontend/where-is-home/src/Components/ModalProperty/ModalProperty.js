@@ -146,7 +146,7 @@ function ModalProperty({ darkMode, propertyData, propertyRooms, closeModal,fetch
                {Array.isArray(imageURLs) && imageURLs.length > 0 ? (
                     <div className='bedroomspending'>
                         {imageURLs.map((url, index) => (
-                            <img key={index} src={url}  />
+                            <img key={index} src={url} className='bedroomspending-img' />
                         ))}
                     </div>
                 ) : (

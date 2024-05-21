@@ -192,3 +192,14 @@
     justify-content:space-between;
     flex-direction: row;
 }
+
+.bedroomspending {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+
+.bedroomspending-img{
+    width: 33%;
+    height: 100%;
+}

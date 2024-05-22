@@ -183,6 +183,7 @@ function OwnerPage({ darkMode , handleSubmitImagesImoveis, handleSubmitImagesBed
     // const ownerId = currentUser.uid;
 
     // Check if all required fields are filled
+
     const isValid = !(
       propertyName &&
       !isNaN(area) &&
@@ -400,6 +401,8 @@ function OwnerPage({ darkMode , handleSubmitImagesImoveis, handleSubmitImagesBed
         }).showToast();
       }
     }
+    setShowRoomForm(!showRoomForm);
+
   };
 
   const handleRoomPhotoChange = (event, roomIndex) => {

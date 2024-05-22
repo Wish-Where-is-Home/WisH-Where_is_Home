@@ -200,11 +200,11 @@ function ModalAdminRooms({darkMode,roomData,closeModalRoom,fetchImageURLsImoveis
                             <p> {roomData.property_info.property_type}</p>
                         </div>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                            <p style={{ marginRight: '0.5rem' }}><strong>Area m2:</strong></p>
+                            <p style={{ marginRight: '0.5rem' }}><strong>Area m<sup>2</sup>:</strong></p>
                             <p> {roomData.property_info.property_area}</p>
                         </div>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                            <p style={{ marginRight: '0.5rem' }}><strong>Selo:</strong></p>
+                            <p style={{ marginRight: '0.5rem' }}><strong>Stamp:</strong></p>
                             <p> {roomData.property_info.property_seal ? roomData.property_info.property_seal : 'N/A'}</p>
                         </div>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
@@ -212,23 +212,23 @@ function ModalAdminRooms({darkMode,roomData,closeModalRoom,fetchImageURLsImoveis
                             <p>{formattedDate}</p>
                         </div>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                            <p style={{ marginRight: '0.5rem' }}><strong>Cozinha:</strong></p>
+                            <p style={{ marginRight: '0.5rem' }}><strong>Kitchen:</strong></p>
                             <p>{formatBooleanValue(roomData.property_info.property_kitchen)}</p>
                         </div>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                            <p style={{ marginRight: '0.5rem' }}><strong>Elevador:</strong></p>
+                            <p style={{ marginRight: '0.5rem' }}><strong>Elevator:</strong></p>
                             <p> {formatBooleanValue(roomData.property_info.property_elevator)}</p>
                         </div>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                            <p style={{ marginRight: '0.5rem' }}><strong>Equipado:</strong></p>
+                            <p style={{ marginRight: '0.5rem' }}><strong>Equipped:</strong></p>
                             <p> {formatBooleanValue(roomData.property_info.property_equipped)}</p>
                         </div>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                            <p style={{ marginRight: '0.5rem' }}><strong>Estacionamento/garagem:</strong></p>
+                            <p style={{ marginRight: '0.5rem' }}><strong>Parking/garage:</strong></p>
                             <p>{formatBooleanValue(roomData.property_info.property_parking)}</p>
                         </div>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                            <p style={{ marginRight: '0.5rem' }}><strong>N' Wcs:</strong></p>
+                            <p style={{ marginRight: '0.5rem' }}><strong>Nº WCs:</strong></p>
                             <p> {roomData.property_info.property_wc}</p>
                         </div>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
@@ -243,7 +243,7 @@ function ModalAdminRooms({darkMode,roomData,closeModalRoom,fetchImageURLsImoveis
                             <p> {roomData.room_info.observations}</p>
                         </div>
                     <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                            <p style={{ marginRight: '0.5rem' }}><strong>Area m2:</strong></p>
+                            <p style={{ marginRight: '0.5rem' }}><strong>Area m<sup>2</sup>:</strong></p>
                             <p> {roomData.room_info.area}</p>
                         </div>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
@@ -251,15 +251,15 @@ function ModalAdminRooms({darkMode,roomData,closeModalRoom,fetchImageURLsImoveis
                             <p> {formatBooleanValue(roomData.room_info.available)}</p>
                         </div>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                            <p style={{ marginRight: '0.5rem' }}><strong>Despesas:</strong></p>
+                            <p style={{ marginRight: '0.5rem' }}><strong>Expenses:</strong></p>
                             <p> {roomData.room_info.despesas_incluidas}</p>
                         </div>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                            <p style={{ marginRight: '0.5rem' }}><strong>Tipologia:</strong></p>
+                            <p style={{ marginRight: '0.5rem' }}><strong>Typology:</strong></p>
                             <p> {roomData.room_info.tipologia}</p>
                         </div>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                            <p style={{ marginRight: '0.5rem' }}><strong>Wc privado:</strong></p>
+                            <p style={{ marginRight: '0.5rem' }}><strong>Private Bathroom:</strong></p>
                             <p> {formatBooleanValue(roomData.room_info.wc_privado)}</p>
                         </div>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
@@ -267,7 +267,7 @@ function ModalAdminRooms({darkMode,roomData,closeModalRoom,fetchImageURLsImoveis
                             <p> {formattedDate2}</p>
                         </div>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                            <p style={{ marginRight: '0.5rem' }}><strong>Preco/mes  :</strong></p>
+                            <p style={{ marginRight: '0.5rem' }}><strong>Price/month:</strong></p>
                             <p> {roomData.room_info.preco_mes}</p>
                         </div>
                     </div>

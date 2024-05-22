@@ -159,23 +159,23 @@ function ModalProperty({ darkMode, propertyData, propertyRooms, closeModal,fetch
                <div className='modal-property-info-div'>
                     <div className='modal-p-left'>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                            <p style={{ marginRight: '0.5rem' }}><strong>Morada:</strong></p>
+                            <p style={{ marginRight: '0.5rem' }}><strong>Address:</strong></p>
                             <p> {propertyData.morada}</p>
                         </div>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                            <p style={{ marginRight: '0.5rem' }}><strong>Tipologia:</strong></p>
+                            <p style={{ marginRight: '0.5rem' }}><strong>Typology:</strong></p>
                             <p> {propertyData.tipologia}</p>
                         </div>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                            <p style={{ marginRight: '0.5rem' }}><strong>Area m2:</strong></p>
+                            <p style={{ marginRight: '0.5rem' }}><strong>Area m<sup>2</sup>:</strong></p>
                             <p> {propertyData.area}</p>
                         </div>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                            <p style={{ marginRight: '0.5rem' }}><strong>N' Quartos:</strong></p>
+                            <p style={{ marginRight: '0.5rem' }}><strong>Nº of Bedrooms:</strong></p>
                             <p> {propertyData.rooms.length}</p>
                         </div>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                            <p style={{ marginRight: '0.5rem' }}><strong>Selo:</strong></p>
+                            <p style={{ marginRight: '0.5rem' }}><strong>Stamp:</strong></p>
                             <p> {propertyData.selo ? propertyData.selo : 'N/A'}</p>
                         </div>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
@@ -185,23 +185,23 @@ function ModalProperty({ darkMode, propertyData, propertyRooms, closeModal,fetch
                     </div>
                     <div className='modal-p-right'>
                     <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                            <p style={{ marginRight: '0.5rem' }}><strong>Cozinha:</strong></p>
+                            <p style={{ marginRight: '0.5rem' }}><strong>Kitchen:</strong></p>
                             <p> {formatBooleanValue(propertyData.cozinha)}</p>
                         </div>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                            <p style={{ marginRight: '0.5rem' }}><strong>Elevador:</strong></p>
+                            <p style={{ marginRight: '0.5rem' }}><strong>Elevator:</strong></p>
                             <p> {formatBooleanValue(propertyData.elevador)}</p>
                         </div>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                            <p style={{ marginRight: '0.5rem' }}><strong>Equipado:</strong></p>
+                            <p style={{ marginRight: '0.5rem' }}><strong>Equipped:</strong></p>
                             <p> {formatBooleanValue(propertyData.equipado)}</p>
                         </div>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                            <p style={{ marginRight: '0.5rem' }}><strong>Estacionamento/garagem:</strong></p>
+                            <p style={{ marginRight: '0.5rem' }}><strong>Parking/garage:</strong></p>
                             <p> {formatBooleanValue(propertyData.estacionamento_garagem)}</p>
                         </div>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                            <p style={{ marginRight: '0.5rem' }}><strong>N' Wcs:</strong></p>
+                            <p style={{ marginRight: '0.5rem' }}><strong>Nº WCs:</strong></p>
                             <p> {propertyData.wcs}</p>
                         </div>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
@@ -211,40 +211,40 @@ function ModalProperty({ darkMode, propertyData, propertyRooms, closeModal,fetch
                     </div>
                </div>
                <div>
-                <h3>Quartos:</h3>
+                <h3>Bedrooms:</h3>
                 <div className="modal-room-container">
                     {propertyRooms.map(room => (
                         <div key={room.id} className="modal-room-card">
                             <div style={{display:"flex",flexDirection:"column",padding:"15px"}}></div>
                             <div style={{display:"flex",flexDirection:"column",padding:"15px"}}>
                                 <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                                        <p style={{ marginRight: '0.5rem' }}><strong>Id:</strong></p>
+                                        <p style={{ marginRight: '0.5rem' }}><strong>ID:</strong></p>
                                         <p>{room.id}</p>
                                 </div>
                                 <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                                        <p style={{ marginRight: '0.5rem' }}><strong>Area m2:</strong></p>
+                                        <p style={{ marginRight: '0.5rem' }}><strong>Area m<sup>2</sup>:</strong></p>
                                         <p>{room.area}</p>
                                 </div>
                                 <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                                        <p style={{ marginRight: '0.5rem' }}><strong>Preco por mes:</strong></p>
+                                        <p style={{ marginRight: '0.5rem' }}><strong>Price per month:</strong></p>
                                         <p>{room.preco_mes}</p>
                                 </div>
                                 <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                                        <p style={{ marginRight: '0.5rem' }}><strong>wc privado:</strong></p>
+                                        <p style={{ marginRight: '0.5rem' }}><strong>Private Bathroom:</strong></p>
                                         <p>{formatBooleanValue(room.wc_privado)}</p>
                                 </div>
                             </div>
                             <div style={{display:"flex",flexDirection:"column",padding:"15px"}}>
                                 <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                                        <p style={{ marginRight: '0.5rem' }}><strong>Disponivel:</strong></p>
+                                        <p style={{ marginRight: '0.5rem' }}><strong>Available:</strong></p>
                                         <p>{formatBooleanValue(room.disponivel)}</p>
                                 </div>
                                 <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                                        <p style={{ marginRight: '0.5rem' }}><strong>Tipologia:</strong></p>
+                                        <p style={{ marginRight: '0.5rem' }}><strong>Typology:</strong></p>
                                         <p>{room.tipologia}</p>
                                 </div>
                                 <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row",}}>
-                                        <p style={{ marginRight: '0.5rem' }}><strong>Despesas Incluidas:</strong></p>
+                                        <p style={{ marginRight: '0.5rem' }}><strong>Included Expenses:</strong></p>
                                         <p>{room.despesas_incluidas}</p>
                                 </div>
                                

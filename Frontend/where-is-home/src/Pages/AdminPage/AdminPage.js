@@ -151,8 +151,8 @@ function AdminPage({ darkMode,fetchImageURLsImoveis,fetchImageURLsBedrooms }) {
                 <>
                     <div className='propertie-div propertie-labels'>
                         <div><strong>ID</strong></div>
-                        <div><strong>Nome</strong></div>
-                        <div><strong>Morada</strong></div>
+                        <div><strong>Name</strong></div>
+                        <div><strong>Address</strong></div>
                         <div></div>
                         <div><strong>State</strong></div>
                     </div>

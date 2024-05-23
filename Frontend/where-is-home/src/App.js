@@ -61,6 +61,7 @@ function App() {
   const db = getFirestore(app);
 
   async function handleSubmitImagesImoveis(photos, imovel_Id) {
+    console.log("Received photos for upload:", photos);
     const collectionRef = doc(db, "imoveis", imovel_Id);
     if (!photos || photos.length === 0) return;
 
@@ -113,8 +114,9 @@ function App() {
     }
 }
 
-
 async function handleSubmitImagesBedrooms(photos, bedroom_Id, imovel_Id) {
+  console.log("Received photos for upload:", photos);
+
   const collectionRef = doc(db, "quartos", bedroom_Id);
   if (!photos || photos.length === 0) return;
 
@@ -124,7 +126,9 @@ async function handleSubmitImagesBedrooms(photos, bedroom_Id, imovel_Id) {
   }
 
   const uploadTasks = Array.from(photos).map((photo, index) => {
-    const storageRef = ref(storage, `images/${bedroom_Id}_${index}_${photo.name}`);
+    const storageRef = ref(storage, `images_bedrooms/${bedroom_Id}_${index}_${photo.name}`);
+    console.log(photo);
+    console.log(storageRef);
     const uploadTask = uploadBytesResumable(storageRef, photo);
 
     return new Promise((resolve, reject) => {
@@ -132,29 +136,38 @@ async function handleSubmitImagesBedrooms(photos, bedroom_Id, imovel_Id) {
         "state_changed",
         (snapshot) => {
           const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log("Upload is " + progress + "% done");
+          console.log(`Upload is ${progress.toFixed(2)}% done for ${photo.name}`);
         },
         (error) => {
+          console.error("Upload error:", error);
           reject(error);
         },
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then(
             async (downloadURL) => {
-              const docSnapshot = await getDoc(collectionRef);
-              const data = docSnapshot.data();
-              const updatedImageURLs = [
-                ...(data.imageurl || []),
-                downloadURL,
-              ];
+              try {
+                const docSnapshot = await getDoc(collectionRef);
+                const data = docSnapshot.data();
+                const updatedImageURLs = [
+                  ...(data.imageurl || []),
+                  downloadURL,
+                ];
 
-              await updateDoc(collectionRef, {
-                imageurl: updatedImageURLs,
-                imovel_id: imovel_Id,
-              });
-              console.log("File available at", downloadURL);
-              resolve(downloadURL);
+                await updateDoc(collectionRef, {
+                  imageurl: updatedImageURLs,
+                  imovel_id: imovel_Id,
+                });
+                console.log("File available at", downloadURL);
+                resolve(downloadURL);
+              } catch (updateError) {
+                console.error("Error updating document:", updateError);
+                reject(updateError);
+              }
             }
-          );
+          ).catch((urlError) => {
+            console.error("Error getting download URL:", urlError);
+            reject(urlError);
+          });
         }
       );
     });
@@ -162,12 +175,15 @@ async function handleSubmitImagesBedrooms(photos, bedroom_Id, imovel_Id) {
 
   try {
     const downloadURLs = await Promise.all(uploadTasks);
-    console.log("All files uploaded", downloadURLs);
+    console.log("All files uploaded successfully", downloadURLs);
     return downloadURLs;
   } catch (error) {
     console.error("Error uploading files:", error);
   }
 }
+
+
+
 
 
   async function fetchImageURLsImoveis(imovel_Id) {

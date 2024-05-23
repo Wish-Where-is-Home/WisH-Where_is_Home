@@ -128,7 +128,11 @@ const Login_register = ({ darkMode,firebaseConfig }) => {
 
             localStorage.setItem('token', tokenData.token);
             localStorage.setItem('tokenExpiration', tokenData.exp);
-            window.location.href = "/";
+
+
+            setTimeout(() => {
+                window.location.href = "/";
+            }, 2000);
 
             
             

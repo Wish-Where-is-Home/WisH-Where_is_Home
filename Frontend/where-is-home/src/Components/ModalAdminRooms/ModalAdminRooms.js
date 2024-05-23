@@ -102,6 +102,11 @@ function ModalAdminRooms({darkMode,roomData,closeModalRoom,fetchImageURLsImoveis
                 position: "right",
                 backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)"
             }).showToast();
+
+            setTimeout(() => {
+                window.location.reload();
+            }, 2000);
+            
         })
         .catch(error => {
             console.error('Error accepting comment:', error);
@@ -137,6 +142,9 @@ function ModalAdminRooms({darkMode,roomData,closeModalRoom,fetchImageURLsImoveis
                 position: "right",
                 backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)"
             }).showToast();
+            setTimeout(() => {
+                window.location.reload();
+            }, 2000);
         })
         .catch(error => {
             console.error('Error denying room:', error);

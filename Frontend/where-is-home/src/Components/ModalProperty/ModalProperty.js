@@ -75,8 +75,9 @@ function ModalProperty({ darkMode, propertyData, propertyRooms, closeModal,fetch
             }
         })
         .then(response => {
-            console.log('Comment accepted successfully');
-            closeCommentModal();
+            
+            closeCommentModal()
+            closeModal();
             Toastify({
                 text: "Room denied successfully",
                 duration: 3000,
@@ -113,6 +114,7 @@ function ModalProperty({ darkMode, propertyData, propertyRooms, closeModal,fetch
         .then(response => {
             console.log('Room denied successfully');
             closeConfirmDenieModal();
+            closeModal();
             Toastify({
                 text: "Room accepted successfully",
                 duration: 3000,

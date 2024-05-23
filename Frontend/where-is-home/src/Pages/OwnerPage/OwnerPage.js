@@ -351,6 +351,7 @@ function OwnerPage({ darkMode , handleSubmitImagesImoveis, handleSubmitImagesBed
         tipologia: tipologia,
         observacoes: observaçoes,
         preco_mes: preco_mes,
+
       });
       console.log(roomDataArray);
     }
@@ -404,13 +405,10 @@ function OwnerPage({ darkMode , handleSubmitImagesImoveis, handleSubmitImagesBed
 
   const handleRoomPhotoChange = (event, roomIndex) => {
     const files = event.target.files;
-    const selected = [];
-    for (let i = 0; i < files.length; i++) {
-      selected.push(URL.createObjectURL(files[i]));
-    }
+    const selectedFiles = Array.from(files);
 
     const updatedSelectedRoomPhotos = [...selectedRoomPhotos];
-    updatedSelectedRoomPhotos[roomIndex] = selected;
+    updatedSelectedRoomPhotos[roomIndex] = selectedFiles;
     setSelectedRoomPhotos(updatedSelectedRoomPhotos);
   };
 

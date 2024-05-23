@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import './roomDetails.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleArrowLeft, faCircleArrowRight, faCircleXmark, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { faCircleArrowLeft, faCircleArrowRight, faCircleXmark, faArrowLeft, faBath, faRulerCombined, faSackDollar, faClipboardList } from "@fortawesome/free-solid-svg-icons";
 import { useTranslation } from 'react-i18next';
-
 
 const RoomDetails = ({ darkMode, room, photos, onClose, onBack }) => {
   const { t } = useTranslation("common");
@@ -27,14 +26,23 @@ const RoomDetails = ({ darkMode, room, photos, onClose, onBack }) => {
   };
 
   return (
-    <div className={`modal-overlay ${darkMode ? 'dark-mode' : 'light-mode'}`} onClick={onClose}>
+    <div className={`modal-overlay ${darkMode ? 'dark-mode' : 'light-mode'}`} onClick={(e) => {
+      e.stopPropagation();
+      onClose(); // Ensure it closes both modals
+    }}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <button className="back-button" onClick={onBack}>
+          <button className="back-button" onClick={(e) => {
+            e.stopPropagation();
+            onBack();
+          }}>
             <FontAwesomeIcon icon={faArrowLeft} />
           </button>
           <h2>{room.tipologia}</h2>
-          <button className="close-button" onClick={onClose}>
+          <button className="close-button" onClick={(e) => {
+            e.stopPropagation();
+            onClose(); // Ensure it closes both modals
+          }}>
             <FontAwesomeIcon icon={faCircleXmark} />
           </button>
         </div>
@@ -84,11 +92,25 @@ const RoomDetails = ({ darkMode, room, photos, onClose, onBack }) => {
 
               <div className="data-column-container">
                 <div className="roomDetails">
-                  <p>{room.area} m²</p>
-                  <p>{room.despesas_incluidas}</p>
-                  <p>{room.observacoes}</p>
-                  <p>{room.wc_privado ? t('private_bathroom') : t('no_private_bathroom')}</p>
-                  <p>{room.disponivel ? `Available for ${room.preco_mes}€ per month` : 'Not available'}</p>
+                  <div className="roomDetail2">
+                    <FontAwesomeIcon icon={faRulerCombined} />
+                    <p>{room.area} m²</p>
+                  </div>
+                  <div className="roomDetail2">
+                    <FontAwesomeIcon icon={faSackDollar} />
+                    <p>{room.despesas_incluidas}</p>
+                  </div>
+                  <div className="roomDetail2">
+                    <FontAwesomeIcon icon={faClipboardList} />
+                    <p>{room.observacoes}</p>
+                  </div>
+                  <div className="roomDetail2">
+                    <FontAwesomeIcon icon={faBath} />
+                    <p>{room.wc_privado ? t('private_bathroom') : t('no_private_bathroom')}</p>
+                  </div>
+                  <div className="roomDetail2">
+                    <p>{room.disponivel ? `Available for ${room.preco_mes}€ per month` : 'Not available'}</p>
+                  </div>
                 </div>
               </div>
             </>

@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import './residenceDetails.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleArrowLeft, faCircleArrowRight, faCircleXmark, faLocationDot } from "@fortawesome/free-solid-svg-icons";
+import { faCircleArrowLeft, faCircleArrowRight, faCircleXmark, faLocationDot, faBath, faRulerCombined, faSackDollar, faClipboardList } from "@fortawesome/free-solid-svg-icons";
 import WalkScoreWidget from './WalkScoreWidget';
 import TravelTimeCalculator from './TravelTimeCalculator';
 import categoryMapping from './categoryMapping';
 import CategoryRatings from './CategoryRatings';
 import { useTranslation } from 'react-i18next';
-import RoomDetails from './RoomDetails'; // Import the RoomDetails component
+import RoomDetails from './RoomDetails';
 
 const ResidenceDetails = ({ darkMode, propertyId, onClose }) => {
   const { t } = useTranslation("common");
@@ -18,8 +18,8 @@ const ResidenceDetails = ({ darkMode, propertyId, onClose }) => {
   const [locationDetails, setLocationDetails] = useState(null);
   const [showOwnerDetails, setShowOwnerDetails] = useState(false);
   const [categoryAverages, setCategoryAverages] = useState({});
-  const [selectedRoom, setSelectedRoom] = useState(null); // New state for selected room
-  const [roomPhotos, setRoomPhotos] = useState([]); // New state for room photos
+  const [selectedRoom, setSelectedRoom] = useState(null);
+  const [roomPhotos, setRoomPhotos] = useState([]);
 
   useEffect(() => {
     const fetchPropertyDetails = async () => {
@@ -39,8 +39,6 @@ const ResidenceDetails = ({ darkMode, propertyId, onClose }) => {
         setPropertyDetails(data);
         getYelpData(data.property.geom[0], data.property.geom[1]);
         fetchLocationData(data.property.geom[0], data.property.geom[1]);
-        
-        
       } catch (error) {
         console.error('There was a problem with your fetch operation:', error);
       }
@@ -48,29 +46,6 @@ const ResidenceDetails = ({ darkMode, propertyId, onClose }) => {
     fetchPropertyDetails();
   }, [propertyId]);
 
-  const YelpCategories = () => {
-    useEffect(() => {
-      const options = {
-        method: 'GET',
-        headers: {
-          accept: 'application/json'
-        }
-      };
-  
-      const targetUrl = 'http://mednat.ieeta.pt:9009/api/yelp/categories/';
-      try {
-        fetch(targetUrl, options)
-        .then(response => response.json())
-        .then(response => console.log(response))
-        .catch(err => console.error(err));
-        
-      } catch (error) {
-        console.log(error)
-      }
-      
-    }, []);
-  };
-  
   const getYelpData = (lat, long) => {
     const targetUrl = `http://mednat.ieeta.pt:9009/api/yelp/search/?latitude=${lat}&longitude=${long}`;
     const options = {
@@ -79,7 +54,7 @@ const ResidenceDetails = ({ darkMode, propertyId, onClose }) => {
         accept: 'application/json'
       }
     };
-  
+
     fetch(targetUrl, options)
       .then(response => response.json())
       .then(data => {
@@ -91,7 +66,7 @@ const ResidenceDetails = ({ darkMode, propertyId, onClose }) => {
       })
       .catch(err => console.error(err));
   };
-  
+
   function calculateCategoryAverages(data) {
     const categorySums = {};
     const categoryCounts = {};
@@ -180,8 +155,17 @@ const ResidenceDetails = ({ darkMode, propertyId, onClose }) => {
     } else {
       newSlideNumber = slideNumber === photos.length - 1 ? 0 : slideNumber + 1;
     }
-    setSlideNumber(newSlideNumber);
+
+    // Set opacity to 0 before changing the image
+    const sliderImg = document.querySelector('.sliderImg');
+    sliderImg.style.opacity = '0';
+
+    setTimeout(() => {
+      setSlideNumber(newSlideNumber);
+      sliderImg.style.opacity = '1'; // Trigger the fade-in effect
+    }, 200); // Match this duration with the CSS transition time
   };
+
 
   if (!propertyDetails) return <div>{t('loading')}</div>;
 
@@ -341,10 +325,22 @@ const ResidenceDetails = ({ darkMode, propertyId, onClose }) => {
                             <h3 className="roomName">{room.tipologia}</h3>
                           </div>
                           <div className="roomDetails2">
-                            <p className="roomDetail">- {room.area} m²</p>
-                            <p className="roomDetail">- {room.despesas_incluidas}</p>
-                            <p className="roomDetail">- {room.observacoes}</p>
-                            <p className="roomDetail">- {room.wc_privado ? t('private_bathroom') : t('no_private_bathroom')}</p>
+                            <div className="roomDetail">
+                              <FontAwesomeIcon icon={faRulerCombined} />
+                              <p>{room.area} m²</p>
+                            </div>
+                            <div className="roomDetail">
+                              <FontAwesomeIcon icon={faSackDollar} />
+                              <p>{room.despesas_incluidas}</p>
+                            </div>
+                            <div className="roomDetail">
+                              <FontAwesomeIcon icon={faClipboardList} />
+                              <p>{room.observacoes}</p>
+                            </div>
+                            <div className="roomDetail">
+                              <FontAwesomeIcon icon={faBath} />
+                              <p>{room.wc_privado ? t('private_bathroom') : t('no_private_bathroom')}</p>
+                            </div>
                           </div>
 
                           <div className="roomPrice">
@@ -361,14 +357,14 @@ const ResidenceDetails = ({ darkMode, propertyId, onClose }) => {
                       <div className="walkDetails">
                         <TravelTimeCalculator propertyLat={propertyDetails.property.geom[0]} propertyLng={propertyDetails.property.geom[1]} />
                         <div className='walkWidget'>
-                        <WalkScoreWidget
-                          apiKey="g73c0420989bc43f79d00fa60cd4df386"
-                          address={propertyDetails.property.morada}
-                          width="300"
-                          height="421"
-                          backgroundColor="#FFFFFF"
-                        />
-                        <div className="source-text">Source: Walkscore API</div>
+                          <WalkScoreWidget
+                            apiKey="g73c0420989bc43f79d00fa60cd4df386"
+                            address={propertyDetails.property.morada}
+                            width="300"
+                            height="421"
+                            backgroundColor="#FFFFFF"
+                          />
+                          <div className="source-text">Source: Walkscore API</div>
                         </div>
                       </div>
                     </div>
@@ -383,8 +379,8 @@ const ResidenceDetails = ({ darkMode, propertyId, onClose }) => {
             darkMode={darkMode}
             room={selectedRoom}
             photos={roomPhotos}
-            onClose={handleCloseRoomDetails}
-            onBack={() => setSelectedRoom(null)} // Assuming onBack will just close the room details modal
+            onClose={onClose} // Ensure it closes both modals
+            onBack={() => setSelectedRoom(null)} // Go back to the residence details
           />
         )}
       </div>

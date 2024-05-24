@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import { useAuth } from '../../AuthContext/AuthContext';
 
 
-function Metrics({ darkMode, isOpen, toggleSidebar, zone, zoneData, slidersValues, sliderValuesCruz, updateScores, setSliderValuesCruz,handleGoBackPage,averageMetrics }) {
+function Metrics({ darkMode, isOpen, toggleSidebar, zone, zoneData, slidersValues, sliderValuesCruz, updateScores, setSliderValuesCruz,handleGoBackPage,averageMetrics}) {
 
     const { t } = useTranslation("common");
     const { isAuthenticated} = useAuth();
@@ -63,9 +63,9 @@ function Metrics({ darkMode, isOpen, toggleSidebar, zone, zoneData, slidersValue
             { name: t("Supermarket"), ids: ['9'] }
         ],
         [t('social_leisure')]: [
-            { name: t("Nightlife"), ids: ['5'] },
+            { name: t("NightLife"), ids: ['5'] },
             { name: t("Hotel"), ids: ['8'] },
-            { name: t("Culture"), ids: ['10'] },
+            { name: t("culture"), ids: ['10'] },
             { name: t("Entertainment"), ids: ['17'] }
         ],
         [t('health')]: [
@@ -241,7 +241,7 @@ function Metrics({ darkMode, isOpen, toggleSidebar, zone, zoneData, slidersValue
             <h1 className='PropText-metrics'>{t('AdjustPref')}</h1>
             <div className='sidebar-content'>
                 <div className='navbar-list-metrics'>
-                {tabs.map((item, index) => (
+                {filteredTabs.map((item, index) => (
                     <div key={index} className={`navbar-item-metrics ${activeTab === index ? 'active' : ''}`}>
                         <button onClick={() => setActiveTab(activeTab === index ? null : index)}>
                             {t(item)}
@@ -259,7 +259,9 @@ function Metrics({ darkMode, isOpen, toggleSidebar, zone, zoneData, slidersValue
                                     return (
                                         <div key={id} className="slider-item">
                                             <div className="slider-container2" style={{position: 'relative' }}>
+                                                
                                                 <Slider
+                                                    style={{ width: '300px' }}
                                                     min={0}
                                                     max={1}
                                                     value={sliderValuesCruz[group.ids[0]]}
@@ -271,7 +273,7 @@ function Metrics({ darkMode, isOpen, toggleSidebar, zone, zoneData, slidersValue
                                                     aria-label={group.name}
                                                 />
                                                 {averageMetrics && (
-                                                <div className="average-line" style={{ position: 'absolute', top: 0, left: `calc(${averageMetrics.averages[group.ids[0]]*100}% + 50px)`, width: '2px', height: '2rem', backgroundColor: 'red', zIndex: -1,marginTop:"0.5rem" }}></div>
+                                                <div className="average-line" style={{ position: 'absolute', top: 0, left: `calc(${averageMetrics.averages[group.ids[0]]*100}% + 100px)`, width: '2px', height: '2rem', backgroundColor: 'red', zIndex: -1,marginTop:"0.5rem" }}></div>
                                                 )}
                                             </div>
                                         </div>

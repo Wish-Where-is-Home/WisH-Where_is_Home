@@ -179,9 +179,9 @@ useEffect(() => {
         { name: t("Supermarket"), ids: ['9'] }
     ],
     [t('social_leisure')]: [
-        { name: t("Nightlife"), ids: ['5'] },
+        { name: t("NightLife"), ids: ['5'] },
         { name: t("Hotel"), ids: ['8'] },
-        { name: t("Culture"), ids: ['10'] },
+        { name: t("culture"), ids: ['10'] },
         { name: t("Entertainment"), ids: ['17'] }
     ],
     [t('health')]: [
@@ -565,7 +565,7 @@ const geoJSONStyle = (feature) => {
 
   const gotothirdpage = () =>{
    
-    navigate('/metricspage', {state: {selectedDistrict,districtId,IdType,scores,slidersValues,sliderValuesCruz} })
+    navigate('/metricspage', {state: {selectedDistrict,districtId,IdType,scores,slidersValues,sliderValuesCruz,sliderGroupings} })
 }
 
 const handleSavePreferences = () => {

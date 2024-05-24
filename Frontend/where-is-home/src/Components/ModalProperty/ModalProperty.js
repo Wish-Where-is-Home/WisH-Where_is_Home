@@ -16,18 +16,31 @@ function ModalProperty({ darkMode, propertyData, propertyRooms, closeModal,fetch
     const [confirmDenieModalOpen, setConfirmDenieModalOpen] = useState(false);
     const [roomId,setRoomId] = useState(null);
     const [imageURLs, setImageURLs] = useState([]);
-    const [bedroomImageURLs, setBedroomImageURLs] = useState([]);
+    const [image2U,setImage2U] = useState([]);
+    const [bedroomImageURLs, setBedroomImageURLs] = useState({});
 
-  useEffect(() => {
-    if (propertyData && fetchImageURLsImoveis) {
-      const fetchImages = async () => {
-        const urls = await fetchImageURLsImoveis(propertyData.id);
-        setImageURLs(urls);
-        console.log(urls);
-      };
-      fetchImages();
-    }
-  }, [propertyData, fetchImageURLsImoveis]);
+    useEffect(() => {
+        if (propertyData && fetchImageURLsImoveis && fetchImageURLsBedrooms) {
+            const fetchImages = async () => {
+                const urls = await fetchImageURLsImoveis(propertyData.id);
+                setImageURLs(urls);
+
+                const roomImagePromises = propertyRooms.map(async (room) => {
+                    const roomUrls = await fetchImageURLsBedrooms(room.id);
+                    return { roomId: room.id, urls: roomUrls };
+                });
+
+                const roomImages = await Promise.all(roomImagePromises);
+                const roomImagesMap = roomImages.reduce((acc, roomImage) => {
+                    acc[roomImage.roomId] = roomImage.urls;
+                    return acc;
+                }, {});
+
+                setBedroomImageURLs(roomImagesMap);
+            };
+            fetchImages();
+        }
+    }, [propertyData, fetchImageURLsImoveis, fetchImageURLsBedrooms, propertyRooms]);
 
  
 
@@ -217,7 +230,12 @@ function ModalProperty({ darkMode, propertyData, propertyRooms, closeModal,fetch
                 <div className="modal-room-container">
                     {propertyRooms.map(room => (
                         <div key={room.id} className="modal-room-card">
-                            <div style={{display:"flex",flexDirection:"column",padding:"15px"}}></div>
+                            
+                            {bedroomImageURLs[room.id] && bedroomImageURLs[room.id].length > 0 ? (
+                                    <img src={bedroomImageURLs[room.id][0]} className='bedroomspending-img2' />
+                                ) : (
+                                    <p>No images available</p>
+                                )}
                             <div style={{display:"flex",flexDirection:"column",padding:"15px"}}>
                                 <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
                                         <p style={{ marginRight: '0.5rem' }}><strong>Id:</strong></p>

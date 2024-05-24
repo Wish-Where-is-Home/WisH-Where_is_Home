@@ -6,7 +6,7 @@ import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import {useTranslation} from "react-i18next";
 import { useAuth } from '../../AuthContext/AuthContext';
 import { getAuth, createUserWithEmailAndPassword, updateProfile, sendPasswordResetEmail, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider } from "firebase/auth";
-import Toastify from 'toastify-js'
+import Toastify from 'toastify-js';
 
 const Login_register = ({ darkMode,firebaseConfig }) => {
     

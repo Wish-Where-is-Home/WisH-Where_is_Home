@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './OwnerPropDetails.css';
+import Toastify from 'toastify-js';
 
 function OwnerPropDetails({ property, allRooms, token, onRoomAvailabilityChange, onDeleteProperty }) {
     const [expanded, setExpanded] = useState(false);
@@ -24,10 +25,27 @@ function OwnerPropDetails({ property, allRooms, token, onRoomAvailabilityChange,
             });
 
             if (!response.ok) {
+
+                Toastify({
+                    text: "Failed to update room availability ",
+                    duration: 3000,
+                    close: true,
+                    gravity: "top", 
+                    position: "right", 
+                    backgroundColor: "linear-gradient(to right, #F44336, #F57C00)",
+                }).showToast();
                 throw new Error('Failed to update room availability');
             }
 
             onRoomAvailabilityChange(roomId, !currentAvailability);
+            Toastify({
+                text: "Availability changed",
+                duration: 3000,
+                close: true,
+                gravity: "top", 
+                position: "right", 
+                backgroundColor: "linear-gradient(to right, #4CAF50, #8BC34A)",
+            }).showToast();
         } catch (error) {
             console.error('Error updating room availability:', error);
         }
@@ -44,10 +62,28 @@ function OwnerPropDetails({ property, allRooms, token, onRoomAvailabilityChange,
             });
 
             if (!response.ok) {
+                Toastify({
+                    text: "Failed to delete property ",
+                    duration: 3000,
+                    close: true,
+                    gravity: "top", 
+                    position: "right", 
+                    backgroundColor: "linear-gradient(to right, #F44336, #F57C00)",
+                }).showToast();
+
                 throw new Error('Failed to delete property');
+                
             }
 
             onDeleteProperty(property.id);
+            Toastify({
+                text: "Property Deleted",
+                duration: 3000,
+                close: true,
+                gravity: "top", 
+                position: "right", 
+                backgroundColor: "linear-gradient(to right, #4CAF50, #8BC34A)",
+            }).showToast();
         } catch (error) {
             console.error('Error deleting property:', error);
         }

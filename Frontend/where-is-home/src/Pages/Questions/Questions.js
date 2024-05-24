@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from "react-i18next";
 import './Questions.css';
@@ -6,31 +5,19 @@ import Slider from '@mui/material/Slider';
 import Box from '@mui/material/Box';
 import { useAuth } from '../../AuthContext/AuthContext';
 
-
-function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,zoneData, IdType,updateScores,sliderValuesCruz,setSliderValuesCruz,sliderGroupings, handleSavePreferences,metricsMapping,averageMetrics}) {
-    const { isAuthenticated} = useAuth();
+function Questions({ slidersValues, darkMode, handlePreviousClick, gotoThirdPage, zoneData, IdType, updateScores, sliderValuesCruz, setSliderValuesCruz, sliderGroupings, handleSavePreferences, metricsMapping, averageMetrics }) {
+    const { isAuthenticated } = useAuth();
     const zone = IdType;
-
-
     const { t } = useTranslation("common");
 
-   
-    
-    const tabs = [t('commerce'),t('social_leisure'),t('health'), t('nature_sports'),t('services'), t('Education')];
- 
-
-
-
+    const tabs = [t('commerce'), t('social_leisure'), t('health'), t('nature_sports'), t('services'), t('Education')];
     const filteredTabs = tabs.filter((tab, index) => slidersValues[index].value > 0);
-
     const [activeTab, setActiveTab] = useState(0);
 
     useEffect(() => {
-     
-      const firstAvailableTab = slidersValues.findIndex(slider => slider.value > 0);
-      setActiveTab(firstAvailableTab >= 0 ? firstAvailableTab : 0);
+        const firstAvailableTab = slidersValues.findIndex(slider => slider.value > 0);
+        setActiveTab(firstAvailableTab >= 0 ? firstAvailableTab : 0);
     }, [slidersValues]);
-
 
     const onSliderChange = (newValue, groupIds) => {
         setSliderValuesCruz(prevValues => {
@@ -75,34 +62,27 @@ function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,z
                             valueLabelFormat={valueLabelFormat}
                         />
                         {averageMetrics && (
-                        <div className="average-line" style={{ position: 'absolute', top: 0, left: `${averageMetrics.averages[group.ids[0]]*100}%`, width: '2px', height: '2rem', backgroundColor: 'red', zIndex: 1 }}></div>
+                            <div className="average-line" style={{ position: 'absolute', top: 0, left: `${averageMetrics.averages[group.ids[0]] * 100}%`, width: '2px', height: '2rem', backgroundColor: 'red', zIndex: 1 }}></div>
                         )}
-                        </Box>
+                    </Box>
                 </div>
             </div>
         ));
     };
-    
-
-    
-
-   
-
 
     useEffect(() => {
         function calculateScores(zoneData, sliderValuesThemesupdated, sliderValuesMetricsupdated, zoneType) {
             if (zoneData !== null) {
                 const scores = {};
                 const data = zoneData;
-                const sliderValuesMetrics = sliderValuesMetricsupdated;  
+                const sliderValuesMetrics = sliderValuesMetricsupdated;
                 const sliderValuesThemes = sliderValuesThemesupdated;
-    
-    
+
                 if (typeof sliderValuesThemes === 'object' && sliderValuesThemes !== null) {
                     for (const id in data[zoneType]) {
                         if (data[zoneType].hasOwnProperty(id)) {
                             const modifiedMetrics = {};
-    
+
                             for (const metric in data[zoneType][id]) {
                                 if (data[zoneType][id].hasOwnProperty(metric)) {
                                     const metricsMappingEntry = metricsMapping[metric];
@@ -117,7 +97,6 @@ function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,z
                                     }
                                 }
                             }
-                            
 
                             let score = 0;
                             for (const metric in modifiedMetrics) {
@@ -130,8 +109,7 @@ function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,z
                             }
                         }
                     }
-    
-                   
+
                     return scores;
                 } else {
                     return null;
@@ -139,17 +117,12 @@ function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,z
             }
         }
 
-       
-        
-        const calculatedScores=calculateScores(zoneData, slidersValues, sliderValuesCruz, zone);
+        const calculatedScores = calculateScores(zoneData, slidersValues, sliderValuesCruz, zone);
         updateScores(calculatedScores);
-    }, [slidersValues, sliderValuesCruz,IdType]);
-    
-
+    }, [slidersValues, sliderValuesCruz, IdType]);
 
     return (
         <div className={`SearchPage2 ${darkMode ? 'dark-mode' : 'light-mode'}`}>
-            
             <div className='search-filters'>
                 <div className='tab-buttons'>
                     {filteredTabs.map((tabName, index) => (
@@ -164,26 +137,26 @@ function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,z
                     <div className='tab-content'>
                         {renderSlidersForTab()}
                     </div>
-                
+
                     <div className={`button-container2 ${tabs[activeTab] === 'Nature Sports' ? ' nature-sports-margin' : ''}`}>
                         <button className="button-small-round" onClick={handlePreviousClick}>
                             <span className="button-icon">Previous</span>
                         </button>
                         {isAuthenticated && (
-                        <button className="button-small-round" type="button" onClick={ handleSavePreferences}>
-                            {t('guardar')}
-                        </button>
-                    ) }
-                        <button className="button-small-round" onClick={gotoThirdPage} >
-                            <span className="button-icon">Search <span style={{padding:"50px 0px"}}> </span>🔍</span>
+                            <button className="button-small-round" type="button" onClick={handleSavePreferences}>
+                                {t('guardar')}
+                            </button>
+                        )}
+                        <button className="button-small-round" onClick={gotoThirdPage}>
+                            <span className="button-icon">Search <span style={{ padding: "50px 0px" }}> </span>🔍</span>
                         </button>
                     </div>
-                        <div style={{width:"100%",padding:"2rem 0",height: '2rem',display: "flex", flexDirection: "row",alignItems:"center",justifyContent:"center"}}>
-                            <div style={{display:"flex", flexDirection:"row"}}>
-                                <div className='average-line2'></div>
-                                <p style={{marginLeft:"1rem",fontSize:"0.8rem"}}>{t('textoaverage')}</p>
-                            </div>
+                    <div style={{ width: "100%", padding: "2rem 0", height: '2rem', display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
+                        <div style={{ display: "flex", flexDirection: "row" }}>
+                            <div className='average-line2'></div>
+                            <p style={{ marginLeft: "1rem", fontSize: "0.8rem" }}>{t('textoaverage')}</p>
                         </div>
+                    </div>
                 </div>
             </div>
         </div>

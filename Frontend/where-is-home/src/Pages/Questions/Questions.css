@@ -31,7 +31,7 @@
 }
 
 .nature-sports-margin {
-  margin-top: 20rem;
+  margin-top: 25rem !important;
 }
 
 
@@ -75,11 +75,11 @@
 .slider-container {
   display: flex;
   align-items: center;
-  height: 10%;
   border: 1px solid #ccc; 
   padding: 10px 10px;
   border-radius: 5px;
-  margin-bottom: 2%;
+  margin-bottom: 3%;
+  height: 4rem;
   width: 100%;
   
 }
@@ -162,6 +162,16 @@
   background-color: #eee;
   height: 300px; 
   width: 100%;
+}
+
+.sidebar-content{
+  width: 100%;
+
+}
+
+.tab-content{
+  width: 90%;
+  
 }
 
 

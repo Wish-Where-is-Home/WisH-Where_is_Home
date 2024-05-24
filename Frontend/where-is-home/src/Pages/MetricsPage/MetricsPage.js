@@ -426,9 +426,12 @@ function MetricsPage({ darkMode, zoneData, scores, updateScores }) {
           setTimeout(revertBackground, 1500);
         }
 
-        // Open the property list if it's not open
+        // Open the property list if it's not open and close metrics
         if (!isPropertiesOpen) {
           setIsPropertiesOpen(true);
+          setIsMetricsOpen(false);
+        } else {
+          setIsMetricsOpen(false);
         }
       });
     });

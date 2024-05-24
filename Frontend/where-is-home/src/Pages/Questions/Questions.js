@@ -169,14 +169,14 @@ function Questions({ slidersValues,darkMode, handlePreviousClick,gotoThirdPage,z
                         <button className="button-small-round" onClick={handlePreviousClick}>
                             <span className="button-icon">Previous</span>
                         </button>
-                        <button className="button-small-round" onClick={gotoThirdPage} >
-                            <span className="button-icon">Search <span style={{padding:"50px 0px"}}> </span>🔍</span>
-                        </button>
                         {isAuthenticated && (
                         <button className="button-small-round" type="button" onClick={ handleSavePreferences}>
                             {t('guardar')}
                         </button>
                     ) }
+                        <button className="button-small-round" onClick={gotoThirdPage} >
+                            <span className="button-icon">Search <span style={{padding:"50px 0px"}}> </span>🔍</span>
+                        </button>
                     </div>
                         <div style={{width:"100%",padding:"2rem 0",height: '2rem',display: "flex", flexDirection: "row",alignItems:"center",justifyContent:"center"}}>
                             <div style={{display:"flex", flexDirection:"row"}}>

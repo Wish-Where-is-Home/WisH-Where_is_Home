@@ -648,8 +648,14 @@ Object.keys(locationMappings).forEach(id => {
   })
   .then(response => {
     if (response.ok) {
-      alert("Data sucessfully saved")
-      console.log('Preferences saved successfully');
+      Toastify({
+        text: "Data saved successful",
+        duration: 3000,
+        close: true,
+        gravity: "top", 
+        position: "right", 
+        backgroundColor: "linear-gradient(to right, #4CAF50, #8BC34A)",
+    }).showToast();
     } else {
       throw new Error('Failed to save preferences');
     }

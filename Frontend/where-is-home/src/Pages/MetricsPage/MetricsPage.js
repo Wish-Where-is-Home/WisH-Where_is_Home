@@ -8,18 +8,14 @@ import "leaflet/dist/leaflet.css";
 import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../AuthContext/AuthContext';
-import L from 'leaflet';
+import L, { icon } from 'leaflet';
 import Button from '@mui/material/Button';
-import { use } from 'i18next';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAngleDown, faBus, faBicycle, faWalking } from '@fortawesome/free-solid-svg-icons';
+import ResidenceDetails from '../Residence-Details/residenceDetails';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerIconRetina from 'leaflet/dist/images/marker-icon-2x.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
-import { icon } from 'leaflet';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
-import { faBus, faBicycle, faWalking } from '@fortawesome/free-solid-svg-icons';
-import ResidenceDetails from '../Residence-Details/residenceDetails';
-
 
 function MetricsPage({ darkMode, zoneData, scores, updateScores }) {
   const { isAuthenticated } = useAuth();
@@ -40,7 +36,6 @@ function MetricsPage({ darkMode, zoneData, scores, updateScores }) {
   const [sliderValuesCruz, setSliderValuesCruz] = useState(null);
   const [modalVisibleGradient, setModalVisibleGradient] = useState(false);
   const [averageMetrics, setAverageMetrics] = useState(false);
-
   const navigate = useNavigate();
   const mapRef = useRef(null);
   const geoJsonRef = useRef(null);
@@ -49,36 +44,28 @@ function MetricsPage({ darkMode, zoneData, scores, updateScores }) {
   const [showBusGeoJSON, setShowBusGeoJSON] = useState(false);
   const [busGeoJSONData, setBusGeoJSONData] = useState(null);
   const [busLayer, setBusLayer] = useState(null);
-
   const [busIconColor, setBusIconColor] = useState(!darkMode ? 'black' : 'white');
   const [showCycleGeoJSON, setShowCycleGeoJSON] = useState(false);
   const [CycleGeoJSONData, setCycleGeoJSONData] = useState(null);
   const [CycleLayer, setCycleLayer] = useState(null);
-
   const [CycleIconColor, setCycleIconColor] = useState(!darkMode ? 'black' : 'white');
-
   const [showFootGeoJSON, setShowFootGeoJSON] = useState(false);
   const [FootGeoJSONData, setFootGeoJSONData] = useState(null);
   const [FootLayer, setFootLayer] = useState(null);
   const [FootIconColor, setFootIconColor] = useState(!darkMode ? 'black' : 'white');
-
   const [selectedPropertyId, setSelectedPropertyId] = useState(null);
 
-    const openModal = (propertyId) => {
-        setSelectedPropertyId(propertyId);
-    };
+  const openModal = (propertyId) => {
+    setSelectedPropertyId(propertyId);
+  };
 
-    const closeModal = () => {
-        setSelectedPropertyId(null);
-    };
-
-
-
+  const closeModal = () => {
+    setSelectedPropertyId(null);
+  };
 
   useEffect(() => {
     const fetchAverageMetrics = async () => {
       try {
-
         const responseAverage = await fetch('http://mednat.ieeta.pt:9009/preferences/average/', {
           method: 'GET',
         });
@@ -86,9 +73,6 @@ function MetricsPage({ darkMode, zoneData, scores, updateScores }) {
         if (responseAverage.ok) {
           const dataAverage = await responseAverage.json();
           setAverageMetrics(dataAverage);
-
-
-
         } else {
           throw new Error('Failed to fetch average preferences');
         }
@@ -98,14 +82,11 @@ function MetricsPage({ darkMode, zoneData, scores, updateScores }) {
     };
 
     fetchAverageMetrics();
-
-  }, [])
-
+  }, []);
 
   const handleModalButtonClick = () => {
     setModalVisibleGradient(!modalVisibleGradient);
   };
-
 
   useEffect(() => {
     if (location.state && location.state.districtId && location.state.IdType) {
@@ -118,9 +99,6 @@ function MetricsPage({ darkMode, zoneData, scores, updateScores }) {
   }, [location.state]);
 
   const zone = IdType;
-
-
-
   const portugalBounds = [
     [34, -12],
     [45, -6]
@@ -139,7 +117,6 @@ function MetricsPage({ darkMode, zoneData, scores, updateScores }) {
     if (zoomButtonPosition === '35%') {
       setZoomButtonPosition('10px');
     }
-
   };
 
   const handleDistrictClick = (event) => {
@@ -150,34 +127,24 @@ function MetricsPage({ darkMode, zoneData, scores, updateScores }) {
 
   const getFirstFeatureCoordinates = (features) => {
     if (features.length === 0) return null;
-
     const firstFeature = features[0];
     let firstCoordinates = firstFeature.geometry.coordinates[0][0];
-
     if (Array.isArray(firstCoordinates[0])) {
-
       firstCoordinates = [firstCoordinates[0][1], firstCoordinates[0][0]];
     } else {
-
       firstCoordinates = [firstCoordinates[1], firstCoordinates[0]];
     }
-
-
     return firstCoordinates;
   };
-
 
   const calculateCenterOfFeatures = (features) => {
     let totalX = 0;
     let totalY = 0;
     let totalCount = 0;
-
     features.forEach(feature => {
       const geometry = feature.geometry;
-
       if (geometry.type === 'Polygon') {
         const coordinates = geometry.coordinates[0];
-
         coordinates.forEach(coordinate => {
           totalX += coordinate[0];
           totalY += coordinate[1];
@@ -185,7 +152,6 @@ function MetricsPage({ darkMode, zoneData, scores, updateScores }) {
         });
       } else if (geometry.type === 'MultiLineString') {
         const lines = geometry.coordinates;
-
         lines.forEach(line => {
           line.forEach(coordinate => {
             totalX += coordinate[0];
@@ -196,18 +162,10 @@ function MetricsPage({ darkMode, zoneData, scores, updateScores }) {
       }
     });
 
-
     const centerX = totalX / totalCount;
     const centerY = totalY / totalCount;
-
-    if (centerX === null && centerY === null) {
-      centerX = 39.6686;
-      centerY = -8.1332;
-    }
-
     return [centerY, centerX];
   };
-
 
   const calculateFillColor = (index, totalColors) => {
     const green = [0, 255, 0];
@@ -216,7 +174,6 @@ function MetricsPage({ darkMode, zoneData, scores, updateScores }) {
     const red = [255, 0, 0];
 
     let color;
-
     if (index === 0) {
       color = red;
     } else if (index === totalColors - 1) {
@@ -224,7 +181,6 @@ function MetricsPage({ darkMode, zoneData, scores, updateScores }) {
     } else {
       const percent = index / (totalColors - 1);
       if (percent < 0.5) {
-
         const ratio = percent / 0.5;
         color = [
           yellow[0] + (orange[0] - yellow[0]) * ratio,
@@ -232,7 +188,6 @@ function MetricsPage({ darkMode, zoneData, scores, updateScores }) {
           yellow[2] + (orange[2] - yellow[2]) * ratio
         ];
       } else {
-
         const ratio = (percent - 0.4) / 0.5;
         color = [
           green[0] + (yellow[0] - green[0]) * ratio,
@@ -244,9 +199,6 @@ function MetricsPage({ darkMode, zoneData, scores, updateScores }) {
 
     return `rgb(${Math.round(color[0])}, ${Math.round(color[1])}, ${Math.round(color[2])})`;
   };
-
-
-
 
   const geoJSONStyle = (feature) => {
     if (!feature || !scores) {
@@ -287,11 +239,7 @@ function MetricsPage({ darkMode, zoneData, scores, updateScores }) {
     };
   };
 
-
-
   useEffect(() => {
-
-
     const fetchGeojsonData = async () => {
       try {
         if (districtId === "0") {
@@ -303,12 +251,10 @@ function MetricsPage({ darkMode, zoneData, scores, updateScores }) {
           setMapCenter([39.6686, -8.1332]);
           setZoom(7);
           setMinZoom(7);
-
         } else if (districtId.length === 4) {
           const url = `http://mednat.ieeta.pt:9009/geoserver/wish/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=wish%3Afreguesias&outputFormat=application%2Fjson&srsname=EPSG:4326&CQL_FILTER=code_municipio='${districtId}'`;
           const response = await fetch(url);
           const data = await response.json();
-
           setGeojsonData(data);
           setIdType('freguesias');
           const firstFeatureCoordinates = getFirstFeatureCoordinates(data.features);
@@ -316,28 +262,21 @@ function MetricsPage({ darkMode, zoneData, scores, updateScores }) {
             setMapCenter(firstFeatureCoordinates);
           }
           setZoom(12);
-
-
         } else if (districtId.length === 6) {
           const url = `http://mednat.ieeta.pt:9009/geoserver/wish/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=wish%3Asubseccao&outputFormat=application%2Fjson&CQL_FILTER=code_freguesia='${districtId}'`;
           const response = await fetch(url);
           const data = await response.json();
-
           setGeojsonData(data);
           setIdType('subseccao');
           const centerCoordinates = calculateCenterOfFeatures(data.features);
-
           if (centerCoordinates) {
             setMapCenter(centerCoordinates);
           }
-
           setZoom(13);
-
         } else {
           const url = `http://mednat.ieeta.pt:9009/geoserver/wish/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=wish%3Amunicipios&outputFormat=application%2Fjson&srsname=EPSG:4326&CQL_FILTER=code_distrito='${districtId}'`;
           const response = await fetch(url);
           const data = await response.json();
-
           setGeojsonData(data);
           const firstFeatureCoordinates = getFirstFeatureCoordinates(data.features);
           if (firstFeatureCoordinates) {
@@ -346,7 +285,6 @@ function MetricsPage({ darkMode, zoneData, scores, updateScores }) {
           setIdType('municipios');
           setZoom(10);
           setMinZoom(7);
-
         }
       } catch (error) {
         console.error('Error fetching GeoJSON data:', error);
@@ -355,14 +293,12 @@ function MetricsPage({ darkMode, zoneData, scores, updateScores }) {
 
     fetchGeojsonData();
   }, [districtId]);
+
   useEffect(() => {
     if (mapRef.current) {
       mapRef.current.setView(mapCenter, Zoom, minZoom);
-
     }
   }, [mapCenter, Zoom, minZoom]);
-
-
 
   useEffect(() => {
     if (geoJsonRef.current && geojsonData) {
@@ -374,25 +310,17 @@ function MetricsPage({ darkMode, zoneData, scores, updateScores }) {
     }
   }, [geojsonData, geoJSONStyle]);
 
-
-
-
-
-
   const goBackPoligon = () => {
-
-
     if (districtId.length > 2) {
       const newDistrictId = districtId.slice(0, -2);
       setDistrictId(newDistrictId);
     } else {
       if (districtId.length == 2 && districtId !== "0") {
-        setSelectedDistrict("Portugal")
+        setSelectedDistrict("Portugal");
         setDistrictId("0");
       }
     }
   };
-
 
   const onEachFeature = (feature, layer) => {
     if (feature.properties && feature.properties.dsg) {
@@ -412,23 +340,16 @@ function MetricsPage({ darkMode, zoneData, scores, updateScores }) {
     }
   };
 
-
   function handleGoBackPage() {
     const camefromback = true;
-    navigate('/quiz', { state: { selectedDistrict, districtId, IdType, scores, slidersValues, sliderValuesCruz, camefromback } })
+    navigate('/quiz', { state: { selectedDistrict, districtId, IdType, scores, slidersValues, sliderValuesCruz, camefromback } });
   }
 
-
-
-
   const fetchRooms = (properties) => {
-    const token = localStorage.getItem('token');
-
     if (properties.length > 0) {
       Promise.all(properties.map(property => {
         return fetch(`http://mednat.ieeta.pt:9009/properties/${property.id}/`, {
           method: 'GET',
-
         })
           .then(response => {
             if (!response.ok) {
@@ -441,39 +362,29 @@ function MetricsPage({ darkMode, zoneData, scores, updateScores }) {
             const menorPreco = Math.min(...precos);
             const maiorPreco = Math.max(...precos);
             const intervaloPreco = `${menorPreco}-${maiorPreco}`;
-
-
             property.intervaloPreco = intervaloPreco;
             return property;
           });
       }))
         .then(updatedProperties => {
-
           setProperties(updatedProperties);
-
         })
         .catch(error => {
           console.error(error);
         });
     }
-
   };
 
   function findSubsectionForProperty(property, subSections) {
     const [lat, lng] = property.geom;
-
     for (const subSection of subSections.features) {
       const [minLng, minLat, maxLng, maxLat] = subSection.bbox;
-
-
       if (lng >= minLng && lng <= maxLng && lat >= minLat && lat <= maxLat) {
         return subSection;
       }
     }
-
     return null;
   }
-
 
   const addMarkers = (sortedProperties) => {
     const revertBackground = () => {
@@ -482,9 +393,6 @@ function MetricsPage({ darkMode, zoneData, scores, updateScores }) {
         element.style.backgroundColor = 'var(--background-color3)';
       });
     };
-
-
-
 
     sortedProperties.forEach(item => {
       const [lng, lat] = item.property.geom;
@@ -500,8 +408,6 @@ function MetricsPage({ darkMode, zoneData, scores, updateScores }) {
         const tooltip = L.tooltip({ direction: 'center', class: 'custom-tooltip' }).setContent(item.property.nome);
         this.bindTooltip(tooltip).openTooltip();
       });
-
-
 
       marker.on('click', function () {
         console.log("CLIQUEI: ", item.property.id);
@@ -520,14 +426,15 @@ function MetricsPage({ darkMode, zoneData, scores, updateScores }) {
           setTimeout(revertBackground, 1500);
         }
 
+        // Open the property list if it's not open
+        if (!isPropertiesOpen) {
+          setIsPropertiesOpen(true);
+        }
       });
     });
   };
 
-
   useEffect(() => {
-    const token = localStorage.getItem('token');
-
     fetch('http://mednat.ieeta.pt:9009/properties/aproved/', {
       method: 'GET',
     })
@@ -543,29 +450,18 @@ function MetricsPage({ darkMode, zoneData, scores, updateScores }) {
           const filteredProperties = data.properties.filter(property => {
             if (property.geom) {
               const [lat, lng] = property.geom;
-              return lng >= minLng && lng <= maxLng &&
-                lat >= minLat && lat <= maxLat;
+              return lng >= minLng && lng <= maxLng && lat >= minLat && lat <= maxLat;
             }
           });
 
-
           const propertiesWithScores = filteredProperties.map(property => {
             const subSection = findSubsectionForProperty(property, geojsonData);
-
             const sectionId = subSection ? subSection.id.split('.')[1] : null;
-
-
             const score = scores[sectionId] || 0;
-
-
-
             return { property, score };
           });
 
           const sortedProperties = propertiesWithScores.sort((a, b) => b.score - a.score);
-
-
-
           setProperties(sortedProperties.map(item => item.property));
           fetchRooms(sortedProperties.map(item => item.property));
 
@@ -576,9 +472,6 @@ function MetricsPage({ darkMode, zoneData, scores, updateScores }) {
           });
 
           addMarkers(sortedProperties);
-
-
-
         } else {
           console.error("GeojsonData or its bbox is not available or not properly defined");
         }
@@ -587,10 +480,6 @@ function MetricsPage({ darkMode, zoneData, scores, updateScores }) {
         console.error("Error fetching data:", error);
       });
   }, [geojsonData, scores]);
-
-
-
-
 
   const busGeoJSONUrl = 'http://mednat.ieeta.pt:9009/geoserver/wish/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=wish%3Aaveiro_bus&srsname=EPSG:4326&outputFormat=application%2Fjson';
   const cycleGeoJSONUrl = 'http://mednat.ieeta.pt:9009/geoserver/wish/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=wish%3Acyclewayaveiro&outputFormat=application%2Fjson';
@@ -608,7 +497,6 @@ function MetricsPage({ darkMode, zoneData, scores, updateScores }) {
       return null;
     }
   };
-
 
   useEffect(() => {
     const addBusGeoJSONToMap = async () => {
@@ -662,7 +550,6 @@ function MetricsPage({ darkMode, zoneData, scores, updateScores }) {
     }
   };
 
-
   useEffect(() => {
     const addCycleGeoJSONToMap = async () => {
       if (!mapRef.current) return;
@@ -702,7 +589,6 @@ function MetricsPage({ darkMode, zoneData, scores, updateScores }) {
     setShowCycleGeoJSON(!showCycleGeoJSON);
   };
 
-
   const loadFootGeoJSON = async () => {
     try {
       const response = await fetch(FootGeoJSONUrl);
@@ -715,7 +601,6 @@ function MetricsPage({ darkMode, zoneData, scores, updateScores }) {
       return null;
     }
   };
-
 
   useEffect(() => {
     const addFootGeoJSONToMap = async () => {
@@ -756,27 +641,26 @@ function MetricsPage({ darkMode, zoneData, scores, updateScores }) {
     setShowFootGeoJSON(!showFootGeoJSON);
   };
 
-
-
   return (
     <div className="metrics-page-container">
-            <Properties
-                darkMode={darkMode}
-                isOpen={isPropertiesOpen}
-                toggleSidebar={toggleProperties}
-                properties={properties}
-                openModal={openModal}
-            />
-            {selectedPropertyId && (
-                <ResidenceDetails
-                    darkMode={darkMode}
-                    propertyId={selectedPropertyId}
-                    onClose={closeModal}
-                />
-            )}
-
+      <Properties
+        darkMode={darkMode}
+        isOpen={isPropertiesOpen}
+        toggleSidebar={toggleProperties}
+        properties={properties}
+        openModal={openModal}
+      />
+      {selectedPropertyId && (
+        <ResidenceDetails
+          darkMode={darkMode}
+          propertyId={selectedPropertyId}
+          onClose={closeModal}
+        />
+      )}
       {mapCenter[0] !== null && mapCenter[1] !== null && (
-        <MapContainer ref={mapRef} style={{ height: "100%", width: "100%" }}
+        <MapContainer
+          ref={mapRef}
+          style={{ height: "100%", width: "100%" }}
           center={mapCenter}
           zoom={Zoom}
           minZoom={minZoom}
@@ -786,14 +670,22 @@ function MetricsPage({ darkMode, zoneData, scores, updateScores }) {
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-
           />
-
           {geojsonData && <GeoJSON ref={geoJsonRef} data={geojsonData} style={geoJSONStyle} onEachFeature={onEachFeature} />}
-          <Button variant="contained" style={{ position: 'absolute', top: '10px', right: zoomButtonPosition, zIndex: "400", backgroundColor: "var(--background-color)", color: "var(--blacktowhite)" }} onClick={goBackPoligon}>
+          <Button
+            variant="contained"
+            style={{
+              position: 'absolute',
+              top: '10px',
+              right: zoomButtonPosition,
+              zIndex: "400",
+              backgroundColor: "var(--background-color)",
+              color: "var(--blacktowhite)"
+            }}
+            onClick={goBackPoligon}
+          >
             {t('zoomOut')}
           </Button>
-
           <Button
             variant="contained"
             style={{
@@ -810,8 +702,6 @@ function MetricsPage({ darkMode, zoneData, scores, updateScores }) {
           >
             <FontAwesomeIcon icon={faAngleDown} />
           </Button>
-
-
           {showAdditionalButtons && (
             <>
               <Button
@@ -823,13 +713,11 @@ function MetricsPage({ darkMode, zoneData, scores, updateScores }) {
                   zIndex: "400",
                   marginRight: "15px",
                   backgroundColor: "var(--background-color)",
-
                 }}
                 onClick={handleBusButtonClick}
               >
                 <FontAwesomeIcon icon={faBus} style={{ color: busIconColor, fontSize: "20px" }} />
               </Button>
-
               <Button
                 variant="contained"
                 style={{
@@ -839,15 +727,12 @@ function MetricsPage({ darkMode, zoneData, scores, updateScores }) {
                   zIndex: "400",
                   marginRight: "15px",
                   backgroundColor: "var(--background-color)",
-
-
                 }}
                 className='button-map3'
                 onClick={handleCycleButtonClick}
               >
                 <FontAwesomeIcon icon={faBicycle} style={{ color: CycleIconColor, fontSize: "20px" }} />
               </Button>
-
               <Button
                 variant="contained"
                 style={{
@@ -857,9 +742,7 @@ function MetricsPage({ darkMode, zoneData, scores, updateScores }) {
                   zIndex: "400",
                   marginRight: "15px",
                   backgroundColor: "var(--background-color)",
-
                 }}
-
                 className='button-map3'
                 onClick={handleFootButtonClick}
               >
@@ -867,21 +750,44 @@ function MetricsPage({ darkMode, zoneData, scores, updateScores }) {
               </Button>
             </>
           )}
-          <Button variant="contained" style={{ position: 'absolute', bottom: '120px', right: '20px', zIndex: "1000", backgroundColor: "var(--background-color)", color: "var(--blacktowhite)", borderRadius: "20rem" }} onClick={handleModalButtonClick}>
+          <Button
+            variant="contained"
+            style={{
+              position: 'absolute',
+              bottom: '120px',
+              right: '20px',
+              zIndex: "1000",
+              backgroundColor: "var(--background-color)",
+              color: "var(--blacktowhite)",
+              borderRadius: "20rem"
+            }}
+            onClick={handleModalButtonClick}
+          >
             ?
           </Button>
-
-          {modalVisibleGradient && <div className="gradient-modal2">
-            <p>{t('better')}</p>
-            <div className="gradient-vertical"></div>
-            <p>{t('worse')}</p>
-          </div>
-          }
-
+          {modalVisibleGradient && (
+            <div className="gradient-modal2">
+              <p>{t('better')}</p>
+              <div className="gradient-vertical"></div>
+              <p>{t('worse')}</p>
+            </div>
+          )}
         </MapContainer>
       )}
       {(slidersValues !== null && sliderValuesCruz !== null) && (
-        <Metrics isOpen={isMetricsOpen} toggleSidebar={toggleMetrics} darkMode={darkMode} zone={zone} zoneData={zoneData} slidersValues={slidersValues} sliderValuesCruz={sliderValuesCruz} updateScores={updateScores} setSliderValuesCruz={setSliderValuesCruz} handleGoBackPage={handleGoBackPage} averageMetrics={averageMetrics} />
+        <Metrics
+          isOpen={isMetricsOpen}
+          toggleSidebar={toggleMetrics}
+          darkMode={darkMode}
+          zone={zone}
+          zoneData={zoneData}
+          slidersValues={slidersValues}
+          sliderValuesCruz={sliderValuesCruz}
+          updateScores={updateScores}
+          setSliderValuesCruz={setSliderValuesCruz}
+          handleGoBackPage={handleGoBackPage}
+          averageMetrics={averageMetrics}
+        />
       )}
     </div>
   );

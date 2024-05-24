@@ -29,7 +29,7 @@
 }
 
 .nature-sports-margin {
-  margin-top: 25rem !important;
+  margin-top: 20rem !important;
 }
 
 .average-line2 {
@@ -66,9 +66,9 @@
   border: 1px solid #ccc;
   padding: 10px;
   border-radius: 5px;
-  margin-bottom: 2%;
-  width: 100%;
+  margin-bottom: 3%;
   height: 4rem;
+  width: 100%;
 }
 
 .dark-mode .slider-container {
@@ -147,7 +147,6 @@
   width: 100%;
 }
 
-
 .sidebar-content{
   width: 100%;
 
@@ -155,8 +154,9 @@
 
 .tab-content{
   width: 90%;
-
+  
 }
+
 
 @media (max-width: 767px) {
   .SearchPage {

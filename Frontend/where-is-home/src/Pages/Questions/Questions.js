@@ -142,7 +142,6 @@ function Questions({ slidersValues, darkMode, handlePreviousClick, gotoThirdPage
                         <button className="button-small-round" onClick={handlePreviousClick}>
                             <span className="button-icon">Previous</span>
                         </button>
-                        
                         {isAuthenticated && (
                             <button className="button-small-round" type="button" onClick={handleSavePreferences}>
                                 {t('guardar')}

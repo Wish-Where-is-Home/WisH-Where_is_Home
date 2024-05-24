@@ -15,6 +15,7 @@ import ModalW from '../../Components/ModalW/ModalW.js';
 import 'proj4leaflet';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import Toastify from 'toastify-js'
 
 
 function QuizPage({ darkMode, zoneData,scores,updateScores}) {
@@ -232,12 +233,17 @@ const [ sliderValuesCruz, setSliderValuesCruz] = useState(buildInitialState());
 
   const handleSearchClick = () => {
   
-
-   
     const allZero = slidersValues.every(slider => slider.value === 0);
 
     if (allZero) {
-        alert('You must be interested in at least one subject.');
+        Toastify({
+          text: "You must be interested in at least one subject. ",
+          duration: 3000,
+          close: true,
+          gravity: "top",
+          position: "right", 
+          backgroundColor: "linear-gradient(to right, #F44336, #F57C00)",
+      }).showToast();
     } else {
         setShowQuestions(true);  
     }
@@ -817,7 +823,7 @@ const handleKeepMetrics = async () => {
                         onChange={(event, value) => handleSliderChange(0, value)}
                       />
                       {averageMetrics && (
-                    <div className="average-line" style={{ left: `${averageMetrics.averages['theme_commerce']}%` }}></div>
+                    <div className="average-line" style={{ left: `${averageMetrics.averages['theme_commerce'] * 100}%` }}></div>
                       )}
                     </Box>
                   </div>
@@ -863,7 +869,7 @@ const handleKeepMetrics = async () => {
 
                       />
                       {averageMetrics && (
-                      <div className="average-line" style={{ left: `${averageMetrics.averages['theme_social_leisure']}%` }}></div>
+                      <div className="average-line" style={{ left: `${averageMetrics.averages['theme_social_leisure']* 100}%` }}></div>
                       )}
                     </Box>
                   </div>
@@ -907,7 +913,7 @@ const handleKeepMetrics = async () => {
 
                       />
                       {averageMetrics && (
-                    <div className="average-line" style={{ left: `${averageMetrics.averages['theme_health']}%` }}></div>
+                    <div className="average-line" style={{ left: `${averageMetrics.averages['theme_health']* 100}%` }}></div>
                       )}
                     </Box>
                   </div>
@@ -951,7 +957,7 @@ const handleKeepMetrics = async () => {
 
                       />
                       {averageMetrics && (
-                       <div className="average-line" style={{ left: `${averageMetrics.averages['theme_nature_sports']}%` }}></div>
+                       <div className="average-line" style={{ left: `${averageMetrics.averages['theme_nature_sports']* 100}%` }}></div>
                       )}
                        </Box>
                   </div>
@@ -995,7 +1001,7 @@ const handleKeepMetrics = async () => {
 
                       />
                       {averageMetrics && (
-                      <div className="average-line" style={{ left: `${averageMetrics.averages['theme_service']}%` }}></div>
+                      <div className="average-line" style={{ left: `${averageMetrics.averages['theme_service'] * 100}%` }}></div>
                       )}
                       </Box>
                   </div>
@@ -1039,7 +1045,7 @@ const handleKeepMetrics = async () => {
 
                       />
                       {averageMetrics && (
-                      <div className="average-line" style={{ left: `${averageMetrics.averages['theme_education']}%` }}></div>
+                      <div className="average-line" style={{ left: `${averageMetrics.averages['theme_education'] * 100}%` }}></div>
                       )}
                       </Box>
                   </div>

@@ -240,9 +240,9 @@ function ProfilePage({ darkMode }) {
             { name: "Supermarket", ids: ['9'] }
         ],
         [t('social_leisure')]: [
-            { name: "Nightlife", ids: ['5'] },
+            { name: "NightLife", ids: ['5'] },
             { name: "Hotel", ids: ['8'] },
-            { name: "Culture", ids: ['10'] },
+            { name: "culture", ids: ['10'] },
             { name: "Entertainment", ids: ['17'] }
         ],
         [t('health')]: [

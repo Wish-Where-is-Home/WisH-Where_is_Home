@@ -41,6 +41,12 @@
     z-index: 2000;
 }
 
+.bedroomspending-img2{
+    margin: auto;
+    width: 33%;
+    height: 100%;
+}
+
 .top-modal-property h2{
     font-size: 1.2rem;
     margin-top: 4rem;

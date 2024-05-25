@@ -8,8 +8,9 @@ import categoryMapping from './categoryMapping';
 import CategoryRatings from './CategoryRatings';
 import { useTranslation } from 'react-i18next';
 import RoomDetails from './RoomDetails';
+import { constructNow } from 'date-fns';
 
-const ResidenceDetails = ({ darkMode, propertyId, onClose }) => {
+const ResidenceDetails = ({ darkMode, propertyId, onClose,fetchImageURLsImoveis,fetchImageURLsBedrooms, fetchImageURLsByImovelId  }) => {
   const { t } = useTranslation("common");
   const [slideNumber, setSlideNumber] = useState(0);
   const [open, setOpen] = useState(false);
@@ -20,6 +21,8 @@ const ResidenceDetails = ({ darkMode, propertyId, onClose }) => {
   const [categoryAverages, setCategoryAverages] = useState({});
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [roomPhotos, setRoomPhotos] = useState([]);
+  const [imageURLs, setImageURLs] = useState([]);
+  const [imagesBedrooms,setImagesBedrooms] = useState([]);
 
   useEffect(() => {
     const fetchPropertyDetails = async () => {
@@ -123,25 +126,24 @@ const ResidenceDetails = ({ darkMode, propertyId, onClose }) => {
     }
   };
 
-  const photos = [{
-    src: "https://cf.bstatic.com/xdata/images/hotel/max1280x900/261707778.jpg?k=56ba0babbcbbfeb3d3e911728831dcbc390ed2cb16c51d88159f82bf751d04c6&o=&hp=1",
-  },
-  {
-    src: "https://cf.bstatic.com/xdata/images/hotel/max1280x900/261707367.jpg?k=cbacfdeb8404af56a1a94812575d96f6b80f6740fd491d02c6fc3912a16d8757&o=&hp=1",
-  },
-  {
-    src: "https://cf.bstatic.com/xdata/images/hotel/max1280x900/261708745.jpg?k=1aae4678d645c63e0d90cdae8127b15f1e3232d4739bdf387a6578dc3b14bdfd&o=&hp=1",
-  },
-  {
-    src: "https://cf.bstatic.com/xdata/images/hotel/max1280x900/261707776.jpg?k=054bb3e27c9e58d3bb1110349eb5e6e24dacd53fbb0316b9e2519b2bf3c520ae&o=&hp=1",
-  },
-  {
-    src: "https://cf.bstatic.com/xdata/images/hotel/max1280x900/261708693.jpg?k=ea210b4fa329fe302eab55dd9818c0571afba2abd2225ca3a36457f9afa74e94&o=&hp=1",
-  },
-  {
-    src: "https://cf.bstatic.com/xdata/images/hotel/max1280x900/261707389.jpg?k=52156673f9eb6d5d99d3eed9386491a0465ce6f3b995f005ac71abc192dd5827&o=&hp=1",
-  },
-  ];
+  useEffect(() => {
+    if (propertyId && fetchImageURLsImoveis && fetchImageURLsBedrooms) {
+        const fetchImages = async () => {
+            const urls = await fetchImageURLsImoveis(propertyId);
+            setImageURLs(urls);
+
+
+            const urls2 = await fetchImageURLsByImovelId(propertyId);
+
+            setImagesBedrooms(urls2);
+            console.log(urls2);
+
+
+
+        };
+        fetchImages();
+    }
+}, [propertyId, fetchImageURLsImoveis, fetchImageURLsBedrooms]);
 
   const handleOpen = (i) => {
     setSlideNumber(i);
@@ -151,9 +153,9 @@ const ResidenceDetails = ({ darkMode, propertyId, onClose }) => {
   const handleMove = (direction) => {
     let newSlideNumber;
     if (direction === "l") {
-      newSlideNumber = slideNumber === 0 ? photos.length - 1 : slideNumber - 1;
+      newSlideNumber = slideNumber === 0 ? imageURLs.length - 1 : slideNumber - 1;
     } else {
-      newSlideNumber = slideNumber === photos.length - 1 ? 0 : slideNumber + 1;
+      newSlideNumber = slideNumber === imageURLs.length - 1 ? 0 : slideNumber + 1;
     }
 
     // Set opacity to 0 before changing the image
@@ -222,7 +224,7 @@ const ResidenceDetails = ({ darkMode, propertyId, onClose }) => {
                 onClick={() => handleMove("l")}
               />
               <div className="sliderWrapper">
-                <img src={photos[slideNumber].src} alt="" className="sliderImg" />
+                <img src={imageURLs[slideNumber]} alt="" className="sliderImg" />
               </div>
               <FontAwesomeIcon
                 icon={faCircleArrowRight}
@@ -236,14 +238,14 @@ const ResidenceDetails = ({ darkMode, propertyId, onClose }) => {
             <>
               <div className="media-column-container">
                 <div className="residenceImages">
-                  {photos.map((photos, i) => (
+                  {imageURLs.map((photos, i) => (
                     <div
                       className={`residenceImgWrapper ${i === 0 ? 'main' : ''}`}
                       key={i}
                       onClick={() => handleOpen(i)}
                     >
                       <img
-                        src={photos.src}
+                        src={imageURLs[i]}
                         alt=""
                         className="residenceImg"
                       />
@@ -319,9 +321,9 @@ const ResidenceDetails = ({ darkMode, propertyId, onClose }) => {
                     <h2>{t('rooms')}</h2>
                     <div className="roomList">
                       {propertyDetails && propertyDetails.quartos.map((room, index) => (
-                        <div key={index} className={`roomListItem ${!room.disponivel ? 'unavailable' : ''}`} onClick={() => handleRoomClick(room, photos)}>
+                        <div key={index} className={`roomListItem ${!room.disponivel ? 'unavailable' : ''}`} onClick={() => handleRoomClick(room, imageURLs)}>
                           <div className="roomImageContainer">
-                            <img src={room.image || photos[0].src} alt="Room" className="roomListImage" />
+                            <img src={room.image || imagesBedrooms[0]} alt="Room" className="roomListImage" />
                             <h3 className="roomName">{room.tipologia}</h3>
                           </div>
                           <div className="roomDetails2">
@@ -378,7 +380,7 @@ const ResidenceDetails = ({ darkMode, propertyId, onClose }) => {
           <RoomDetails
             darkMode={darkMode}
             room={selectedRoom}
-            photos={roomPhotos}
+            photos={imagesBedrooms}
             onClose={onClose} // Ensure it closes both modals
             onBack={() => setSelectedRoom(null)} // Go back to the residence details
           />

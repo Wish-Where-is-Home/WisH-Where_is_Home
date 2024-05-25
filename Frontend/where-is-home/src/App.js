@@ -24,6 +24,7 @@ import {
 import { getAnalytics } from "firebase/analytics";
 import { getStorage } from "firebase/storage";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { collection, getDocs, query, where } from "firebase/firestore";
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
@@ -226,6 +227,40 @@ async function handleSubmitImagesBedrooms(photos, bedroom_Id, imovel_Id) {
       return [];
     }
   }
+
+  async function fetchImageURLsByImovelId(imovel_Id) {
+    try {
+      const stringid = String(imovel_Id);
+    
+      
+     
+      const collectionRef = collection(db, "quartos");
+      
+      
+     
+      const q = query(collectionRef, where("imovel_id", "==", stringid));
+     
+  
+      const querySnapshot = await getDocs(q);
+      
+     
+      const allImageURLs = [];
+      querySnapshot.forEach((doc) => {
+        
+        const data = doc.data();
+        
+        const imageUrls = data.imageurl || [];
+        allImageURLs.push(...imageUrls);
+      });
+  
+     
+      return allImageURLs;
+    } catch (error) {
+      console.error("Error fetching bedroom images by imovel_Id:", error);
+      return [];
+    }
+  }
+
   
   useEffect(() => {
     const prefersDarkMode =
@@ -309,6 +344,9 @@ async function handleSubmitImagesBedrooms(photos, bedroom_Id, imovel_Id) {
                 zoneData={zoneData}
                 scores={scores}
                 updateScores={updateScores}
+                fetchImageURLsImoveis={fetchImageURLsImoveis}
+                fetchImageURLsBedrooms={fetchImageURLsBedrooms}
+                fetchImageURLsByImovelId={fetchImageURLsByImovelId}
               />
             }
           />

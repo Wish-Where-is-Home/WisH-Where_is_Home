@@ -57,7 +57,7 @@ const ResidenceDetails = ({ darkMode, propertyId, onClose,fetchImageURLsImoveis,
         accept: 'application/json'
       }
     };
-
+  
     fetch(targetUrl, options)
       .then(response => response.json())
       .then(data => {
@@ -69,6 +69,7 @@ const ResidenceDetails = ({ darkMode, propertyId, onClose,fetchImageURLsImoveis,
       })
       .catch(err => console.error(err));
   };
+  
 
   function calculateCategoryAverages(data) {
     const categorySums = {};

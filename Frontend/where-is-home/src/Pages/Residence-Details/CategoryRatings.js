@@ -5,6 +5,8 @@ import { faStar as farStar } from '@fortawesome/free-regular-svg-icons';
 import './CategoryRatings.css';
 
 const CategoryRatings = ({ categoryAverages }) => {
+  console.log("Received categoryAverages: ", categoryAverages);
+
   const renderStars = (rating) => {
     const roundedRating = Math.round(rating * 2) / 2; 
     const fullStars = Math.floor(roundedRating);

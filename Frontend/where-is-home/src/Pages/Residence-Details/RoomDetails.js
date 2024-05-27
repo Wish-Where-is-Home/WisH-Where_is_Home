@@ -60,7 +60,7 @@ const RoomDetails = ({ darkMode, room, photos, onClose, onBack }) => {
                 onClick={() => handleMove("l")}
               />
               <div className="sliderWrapper">
-                <img src={photos[slideNumber].src} alt="" className="sliderImg" />
+                <img src={photos[slideNumber]} alt="" className="sliderImg" />
               </div>
               <FontAwesomeIcon
                 icon={faCircleArrowRight}
@@ -74,14 +74,14 @@ const RoomDetails = ({ darkMode, room, photos, onClose, onBack }) => {
             <>
               <div className="media-column-container">
                 <div className="roomImages">
-                  {photos.map((photos, i) => (
+                  {photos.map((photo, i) => (
                     <div
                       className={`roomImgWrapper ${i === 0 ? 'main' : ''}`}
                       key={i}
                       onClick={() => handleOpen(i)}
                     >
                       <img
-                        src={photos.src}
+                        src={photo}
                         alt=""
                         className="roomImg"
                       />

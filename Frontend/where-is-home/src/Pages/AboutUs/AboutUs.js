@@ -1,6 +1,7 @@
 import React from 'react';
 import './AboutUs.css';
 import {useTranslation} from "react-i18next";
+import video from './../../Assets/Video/promovideo.mp4';
 
 
 function AboutUs ({darkMode}) {
@@ -19,11 +20,15 @@ function AboutUs ({darkMode}) {
 
                     </div>
                     <div className='about-us-video'>
-                        <div></div>
+                        <div>
+                        <video width="100%" height="100%" className="video2" autoPlay loop muted disablePictureInPicture controlsList="nodownload">                            <source src={video} type="video/mp4"/>
+                            Seu navegador não suporta a tag de vídeo.
+                        </video>
+                        </div>
                     </div>
                 </div>
             </div>      
-        );
+            );
     
 }
 

@@ -21,7 +21,8 @@ function AboutUs ({darkMode}) {
                     </div>
                     <div className='about-us-video'>
                         <div>
-                        <video width="100%" height="100%" className="video2" autoPlay loop muted disablePictureInPicture controlsList="nodownload">                            <source src={video} type="video/mp4"/>
+                        <video width="100%" height="100%" className="video2" autoPlay loop muted disablePictureInPicture controlsList="nodownload">                            
+                            <source src={video} type="video/mp4"/>
                             Seu navegador não suporta a tag de vídeo.
                         </video>
                         </div>

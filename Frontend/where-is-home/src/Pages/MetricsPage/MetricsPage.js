@@ -652,6 +652,7 @@ function MetricsPage({ darkMode, zoneData, scores, updateScores , fetchImageURLs
         toggleSidebar={toggleProperties}
         properties={properties}
         openModal={openModal}
+        fetchImageURLsImoveis={fetchImageURLsImoveis}
       />
       {selectedPropertyId && (
         <ResidenceDetails

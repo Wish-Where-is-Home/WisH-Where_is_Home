@@ -4,7 +4,7 @@ import PropertyDetails from "../../Components/OwnerPropDetails/OwnerPropDetails"
 import Toastify from 'toastify-js'
 import "toastify-js/src/toastify.css"
 
-function OwnerPage({ darkMode , handleSubmitImagesImoveis, handleSubmitImagesBedrooms}) {
+function OwnerPage({ darkMode , handleSubmitImagesImoveis, handleSubmitImagesBedrooms,fetchImageURLsImoveis}) {
   const [properties, setProperties] = useState([]);
   const [selectedTab, setSelectedTab] = useState("accepted");
   const [showForm, setShowForm] = useState(false);
@@ -465,6 +465,7 @@ function OwnerPage({ darkMode , handleSubmitImagesImoveis, handleSubmitImagesBed
                 token={token}
                 onRoomAvailabilityChange={handleRoomAvailabilityChange}
                 onDeleteProperty={handleDeleteProperty}
+                fetchImageURLsImoveis={fetchImageURLsImoveis}
               />
             ))}
         </div>

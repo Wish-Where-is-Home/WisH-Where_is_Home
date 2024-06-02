@@ -46,6 +46,10 @@
     margin: 5px 0;
   }
 
+  .room-contain p{
+    margin-bottom: 2rem;
+  }
+
   .property-details .room-dropdown {
     margin-top: 10px;
     background-color: var(--background-color2);

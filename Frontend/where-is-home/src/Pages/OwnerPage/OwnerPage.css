@@ -54,7 +54,7 @@ body,html{
 }
 
 .o-show-properties {
-  width: 400px;
+  width: 500px;
   padding: 0 30px 30px 30px;
   display: flex;
   flex-direction: column;

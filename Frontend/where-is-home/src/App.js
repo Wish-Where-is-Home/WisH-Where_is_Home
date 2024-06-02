@@ -381,6 +381,7 @@ async function handleSubmitImagesBedrooms(photos, bedroom_Id, imovel_Id) {
                 darkMode={darkMode}
                 handleSubmitImagesImoveis={handleSubmitImagesImoveis}
                 handleSubmitImagesBedrooms={handleSubmitImagesBedrooms}
+                fetchImageURLsImoveis={fetchImageURLsImoveis}
               />
             }
           />

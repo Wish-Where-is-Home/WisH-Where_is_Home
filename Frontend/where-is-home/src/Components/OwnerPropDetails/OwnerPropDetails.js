@@ -1,10 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './OwnerPropDetails.css';
 import Toastify from 'toastify-js';
+import imovel1 from './imovel1.png';
 
-function OwnerPropDetails({ property, allRooms, token, onRoomAvailabilityChange, onDeleteProperty }) {
+function OwnerPropDetails({ property, allRooms, token, onRoomAvailabilityChange, onDeleteProperty, fetchImageURLsImoveis }) {
     const [expanded, setExpanded] = useState(false);
     const [showRooms, setShowRooms] = useState(false);
+    const [photo, setPhoto] = useState(imovel1);
+
+    useEffect(() => {
+        const fetchPhoto = async () => {
+            try {
+                const photos = await fetchImageURLsImoveis(property.id);
+                if (photos.length > 0) {
+                    setPhoto(photos[0]);
+                }
+            } catch (error) {
+                console.error('Error fetching property photos:', error);
+            }
+        };
+
+        fetchPhoto();
+    }, [property.id, fetchImageURLsImoveis]);
+
     const handleToggleExpand = () => {
         setExpanded(!expanded);
     };
@@ -25,7 +43,6 @@ function OwnerPropDetails({ property, allRooms, token, onRoomAvailabilityChange,
             });
 
             if (!response.ok) {
-
                 Toastify({
                     text: "Failed to update room availability ",
                     duration: 3000,
@@ -72,7 +89,6 @@ function OwnerPropDetails({ property, allRooms, token, onRoomAvailabilityChange,
                 }).showToast();
 
                 throw new Error('Failed to delete property');
-                
             }
 
             onDeleteProperty(property.id);
@@ -91,12 +107,10 @@ function OwnerPropDetails({ property, allRooms, token, onRoomAvailabilityChange,
 
     const propertyRooms = allRooms.filter(room => room.property_id === property.id);
 
-    
     return (
         <div className="property-details">
             <div className="summary">
-                {/* You can customize the image source */}
-                <img src={property.photo} alt="Property Photo" />
+                <img src={photo} alt="Property Photo" />
                 <h3>{property.nome}</h3>
                 <button onClick={handleToggleExpand}>{expanded ? 'Less' : 'More'}</button>
                 <button onClick={toggleRooms}>Rooms</button>
@@ -119,10 +133,10 @@ function OwnerPropDetails({ property, allRooms, token, onRoomAvailabilityChange,
                     <p>Stamp: {property.selo}</p>
                 </div>
             )}
-            {showRooms  && (
+            {showRooms && (
                 <div className="room-dropdown">
                     <ul className='room-contain'>
-                        {propertyRooms.map((room,index) => (
+                        {propertyRooms.map((room, index) => (
                             <li key={room.id}>
                                 <p><span>Room {index + 1}:</span> </p>
                                 <p><span>Included Expenses:</span> {room.despesas_incluidas}</p>
@@ -131,7 +145,7 @@ function OwnerPropDetails({ property, allRooms, token, onRoomAvailabilityChange,
                                 <p>
                                     <span>Available:</span> {room.disponivel ? 'Yes' : 'No'}
                                     <button onClick={() => handleRoomAvailabilityChange(room.id, room.disponivel)}>
-                                    {room.disponivel ? 'Unavailable' : 'Available'}
+                                        {room.disponivel ? 'Unavailable' : 'Available'}
                                     </button>
                                 </p>
                                 <p><span>Observations:</span> {room.observacoes}</p>

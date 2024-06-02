@@ -1,0 +1,96 @@
+.AboutUs{
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    background-color: var(--background-color);
+    font-family:'Space Mono Bold 700', sans-serif ;
+    overflow-y: hidden !important;
+    overflow-x: hidden;
+    
+}
+
+
+
+.backline{
+   position: absolute;
+    width: 100%;
+    height: 100%;
+    border-bottom: 4px solid var(--navbar-border);
+    z-index: 1;
+    rotate:-60deg;
+
+}
+
+
+
+.aboutus-container{
+    width: 95%;
+    margin: auto;
+    height: 75%;
+    padding-top: 4%;
+    display: flex;
+    flex-direction: row;
+
+}
+
+
+
+.aboutus-text-container{
+    width: 50%;
+    height: 100%;
+    margin-right: 5%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+
+.aboutus-text-container h2{
+    width: 70%;
+    padding-top: 1%;
+    text-align: start;
+    color: var(--navbar-border);
+    letter-spacing: 0.4rem;
+    font-size: 2.5rem;
+    padding-bottom: 5%;
+}
+
+.aboutus-text-container .text{
+    width: 100%;
+    height: 30%;
+    align-self: center;
+}
+
+.aboutus-text-container .text p{
+    width: 100%;
+    text-align: start;
+    color: var(--blacktowhite);
+    text-align: justify;
+    line-height: 2rem;
+}
+
+
+
+
+.about-us-video{
+    width: 43%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.about-us-video div{
+    width: 100%;
+    height: 70%;
+    z-index: 999;
+}
+
+.video2 {
+    width:100% !important;
+    height: 100%;;
+    object-fit: cover;
+    border: 1px solid white;
+    border-radius: 1rem;
+}

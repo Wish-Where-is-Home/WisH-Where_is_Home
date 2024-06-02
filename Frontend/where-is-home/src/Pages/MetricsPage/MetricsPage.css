@@ -1,0 +1,32 @@
+.metrics-page-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  padding-top: 4%;
+}
+
+.gradient-modal2 {
+position: absolute; 
+top: calc(65% - 2rem); 
+left: calc(97% - 1.8rem);
+width: 4rem;
+height: 12rem;
+background-color: var(--background-color);
+z-index: 9999;
+border-radius: 20px;
+display: flex;
+flex-direction: column;
+align-items: center;
+}
+
+.button-map3 {
+color: var(--blacktowhite);
+}
+
+.custom-tooltip {
+background: var(--background-color);
+color: var(--blacktowhite);
+}

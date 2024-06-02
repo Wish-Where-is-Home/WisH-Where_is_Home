@@ -1,0 +1,180 @@
+.admin-section{
+    min-height: 100vh !important;
+    width: 100%;
+    display: flex;
+    background-color: var(--background-color);
+    font-family:'Space Mono Bold 700', sans-serif ;
+    align-items: center;
+    justify-content: center;
+    overflow-y: auto !important;
+    
+}
+
+
+.properties-container-admin{
+    width: 80%; 
+    min-height: 50rem;
+    margin-top: 7rem;
+    display: flex !important;
+    flex-direction: column !important; 
+    align-items: center;
+}
+
+.admin-top-choose{
+    width: 50%;
+    justify-self: center;
+    height: 3rem;
+    display: flex;
+    flex-direction: row;
+    margin: 0 auto;
+    justify-content: space-between; 
+}
+
+.admin-top-choose:hover{
+    cursor: pointer;
+}
+
+.achoose-perconfirm{
+    width: 40%;
+    height: 100%;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+
+.achoose-confirmed{
+    width: 40%;
+    height: 100%;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+
+.achoose-perconfirm,
+.achoose-confirmed {
+    position: relative; 
+}
+
+
+.admin-top-choose > div:nth-child(1):is(.selected):before,
+.admin-top-choose > div:nth-child(2):is(.selected):before {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    border-bottom: 2px solid transparent;
+}
+
+.admin-top-choose > div:nth-child(1):is(.selected):before,
+.admin-top-choose > div:nth-child(2):is(.selected):before {
+    content: '';
+    border-color: #0dddda;
+}
+
+
+.afilter-div{
+    width: 20%;
+    height: 100%;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.afilter-button{
+    width: 2rem;
+    height: 2rem;
+    border-radius: 5%;
+    background-color: var(--background-color);
+    border: 2px solid var(--background-color);
+}
+
+
+.afilter-button:hover{
+    cursor: pointer;
+}
+
+.afilter-options {
+    position: absolute; 
+    top: calc(100% + 10px); 
+    right: 0;
+    left: 5rem; 
+    background-color: var(--background-color);
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    width: 200px;
+}
+
+.afilter-options label {
+    display: block; 
+    margin-bottom: 10px; 
+}
+
+.afilter-options label input{
+    margin-right: 1rem;
+}
+
+.ashow-properties{
+    width: 100%;
+    max-height: 70vh;
+    flex-grow: 1;
+    margin-top: 4rem;
+    border-top:2px solid var(--blacktowhite);  
+}
+
+.dropdown-container {
+    width: 100%;
+    margin-top: 10px; 
+}
+
+
+.propertie-div{
+    height: 5rem;
+    width: 100%;
+    margin-top: 0.1rem;
+    margin-bottom: 0.1rem;
+    display: flex;
+    position: relative;
+    flex-direction: row;
+    justify-content: space-evenly ;
+    text-align: center;
+    align-items: center;
+
+}
+
+.propertie-div::before {
+    content: '';
+    position: absolute;
+    height: 3rem;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 1px; 
+    margin-top: 1rem;
+    background-color: var(--blacktowhite); 
+}
+
+.propertie-div::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    height: 3rem;
+    margin-top: 1rem;
+    width: 1px; 
+    background-color: var(--blacktowhite);
+}
+
+
+.propertie-div div{
+    width: 25%;
+}

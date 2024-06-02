@@ -1,0 +1,88 @@
+.travel-time-calculator {
+    font-family: Arial, sans-serif;
+    width: 70%;
+    max-width: 363px;
+    background-color: white;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-radius: 5px;
+    margin-bottom: 0;
+    margin-right: 5%;
+    margin-left: 5%;
+    display: flex;
+    flex-direction: column; 
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+}
+
+.destination-input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.mode-icons {
+    display: flex;
+    margin-left: 2%;
+}
+
+.mode-icon {
+    width: 30px;
+    height: 30px;
+    background-color: #f0f0f0;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 5px; 
+}
+
+.mode-icon.active {
+    background-color: #0071c2;
+    color: white;
+}
+
+.calculate-button {
+    width: 100%;
+    background-color: #0071c2;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    margin-top: 2%;
+    cursor: pointer;
+}
+
+.results {
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    gap: 10px; 
+    margin-top: 0;
+    text-align: center;
+}
+
+.distance-label {
+    font-size: 14px;
+    color: #666;
+}
+
+.travel-time {
+    font-size: 18px;
+    color: #0071c2;
+    font-weight: bold;
+}
+
+.map-container {
+    width: 100%;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-top: 0;
+}

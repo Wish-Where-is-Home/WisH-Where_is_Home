@@ -122,5 +122,16 @@
     "distance_to_institution": "Distance to institution",
     "description": "Description",
     "rooms": "Rooms",
-    "widgets": "Widgets"
+    "widgets": "Widgets",
+    "tipologia":"Typology",
+    "nquartos":"N' Bedrooms",
+    "stamp":"Quality assessment",
+    "lupdate":"Last Update",
+    "no":"No",
+    "elevator":"Elevator",
+    "equipado":"Equipped",
+    "pg":"Parking/garage",
+    "ppm":"Price per month",
+    "wcprivado":"Private WC"
+    
 }

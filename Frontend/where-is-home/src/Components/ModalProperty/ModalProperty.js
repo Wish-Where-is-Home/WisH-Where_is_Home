@@ -8,9 +8,11 @@ import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import Toastify from 'toastify-js'
 import "toastify-js/src/toastify.css"
+import { useTranslation } from "react-i18next";
 
 function ModalProperty({ darkMode, propertyData, propertyRooms, closeModal,fetchImageURLsImoveis,fetchImageURLsBedrooms }) {
 
+    const { t } = useTranslation("common");
     const [commentModalAcceptOpen, setCommentModalAcceptOpen] = useState(false);
     const [comment, setComment] = useState('');
     const [confirmDenieModalOpen, setConfirmDenieModalOpen] = useState(false);
@@ -74,7 +76,7 @@ function ModalProperty({ darkMode, propertyData, propertyRooms, closeModal,fetch
     }
 
     const formatBooleanValue = (value) => {
-        return value ? 'Sim' : 'Não';
+        return value ? t('yes'): t('no');
     };
 
     const handleAcceptComment = () => {
@@ -174,11 +176,11 @@ function ModalProperty({ darkMode, propertyData, propertyRooms, closeModal,fetch
                <div className='modal-property-info-div'>
                     <div className='modal-p-left'>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                            <p style={{ marginRight: '0.5rem' }}><strong>Morada:</strong></p>
+                            <p style={{ marginRight: '0.5rem' }}><strong>{t('address')}:</strong></p>
                             <p> {propertyData.morada}</p>
                         </div>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                            <p style={{ marginRight: '0.5rem' }}><strong>Tipologia:</strong></p>
+                            <p style={{ marginRight: '0.5rem' }}><strong>{t('tipologia')}:</strong></p>
                             <p> {propertyData.tipologia}</p>
                         </div>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
@@ -186,33 +188,33 @@ function ModalProperty({ darkMode, propertyData, propertyRooms, closeModal,fetch
                             <p> {propertyData.area}</p>
                         </div>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                            <p style={{ marginRight: '0.5rem' }}><strong>N' Quartos:</strong></p>
+                            <p style={{ marginRight: '0.5rem' }}><strong>{t('nquartos')}:</strong></p>
                             <p> {propertyData.rooms.length}</p>
                         </div>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                            <p style={{ marginRight: '0.5rem' }}><strong>Selo:</strong></p>
+                            <p style={{ marginRight: '0.5rem' }}><strong>{t('stamp')}:</strong></p>
                             <p> {propertyData.selo ? propertyData.selo : 'N/A'}</p>
                         </div>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                            <p style={{ marginRight: '0.5rem' }}><strong>Last update:</strong></p>
+                            <p style={{ marginRight: '0.5rem' }}><strong>{t('lupdate')}:</strong></p>
                             <p>{formattedDate}</p>
                         </div>
                     </div>
                     <div className='modal-p-right'>
                     <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                            <p style={{ marginRight: '0.5rem' }}><strong>Cozinha:</strong></p>
+                            <p style={{ marginRight: '0.5rem' }}><strong>{t('kitchen')}:</strong></p>
                             <p> {formatBooleanValue(propertyData.cozinha)}</p>
                         </div>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                            <p style={{ marginRight: '0.5rem' }}><strong>Elevador:</strong></p>
+                            <p style={{ marginRight: '0.5rem' }}><strong>{t('elevator')}:</strong></p>
                             <p> {formatBooleanValue(propertyData.elevador)}</p>
                         </div>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                            <p style={{ marginRight: '0.5rem' }}><strong>Equipado:</strong></p>
+                            <p style={{ marginRight: '0.5rem' }}><strong>{t('equipado')}:</strong></p>
                             <p> {formatBooleanValue(propertyData.equipado)}</p>
                         </div>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                            <p style={{ marginRight: '0.5rem' }}><strong>Estacionamento/garagem:</strong></p>
+                            <p style={{ marginRight: '0.5rem' }}><strong>{t('pg')}:</strong></p>
                             <p> {formatBooleanValue(propertyData.estacionamento_garagem)}</p>
                         </div>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
@@ -226,7 +228,7 @@ function ModalProperty({ darkMode, propertyData, propertyRooms, closeModal,fetch
                     </div>
                </div>
                <div>
-                <h3>Quartos:</h3>
+                <h3>{t('rooms')}:</h3>
                 <div className="modal-room-container">
                     {propertyRooms.map(room => (
                         <div key={room.id} className="modal-room-card">
@@ -246,11 +248,11 @@ function ModalProperty({ darkMode, propertyData, propertyRooms, closeModal,fetch
                                         <p>{room.area}</p>
                                 </div>
                                 <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                                        <p style={{ marginRight: '0.5rem' }}><strong>Preco por mes:</strong></p>
+                                        <p style={{ marginRight: '0.5rem' }}><strong>{t('ppm')}:</strong></p>
                                         <p>{room.preco_mes}</p>
                                 </div>
                                 <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                                        <p style={{ marginRight: '0.5rem' }}><strong>wc privado:</strong></p>
+                                        <p style={{ marginRight: '0.5rem' }}><strong>{t('wcprivado')}:</strong></p>
                                         <p>{formatBooleanValue(room.wc_privado)}</p>
                                 </div>
                             </div>

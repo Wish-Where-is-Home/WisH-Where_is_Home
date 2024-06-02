@@ -130,6 +130,14 @@
   "equipado":"Equipado",
   "pg":"Estacionamento/garagem",
   "ppm":"Preço por mês",
-  "wcprivado":"WC privado"
-  
+  "wcprivado":"WC privado",
+  "disponivel":"Disponível",
+  "state":"Estado",
+  "accept":"Aceitar",
+  "deny":"Negar",
+  "1quarto":"Quarto",
+  "owner":"Proprietário",
+  "obs":"Observações",
+  "uat":"Atualizado em",
+  "writec":"Escreva seu comentário aqui"
 }

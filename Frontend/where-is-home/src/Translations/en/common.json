@@ -121,7 +121,7 @@
     "calculate": "Calculate",
     "distance_to_institution": "Distance to institution",
     "description": "Description",
-    "rooms": "Rooms",
+    "rooms": "Bedrooms",
     "widgets": "Widgets",
     "tipologia":"Typology",
     "nquartos":"N' Bedrooms",
@@ -132,6 +132,15 @@
     "equipado":"Equipped",
     "pg":"Parking/garage",
     "ppm":"Price per month",
-    "wcprivado":"Private WC"
+    "wcprivado":"Private WC",
+    "disponivel":"Available",
+    "state":"State",
+    "accept":"Accept",
+    "deny":"Deny",
+    "1quarto":"Bedroom",
+    "owner":"Owner",
+    "obs":"Observations",
+    "uat":"Updated at",
+    "writec":"Write your comment here"
     
 }

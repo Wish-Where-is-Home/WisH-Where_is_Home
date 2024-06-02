@@ -154,7 +154,7 @@ function AdminPage({ darkMode,fetchImageURLsImoveis,fetchImageURLsBedrooms }) {
                         <div><strong>{t('name')}</strong></div>
                         <div><strong>{t('address')}</strong></div>
                         <div></div>
-                        <div><strong>State</strong></div>
+                        <div><strong>{t('state')}</strong></div>
                     </div>
                     {propertiesToDisplay.map(property => (
                         <div className='propertie-div' key={property.id}>

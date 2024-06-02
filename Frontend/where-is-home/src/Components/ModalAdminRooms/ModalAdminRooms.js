@@ -80,7 +80,7 @@ function ModalAdminRooms({darkMode,roomData,closeModalRoom,fetchImageURLsImoveis
     }
 
     const formatBooleanValue = (value) => {
-        return value ? 'Sim' : 'Não';
+        return value ? t('yes'): t('no');
     };
 
     const handleAcceptComment = () => {
@@ -165,7 +165,7 @@ function ModalAdminRooms({darkMode,roomData,closeModalRoom,fetchImageURLsImoveis
         <div className={`modal-overlay ${darkMode ? 'dark-mode' : 'light-mode'}`}>
             <div className="modal-content">
                 <div className='top-modal-property'>
-                    <h2>Bedroom: {roomData.room_info.room_id}</h2>
+                    <h2>{t('1quarto')}: {roomData.room_info.room_id}</h2>
                     <button onClick={closeModalRoom}>
                         <FontAwesomeIcon className='icon-close-modal' icon={faTimes} />
                     </button>
@@ -182,18 +182,18 @@ function ModalAdminRooms({darkMode,roomData,closeModalRoom,fetchImageURLsImoveis
                 )}
                <div className='modal-p-descricao' style={{display:"flex",flexDirection:"column"}}>
                 <h3>
-                    Owner: {roomData.owner_info.owner_name}
+                    {t('owner')}: {roomData.owner_info.owner_name}
                 </h3>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                            <p style={{ marginRight: '0.5rem' }}><strong>Phone Number:</strong></p>
+                            <p style={{ marginRight: '0.5rem' }}><strong>{t('phone')}:</strong></p>
                             <p> {roomData.owner_info.owner_phone}</p>
                         </div>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                            <p style={{ marginRight: '0.5rem' }}><strong>Email:</strong></p>
+                            <p style={{ marginRight: '0.5rem' }}><strong>{t('email')}:</strong></p>
                             <p> {roomData.owner_info.owner_email}</p>
                         </div>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                            <p style={{ marginRight: '0.5rem' }}><strong>Description:</strong></p>
+                            <p style={{ marginRight: '0.5rem' }}><strong>{t('description')}:</strong></p>
                             <p> {roomData.property_info.property_description}</p>
                         </div>
                         
@@ -202,11 +202,11 @@ function ModalAdminRooms({darkMode,roomData,closeModalRoom,fetchImageURLsImoveis
                     <div className='modal-p-left'>
                         <p style={{color:"#0dddda"}}><strong>Property:</strong></p>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                            <p style={{ marginRight: '0.5rem' }}><strong>Address:</strong></p>
+                            <p style={{ marginRight: '0.5rem' }}><strong>{t('address')}:</strong></p>
                             <p> {roomData.property_info.property_address}</p>
                         </div>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                            <p style={{ marginRight: '0.5rem' }}><strong>Type:</strong></p>
+                            <p style={{ marginRight: '0.5rem' }}><strong>{t('tipologia')}:</strong></p>
                             <p> {roomData.property_info.property_type}</p>
                         </div>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
@@ -214,27 +214,27 @@ function ModalAdminRooms({darkMode,roomData,closeModalRoom,fetchImageURLsImoveis
                             <p> {roomData.property_info.property_area}</p>
                         </div>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                            <p style={{ marginRight: '0.5rem' }}><strong>Selo:</strong></p>
+                            <p style={{ marginRight: '0.5rem' }}><strong>{t('stamp')}:</strong></p>
                             <p> {roomData.property_info.property_seal ? roomData.property_info.property_seal : 'N/A'}</p>
                         </div>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                            <p style={{ marginRight: '0.5rem' }}><strong>Last update:</strong></p>
+                            <p style={{ marginRight: '0.5rem' }}><strong>{t('lupdate')}:</strong></p>
                             <p>{formattedDate}</p>
                         </div>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                            <p style={{ marginRight: '0.5rem' }}><strong>Cozinha:</strong></p>
+                            <p style={{ marginRight: '0.5rem' }}><strong>{t('kitchen')}:</strong></p>
                             <p>{formatBooleanValue(roomData.property_info.property_kitchen)}</p>
                         </div>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                            <p style={{ marginRight: '0.5rem' }}><strong>Elevador:</strong></p>
+                            <p style={{ marginRight: '0.5rem' }}><strong>{t('elevator')}:</strong></p>
                             <p> {formatBooleanValue(roomData.property_info.property_elevator)}</p>
                         </div>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                            <p style={{ marginRight: '0.5rem' }}><strong>Equipado:</strong></p>
+                            <p style={{ marginRight: '0.5rem' }}><strong>{t('equipado')}:</strong></p>
                             <p> {formatBooleanValue(roomData.property_info.property_equipped)}</p>
                         </div>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                            <p style={{ marginRight: '0.5rem' }}><strong>Estacionamento/garagem:</strong></p>
+                            <p style={{ marginRight: '0.5rem' }}><strong>{t('pg')}:</strong></p>
                             <p>{formatBooleanValue(roomData.property_info.property_parking)}</p>
                         </div>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
@@ -249,7 +249,7 @@ function ModalAdminRooms({darkMode,roomData,closeModalRoom,fetchImageURLsImoveis
                     <div className='modal-p-right'>
                     <p style={{color:"#0dddda"}}><strong>Bedroom:</strong></p>
                     <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                            <p style={{ marginRight: '0.5rem' }}><strong>Observations:</strong></p>
+                            <p style={{ marginRight: '0.5rem' }}><strong>{t('obs')}:</strong></p>
                             <p> {roomData.room_info.observations}</p>
                         </div>
                     <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
@@ -257,27 +257,27 @@ function ModalAdminRooms({darkMode,roomData,closeModalRoom,fetchImageURLsImoveis
                             <p> {roomData.room_info.area}</p>
                         </div>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                            <p style={{ marginRight: '0.5rem' }}><strong>Available:</strong></p>
+                            <p style={{ marginRight: '0.5rem' }}><strong>{t('disponivel')}:</strong></p>
                             <p> {formatBooleanValue(roomData.room_info.available)}</p>
                         </div>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                            <p style={{ marginRight: '0.5rem' }}><strong>Despesas:</strong></p>
+                            <p style={{ marginRight: '0.5rem' }}><strong>{t('expenses')}:</strong></p>
                             <p> {roomData.room_info.despesas_incluidas}</p>
                         </div>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                            <p style={{ marginRight: '0.5rem' }}><strong>Tipologia:</strong></p>
+                            <p style={{ marginRight: '0.5rem' }}><strong>{t('tipologia')}:</strong></p>
                             <p> {roomData.room_info.tipologia}</p>
                         </div>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                            <p style={{ marginRight: '0.5rem' }}><strong>Wc privado:</strong></p>
+                            <p style={{ marginRight: '0.5rem' }}><strong>{t('wcprivado')}:</strong></p>
                             <p> {formatBooleanValue(roomData.room_info.wc_privado)}</p>
                         </div>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                            <p style={{ marginRight: '0.5rem' }}><strong>Update at:</strong></p>
+                            <p style={{ marginRight: '0.5rem' }}><strong>{t('uat')}:</strong></p>
                             <p> {formattedDate2}</p>
                         </div>
                         <div style={{display:"flex",width:"100%", justifyContent:"center",flexDirection:"row"}}>
-                            <p style={{ marginRight: '0.5rem' }}><strong>Preco/mes  :</strong></p>
+                            <p style={{ marginRight: '0.5rem' }}><strong>{t('ppm')}:</strong></p>
                             <p> {roomData.room_info.preco_mes}</p>
                         </div>
                     </div>
@@ -291,14 +291,14 @@ function ModalAdminRooms({darkMode,roomData,closeModalRoom,fetchImageURLsImoveis
                     </button>
                 </div>
                 <div className='modal-admin-room-div-buttons2'>
-                    <h4>Accept</h4>
-                    <h4>Deny</h4>
+                    <h4>{t('accept')}</h4>
+                    <h4>{t('deny')}</h4>
                 </div>
             </div>
             {commentModalAcceptOpen && (
                 <div className="comment-overlay">
                     <div className="comment-modal">
-                        <p><strong>Write your comment here:</strong></p>
+                        <p><strong>{t('writec')}:</strong></p>
                         <textarea
                             rows="4"
                             cols="50"

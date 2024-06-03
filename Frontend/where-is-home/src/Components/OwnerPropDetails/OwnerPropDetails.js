@@ -141,7 +141,7 @@ function OwnerPropDetails({ property, allRooms, token, onRoomAvailabilityChange,
                                 <p><span>Room {index + 1}:</span> </p>
                                 <p><span>Included Expenses:</span> {room.despesas_incluidas}</p>
                                 <p><span>Private Bathroom:</span> {room.wc_privado ? 'Yes' : 'No'}</p>
-                                <p><span>Price:</span> {room.preco} €</p>
+                                <p><span>Price:</span> {room.preco_mes} €</p>
                                 <p>
                                     <span>Available:</span> {room.disponivel ? 'Yes' : 'No'}
                                     <button onClick={() => handleRoomAvailabilityChange(room.id, room.disponivel)}>

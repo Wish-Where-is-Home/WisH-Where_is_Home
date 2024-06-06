@@ -60,6 +60,37 @@ class GenerateTokenView(APIView):
         jwt_token = jwt.encode(token_payload, settings.SECRET_KEY, algorithm='HS256')
         return Response({'token': jwt_token, 'exp': expiration_time.timestamp()}, status=status.HTTP_200_OK)
 
+class YelpCategories(APIView):
+
+    def get(self, request):
+        url = 'https://api.yelp.com/v3/categories?locale=pt_PT'
+        headers = {
+            'accept': 'application/json',
+            'Authorization': 'Bearer n4_U5dAgaoFgsqnWIuzKtDDm0yJA9jdoAG1CV-o9P2Cn7YnS7SECBJOoRwQMWLS6yGw98uZhuh_Uk2hIjCGfygO_ldDtLSh-0zH3SzyuXJqseIW_J4y1f-jUzQdVZnYx'
+        }
+
+        response = requests.get(url, headers=headers)
+        return Response(response.json())
+
+class YelpSearch(APIView):
+
+    def get(self, request):
+        lat = request.query_params.get('latitude')
+        long = request.query_params.get('longitude')
+        if not lat or not long:
+           return Rsponse({'error': 'lat e long are required'}, status = status.HTTP_400_BAD_REQUEST)
+        url = f'https://api.yelp.com/v3/businesses/search?latitude={lat}&longitude={long}&radius=40000&sort_by=best_match&limit=50'
+        headers = {
+            'accept': 'application/json',
+            'Authorization': 'Bearer n4_U5dAgaoFgsqnWIuzKtDDm0yJA9jdoAG1CV-o9P2Cn7YnS7SECBJOoRwQMWLS6yGw98uZhuh_Uk2hIjCGfygO_ldDtLSh-0zH3SzyuXJqseIW_J4y1f-jUzQdVZnYx'
+        }
+
+        response = requests.get(url, headers=headers)
+        return Response(response.json())
+
+
+
+
 class UpdateUserView(APIView):
     def post(self, request):
         token_result = check_token(request)

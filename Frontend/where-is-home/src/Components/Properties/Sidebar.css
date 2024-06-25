@@ -3,13 +3,13 @@
 
 .sidebar {
   position: fixed;
-  top: 70px; 
+  top: 0; 
   right: -33%; 
   width: 33%;
-  height: calc(100% - 70px); 
+  height: calc(100%); 
   background-color: black;
   transition: right 0.3s ease; 
-  z-index: 700; 
+  z-index: 701; 
 
 }
 

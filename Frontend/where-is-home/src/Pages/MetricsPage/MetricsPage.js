@@ -770,9 +770,9 @@ function MetricsPage({ darkMode, zoneData, scores, updateScores , fetchImageURLs
             variant="contained"
             style={{
               position: 'absolute',
-              bottom: '120px',
+              bottom: '50px',
               right: '20px',
-              zIndex: "1000",
+              zIndex: "700",
               backgroundColor: "var(--background-color)",
               color: "var(--blacktowhite)",
               borderRadius: "20rem"

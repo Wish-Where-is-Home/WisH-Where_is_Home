@@ -20,7 +20,7 @@ function Navbar({ darkMode, toggleDarkMode, specialStyle  }) {
 
 
     const [menuOpen, setMenuOpen] = useState(false);
-    const [isMobile, setIsMobile] = useState(window.innerWidth < 1300);
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 1500);
 
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
@@ -28,7 +28,7 @@ function Navbar({ darkMode, toggleDarkMode, specialStyle  }) {
 
     useEffect(() => {
         const handleResize = () => {
-            setIsMobile(window.innerWidth < 1300);
+            setIsMobile(window.innerWidth < 1500);
         };
 
         window.addEventListener('resize', handleResize);
@@ -72,11 +72,13 @@ function Navbar({ darkMode, toggleDarkMode, specialStyle  }) {
                             </div>
                         </div>
                     ) : (
-                        <div className="menu-items2">
+                        <div className={`${specialStyle ? "menu-items2-special" : "menu-items2 "}`}>
                             <ul>
-                                <li><a href="/aboutus">{t('aboutus')}</a></li>
+                            <li style={{ display: specialStyle ? 'none' : 'flex' }}>
+                                <a href="/aboutus">{t('aboutus')}</a>
+                            </li>
                                 
-                                <li><LanguageSelector style={{"marginleft":"3rem"}}/></li>
+                                <li><LanguageSelector style={{"marginleft": specialStyle ? '0' : "3rem"}}/></li>
                                 <li className="theme-toggle-container">
                                     <FontAwesomeIcon icon={faSun} className="sun-icon" />
                                     <FontAwesomeIcon icon={faMoon} className="moon-icon" />
@@ -104,7 +106,7 @@ function Navbar({ darkMode, toggleDarkMode, specialStyle  }) {
                 </div>
             </div>
             {menuOpen && isMobile && (
-                <div className="menu-items">
+                <div className={`${specialStyle ? "menu-items-special" : "menu-items"}`}>
                     {!isAuthenticated?(
                     <ul>
                         <li><a href="/aboutus">{t('aboutus')}</a></li>

@@ -31,17 +31,20 @@
     background-color: var(--background-color2);
     border: 3px solid var(--navbar-border);
     border-bottom: 0;
-    border-right: 0;
-    border-left: 0;
     color: #ffffff;
     position: fixed;
     bottom: 0;
     left: 50%;
     margin: 0 auto;
     transform: translateX(-50%);
-    width: 100%;
+    border-top-left-radius: 3rem;
+    border-top-right-radius: 3rem;
+    width: 33%;
     height: 65px;
     z-index: 10000;
+    display: flex;
+    justify-content: center;
+    font-family:'Space Mono Bold 700', sans-serif ;
   }
   
 
@@ -49,8 +52,9 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 50%;
+    max-width: 70%;
     margin: 0 auto;
+    margin-left: 3rem;
     height: 100%;
     background-color: var(--background-color2);
 }
@@ -64,6 +68,8 @@
     height: 100%;
     background-color: var(--background-color2);
 }
+
+
 
 
 
@@ -203,6 +209,20 @@
     display: flex;
     justify-content: center;
 }
+.menu-items-special{
+    position: absolute;
+    top: calc(100% - 300px);
+    background-color: var(--background-color);
+    border: 2px solid #0dddda;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    z-index: 2000;
+}
+
+
 
 .user-menu:hover {
     cursor: pointer;
@@ -280,6 +300,56 @@
 }
 
 
+.menu-items2-special ul{
+    list-style-type: none;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 70%;
+}
+
+.menu-items2-special ul li{
+    padding-right: 40px;
+    padding-left: 40px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+}
+
+.menu-items2-special ul li a{
+    text-decoration: none;
+    color: var(--blacktowhite);
+    font-size: 18px;
+    width: 100%;
+    white-space: nowrap; 
+    letter-spacing: 0.1rem;
+    position: relative;
+}
+
+
+.menu-items2-special ul li a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -12px;
+    width: 0;
+    height: 2px; 
+    background-color: #0dddda;
+    transition: width 0.3s ease; 
+}
+
+.menu-items2-special ul li a:hover {
+    text-decoration: none;
+}
+
+.menu-items2-special ul li a:hover::after {
+    width: 100%;
+}
+
+
+
 
 .menu-items ul {
     list-style-type: none;
@@ -319,6 +389,47 @@
 }
 
 .menu-items ul li a:hover::after {
+    width: 100%;
+}
+
+.menu-items-special ul {
+    list-style-type: none;
+    padding: 10px 20px;
+    margin: 0;
+}
+
+.menu-items-special ul li {
+    margin: 5px 0;
+    padding: 20px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu-items-special ul li a {
+    text-decoration: none;
+    color: var(--blacktowhite);
+    font-size: 18px;
+    position: relative;
+}
+
+
+.menu-items-special ul li a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -12px;
+    width: 0;
+    height: 2px; 
+    background-color: #0dddda;
+    transition: width 0.3s ease; 
+}
+
+.menu-items-special ul li a:hover {
+    text-decoration: none;
+}
+
+.menu-items-special ul li a:hover::after {
     width: 100%;
 }
 
@@ -417,6 +528,11 @@
 
     .menu-items ul li a {
         font-size: 14px;
+    }
+
+    .menu-items-special {
+        top: calc(100% + 10px); 
+        right: 5%;
     }
 
 } 

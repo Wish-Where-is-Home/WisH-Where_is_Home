@@ -15,10 +15,10 @@
 
 .sidebar-metrics {
     position: fixed;
-    top: 70px;
+    top: 0;
     left: -30%;
     width: 30%;
-    height: calc(100% - 70px);
+    height: calc(100%);
     transition: left 0.3s ease;
 
     z-index: 1000;

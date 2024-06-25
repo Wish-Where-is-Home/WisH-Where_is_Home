@@ -10,8 +10,10 @@ import { faUser } from '@fortawesome/free-solid-svg-icons';
 
 
 
-function Navbar({ darkMode, toggleDarkMode }) {
+function Navbar({ darkMode, toggleDarkMode, specialStyle  }) {
 
+
+    console.log("navbar: ", specialStyle );
     const { t } = useTranslation("common");
 
     const { isAuthenticated,logoutUser,userInfo} = useAuth();
@@ -49,8 +51,8 @@ function Navbar({ darkMode, toggleDarkMode }) {
 
 
     return (
-        <nav className={`navbar ${darkMode ? 'dark-mode' : 'light-mode'}`}>
-            <div className='navbar-container'>
+        <nav className={`${darkMode ? 'dark-mode' : 'light-mode'} ${specialStyle ? "navbar-special" : "navbar "}`}>
+            <div className={`${specialStyle ? "navbar-special2" : "navbar-container "}`}>
                 <div className="logo">
                     <a href='/'>
                     <img src={logo} alt="logo" />
@@ -80,7 +82,7 @@ function Navbar({ darkMode, toggleDarkMode }) {
                                     <FontAwesomeIcon icon={faMoon} className="moon-icon" />
                                     <input type="checkbox" className="theme-toggle" checked={darkMode} onChange={toggleDarkMode} />
                                 </li>
-                                {!isAuthenticated ? (
+                                {/* {!isAuthenticated ? (
                                     <li><a href="/login">Login</a></li>
                                  ):(
                                     <li className="user-menu" onClick={toggleDropdown}>
@@ -94,7 +96,7 @@ function Navbar({ darkMode, toggleDarkMode }) {
                                             </ul>
                                         )}
                                     </li>
-                                )}
+                                )} */}
                                 
                             </ul>
                         </div>
@@ -106,7 +108,7 @@ function Navbar({ darkMode, toggleDarkMode }) {
                     {!isAuthenticated?(
                     <ul>
                         <li><a href="/aboutus">{t('aboutus')}</a></li>
-                        <li><a href="/login">Login</a></li>
+                        {/* <li><a href="/login">Login</a></li> */}
                         <li><LanguageSelector style={{margin:0}}/></li>
                         <li className="theme-toggle-container">
                                     <FontAwesomeIcon icon={faSun} className="sun-icon" />

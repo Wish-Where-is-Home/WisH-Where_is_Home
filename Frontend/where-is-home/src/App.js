@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Navbar from "./Components/Navbar/Navbar";
 import Homepage from "./Pages/Homepage/Homepage";
 import Loader from "./Components/Loader/Loader";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, useLocation  } from "react-router-dom";
 import "./App.css";
 import Login_register from "./Pages/Login-register/Login_register";
 import AboutUs from "./Pages/AboutUs/AboutUs";
@@ -27,6 +27,7 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { collection, getDocs, query, where } from "firebase/firestore";
 
 function App() {
+  const [isSpecialStyle, setIsSpecialStyle] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   const [loading, setLoading] = useState(true);
   const [zoneData, setZoneData] = useState(null);
@@ -114,6 +115,7 @@ function App() {
         console.error("Error uploading files:", error);
     }
 }
+
 
 async function handleSubmitImagesBedrooms(photos, bedroom_Id, imovel_Id) {
   console.log("Received photos for upload:", photos);
@@ -304,7 +306,7 @@ async function handleSubmitImagesBedrooms(photos, bedroom_Id, imovel_Id) {
   return (
     <div className={`App ${darkMode ? "dark-mode" : "light-mode"}`}>
       <Loader visible={loading} />
-      <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
+      <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} specialStyle={isSpecialStyle} />
       <Router>
         <Routes>
           <Route exact path="/" element={<Homepage darkMode={darkMode} />} />
@@ -347,6 +349,7 @@ async function handleSubmitImagesBedrooms(photos, bedroom_Id, imovel_Id) {
                 fetchImageURLsImoveis={fetchImageURLsImoveis}
                 fetchImageURLsBedrooms={fetchImageURLsBedrooms}
                 fetchImageURLsByImovelId={fetchImageURLsByImovelId}
+                setIsSpecialStyle={setIsSpecialStyle}
               />
             }
           />

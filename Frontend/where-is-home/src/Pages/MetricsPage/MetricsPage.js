@@ -17,7 +17,7 @@ import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerIconRetina from 'leaflet/dist/images/marker-icon-2x.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 
-function MetricsPage({ darkMode, zoneData, scores, updateScores , fetchImageURLsImoveis,fetchImageURLsBedrooms, fetchImageURLsByImovelId }) {
+function MetricsPage({ darkMode, zoneData, scores, updateScores , fetchImageURLsImoveis,fetchImageURLsBedrooms, fetchImageURLsByImovelId,setIsSpecialStyle}) {
   const { isAuthenticated } = useAuth();
   const { t } = useTranslation("common");
   const location = useLocation();
@@ -62,6 +62,15 @@ function MetricsPage({ darkMode, zoneData, scores, updateScores , fetchImageURLs
   const closeModal = () => {
     setSelectedPropertyId(null);
   };
+
+  useEffect(() => {
+    setIsSpecialStyle(true);
+    console.log("special true");
+
+    return () => {
+      setIsSpecialStyle(false); 
+    };
+  }, [setIsSpecialStyle]);
 
   useEffect(() => {
     const fetchAverageMetrics = async () => {
